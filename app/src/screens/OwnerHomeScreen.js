@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   Image,
   RefreshControl,
+  Modal,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -18,6 +19,8 @@ import {
   ChevronRight,
   Plus,
   CheckCircle2,
+  X,
+  Layers,
 } from 'lucide-react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -99,7 +102,8 @@ const OwnerHomeScreen = () => {
   const { myself } = useSelector((state) => state.getData);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [activeVehicleIndex, setActiveVehicleIndex] = useState(0);
+  const [activeVehicleId, setActiveVehicleId] = useState(null);
+  const [vehiclePickerModalVisible, setVehiclePickerModalVisible] = useState(false);
 
   const fetchInitialData = useCallback(async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -119,6 +123,13 @@ const OwnerHomeScreen = () => {
       fetchInitialData();
     }, [fetchInitialData])
   );
+
+  const hasUnreadNotifications = useMemo(() => {
+    if (!myself?.notifications || !Array.isArray(myself.notifications)) return false;
+    return myself.notifications.some(
+      (n) => n.isRead === false || n.is_read === false
+    );
+  }, [myself?.notifications]);
 
   // Resilient multi-level garage vehicle resolution (handles garage, cars, vehicleId, or watchlist vehicle summaries)
   const garageVehicles = (myself?.garage?.length
@@ -144,32 +155,54 @@ const OwnerHomeScreen = () => {
     const restoreActive = async () => {
       try {
         const savedId = await AsyncStorage.getItem('active_vehicle_id');
-        if (savedId && garageVehicles.length > 0) {
-          const foundIdx = garageVehicles.findIndex(
-            (v, i) => (v.id || v._id || v.linkageTargetId || String(i)) === savedId
-          );
-          if (foundIdx !== -1) {
-            setActiveVehicleIndex(foundIdx);
-          }
+        if (savedId) {
+          setActiveVehicleId(savedId);
         }
       } catch (e) {
         // ignore
       }
     };
     restoreActive();
-  }, [garageVehicles.length]);
+  }, []);
 
-  const handleSelectActiveVehicle = async (index, car) => {
-    setActiveVehicleIndex(index);
+  // Sort vehicles so the selected / active vehicle is ALWAYS at position 0 (1st position)
+  const sortedGarageVehicles = useMemo(() => {
+    if (!garageVehicles || garageVehicles.length === 0) return [];
+
+    let activeId = activeVehicleId;
+    const hasActiveIdMatch = activeId && garageVehicles.some(
+      v => String(v.id || v._id || v.linkageTargetId) === String(activeId)
+    );
+
+    if (!hasActiveIdMatch) {
+      const primary = garageVehicles.find(v => v.isPrimary || v.is_primary);
+      activeId = primary
+        ? String(primary.id || primary._id || primary.linkageTargetId)
+        : String(garageVehicles[0].id || garageVehicles[0]._id || garageVehicles[0].linkageTargetId);
+    }
+
+    const selectedCar = garageVehicles.find(
+      v => String(v.id || v._id || v.linkageTargetId) === String(activeId)
+    ) || garageVehicles[0];
+
+    const otherCars = garageVehicles.filter(
+      v => String(v.id || v._id || v.linkageTargetId) !== String(selectedCar.id || selectedCar._id || selectedCar.linkageTargetId)
+    );
+
+    return [selectedCar, ...otherCars];
+  }, [garageVehicles, activeVehicleId]);
+
+  const activeCar = sortedGarageVehicles[0] || null;
+
+  const handleSelectActiveVehicle = async (car) => {
+    const carId = String(car.id || car._id || car.linkageTargetId);
+    setActiveVehicleId(carId);
     try {
-      const carId = car.id || car._id || car.linkageTargetId || String(index);
       await AsyncStorage.setItem('active_vehicle_id', carId);
     } catch (e) {
       // ignore
     }
   };
-
-  const activeCar = garageVehicles[activeVehicleIndex] || garageVehicles[0] || null;
 
   // Smart Direct Parts Lookup:
   // If registered vehicle has a TecDoc linkageTargetId, navigate directly to VerifiedPartsScreen!
@@ -291,7 +324,7 @@ const OwnerHomeScreen = () => {
             activeOpacity={0.75}
           >
             <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
-            <View style={styles.badgeDot} />
+            {hasUnreadNotifications && <View style={styles.badgeDot} />}
           </TouchableOpacity>
         </View>
       </View>
@@ -341,8 +374,8 @@ const OwnerHomeScreen = () => {
             decelerationRate="fast"
             snapToInterval={292}
           >
-            {garageVehicles.map((car, idx) => {
-              const isActive = idx === activeVehicleIndex;
+            {sortedGarageVehicles.map((car, idx) => {
+              const isActive = idx === 0;
               return (
                 <View
                   key={car.id || car._id || `car-${idx}`}
@@ -374,7 +407,7 @@ const OwnerHomeScreen = () => {
                     {!isActive && (
                       <TouchableOpacity
                         style={styles.switchActivePill}
-                        onPress={() => handleSelectActiveVehicle(idx, car)}
+                        onPress={() => handleSelectActiveVehicle(car)}
                         activeOpacity={0.7}
                       >
                         <Text style={styles.switchActivePillText}>Select Active</Text>
@@ -410,7 +443,7 @@ const OwnerHomeScreen = () => {
                   ) : (
                     <TouchableOpacity
                       style={styles.inactiveSetBtn}
-                      onPress={() => handleSelectActiveVehicle(idx, car)}
+                      onPress={() => handleSelectActiveVehicle(car)}
                       activeOpacity={0.75}
                     >
                       <Text style={styles.inactiveSetBtnText}>Tap to Set as Active</Text>
@@ -470,8 +503,14 @@ const OwnerHomeScreen = () => {
                 key={action.id}
                 style={styles.iphoneCard}
                 onPress={() => {
-                  if (action.id === 'parts' && activeCar) {
-                    handleLookupActiveCarParts(activeCar);
+                  if (action.id === 'parts') {
+                    if (garageVehicles && garageVehicles.length > 1) {
+                      setVehiclePickerModalVisible(true);
+                    } else if (activeCar) {
+                      handleLookupActiveCarParts(activeCar);
+                    } else {
+                      navigation.navigate('PartsFinder');
+                    }
                   } else {
                     navigation.navigate(action.route);
                   }
@@ -523,6 +562,118 @@ const OwnerHomeScreen = () => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Vehicle Selection Modal for Find Parts (Item 2) */}
+      <Modal
+        visible={vehiclePickerModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setVehiclePickerModalVisible(false)}
+      >
+        <View style={styles.pickerModalBackdrop}>
+          <TouchableOpacity
+            style={styles.pickerModalDismissArea}
+            activeOpacity={1}
+            onPress={() => setVehiclePickerModalVisible(false)}
+          />
+          <View style={styles.pickerModalSheet}>
+            <View style={styles.pickerModalHandle} />
+            <View style={styles.pickerModalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.pickerModalTitle}>Select Vehicle for Parts</Text>
+                <Text style={styles.pickerModalSub}>
+                  Choose which vehicle to match verified NGK components
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.pickerModalCloseBtn}
+                onPress={() => setVehiclePickerModalVisible(false)}
+                activeOpacity={0.7}
+              >
+                <X size={20} color="#64748B" strokeWidth={2.4} />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              style={styles.pickerModalList}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 16 }}
+            >
+              {sortedGarageVehicles.map((car, idx) => {
+                const isCurrentActive = idx === 0;
+                return (
+                  <TouchableOpacity
+                    key={car.id || car._id || `pick-${idx}`}
+                    style={[
+                      styles.pickerVehicleItem,
+                      isCurrentActive && styles.pickerVehicleItemActive,
+                    ]}
+                    onPress={() => {
+                      handleSelectActiveVehicle(car);
+                      setVehiclePickerModalVisible(false);
+                      handleLookupActiveCarParts(car);
+                    }}
+                    activeOpacity={0.75}
+                  >
+                    <View style={styles.pickerItemLeft}>
+                      <View style={[
+                        styles.pickerVehicleThumbContainer,
+                        isCurrentActive && styles.pickerVehicleThumbContainerActive,
+                      ]}>
+                        <VehicleCardImage
+                          car={car}
+                          height={54}
+                          resizeMode="cover"
+                          compact={true}
+                          style={styles.pickerVehicleThumb}
+                        />
+                      </View>
+                      <View style={{ flex: 1, minWidth: 0, paddingRight: 4 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                          <Text style={[styles.pickerItemTitle, { flexShrink: 1 }]} numberOfLines={1}>
+                            {car.make} {car.model}
+                          </Text>
+                          {isCurrentActive && (
+                            <View style={styles.pickerActiveTag}>
+                              <Text style={styles.pickerActiveTagText}>ACTIVE</Text>
+                            </View>
+                          )}
+                        </View>
+                        <Text style={styles.pickerItemSub} numberOfLines={1}>
+                          {car.year ? `${car.year} • ` : ''}{car.engine || 'Standard Trim'}
+                          {car.licensePlate ? ` • ${car.licensePlate}` : ''}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.pickerItemArrow}>
+                      <ChevronRight size={18} color={isCurrentActive ? '#D0142C' : '#94A3B8'} strokeWidth={2.2} />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+
+              {/* Manual search option */}
+              <TouchableOpacity
+                style={styles.pickerManualSearchBtn}
+                onPress={() => {
+                  setVehiclePickerModalVisible(false);
+                  navigation.navigate('PartsFinder');
+                }}
+                activeOpacity={0.75}
+              >
+                <View style={styles.pickerManualSearchIconBox}>
+                  <Search size={18} color="#D0142C" strokeWidth={2.2} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.pickerManualSearchTitle}>Select Another Vehicle</Text>
+                  <Text style={styles.pickerManualSearchSub}>Browse full catalog by Make & Model</Text>
+                </View>
+                <ChevronRight size={16} color="#94A3B8" strokeWidth={2} />
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -946,6 +1097,172 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#334155',
     lineHeight: 14,
+  },
+
+  /* Vehicle Picker Modal Styles (Item 2) */
+  pickerModalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    justifyContent: 'flex-end',
+  },
+  pickerModalDismissArea: {
+    flex: 1,
+  },
+  pickerModalSheet: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 28,
+    maxHeight: '75%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 20,
+  },
+  pickerModalHandle: {
+    width: 44,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: '#CBD5E1',
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  pickerModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  pickerModalTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#0F172A',
+    letterSpacing: -0.3,
+  },
+  pickerModalSub: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#64748B',
+    marginTop: 2,
+  },
+  pickerModalCloseBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
+  },
+  pickerModalList: {
+    maxHeight: 380,
+  },
+  pickerVehicleItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    marginBottom: 10,
+  },
+  pickerVehicleItemActive: {
+    backgroundColor: '#FFF5F5',
+    borderColor: '#FCA5A5',
+  },
+  pickerItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
+  },
+  pickerVehicleThumbContainer: {
+    width: 80,
+    height: 54,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#0F172A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  pickerVehicleThumbContainerActive: {
+    borderColor: '#D0142C',
+    borderWidth: 1.5,
+  },
+  pickerVehicleThumb: {
+    width: 80,
+    height: 54,
+    borderRadius: 10,
+  },
+  pickerItemTitle: {
+    fontSize: 14.5,
+    fontWeight: '700',
+    color: '#0F172A',
+    flexShrink: 1,
+  },
+  pickerActiveTag: {
+    backgroundColor: '#D0142C',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 4,
+    flexShrink: 0,
+  },
+  pickerActiveTagText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
+  },
+  pickerItemSub: {
+    fontSize: 12,
+    color: '#64748B',
+    marginTop: 2,
+    fontWeight: '500',
+  },
+  pickerItemArrow: {
+    paddingLeft: 4,
+  },
+  pickerManualSearchBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    borderStyle: 'dashed',
+    marginTop: 4,
+  },
+  pickerManualSearchIconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 10,
+    backgroundColor: '#FFF5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: '#FEE2E2',
+  },
+  pickerManualSearchTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#0F172A',
+  },
+  pickerManualSearchSub: {
+    fontSize: 11.5,
+    color: '#64748B',
+    marginTop: 1,
   },
 });
 

@@ -7,6 +7,7 @@ export default function VehicleCardImage({
   style,
   height = 120,
   resizeMode = 'cover',
+  compact = false,
 }) {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,8 +44,8 @@ export default function VehicleCardImage({
   return (
     <View style={[styles.container, { height }, style]}>
       {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#D0142C" />
+        <View style={[styles.loadingContainer, compact && { backgroundColor: 'rgba(15, 23, 42, 0.4)' }]}>
+          <ActivityIndicator size={compact ? 'small' : 'small'} color="#D0142C" />
         </View>
       )}
 
@@ -62,20 +63,22 @@ export default function VehicleCardImage({
           onError={() => setHasError(true)}
         />
       ) : (
-        <View style={styles.fallbackContainer}>
+        <View style={[styles.fallbackContainer, compact && { backgroundColor: '#1E293B' }]}>
           <Image
             source={require('../../assets/images/demonstration_car_fallback.png')}
-            style={styles.fallbackImage}
+            style={[styles.fallbackImage, compact && { width: '85%', height: '80%' }]}
             resizeMode="contain"
           />
-          <View style={styles.fallbackBadge}>
-            <Text style={styles.fallbackBadgeText}>Demonstration Vehicle</Text>
-          </View>
+          {!compact && (
+            <View style={styles.fallbackBadge}>
+              <Text style={styles.fallbackBadgeText}>Demonstration Vehicle</Text>
+            </View>
+          )}
         </View>
       )}
 
-      {/* Subtle edge-to-edge shadow gradient for contrast */}
-      <View style={styles.bottomShadowOverlay} pointerEvents="none" />
+      {/* Subtle edge-to-edge shadow gradient for contrast (full size only) */}
+      {!compact && <View style={styles.bottomShadowOverlay} pointerEvents="none" />}
     </View>
   );
 }

@@ -104,7 +104,20 @@ class UserService {
     user.watchList = watchlistRows || [];
     user.watchlist = watchlistRows || [];
     user.searchHistory = [];
-    user.notifications = notificationRows || [];
+    user.notifications = (notificationRows || []).map((row) => ({
+      id: row.id,
+      userId: row.user_id,
+      user_id: row.user_id,
+      message: row.message,
+      eventType: row.event_type || 'general',
+      event_type: row.event_type || 'general',
+      isRead: !!row.is_read,
+      is_read: !!row.is_read,
+      timestamp: row.created_at,
+      created_at: row.created_at,
+      createdAt: row.created_at,
+      metadata: row.metadata || {},
+    }));
     user.is_approved = user.is_approved !== undefined ? user.is_approved : (user.role === 'owner');
     user.approval_status = user.approval_status || (user.role === 'owner' ? 'approved' : 'pending_approval');
 
@@ -342,15 +355,33 @@ class UserService {
     return true;
   }
 
-  async readNotifications(id) {
-    const { data, error } = await supabase
+  async readNotifications(id, notificationId = null) {
+    let query = supabase
       .from('notifications')
       .update({ is_read: true })
-      .eq('user_id', id)
-      .select();
+      .eq('user_id', id);
+
+    if (notificationId) {
+      query = query.eq('id', notificationId);
+    }
+
+    const { data, error } = await query.select();
 
     if (error) throw new Error('Failed to update notifications');
-    return data || [];
+    return (data || []).map((row) => ({
+      id: row.id,
+      userId: row.user_id,
+      user_id: row.user_id,
+      message: row.message,
+      eventType: row.event_type || 'general',
+      event_type: row.event_type || 'general',
+      isRead: true,
+      is_read: true,
+      timestamp: row.created_at,
+      created_at: row.created_at,
+      createdAt: row.created_at,
+      metadata: row.metadata || {},
+    }));
   }
 }
 

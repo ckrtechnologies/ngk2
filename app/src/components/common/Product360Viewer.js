@@ -74,6 +74,13 @@ const Product360Viewer = ({
   const pinchStartDistRef    = useRef(0);
   const pinchStartScaleRef   = useRef(1);
   const touchStartTimeRef    = useRef(0);
+  const autoSpinResumeTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (autoSpinResumeTimerRef.current) clearTimeout(autoSpinResumeTimerRef.current);
+    };
+  }, []);
 
   currentFrameRef.current   = currentFrame;
   isAutoSpinningRef.current = isAutoSpinning;
@@ -196,12 +203,12 @@ const Product360Viewer = ({
     setCurrentFrame(Math.round((norm / 360) * total) % total);
   }, [angle, isAutoSpinning, isStatic, frames.length]);
 
-  // ── Auto-spin — ONLY fires after all frames are downloaded (READY) ───────
+  // ── Auto-spin — Fires reliably whenever isAutoSpinning is true and multiple frames exist ───────
   useEffect(() => {
-    if (isStatic || !isAutoSpinning || phase !== Phase.READY || frames.length <= 1) return;
+    if (isStatic || !isAutoSpinning || frames.length <= 1) return;
     const t = setInterval(() => setCurrentFrame(p => (p + 1) % frames.length), 95);
     return () => clearInterval(t);
-  }, [isAutoSpinning, isStatic, phase, frames.length]);
+  }, [isAutoSpinning, isStatic, frames.length]);
 
   // ── Helpers ─────────────────────────────────────────────────────────────
   const getTouchDist = useCallback((touches) => {
@@ -226,6 +233,10 @@ const Product360Viewer = ({
 
     onPanResponderGrant: (evt) => {
       touchStartTimeRef.current = Date.now();
+      if (autoSpinResumeTimerRef.current) {
+        clearTimeout(autoSpinResumeTimerRef.current);
+        autoSpinResumeTimerRef.current = null;
+      }
       // Pause auto-spin on touch
       if (!isStatic && isAutoSpinningRef.current) onAutoSpinChange?.(false);
 
@@ -264,7 +275,16 @@ const Product360Viewer = ({
         return;
       }
 
-      // 1-finger pan when zoomed (both X and Y)
+      // Static HD photo mode: pure 2D translation across X and Y without 3D warping
+      if (isStatic) {
+        pan.setValue({
+          x: panOffset.current.x + gs.dx,
+          y: panOffset.current.y + gs.dy,
+        });
+        return;
+      }
+
+      // 1-finger pan when zoomed in 3D mode
       if (zoomScaleRef.current > 1.08) {
         pan.setValue({
           x: panOffset.current.x + gs.dx,
@@ -274,34 +294,36 @@ const Product360Viewer = ({
       }
 
       // 1-finger 360 horizontal scrub (X axis)
-      if (!isStatic && framesCountRef.current > 1) {
+      if (framesCountRef.current > 1) {
         const total = framesCountRef.current;
         let next = (startXRef.current - Math.round(gs.dx / 8)) % total;
         if (next < 0) next += total;
         setCurrentFrame(next);
         onAngleChange?.(Math.round((next / total) * 360) % 360);
-      } else if (isStatic) {
-        pan.setValue({
-          x: panOffset.current.x + gs.dx * 0.4,
-          y: panOffset.current.y + gs.dy * 0.4,
-        });
       }
 
-      // 1-finger 3D vertical pitch tilt (Y axis)
-      // Moving finger up (-dy) tilts view up, finger down (+dy) tilts view down
+      // 1-finger 3D vertical pitch tilt (Y axis) - ONLY for 3D spin view
       const targetPitch = Math.max(-28, Math.min(28, pitchOffset.current - gs.dy * 0.25));
       pitchAnim.setValue(targetPitch);
     },
 
     onPanResponderRelease: (evt, gs) => {
-      if (zoomScaleRef.current > 1.08) {
+      if (isStatic) {
         panOffset.current.x += gs.dx;
         panOffset.current.y += gs.dy;
-      } else if (isStatic) {
-        panOffset.current.x += gs.dx * 0.4;
-        panOffset.current.y += gs.dy * 0.4;
+      } else {
+        if (zoomScaleRef.current > 1.08) {
+          panOffset.current.x += gs.dx;
+          panOffset.current.y += gs.dy;
+        }
+        pitchOffset.current = Math.max(-28, Math.min(28, pitchOffset.current - gs.dy * 0.25));
+
+        // Auto-resume auto-spin after 2.5s of touch inactivity
+        if (autoSpinResumeTimerRef.current) clearTimeout(autoSpinResumeTimerRef.current);
+        autoSpinResumeTimerRef.current = setTimeout(() => {
+          onAutoSpinChange?.(true);
+        }, 2500);
       }
-      pitchOffset.current = Math.max(-28, Math.min(28, pitchOffset.current - gs.dy * 0.25));
       pinchStartDistRef.current = 0;
 
       // Single clean tap → trigger onPressImage
@@ -337,37 +359,24 @@ const Product360Viewer = ({
       {...panResponder.panHandlers}
     >
       {/*
-       * LAYER 1 — Static placeholder underlayer.
-       * Rendered ONLY while phase !== Phase.READY to eliminate scale jumps,
-       * double-layer ghosting, and background bleed during rotation.
+       * Steady poster underlayer — always mounted when an image source is available.
+       * Eliminates 1-2s blink/flicker while frames load or when switching views.
        */}
-      {phase !== Phase.READY && (
-        cleanStatic ? (
-          <View style={[StyleSheet.absoluteFill, styles.layerCenter]}>
-            <Image
-              source={staticSource}
-              style={styles.frameImage}
-              resizeMode="contain"
-              fadeDuration={0}
-            />
-          </View>
-        ) : isLoadingPhase ? (
-          <View style={styles.centerBox}>
-            <ActivityIndicator size="small" color="#D0142C" />
-            <Text style={styles.loadingText}>Loading 360° model...</Text>
-          </View>
-        ) : phase === Phase.IDLE && !cleanStatic ? (
-          <View style={styles.centerBox}>
-            <Text style={styles.loadingText}>No Image Available</Text>
-          </View>
-        ) : null
+      {(cleanStatic || staticImageUrl || gifUrl) && (
+        <View style={[StyleSheet.absoluteFill, styles.layerCenter]}>
+          <Image
+            source={cleanStatic ? { uri: cleanStatic } : (staticImageUrl ? { uri: staticImageUrl } : { uri: gifUrl })}
+            style={styles.frameImage}
+            resizeMode="contain"
+            fadeDuration={0}
+          />
+        </View>
       )}
 
       {/*
-       * LAYER 2 — 360 frame (or static zoom/pan) layer.
-       * Only rendered when phase === READY (all frames confirmed on disk/memory).
+       * Active Frame / Zoom & Pan Layer.
        */}
-      {(phase === Phase.READY || isStatic) && (
+      {(phase === Phase.READY || isStatic || frames.length > 0) && (
         <Animated.View
           style={[
             StyleSheet.absoluteFill,
@@ -379,10 +388,12 @@ const Product360Viewer = ({
                 { translateX: pan.x },
                 { translateY: pan.y },
                 {
-                  rotateX: pitchAnim.interpolate({
-                    inputRange: [-28, 28],
-                    outputRange: ['-28deg', '28deg'],
-                  }),
+                  rotateX: isStatic
+                    ? '0deg'
+                    : pitchAnim.interpolate({
+                        inputRange: [-28, 28],
+                        outputRange: ['-28deg', '28deg'],
+                      }),
                 },
               ],
             },
@@ -390,7 +401,7 @@ const Product360Viewer = ({
         >
           {isStatic ? (
             <Image
-              source={staticSource || { uri: gifUrl }}
+              source={staticSource || (staticImageUrl ? { uri: staticImageUrl } : { uri: gifUrl })}
               style={styles.frameImage}
               resizeMode="contain"
               fadeDuration={0}

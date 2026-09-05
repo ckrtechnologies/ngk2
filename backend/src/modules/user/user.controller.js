@@ -45,7 +45,8 @@ export const deleteUser = async (req, res) => {
 export const readNotifications = async (req, res) => {
   try {
     const { id } = req.params;
-    const notifications = await userService.readNotifications(id);
+    const notificationId = req.body?.notificationId || req.query?.notificationId || null;
+    const notifications = await userService.readNotifications(id, notificationId);
     return sendSuccess(res, { notifications }, 'Notifications updated successfully', 200);
   } catch (error) {
     return sendError(res, error.message, 400, error);

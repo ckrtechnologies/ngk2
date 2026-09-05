@@ -278,13 +278,53 @@ const DealerLocatorScreen = () => {
     });
   };
 
+  // Compute dynamic counts based on active search query & radius filter (Item 8)
   const counts = useMemo(() => {
+    const baseList = dealers.filter((d) => {
+      // 1. Distance radius filter
+      if (
+        filters.radius !== undefined &&
+        filters.radius !== null &&
+        d.distanceKm !== undefined &&
+        d.distanceKm !== null &&
+        d.distanceKm !== 999999
+      ) {
+        if (filters.radius !== 1500 && d.distanceKm > filters.radius) {
+          return false;
+        }
+      }
+
+      // 2. Text search query
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const name = (
+          d.name ||
+          d.dealer_name ||
+          d.companyName ||
+          ''
+        ).toLowerCase();
+        const city = (d.city || '').toLowerCase();
+        const province = (d.province || '').toLowerCase();
+        const address = (d.address || d.streetAddress || '').toLowerCase();
+        if (
+          !name.includes(query) &&
+          !city.includes(query) &&
+          !province.includes(query) &&
+          !address.includes(query)
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
     return {
-      all: dealers.length,
-      distributors: dealers.filter((d) => d.role === 'distributor').length,
-      resellers: dealers.filter((d) => d.role === 'reseller').length,
+      all: baseList.length,
+      distributors: baseList.filter((d) => d.role === 'distributor').length,
+      resellers: baseList.filter((d) => d.role === 'reseller').length,
     };
-  }, [dealers]);
+  }, [dealers, searchQuery, filters.radius]);
 
   const handleApplyFilters = (newFilters) => {
     setFilters(newFilters);

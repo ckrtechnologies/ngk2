@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -59,6 +59,13 @@ const DistributorHomeScreen = () => {
     enquiry?.filter(
       (e) => (e.status || '').toLowerCase() === 'in progress'
     )?.length || 0;
+
+  const hasUnreadNotifications = useMemo(() => {
+    if (!myself?.notifications || !Array.isArray(myself.notifications)) return false;
+    return myself.notifications.some(
+      (n) => n.isRead === false || n.is_read === false
+    );
+  }, [myself?.notifications]);
 
   const quickActions = [
     {
@@ -132,7 +139,7 @@ const DistributorHomeScreen = () => {
           activeOpacity={0.75}
         >
           <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
-          {pendingCount > 0 && <View style={styles.badgeDot} />}
+          {hasUnreadNotifications && <View style={styles.badgeDot} />}
         </TouchableOpacity>
       </View>
 

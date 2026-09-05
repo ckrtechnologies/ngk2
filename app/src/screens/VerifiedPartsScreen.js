@@ -47,6 +47,7 @@ import AppHeader from '../components/common/AppHeader';
 import AppButton from '../components/common/AppButton';
 import JourneyStepIndicator from '../components/common/JourneyStepIndicator';
 import Product360Viewer from '../components/common/Product360Viewer';
+import VehicleCardImage from '../components/vehicle/VehicleCardImage';
 
 const categorizePart = (item) => {
   if (item?.category?.id) {
@@ -662,20 +663,53 @@ const VerifiedPartsScreen = () => {
         title="Verified Parts"
         subtitle={
           vehicle
-            ? `${vehicle.manuName || ''} ${vehicle.modelname || vehicle.name || ''}`
+            ? `${vehicle.manuName || vehicle.make || ''} ${vehicle.modelname || vehicle.model || vehicle.name || ''}`
             : searchQuery
             ? `Search: "${searchQuery}"`
             : `${parts.length} Matching Components`
         }
         onBack={() => navigation.goBack()}
+        rightElement={
+          vehicle ? (
+            <TouchableOpacity
+              style={styles.switchVehicleHeaderBtn}
+              onPress={() => navigation.navigate('PartsFinder')}
+              activeOpacity={0.8}
+            >
+              <Car size={13} color="#FFFFFF" strokeWidth={2.2} />
+              <Text style={styles.switchVehicleHeaderBtnText}>Switch</Text>
+            </TouchableOpacity>
+          ) : null
+        }
       />
 
       {/* 3-Step Journey Indicator */}
       <JourneyStepIndicator
         currentStep={3}
         onStepPress={(step) => {
-          if (step === 2) navigation.goBack();
-          else if (step === 1) navigation.navigate('PartsFinder');
+          if (step === 1) {
+            navigation.navigate('PartsFinder');
+          } else if (step === 2) {
+            if (selectedManufacturer || selectedSeries || vehicle) {
+              const manu = selectedManufacturer || {
+                manuId: vehicle?.manuId || vehicle?.mfrId,
+                manuName: vehicle?.manuName || vehicle?.make || vehicle?.manufacturer,
+              };
+              const series = selectedSeries || {
+                modelId: vehicle?.modelId || vehicle?.modelSeriesId,
+                modelname: vehicle?.modelname || vehicle?.model,
+              };
+              navigation.navigate('vehiclesListScreen', {
+                selectedApp: route.params?.selectedApp || 'Passenger',
+                appType: route.params?.appType || 'P',
+                selectedManufacturer: manu,
+                selectedSeries: series,
+                vehiclesList: route.params?.vehiclesList || [],
+              });
+            } else {
+              navigation.navigate('PartsFinder');
+            }
+          }
         }}
       />
 
@@ -760,6 +794,15 @@ const VerifiedPartsScreen = () => {
             {/* Registered Vehicle Context Banner */}
             {vehicle && (
               <View style={styles.vehicleContextCard}>
+                <View style={styles.vehicleContextThumbContainer}>
+                  <VehicleCardImage
+                    car={vehicle}
+                    height={54}
+                    resizeMode="cover"
+                    compact={true}
+                    style={styles.vehicleContextThumb}
+                  />
+                </View>
                 <View style={styles.vehicleContextLeft}>
                   <View style={styles.vehicleContextBadge}>
                     <Car size={13} color="#D0142C" strokeWidth={2.2} />
@@ -1286,9 +1329,9 @@ const VerifiedPartsScreen = () => {
             },
           ]}
         >
-          <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" translucent={true} />
+          <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={true} />
 
-          {/* Top Modal Navigation Header - Clean Light Theme */}
+          {/* Top Modal Navigation Header - NGK Crimson Theme */}
           {!isStudioFullscreen && (
             <View style={styles.modalHeaderLight}>
               <View style={styles.modalHeaderInfo}>
@@ -1315,7 +1358,7 @@ const VerifiedPartsScreen = () => {
                 onPress={() => { setIsStudioFullscreen(false); setSpecsModalVisible(false); }}
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
               >
-                <X size={20} color="#374151" />
+                <X size={20} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           )}
@@ -2423,6 +2466,25 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
   },
+  enquireBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    height: 46,
+    borderRadius: 10,
+    backgroundColor: '#D0142C',
+    shadowColor: '#D0142C',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  enquireBtnText: {
+    fontSize: 13.5,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
   // Quick Peek Modal Styles
   peekModalOverlay: {
     flex: 1,
@@ -2644,6 +2706,22 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   // Full-Screen 3D Showroom Modal Styles - Clean Light OEM Theme
+  switchVehicleHeaderBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.22)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 14,
+    gap: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.35)',
+  },
+  switchVehicleHeaderBtnText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
   fullScreenModal: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -2654,9 +2732,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 18,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderColor: '#E5E7EB',
+    backgroundColor: '#D0142C',
+    borderBottomWidth: 0,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
   modalHeaderInfo: {
     flex: 1,
@@ -2664,7 +2746,7 @@ const styles = StyleSheet.create({
   },
   modalBrandPillLight: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -2673,25 +2755,26 @@ const styles = StyleSheet.create({
   modalBrandTextLight: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#FFFFFF',
     letterSpacing: 0.5,
   },
   modalPartNumberLight: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#111827',
+    color: '#FFFFFF',
     letterSpacing: 0.5,
   },
   modalPartSubLight: {
     fontSize: 12,
-    color: '#6B7280',
+    color: 'rgba(255, 255, 255, 0.88)',
     marginTop: 2,
+    fontWeight: '500',
   },
   modalCloseBtnLight: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -3218,7 +3301,7 @@ const styles = StyleSheet.create({
   vehicleContextCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 14,
-    padding: 14,
+    padding: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#E5E7EB',
@@ -3230,6 +3313,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 2,
+  },
+  vehicleContextThumbContainer: {
+    width: 76,
+    height: 54,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#0F172A',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  vehicleContextThumb: {
+    width: 76,
+    height: 54,
+    borderRadius: 10,
   },
   vehicleContextLeft: {
     flex: 1,

@@ -51,7 +51,13 @@ export default function DealerFilterModal({
     return dealers.filter((d) => {
       // Role filter
       if (draft.role === 'distributor' && d.role !== 'distributor') return false;
-      if (draft.role === 'reseller' && d.role !== 'reseller') return false;
+      if (
+        draft.role === 'reseller' &&
+        d.role !== 'reseller' &&
+        d.role !== 'stockist' &&
+        d.role !== 'dealer'
+      )
+        return false;
 
       // Distance / radius filter
       if (

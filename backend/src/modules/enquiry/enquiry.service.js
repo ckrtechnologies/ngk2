@@ -163,17 +163,65 @@ class EnquiryService {
       const customerObj = item.customer || {};
       const dealerObj = item.dealer || {};
       const partRef = item.part_reference || {};
+      const vehicleObj = partRef.vehicle || {};
+      const partObj = partRef.part || {};
       const messagesList = (item.messages || []).sort(
         (a, b) => new Date(a.created_at) - new Date(b.created_at)
       );
+
+      const resolvedPartNumber =
+        partRef.partNumber ||
+        partRef.part_number ||
+        partObj.partNumber ||
+        partObj.articleNo ||
+        vehicleObj.partNumber ||
+        null;
+
+      const resolvedPartName =
+        partRef.partName ||
+        partRef.part_name ||
+        partObj.partName ||
+        partObj.description ||
+        vehicleObj.partName ||
+        null;
+
+      const resolvedMake =
+        partRef.make ||
+        vehicleObj.make ||
+        partRef.vehicleMake ||
+        null;
+
+      const resolvedModel =
+        partRef.model ||
+        vehicleObj.model ||
+        partRef.vehicleModel ||
+        null;
+
+      const resolvedYear =
+        partRef.year ||
+        vehicleObj.year ||
+        partRef.vehicleYear ||
+        null;
+
+      const resolvedCarName =
+        partRef.carName ||
+        partRef.car_name ||
+        [resolvedMake, resolvedModel, resolvedYear].filter(Boolean).join(' ').trim() ||
+        null;
+
+      const resolvedDealerName =
+        dealerObj.name ||
+        partRef.dealerName ||
+        vehicleObj.dealerName ||
+        'Authorized Stockist';
 
       return {
         ...item,
         status: item.status || 'Pending',
         title: item.title,
         description: item.description,
-        quantity: item.quantity || 1,
-        enquiryDetails: item.description || '',
+        quantity: item.quantity || partRef.quantity || 1,
+        enquiryDetails: item.description || partRef.enquiryDetails || '',
         messages: messagesList.map((m) => ({
           id: m.id,
           sender: m.sender_role || 'user',
@@ -182,17 +230,25 @@ class EnquiryService {
           timestamp: m.created_at,
           isSystem: m.is_system,
         })),
-        part: partRef.part || null,
-        vehicleData: partRef.vehicle || null,
-        imageurl: item.image_url || null,
+        part_number: resolvedPartNumber,
+        part_name: resolvedPartName,
+        car_name: resolvedCarName,
+        make: resolvedMake,
+        model: resolvedModel,
+        year: resolvedYear,
+        engine: partRef.engine || vehicleObj.engine || null,
+        part: partObj || null,
+        vehicle: vehicleObj || null,
+        vehicleData: vehicleObj || null,
+        imageurl: item.image_url || partRef.imageurl || null,
         userName: customerObj.name || 'Customer',
         userEmail: customerObj.email || '',
-        dealerName: dealerObj.name || 'Reseller',
+        dealerName: resolvedDealerName,
+        part_reference: partRef,
       };
     });
   }
 
-  /**
   /**
    * Helper: Get formatted enquiry with all messages and relationships
    */
@@ -210,17 +266,65 @@ class EnquiryService {
     const customerObj = data.customer || {};
     const dealerObj = data.dealer || {};
     const partRef = data.part_reference || {};
+    const vehicleObj = partRef.vehicle || {};
+    const partObj = partRef.part || {};
     const messagesList = (data.messages || []).sort(
       (a, b) => new Date(a.created_at) - new Date(b.created_at)
     );
+
+    const resolvedPartNumber =
+      partRef.partNumber ||
+      partRef.part_number ||
+      partObj.partNumber ||
+      partObj.articleNo ||
+      vehicleObj.partNumber ||
+      null;
+
+    const resolvedPartName =
+      partRef.partName ||
+      partRef.part_name ||
+      partObj.partName ||
+      partObj.description ||
+      vehicleObj.partName ||
+      null;
+
+    const resolvedMake =
+      partRef.make ||
+      vehicleObj.make ||
+      partRef.vehicleMake ||
+      null;
+
+    const resolvedModel =
+      partRef.model ||
+      vehicleObj.model ||
+      partRef.vehicleModel ||
+      null;
+
+    const resolvedYear =
+      partRef.year ||
+      vehicleObj.year ||
+      partRef.vehicleYear ||
+      null;
+
+    const resolvedCarName =
+      partRef.carName ||
+      partRef.car_name ||
+      [resolvedMake, resolvedModel, resolvedYear].filter(Boolean).join(' ').trim() ||
+      null;
+
+    const resolvedDealerName =
+      dealerObj.name ||
+      partRef.dealerName ||
+      vehicleObj.dealerName ||
+      'Authorized Stockist';
 
     return {
       ...data,
       status: data.status || 'Pending',
       title: data.title,
       description: data.description,
-      quantity: data.quantity || 1,
-      enquiryDetails: data.description || '',
+      quantity: data.quantity || partRef.quantity || 1,
+      enquiryDetails: data.description || partRef.enquiryDetails || '',
       messages: messagesList.map((m) => ({
         id: m.id,
         sender: m.sender_role || 'user',
@@ -229,12 +333,21 @@ class EnquiryService {
         timestamp: m.created_at,
         isSystem: m.is_system,
       })),
-      part: partRef.part || null,
-      vehicleData: partRef.vehicle || null,
-      imageurl: data.image_url || null,
+      part_number: resolvedPartNumber,
+      part_name: resolvedPartName,
+      car_name: resolvedCarName,
+      make: resolvedMake,
+      model: resolvedModel,
+      year: resolvedYear,
+      engine: partRef.engine || vehicleObj.engine || null,
+      part: partObj || null,
+      vehicle: vehicleObj || null,
+      vehicleData: vehicleObj || null,
+      imageurl: data.image_url || partRef.imageurl || null,
       userName: customerObj.name || 'Customer',
       userEmail: customerObj.email || '',
-      dealerName: dealerObj.name || 'Reseller',
+      dealerName: resolvedDealerName,
+      part_reference: partRef,
     };
   }
 
@@ -341,7 +454,7 @@ class EnquiryService {
     await supabase.from('enquiries').update({ updated_at: new Date().toISOString() }).eq('id', id);
 
     // Notify other party
-    const targetUserId = sender === 'owner' ? enquiry.dealer_id : enquiry.user_id;
+    const targetUserId = senderRole === 'owner' ? enquiry.dealer_id : enquiry.user_id;
     if (targetUserId) {
       await supabase.from('notifications').insert({
         user_id: targetUserId,

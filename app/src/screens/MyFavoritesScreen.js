@@ -254,7 +254,10 @@ const MyFavoritesScreen = () => {
                 style={styles.footerBtnEnquiry}
                 onPress={() => {
                   setShowDetailsModal(false);
-                  navigation.navigate('TechnicalEnquiry', { part: selectedPart });
+                  navigation.navigate('TechnicalEnquiry', {
+                    part: selectedPart,
+                    vehicle: selectedPart?.vehicle || selectedPart?.article_summary || null,
+                  });
                 }}
               >
                 <Settings color="#FFFFFF" size={wp('5%')} />
