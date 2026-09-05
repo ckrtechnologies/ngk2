@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
   Search,
@@ -145,13 +145,9 @@ const VehiclesListScreen = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingBottom: insets.bottom,
-        },
-      ]}
+    <SafeAreaView
+      edges={['bottom', 'left', 'right']}
+      style={styles.safeArea}
     >
       <AppHeader
         title={`${mfrName} ${seriesName}`}
@@ -303,7 +299,7 @@ const VehiclesListScreen = () => {
         )}
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 };
 

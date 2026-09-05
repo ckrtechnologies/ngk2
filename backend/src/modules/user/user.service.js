@@ -29,21 +29,33 @@ class UserService {
       console.warn('Could not fetch garage vehicles:', garageError.message);
     }
 
+    const hasExplicitPrimary = garageRows?.some(
+      (v) => v.raw_specs?.isPrimary === true || v.raw_specs?.is_primary === true
+    );
+
     const garageList = (garageRows && garageRows.length > 0)
-      ? garageRows.map((v, index) => ({
-          id: v.id,
-          make: v.make,
-          model: v.model,
-          year: v.year,
-          engine: v.engine_code,
-          engine_code: v.engine_code,
-          licensePlate: v.license_plate || v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
-          license_plate: v.license_plate || v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
-          vin: v.vin,
-          linkageTargetId: v.linkage_target_id,
-          isPrimary: v.is_primary || v.raw_specs?.isPrimary || v.raw_specs?.is_primary || (index === 0),
-          created_at: v.created_at,
-        }))
+      ? garageRows.map((v, index) => {
+          const isPrimary = hasExplicitPrimary
+            ? Boolean(v.raw_specs?.isPrimary || v.raw_specs?.is_primary)
+            : index === 0;
+
+          return {
+            id: v.id,
+            make: v.make,
+            model: v.model,
+            year: v.year || v.raw_specs?.year,
+            engine: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
+            engine_code: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
+            licensePlate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
+            license_plate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
+            vin: v.vin || v.raw_specs?.vin || '',
+            linkageTargetId: v.linkage_target_id,
+            raw_specs: v.raw_specs || {},
+            isPrimary,
+            is_primary: isPrimary,
+            created_at: v.created_at,
+          };
+        })
       : [];
 
     // Fetch watchlist items

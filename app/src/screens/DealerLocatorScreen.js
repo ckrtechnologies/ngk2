@@ -15,7 +15,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   MapPin,
   Phone,
@@ -291,13 +291,9 @@ const DealerLocatorScreen = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingBottom: insets.bottom,
-        },
-      ]}
+    <SafeAreaView
+      edges={['bottom', 'left', 'right']}
+      style={styles.safeArea}
     >
       <AppHeader
         title="Authorized Dealers"
@@ -755,7 +751,7 @@ const DealerLocatorScreen = () => {
         onReset={() => setFilters(DEFAULT_FILTERS)}
         dealers={dealers}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

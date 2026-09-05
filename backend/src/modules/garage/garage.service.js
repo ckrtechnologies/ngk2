@@ -66,21 +66,112 @@ class GarageService {
       return [];
     }
 
+    const hasExplicitPrimary = vehicles.some(
+      (v) => v.raw_specs?.isPrimary === true || v.raw_specs?.is_primary === true
+    );
+
     // Normalize keys
-    return vehicles.map((v, index) => ({
-      id: v.id,
-      make: v.make,
-      model: v.model,
-      year: v.year,
-      engine: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
-      engine_code: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
-      licensePlate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
-      license_plate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
-      vin: v.vin || v.raw_specs?.vin || '',
-      linkageTargetId: v.linkage_target_id,
-      isPrimary: v.is_primary || v.raw_specs?.isPrimary || v.raw_specs?.is_primary || (index === 0),
-      created_at: v.created_at,
-    }));
+    return vehicles.map((v, index) => {
+      const isPrimary = hasExplicitPrimary
+        ? Boolean(v.raw_specs?.isPrimary || v.raw_specs?.is_primary)
+        : index === 0;
+
+      return {
+        id: v.id,
+        make: v.make,
+        model: v.model,
+        year: v.year || v.raw_specs?.year,
+        engine: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
+        engine_code: v.engine_code || v.raw_specs?.engine || v.raw_specs?.engine_code || 'Standard',
+        licensePlate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
+        license_plate: v.raw_specs?.licensePlate || v.raw_specs?.license_plate || '',
+        vin: v.vin || v.raw_specs?.vin || '',
+        linkageTargetId: v.linkage_target_id,
+        raw_specs: v.raw_specs || {},
+        isPrimary,
+        is_primary: isPrimary,
+        created_at: v.created_at,
+      };
+    });
+  }
+
+  /**
+   * Update vehicle in garage
+   */
+  async updateVehicleInGarage(userId, vehicleId, updates = {}) {
+    if (!userId || !vehicleId) {
+      throw new Error('User ID and Vehicle ID are required');
+    }
+
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(vehicleId));
+    let query = supabase
+      .from('garage_vehicles')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (isUuid) {
+      query = query.eq('id', vehicleId);
+    } else {
+      query = query.or(`id.eq.${vehicleId},linkage_target_id.eq.${vehicleId}`);
+    }
+
+    const { data: currentVehicle, error: findError } = await query.maybeSingle();
+
+    if (findError) {
+      console.warn('Error finding vehicle for update:', findError.message);
+    }
+
+    const targetId = currentVehicle?.id || (isUuid ? vehicleId : null);
+    if (!targetId) {
+      throw new Error(`Vehicle ${vehicleId} not found in garage`);
+    }
+
+    const existingSpecs = currentVehicle?.raw_specs || {};
+    const updatedSpecs = {
+      ...existingSpecs,
+      ...(updates.raw_specs || {}),
+      licensePlate: updates.licensePlate !== undefined ? updates.licensePlate : (existingSpecs.licensePlate || existingSpecs.license_plate || ''),
+      license_plate: updates.licensePlate !== undefined ? updates.licensePlate : (existingSpecs.licensePlate || existingSpecs.license_plate || ''),
+      vin: updates.vin !== undefined ? updates.vin : (existingSpecs.vin || currentVehicle?.vin || ''),
+      engine: updates.engine !== undefined ? updates.engine : (existingSpecs.engine || currentVehicle?.engine_code || ''),
+      engine_code: updates.engine !== undefined ? updates.engine : (existingSpecs.engine_code || currentVehicle?.engine_code || ''),
+      year: updates.year !== undefined ? updates.year : (existingSpecs.year || currentVehicle?.year || ''),
+      nickname: updates.nickname !== undefined ? updates.nickname : existingSpecs.nickname,
+      isPrimary: updates.isPrimary !== undefined ? Boolean(updates.isPrimary) : Boolean(existingSpecs.isPrimary),
+      is_primary: updates.isPrimary !== undefined ? Boolean(updates.isPrimary) : Boolean(existingSpecs.is_primary),
+    };
+
+    // Only update valid columns that exist in the Supabase garage_vehicles table
+    const updatePayload = {
+      raw_specs: updatedSpecs,
+    };
+    if (updates.vin !== undefined) {
+      updatePayload.vin = updates.vin ? String(updates.vin).trim() : null;
+    }
+    if (updates.engine !== undefined) {
+      updatePayload.engine_code = updates.engine ? String(updates.engine).trim() : null;
+    }
+    if (updates.year !== undefined) {
+      updatePayload.year = updates.year ? String(updates.year).trim() : null;
+    }
+
+    const { data: updatedEntry, error: updateErr } = await supabase
+      .from('garage_vehicles')
+      .update(updatePayload)
+      .eq('id', targetId)
+      .select();
+
+    if (updateErr) {
+      console.error('Could not update garage_vehicles:', updateErr.message);
+      throw new Error(`Failed to update vehicle in database: ${updateErr.message}`);
+    }
+
+    // If isPrimary was set to true, update all other vehicles for this user to be false
+    if (updates.isPrimary) {
+      await this.setPrimaryVehicle(userId, targetId);
+    }
+
+    return updatedEntry || [updatedSpecs];
   }
 
   /**
@@ -90,15 +181,15 @@ class GarageService {
     if (!userId || !vehicleId) return;
 
     // Fetch user's vehicles
-    const { data: vehicles } = await supabase
+    const { data: vehicles, error } = await supabase
       .from('garage_vehicles')
       .select('*')
       .eq('user_id', userId);
 
-    if (!vehicles) return;
+    if (error || !vehicles) return;
 
     for (const v of vehicles) {
-      const isTarget = v.id === vehicleId;
+      const isTarget = String(v.id) === String(vehicleId);
       const updatedSpecs = {
         ...(v.raw_specs || {}),
         isPrimary: isTarget,

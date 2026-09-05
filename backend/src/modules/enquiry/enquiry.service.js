@@ -302,8 +302,10 @@ class EnquiryService {
   /**
    * 4. Add Message to Enquiry Thread
    */
-  async addMessage(id, { sender, senderName, text, senderId }) {
-    if (!text || !text.trim()) {
+  async addMessage(id, payload = {}) {
+    const rawText = payload.text || payload.message || payload.message_text || '';
+    const text = String(rawText).trim();
+    if (!text) {
       throw new Error('Message text cannot be empty');
     }
 
@@ -317,15 +319,19 @@ class EnquiryService {
       throw new Error('Enquiry not found');
     }
 
+    const senderRole = payload.sender || payload.senderRole || payload.role || 'user';
+    const senderName = payload.senderName || payload.sender_name || 'User';
+    const senderId = payload.senderId || payload.sender_id || (senderRole === 'owner' ? enquiry.user_id : enquiry.dealer_id);
+
     // Insert message into normalized enquiry_messages
     const { error: insertError } = await supabase
       .from('enquiry_messages')
       .insert({
         enquiry_id: id,
-        sender_id: senderId || (sender === 'owner' ? enquiry.user_id : enquiry.dealer_id),
-        sender_name: senderName || 'User',
-        sender_role: sender || 'user',
-        message_text: text.trim(),
+        sender_id: senderId,
+        sender_name: senderName,
+        sender_role: senderRole,
+        message_text: text,
         is_system: false,
       });
 

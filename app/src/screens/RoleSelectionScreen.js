@@ -5,12 +5,21 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ScrollView,
+  StatusBar,
 } from 'react-native';
-import { User, ShoppingBag, Truck, ChevronRight } from 'lucide-react-native';
+import { ArrowRight } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ScreenContainer from '../components/common/ScreenContainer';
+import {
+  OwnerRole3DIcon,
+  ResellerRole3DIcon,
+  DistributorRole3DIcon,
+} from '../components/icons/HomeIcons';
 
 const RoleSelectionScreen = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     const checkAlreadyLogin = async () => {
       const token = await AsyncStorage.getItem('token');
@@ -34,29 +43,38 @@ const RoleSelectionScreen = ({ navigation }) => {
     {
       id: 'owner',
       title: 'Vehicle Owner',
-      description: 'Search parts & track garage maintenance',
-      icon: <User size={22} color="#D0142C" />,
+      description: 'Search verified OE spark plugs, glow plugs & coils with fitment guarantee.',
+      IconComponent: OwnerRole3DIcon,
       badge: 'Individual',
       badgeBg: '#FEE2E2',
       badgeColor: '#D0142C',
+      boxBg: '#FEF2F2',
+      boxBorder: '#FECDD3',
+      ctaColor: '#D0142C',
     },
     {
       id: 'reseller',
       title: 'Professional Reseller',
-      description: 'Workshop supply, trade catalogue & quotes',
-      icon: <ShoppingBag size={22} color="#D0142C" />,
-      badge: 'Trade & Workshop',
+      description: 'Workshop parts supply, quote requests & priority trade stock inquiry.',
+      IconComponent: ResellerRole3DIcon,
+      badge: 'Workshop & Trade',
       badgeBg: '#FEF3C7',
       badgeColor: '#D97706',
+      boxBg: '#FFFBEB',
+      boxBorder: '#FDE68A',
+      ctaColor: '#D97706',
     },
     {
       id: 'distributor',
       title: 'Authorized Distributor',
-      description: 'Bulk logistics & tier-1 parts provisioning',
-      icon: <Truck size={22} color="#111827" />,
-      badge: 'Enterprise',
-      badgeBg: '#F3F4F6',
-      badgeColor: '#374151',
+      description: 'National freight, bulk stock management & regional stockist oversight.',
+      IconComponent: DistributorRole3DIcon,
+      badge: 'Enterprise Tier-1',
+      badgeBg: '#E2E8F0',
+      badgeColor: '#334155',
+      boxBg: '#F1F5F9',
+      boxBorder: '#CBD5E1',
+      ctaColor: '#0F172A',
     },
   ];
 
@@ -65,181 +83,335 @@ const RoleSelectionScreen = ({ navigation }) => {
   };
 
   return (
-    <ScreenContainer
-      scrollable={false}
-      footer={
-        <View style={styles.footer}>
-          <Text style={styles.footerBrand}>NGK SPARK PLUG CO., LTD.</Text>
-          <Text style={styles.footerVersion}>Technical Services Mobile • v2.0</Text>
-        </View>
-      }
-    >
-      <View style={styles.content}>
-        {/* Top Branding */}
-        <View style={styles.topSection}>
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
+
+      {/* SOLID CRIMSON BRAND HERO HEADER */}
+      <View style={[styles.solidHeader, { paddingTop: insets.top + 20 }]}>
+        <View style={styles.headerBrandingPill}>
           <Image
-            source={require('../assets/images/logo.png')}
-            style={styles.logo}
+            source={require('../assets/images/logo_cropped.png')}
+            style={styles.headerLogo}
             resizeMode="contain"
           />
-          <Text style={styles.headline}>Select Your Profile</Text>
-          <Text style={styles.subheadline}>
-            Choose your account type to tailor your technical catalogue and service tools.
-          </Text>
         </View>
+        <Text style={styles.headline}>Select Your Portal</Text>
+        <Text style={styles.subheadline}>
+          Choose your account persona to access verified automotive catalogs, trade pricing and technical services.
+        </Text>
 
-        {/* 3 Compact Native Role Tiles */}
-        <View style={styles.rolesList}>
-          {roles.map((role) => (
-            <TouchableOpacity
-              key={role.id}
-              style={styles.roleCard}
-              activeOpacity={0.7}
-              onPress={() => handleRoleSelect(role.id)}
-            >
-              <View
-                style={[
-                  styles.iconBox,
-                  { backgroundColor: role.id === 'distributor' ? '#F3F4F6' : '#FEF2F2' },
-                ]}
-              >
-                {role.icon}
-              </View>
-
-              <View style={styles.infoBox}>
-                <View style={styles.titleRow}>
-                  <Text style={styles.roleTitle}>{role.title}</Text>
-                  <View
-                    style={[
-                      styles.roleBadge,
-                      { backgroundColor: role.badgeBg },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.roleBadgeText,
-                        { color: role.badgeColor },
-                      ]}
-                    >
-                      {role.badge}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={styles.roleDescription} numberOfLines={1}>
-                  {role.description}
-                </Text>
-              </View>
-
-              <ChevronRight size={18} color="#9CA3AF" />
-            </TouchableOpacity>
-          ))}
+        {/* Feature Highlights Pills */}
+        <View style={styles.headerPillsRow}>
+          <View style={styles.headerFeaturePill}>
+            <Text style={styles.headerFeaturePillText}>OE Fitment Guarantee</Text>
+          </View>
+          <View style={styles.headerFeatureDot} />
+          <View style={styles.headerFeaturePill}>
+            <Text style={styles.headerFeaturePillText}>Trade Pricing</Text>
+          </View>
+          <View style={styles.headerFeatureDot} />
+          <View style={styles.headerFeaturePill}>
+            <Text style={styles.headerFeaturePillText}>Priority Dispatch</Text>
+          </View>
         </View>
       </View>
-    </ScreenContainer>
+
+      {/* LOWER SECTION: WELL-PROPORTIONED CARDS WITH BEAUTIFUL 3D ICONS */}
+      <View style={[styles.lowerContainer, { paddingBottom: Math.max(insets.bottom, 12) + 8 }]}>
+        <View style={styles.cardsWrapper}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionHeaderText}>AVAILABLE ACCESS PORTALS</Text>
+            <Text style={styles.sectionSubText}>3 Personas</Text>
+          </View>
+
+          <View style={styles.cardsStack}>
+            {roles.map((role) => {
+              const Icon = role.IconComponent;
+              return (
+                <TouchableOpacity
+                  key={role.id}
+                  style={styles.roleCard}
+                  activeOpacity={0.84}
+                  onPress={() => handleRoleSelect(role.id)}
+                >
+                  {/* Beautiful 3D Icon Box */}
+                  <View
+                    style={[
+                      styles.cardIconBox,
+                      {
+                        backgroundColor: role.boxBg,
+                        borderColor: role.boxBorder,
+                      },
+                    ]}
+                  >
+                    <Icon size={48} />
+                  </View>
+
+                  {/* Right Content Column */}
+                  <View style={styles.cardContentCol}>
+                    <View style={styles.cardTitleRow}>
+                      <Text style={styles.cardTitle}>{role.title}</Text>
+                      <View style={[styles.cardBadge, { backgroundColor: role.badgeBg }]}>
+                        <Text style={[styles.cardBadgeText, { color: role.badgeColor }]}>
+                          {role.badge}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.cardDescription} numberOfLines={2}>
+                      {role.description}
+                    </Text>
+
+                    <View
+                      style={[
+                        styles.cardActionPill,
+                        { backgroundColor: role.boxBg, borderColor: role.boxBorder },
+                      ]}
+                    >
+                      <Text style={[styles.cardActionText, { color: role.ctaColor }]}>
+                        Continue as {role.title}
+                      </Text>
+                      <ArrowRight size={13} color={role.ctaColor} strokeWidth={2.5} />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Bottom Trust & Footer */}
+        <View style={styles.bottomSection}>
+          <View style={styles.trustBanner}>
+            <Text style={styles.trustBannerText}>
+              🔒 Official NGK Technical Services • Direct OEM Network
+            </Text>
+          </View>
+          <View style={styles.footer}>
+            <Text style={styles.footerBrand}>NGK SPARK PLUG CO., LTD. • TECHNICAL SERVICES</Text>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    paddingTop: 8,
+    backgroundColor: '#D0142C',
   },
-  topSection: {
+  solidHeader: {
+    backgroundColor: '#D0142C',
     alignItems: 'center',
-    marginBottom: 24,
+    justifyContent: 'center',
+    paddingHorizontal: 22,
+    paddingBottom: 28,
   },
-  logo: {
-    width: 140,
-    height: 48,
-    marginBottom: 16,
+  headerBrandingPill: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 9,
+    borderRadius: 16,
+    marginBottom: 12,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    elevation: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerLogo: {
+    width: 54,
+    height: 34,
   },
   headline: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#111827',
-    letterSpacing: -0.5,
+    fontSize: 24,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -0.4,
     textAlign: 'center',
     marginBottom: 6,
   },
   subheadline: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: 12.5,
+    color: 'rgba(255, 255, 255, 0.92)',
     textAlign: 'center',
     lineHeight: 18,
-    paddingHorizontal: 12,
+    fontWeight: '500',
+    maxWidth: 330,
+    marginBottom: 14,
   },
-  rolesList: {
-    width: '100%',
-    gap: 12,
-  },
-  roleCard: {
+  headerPillsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  iconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 14,
+    gap: 7,
   },
-  infoBox: {
+  headerFeaturePill: {
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  headerFeaturePillText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  headerFeatureDot: {
+    width: 3.5,
+    height: 3.5,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  lowerContainer: {
     flex: 1,
-    marginRight: 8,
+    backgroundColor: '#F8FAFC',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    paddingHorizontal: 18,
+    paddingTop: 20,
+    justifyContent: 'space-between',
   },
-  titleRow: {
+  cardsWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  sectionHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 3,
+    marginBottom: 12,
+    paddingHorizontal: 2,
   },
-  roleTitle: {
-    fontSize: 15,
+  sectionHeaderText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#94A3B8',
+    letterSpacing: 1.1,
+  },
+  sectionSubText: {
+    fontSize: 11,
     fontWeight: '700',
-    color: '#111827',
+    color: '#CBD5E1',
   },
-  roleBadge: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+  cardsStack: {
+    gap: 15,
+  },
+  roleCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 22,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardIconBox: {
+    width: 72,
+    height: 72,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  cardContentCol: {
+    flex: 1,
+    marginLeft: 14,
+    justifyContent: 'center',
+  },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#0F172A',
+    letterSpacing: -0.3,
+  },
+  cardBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
     borderRadius: 6,
   },
-  roleBadgeText: {
-    fontSize: 10,
-    fontWeight: '700',
+  cardBadgeText: {
+    fontSize: 8.5,
+    fontWeight: '800',
     textTransform: 'uppercase',
+    letterSpacing: 0.3,
   },
-  roleDescription: {
+  cardDescription: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#64748B',
+    lineHeight: 17,
+    marginBottom: 8,
+  },
+  cardActionPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 4.5,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  cardActionText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    letterSpacing: 0.1,
+  },
+  bottomSection: {
+    gap: 8,
+    alignItems: 'center',
+    paddingTop: 8,
+  },
+  trustBanner: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  trustBannerText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#475569',
+    letterSpacing: 0.2,
   },
   footer: {
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingBottom: 2,
   },
   footerBrand: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#9CA3AF',
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: '#94A3B8',
     letterSpacing: 0.8,
-  },
-  footerVersion: {
-    fontSize: 10,
-    color: '#D1D5DB',
-    marginTop: 2,
   },
 });
 

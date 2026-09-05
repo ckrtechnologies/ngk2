@@ -96,3 +96,19 @@ export const setPrimaryVehicle = async (req, res) => {
   }
 };
 
+export const updateVehicleInGarage = async (req, res) => {
+  try {
+    const id = req.params.id || req.body.userId || req.user?.id;
+    const vehicleId = req.params.vehicleId || req.body.vehicleId || req.body.id;
+    if (!id || !vehicleId) {
+      return sendError(res, 'User ID and Vehicle ID are required', 400);
+    }
+    const updates = req.body.updates || req.body;
+    await garageService.updateVehicleInGarage(id, vehicleId, updates);
+    const garage = await garageService.getGarageVehicles(id);
+    return sendSuccess(res, { garage }, 'Vehicle updated successfully');
+  } catch (error) {
+    return sendError(res, error.message, 400, error);
+  }
+};
+

@@ -5,18 +5,23 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ScrollView,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
+import { Mail, Lock, Eye, EyeOff, ChevronLeft } from 'lucide-react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiFunction } from '../apis/apiFunction';
 import { loginApi } from '../apis/api';
 import Toast from 'react-native-toast-message';
-import ScreenContainer from '../components/common/ScreenContainer';
-import AppHeader from '../components/common/AppHeader';
 import AppInput from '../components/common/AppInput';
 import AppButton from '../components/common/AppButton';
 import { useAuth } from '../core/auth/useAuth';
 
 const LoginScreen = ({ route, navigation }) => {
+  const insets = useSafeAreaInsets();
   const { signIn } = useAuth();
   const { role = 'owner' } = route.params || {};
   const [email, setEmail] = useState('');
@@ -31,38 +36,35 @@ const LoginScreen = ({ route, navigation }) => {
       case 'distributor':
         return {
           title: 'Distributor Portal',
-          subtitle: 'Enterprise Provisioned Access',
+          subtitle: 'Enterprise Tier-1 Logistics Access',
           emailPlaceholder: 'admin@distributor.com',
-          buttonColor: '#111827',
+          buttonColor: '#0F172A',
           badgeText: 'Distributor',
-          badgeBg: '#F3F4F6',
-          badgeColor: '#111827',
+          badgeBg: 'rgba(255, 255, 255, 0.16)',
+          badgeColor: '#F8FAFC',
           showRegister: false,
-          showGoogle: false,
         };
       case 'reseller':
         return {
           title: 'Reseller Portal',
-          subtitle: 'Workshop & Trade Access',
+          subtitle: 'Workshop & Trade Inquiries Access',
           emailPlaceholder: 'reseller@workshop.com',
           buttonColor: '#D0142C',
-          badgeText: 'Reseller',
-          badgeBg: '#FEF3C7',
-          badgeColor: '#D97706',
+          badgeText: 'Professional Reseller',
+          badgeBg: 'rgba(245, 158, 11, 0.2)',
+          badgeColor: '#FBBF24',
           showRegister: true,
-          showGoogle: false,
         };
       default:
         return {
           title: 'Welcome Back',
-          subtitle: 'Sign in to access your garage & parts catalog',
+          subtitle: 'Sign in to your garage & catalog portal',
           emailPlaceholder: 'owner@example.com',
           buttonColor: '#D0142C',
           badgeText: 'Vehicle Owner',
-          badgeBg: '#FEE2E2',
-          badgeColor: '#D0142C',
+          badgeBg: 'rgba(208, 20, 44, 0.25)',
+          badgeColor: '#FCA5A5',
           showRegister: true,
-          showGoogle: false,
         };
     }
   }, [role]);
@@ -137,205 +139,264 @@ const LoginScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ScreenContainer
-      scrollable={false}
-      footer={
-        <View style={styles.footerContainer}>
-          {roleConfig.showRegister && (
-            <TouchableOpacity
-              style={styles.registerRow}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('Register', { role })}
-            >
-              <Text style={styles.registerPrompt}>Don't have an account? </Text>
-              <Text style={[styles.registerLink, { color: roleConfig.buttonColor }]}>
-                Register
-              </Text>
-            </TouchableOpacity>
-          )}
-          <Text style={styles.copyrightText}>
-            Protected by NGK Technical Security System
-          </Text>
-        </View>
-      }
-    >
-      <AppHeader
-        variant="light"
-        includeTopInset={false}
-        showStatusBar={false}
-        onBack={() => navigation.goBack()}
-      />
+    <View style={styles.root}>
+      <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
 
-      <View style={styles.body}>
-        {/* Top Header & Role Badge */}
-        <View style={styles.headerBox}>
-          <Image
-            source={
-              role === 'distributor'
-                ? require('../assets/images/logo_black.png')
-                : require('../assets/images/logo.png')
-            }
-            style={styles.brandLogo}
-            resizeMode="contain"
-          />
-          <View style={styles.titleWithBadge}>
-            <Text style={styles.mainTitle}>{roleConfig.title}</Text>
-            <View
-              style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}
-            >
-              <Text
-                style={[
-                  styles.badgePillText,
-                  { color: roleConfig.badgeColor },
-                ]}
-              >
+      {/* TOP 35% DARK HEADER SECTION */}
+      <View style={[styles.darkHeaderSection, { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) }]}>
+        {/* Navigation Bar Row */}
+        <View style={styles.navRow}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
+          >
+            <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
+          </TouchableOpacity>
+
+          <View style={styles.headerBadgeContainer}>
+            <View style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}>
+              <Text style={[styles.badgePillText, { color: roleConfig.badgeColor }]}>
                 {roleConfig.badgeText}
               </Text>
             </View>
           </View>
-          <Text style={styles.subtitleText}>{roleConfig.subtitle}</Text>
+
+          <View style={{ width: 40 }} />
         </View>
 
-        {/* Form Container */}
-        <View style={styles.formCard}>
-          <AppInput
-            label="Email Address"
-            placeholder={roleConfig.emailPlaceholder}
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-              if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
-            }}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            leftIcon={<Mail size={18} color="#9CA3AF" />}
-            error={errors.email}
-          />
-
-          <AppInput
-            label="Password"
-            placeholder="••••••••"
-            value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-              if (errors.password)
-                setErrors((prev) => ({ ...prev, password: null }));
-            }}
-            secureTextEntry={!showPassword}
-            leftIcon={<Lock size={18} color="#9CA3AF" />}
-            rightIcon={
-              showPassword ? (
-                <Eye size={18} color="#6B7280" />
-              ) : (
-                <EyeOff size={18} color="#6B7280" />
-              )
-            }
-            onRightIconPress={() => setShowPassword((prev) => !prev)}
-            rightActionText="Forgot?"
-            rightActionColor={roleConfig.buttonColor}
-            onRightActionPress={() =>
-              navigation.navigate('ForgotPassword', { role })
-            }
-            error={errors.password}
-          />
-
-          <AppButton
-            title="Sign In"
-            onPress={handleLogin}
-            loading={loading}
-            backgroundColor={roleConfig.buttonColor}
-            style={styles.submitBtn}
-          />
+        {/* Center Brand Identity */}
+        <View style={styles.headerHeroBox}>
+          <View style={styles.logoCapsule}>
+            <Image
+              source={require('../assets/images/logo_cropped.png')}
+              style={styles.brandLogo}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.heroTitle}>{roleConfig.title}</Text>
+          <Text style={styles.heroSubtitle}>{roleConfig.subtitle}</Text>
         </View>
       </View>
-    </ScreenContainer>
+
+      {/* LOWER 65% FORM SECTION WITH CURVED WHITE SHEET */}
+      <KeyboardAvoidingView
+        style={styles.formSection}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollFormContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.formCard}>
+            <AppInput
+              label="Email Address"
+              placeholder={roleConfig.emailPlaceholder}
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              leftIcon={<Mail size={18} color="#64748B" />}
+              error={errors.email}
+            />
+
+            <AppInput
+              label="Password"
+              placeholder="••••••••"
+              value={password}
+              onChangeText={(text) => {
+                setPassword(text);
+                if (errors.password)
+                  setErrors((prev) => ({ ...prev, password: null }));
+              }}
+              secureTextEntry={!showPassword}
+              leftIcon={<Lock size={18} color="#64748B" />}
+              rightIcon={
+                showPassword ? (
+                  <Eye size={18} color="#475569" />
+                ) : (
+                  <EyeOff size={18} color="#475569" />
+                )
+              }
+              onRightIconPress={() => setShowPassword((prev) => !prev)}
+              rightActionText="Forgot?"
+              rightActionColor={roleConfig.buttonColor}
+              onRightActionPress={() =>
+                navigation.navigate('ForgotPassword', { role })
+              }
+              error={errors.password}
+            />
+
+            <AppButton
+              title="Sign In"
+              onPress={handleLogin}
+              loading={loading}
+              backgroundColor={roleConfig.buttonColor}
+              style={styles.submitBtn}
+            />
+          </View>
+
+          {/* Footer & Registration */}
+          <View style={styles.footerContainer}>
+            {roleConfig.showRegister && (
+              <TouchableOpacity
+                style={styles.registerRow}
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('Register', { role })}
+              >
+                <Text style={styles.registerPrompt}>Don't have an account? </Text>
+                <Text style={[styles.registerLink, { color: roleConfig.buttonColor }]}>
+                  Register
+                </Text>
+              </TouchableOpacity>
+            )}
+            <Text style={styles.copyrightText}>
+              Protected by NGK Technical Security System • 2026
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
+  root: {
     flex: 1,
-    justifyContent: 'center',
-    paddingBottom: 10,
+    backgroundColor: '#0F121C',
   },
-  headerBox: {
-    alignItems: 'center',
-    marginBottom: 20,
+  darkHeaderSection: {
+    height: hp('35%'),
+    minHeight: 250,
+    backgroundColor: '#0F121C',
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingBottom: 32,
   },
-  brandLogo: {
-    width: 120,
-    height: 40,
-    marginBottom: 12,
-  },
-  titleWithBadge: {
+  navRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    marginBottom: 4,
+    justifyContent: 'space-between',
+    width: '100%',
   },
-  mainTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
-    letterSpacing: -0.4,
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.22)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerBadgeContainer: {
+    alignItems: 'center',
   },
   badgePill: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
   },
   badgePillText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: '800',
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
-  subtitleText: {
-    fontSize: 13,
-    color: '#6B7280',
+  headerHeroBox: {
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  logoCapsule: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 22,
+    marginBottom: 12,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  brandLogo: {
+    width: 88,
+    height: 88,
+  },
+  heroTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -0.4,
+    marginBottom: 4,
     textAlign: 'center',
+  },
+  heroSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.75)',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  formSection: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: -20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  scrollFormContent: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 28,
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   formCard: {
     width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#F3F4F6',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
   },
   submitBtn: {
-    marginTop: 6,
+    marginTop: 10,
   },
   footerContainer: {
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingTop: 20,
   },
   registerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 6,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   registerPrompt: {
     fontSize: 13,
-    color: '#6B7280',
+    color: '#475569',
     fontWeight: '500',
   },
   registerLink: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   copyrightText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: '#94A3B8',
     textAlign: 'center',
-    marginTop: 2,
+    fontWeight: '600',
   },
 });
 

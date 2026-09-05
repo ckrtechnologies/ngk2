@@ -32,7 +32,7 @@ export const updateStatus = async (req, res) => {
 
 export const addMessage = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id || req.body.enquiryId || req.body.id;
     const data = await enquiryService.addMessage(id, req.body);
     return sendSuccess(res, { enquiry: data }, 'Message added successfully', 200);
   } catch (error) {

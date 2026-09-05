@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   // Initialize and validate session on app startup
   useEffect(() => {
     const initializeSession = async () => {
+      const startTime = Date.now();
       try {
         const storedToken = await AsyncStorage.getItem('token');
         const storedRole = await AsyncStorage.getItem('role');
@@ -75,6 +76,11 @@ export const AuthProvider = ({ children }) => {
         setUserRole(null);
         setCurrentUser(null);
       } finally {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, 3000 - elapsed);
+        if (remaining > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remaining));
+        }
         setIsLoading(false);
       }
     };

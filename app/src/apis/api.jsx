@@ -23,6 +23,7 @@ export const addEnquiryMessageApi = `${BASE_URL}/enquiries/addMessage`
 
 // Garage & Watchlist
 export const addVehicleToGarageApi = `${BASE_URL}/garage/addVehicleToGarage`
+export const updateVehicleInGarageApi = `${BASE_URL}/garage/updateVehicleInGarage`
 export const addSearchHistoryApi = `${BASE_URL}/garage/addSearchHistory`
 export const addVehicleToWatchlistApi = `${BASE_URL}/garage/addVehicleToWatchlist`
 export const removeFromWatchlistApi = `${BASE_URL}/garage/removeFromWatchlist`

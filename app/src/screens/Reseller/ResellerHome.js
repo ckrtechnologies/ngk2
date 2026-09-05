@@ -9,7 +9,7 @@ import {
   Image,
   RefreshControl,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,
   Bell,
@@ -96,39 +96,42 @@ const ResellerHomeScreen = () => {
   ];
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-        },
-      ]}
-    >
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
 
-      {/* 52px Native App Header */}
-      <View style={styles.header}>
+      {/* Solid Crimson NGK Header */}
+      <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
         <TouchableOpacity
           style={styles.headerBtn}
           onPress={() => navigation.navigate('CustomDrawer')}
-          activeOpacity={0.7}
+          activeOpacity={0.75}
         >
-          <Menu size={22} color="#111827" />
+          <Menu size={22} color="#FFFFFF" strokeWidth={2.4} />
         </TouchableOpacity>
 
-        <Image
-          source={require('../../assets/images/logo.png')}
-          style={styles.headerLogo}
-          resizeMode="contain"
-        />
+        <View style={styles.headerCenter}>
+          <View style={styles.logoBadgeContainer}>
+            <Image
+              source={require('../../assets/images/ngk_emblem_clean.png')}
+              style={styles.headerLogoImg}
+              resizeMode="contain"
+            />
+            <Text style={styles.headerBrandText}>NGK</Text>
+          </View>
+          <View style={styles.headerUserContainer}>
+            <Text style={styles.headerGreetingHello}>WORKSHOP,</Text>
+            <Text style={styles.headerUserName} numberOfLines={1}>
+              {myself?.name ? myself.name : 'Partner'}
+            </Text>
+          </View>
+        </View>
 
         <TouchableOpacity
           style={styles.headerBtn}
           onPress={() => navigation.navigate('Notifications')}
-          activeOpacity={0.7}
+          activeOpacity={0.75}
         >
-          <Bell size={20} color="#111827" />
+          <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
           {pendingCount > 0 && <View style={styles.badgeDot} />}
         </TouchableOpacity>
       </View>
@@ -223,7 +226,7 @@ const ResellerHomeScreen = () => {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -232,37 +235,90 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F9FAFB',
   },
-  header: {
-    height: 52,
-    backgroundColor: '#FFFFFF',
+  solidHeader: {
+    backgroundColor: '#D0142C',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: '#A50E26',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   headerBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.28)',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
+  headerCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flexShrink: 1,
+    paddingHorizontal: 8,
+  },
+  logoBadgeContainer: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.16,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  headerLogoImg: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+  },
+  headerBrandText: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#D0142C',
+    letterSpacing: 0.8,
+    marginLeft: 5,
+  },
+  headerUserContainer: {
+    justifyContent: 'center',
+    flexShrink: 1,
+  },
+  headerGreetingHello: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: 'rgba(255, 255, 255, 0.82)',
+    letterSpacing: 0.8,
+  },
+  headerUserName: {
+    fontSize: 14.5,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -0.2,
+  },
   badgeDot: {
     position: 'absolute',
-    top: 7,
-    right: 7,
-    width: 7,
-    height: 7,
+    top: 6,
+    right: 6,
+    width: 7.5,
+    height: 7.5,
     borderRadius: 4,
-    backgroundColor: '#D0142C',
-  },
-  headerLogo: {
-    width: 100,
-    height: 32,
+    backgroundColor: '#FBBF24',
+    borderWidth: 1.5,
+    borderColor: '#D0142C',
   },
   scrollContent: {
     paddingHorizontal: 16,

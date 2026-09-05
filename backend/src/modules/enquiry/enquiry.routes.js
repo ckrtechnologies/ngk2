@@ -10,5 +10,6 @@ enquiryRouter.get('/getEnquiry/:userId', optionalAuth, getEnquiries);
 enquiryRouter.get('/:userId', optionalAuth, getEnquiries);
 enquiryRouter.put('/updateStatus/:id', optionalAuth, updateStatus);
 enquiryRouter.post('/addMessage/:id', optionalAuth, addMessage);
+enquiryRouter.post('/addMessage', optionalAuth, addMessage);
 
 export default enquiryRouter;

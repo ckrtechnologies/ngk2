@@ -13,8 +13,9 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
   Plus,
@@ -38,8 +39,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyselfRedux } from '../redux/getData';
 import { apiFunction } from '../apis/apiFunction';
+import VehicleCardImage from '../components/vehicle/VehicleCardImage';
 import {
   addVehicleToGarageApi,
+  updateVehicleInGarageApi,
   addVehicleToWatchlistApi,
   removeFromWatchlistApi,
   serviceJsonApi,
@@ -122,10 +125,26 @@ const MyGarageScreen = () => {
   const [pickerType, setPickerType] = useState('manu'); // 'manu' | 'series' | 'trim'
   const [pickerSearch, setPickerSearch] = useState('');
 
+  // Active Vehicle state
+  const [activeVehicleId, setActiveVehicleId] = useState(null);
+
+  // Edit Vehicle Modal states (Full CRUD: Update)
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState(null);
+  const [editLicensePlate, setEditLicensePlate] = useState('');
+  const [editVin, setEditVin] = useState('');
+  const [editEngine, setEditEngine] = useState('');
+  const [editYear, setEditYear] = useState('');
+  const [editIsPrimary, setEditIsPrimary] = useState(false);
+  const [editSubmitting, setEditSubmitting] = useState(false);
+
   const refreshUser = useCallback(async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    if (userId) dispatch(getMyselfRedux(userId));
-  }, [dispatch]);
+    const storedUserId = await AsyncStorage.getItem('userId');
+    const effectiveUserId = storedUserId || myself?.id || myself?._id;
+    if (effectiveUserId) dispatch(getMyselfRedux(effectiveUserId));
+    const savedActiveId = await AsyncStorage.getItem('active_vehicle_id');
+    if (savedActiveId) setActiveVehicleId(savedActiveId);
+  }, [dispatch, myself?.id, myself?._id]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -410,6 +429,101 @@ const MyGarageScreen = () => {
     }
   };
 
+  const handleSetActive = async (car) => {
+    const carId = car.id || car._id || car.linkageTargetId;
+    if (!carId) return;
+    try {
+      await AsyncStorage.setItem('active_vehicle_id', String(carId));
+      setActiveVehicleId(String(carId));
+      Toast.show({
+        type: 'success',
+        text1: 'Active Vehicle Set',
+        text2: `${car.make} ${car.model} is now active on your dashboard.`,
+      });
+      refreshUser();
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  const handleOpenEditModal = (car) => {
+    setEditingVehicle(car);
+    setEditLicensePlate(car.license_plate || car.licensePlate || '');
+    setEditVin(car.vin || '');
+    setEditEngine(car.engine || car.engine_code || '');
+    setEditYear(car.year ? String(car.year) : '');
+    const isPrimary = (car.id || car._id || car.linkageTargetId) === activeVehicleId || car.isPrimary || car.is_primary;
+    setEditIsPrimary(Boolean(isPrimary));
+    setEditModalVisible(true);
+  };
+
+  const handleSaveVehicleEdit = async () => {
+    if (!editingVehicle) return;
+    setEditSubmitting(true);
+    const storedUserId = await AsyncStorage.getItem('userId');
+    const userId = storedUserId || myself?.id || myself?._id;
+    const vehicleId = editingVehicle.id || editingVehicle._id || editingVehicle.linkageTargetId;
+
+    const updates = {
+      licensePlate: editLicensePlate.trim(),
+      license_plate: editLicensePlate.trim(),
+      vin: editVin.trim(),
+      engine: editEngine.trim(),
+      year: editYear.trim(),
+      isPrimary: editIsPrimary,
+    };
+
+    try {
+      const res = await apiFunction(
+        updateVehicleInGarageApi,
+        [],
+        { userId, vehicleId, updates },
+        'PUT',
+        false
+      );
+
+      if (res?.error || res?.success === false) {
+        throw new Error(res?.message || 'Failed to update vehicle');
+      }
+
+      if (editIsPrimary) {
+        await AsyncStorage.setItem('active_vehicle_id', String(vehicleId));
+        setActiveVehicleId(String(vehicleId));
+      }
+
+      setEditSubmitting(false);
+      setEditModalVisible(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Vehicle Updated',
+        text2: `${editingVehicle.make} ${editingVehicle.model} updated successfully.`,
+      });
+      await refreshUser();
+    } catch (err) {
+      setEditSubmitting(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Update Failed',
+        text2: err?.message || 'Could not save vehicle changes.',
+      });
+    }
+  };
+
+  const confirmDeleteVehicle = (car) => {
+    Alert.alert(
+      'Remove Vehicle',
+      `Are you sure you want to remove ${car.make} ${car.model} from your garage?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => handleDeleteVehicle(car.id || car._id || car.linkageTargetId),
+        },
+      ]
+    );
+  };
+
   const handleDeleteVehicle = async (vehicleId) => {
     const userId = await AsyncStorage.getItem('userId');
     try {
@@ -495,13 +609,9 @@ const MyGarageScreen = () => {
   }, [pickerType, pickerSearch, allManufacturers, popularBrands, seriesList, vehiclesList]);
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingBottom: insets.bottom,
-        },
-      ]}
+    <SafeAreaView
+      edges={['bottom', 'left', 'right']}
+      style={styles.safeArea}
     >
       <AppHeader
         title="My Garage"
@@ -548,13 +658,26 @@ const MyGarageScreen = () => {
           </View>
         ) : (
           <View style={styles.vehicleList}>
-            {garageVehicles.map((car, idx) => {
-              const hasCatalogLink = Boolean(
-                car.linkageTargetId ||
-                car.linkage_target_id ||
-                car.raw_specs?.linkageTargetId ||
-                car.raw_specs?.carId
+            {(() => {
+              const primaryCar = garageVehicles.find(v => v.isPrimary || v.is_primary);
+              const primaryId = primaryCar ? (primaryCar.id || primaryCar._id || primaryCar.linkageTargetId) : null;
+              const hasMatchingSavedActive = activeVehicleId && garageVehicles.some(
+                v => String(v.id || v._id || v.linkageTargetId) === String(activeVehicleId)
               );
+              const effectiveActiveId = hasMatchingSavedActive
+                ? activeVehicleId
+                : (primaryId || (garageVehicles[0] ? (garageVehicles[0].id || garageVehicles[0]._id || garageVehicles[0].linkageTargetId) : null));
+
+              return garageVehicles.map((car, idx) => {
+                const hasCatalogLink = Boolean(
+                  car.linkageTargetId ||
+                  car.linkage_target_id ||
+                  car.raw_specs?.linkageTargetId ||
+                  car.raw_specs?.carId
+                );
+
+                const carId = car.id || car._id || car.linkageTargetId;
+                const isCarActive = effectiveActiveId ? String(carId) === String(effectiveActiveId) : false;
 
               return (
                 <View key={car.id || idx} style={styles.carCard}>
@@ -567,6 +690,12 @@ const MyGarageScreen = () => {
                         <Text style={styles.carMakeModel}>
                           {car.make} {car.model}
                         </Text>
+                        {isCarActive ? (
+                          <View style={styles.activePill}>
+                            <CheckCircle2 size={11} color="#059669" strokeWidth={2.5} />
+                            <Text style={styles.activePillText}>Active Vehicle</Text>
+                          </View>
+                        ) : null}
                         {hasCatalogLink && (
                           <View style={styles.verifiedBadge}>
                             <ShieldCheck size={11} color="#059669" strokeWidth={2.5} />
@@ -579,21 +708,49 @@ const MyGarageScreen = () => {
                         {car.license_plate || car.licensePlate
                           ? ` • ${car.license_plate || car.licensePlate}`
                           : ''}
+                        {car.vin ? ` • VIN: ${car.vin}` : ''}
                       </Text>
                     </View>
-                    <TouchableOpacity
-                      style={styles.trashBtn}
-                      onPress={() => handleDeleteVehicle(car.id)}
-                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    >
-                      <Trash2 size={16} color="#9CA3AF" />
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <TouchableOpacity
+                        style={styles.editBtn}
+                        onPress={() => handleOpenEditModal(car)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Edit3 size={15} color="#475569" />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.trashBtn}
+                        onPress={() => confirmDeleteVehicle(car)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Trash2 size={15} color="#9CA3AF" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
+
+                  {/* Vehicle Authentic Photo Showcase */}
+                  <VehicleCardImage
+                    car={car}
+                    height={165}
+                    resizeMode="cover"
+                    style={{ marginVertical: 10, borderRadius: 14, borderWidth: 1, borderColor: '#E2E8F0', overflow: 'hidden' }}
+                  />
 
                   {/* Card Action Bar */}
                   <View style={styles.cardActions}>
+                    {!isCarActive && (
+                      <TouchableOpacity
+                        style={styles.setActiveBtn}
+                        onPress={() => handleSetActive(car)}
+                        activeOpacity={0.75}
+                      >
+                        <Zap size={13} color="#475569" />
+                        <Text style={styles.setActiveBtnText}>Set Active</Text>
+                      </TouchableOpacity>
+                    )}
                     <TouchableOpacity
-                      style={styles.findPartsBtn}
+                      style={[styles.findPartsBtn, !isCarActive && { flex: 1.8 }]}
                       onPress={() => handleLookupParts(car)}
                       activeOpacity={0.75}
                     >
@@ -605,7 +762,8 @@ const MyGarageScreen = () => {
                   </View>
                 </View>
               );
-            })}
+            });
+          })()}
           </View>
         )}
       </ScrollView>
@@ -1216,7 +1374,123 @@ const MyGarageScreen = () => {
         </View>
         </KeyboardAvoidingView>
       </Modal>
-    </View>
+
+      {/* Edit Vehicle Modal (Full CRUD: Update) */}
+      <Modal
+        visible={editModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalSheet, { maxHeight: '85%' }]}>
+              {/* Modal Header */}
+              <View style={styles.modalHeader}>
+                <View>
+                  <Text style={styles.modalTitle}>Edit Vehicle Details</Text>
+                  <Text style={styles.modalSubtitle}>
+                    {editingVehicle ? `${editingVehicle.make} ${editingVehicle.model}` : 'Update vehicle specifications'}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setEditModalVisible(false)}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  style={styles.closeBtn}
+                >
+                  <X size={20} color="#6B7280" />
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView
+                style={{ paddingHorizontal: 16 }}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+              >
+                <View style={{ gap: 12, paddingTop: 12, paddingBottom: 28 }}>
+                  <AppInput
+                    label="License Plate"
+                    placeholder="e.g. CA 123-456"
+                    value={editLicensePlate}
+                    onChangeText={setEditLicensePlate}
+                    autoCapitalize="characters"
+                  />
+
+                  <AppInput
+                    label="VIN Number"
+                    placeholder="e.g. 1HGCR2F83HA..."
+                    value={editVin}
+                    onChangeText={setEditVin}
+                    autoCapitalize="characters"
+                  />
+
+                  <View style={{ flexDirection: 'row', gap: 10 }}>
+                    <View style={{ flex: 1 }}>
+                      <AppInput
+                        label="Model Year"
+                        placeholder="e.g. 2022"
+                        value={editYear}
+                        onChangeText={setEditYear}
+                        keyboardType="number-pad"
+                        maxLength={4}
+                      />
+                    </View>
+                    <View style={{ flex: 1.5 }}>
+                      <AppInput
+                        label="Engine / Trim"
+                        placeholder="e.g. 2.0L Turbo"
+                        value={editEngine}
+                        onChangeText={setEditEngine}
+                      />
+                    </View>
+                  </View>
+
+                  {/* Primary Vehicle Toggle */}
+                  <TouchableOpacity
+                    style={styles.primaryToggleCard}
+                    onPress={() => setEditIsPrimary(!editIsPrimary)}
+                    activeOpacity={0.7}
+                  >
+                    <View style={[styles.checkboxBox, editIsPrimary && styles.checkboxBoxChecked]}>
+                      {editIsPrimary && <Check size={14} color="#FFFFFF" strokeWidth={3} />}
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.primaryToggleTitle}>Set as Primary Vehicle</Text>
+                      <Text style={styles.primaryToggleDesc}>
+                        Displays this vehicle front and center on your Home screen.
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+
+                  {/* Action Buttons */}
+                  <View style={{ flexDirection: 'row', gap: 10, marginTop: 8 }}>
+                    <TouchableOpacity
+                      style={styles.cancelEditBtn}
+                      onPress={() => setEditModalVisible(false)}
+                      disabled={editSubmitting}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.cancelEditBtnText}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <AppButton
+                      title="Save Changes"
+                      leftIcon={<Check size={18} color="#FFFFFF" strokeWidth={2.5} />}
+                      onPress={handleSaveVehicleEdit}
+                      loading={editSubmitting}
+                      style={{ flex: 1.6 }}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    </SafeAreaView>
   );
 };
 
@@ -1299,6 +1573,22 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#111827',
   },
+  activePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#ECFDF5',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  activePillText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#059669',
+  },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1320,21 +1610,55 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginTop: 2,
   },
+  editBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#F1F5F9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   trashBtn: {
-    padding: 6,
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#FEF2F2',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardActions: {
     borderTopWidth: 1,
     borderTopColor: '#F3F4F6',
     paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  setActiveBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    backgroundColor: '#F1F5F9',
+    paddingVertical: 9,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  setActiveBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#475569',
   },
   findPartsBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
     backgroundColor: '#FEF2F2',
-    paddingVertical: 8,
+    paddingVertical: 9,
     borderRadius: 8,
   },
   findPartsText: {
@@ -1776,6 +2100,54 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#6B7280',
     marginTop: 2,
+  },
+  primaryToggleCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    gap: 12,
+    marginTop: 4,
+  },
+  checkboxBox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#CBD5E1',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxBoxChecked: {
+    backgroundColor: '#D0142C',
+    borderColor: '#D0142C',
+  },
+  primaryToggleTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#1E293B',
+  },
+  primaryToggleDesc: {
+    fontSize: 11,
+    color: '#64748B',
+    marginTop: 2,
+  },
+  cancelEditBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelEditBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#64748B',
   },
 });
 

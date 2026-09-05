@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Tag,
   ShieldCheck,
@@ -654,13 +654,9 @@ const VerifiedPartsScreen = () => {
   const peekOeNumbers = peekPart?.oenNumbers || peekPart?.raw?.oenNumbers || [];
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingBottom: insets.bottom,
-        },
-      ]}
+    <SafeAreaView
+      edges={['bottom', 'left', 'right']}
+      style={styles.safeArea}
     >
       <AppHeader
         title="Verified Parts"
@@ -2033,7 +2029,7 @@ const VerifiedPartsScreen = () => {
            */}
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

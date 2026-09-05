@@ -13,7 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
   Wrench,
@@ -550,13 +550,9 @@ const PartsFinderScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
-      style={[
-        styles.safeArea,
-        {
-          paddingBottom: insets.bottom,
-        },
-      ]}
+    <SafeAreaView
+      edges={['bottom', 'left', 'right']}
+      style={styles.safeArea}
     >
       <AppHeader
         title="Parts Finder"
@@ -1076,7 +1072,7 @@ const PartsFinderScreen = () => {
         </View>
         </KeyboardAvoidingView>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
