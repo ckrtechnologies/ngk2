@@ -54,9 +54,9 @@ const PartFinder = () => {
   // Direct Part Number Search
   const [partNumberQuery, setPartNumberQuery] = useState('');
 
-  // Selected Article & Slide-Over Drawer State (Default 'left' as requested)
+  // Selected Article & Slide-Over Drawer State (Default 'right')
   const [selectedArticle, setSelectedArticle] = useState(null);
-  const [drawerSide, setDrawerSide] = useState('left');
+  const [drawerSide, setDrawerSide] = useState('right');
   const [copiedNumber, setCopiedNumber] = useState(false);
 
   const handleCopyPartNumber = (text) => {

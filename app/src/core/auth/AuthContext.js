@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
           if (storedUserId) {
             try {
               const freshUser = await dispatch(getMyselfRedux(storedUserId)).unwrap();
-              if (freshUser) {
+              if (freshUser && freshUser.id) {
                 setCurrentUser(freshUser);
                 await AsyncStorage.setItem('user', JSON.stringify(freshUser));
                 if (freshUser.role) {
@@ -59,9 +59,24 @@ export const AuthProvider = ({ children }) => {
                   setUserRole(updatedRole);
                   await AsyncStorage.setItem('role', updatedRole);
                 }
+              } else {
+                // User account was deleted in Supabase. Cleanly clear orphaned session!
+                console.warn('Session user not found in database. Purging orphaned session.');
+                await AsyncStorage.multiRemove(['token', 'userId', 'role', 'user']);
+                setUserToken(null);
+                setUserRole(null);
+                setCurrentUser(null);
+                dispatch(setMyself(null));
               }
             } catch (err) {
               console.log('Session profile hydration check notice:', err);
+              if (err?.status === 404 || err?.status === 401 || err?.message?.includes('not found')) {
+                await AsyncStorage.multiRemove(['token', 'userId', 'role', 'user']);
+                setUserToken(null);
+                setUserRole(null);
+                setCurrentUser(null);
+                dispatch(setMyself(null));
+              }
             }
           }
         } else {

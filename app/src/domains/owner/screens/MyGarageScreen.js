@@ -386,9 +386,22 @@ const MyGarageScreen = () => {
     }
 
     setSubmitting(true);
-    const userId = await AsyncStorage.getItem('userId');
+    const storedUserId = await AsyncStorage.getItem('userId');
+    const effectiveUserId = myself?.id || storedUserId;
+
+    if (!effectiveUserId) {
+      setSubmitting(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Sign In Required',
+        text2: 'Please sign in to save vehicles to your garage.',
+      });
+      navigation.navigate('Login');
+      return;
+    }
+
     const payload = {
-      userId: userId,
+      userId: effectiveUserId,
       make: make.trim().toUpperCase(),
       model: model.trim().toUpperCase(),
       year: year.trim() || String(new Date().getFullYear()),
@@ -400,9 +413,24 @@ const MyGarageScreen = () => {
     };
 
     try {
-      let res = await apiFunction(addVehicleToGarageApi, [], payload, 'POST', false);
+      let res = await apiFunction(addVehicleToGarageApi, [], payload, 'POST', true);
       if (!res?.success) {
-        res = await apiFunction(addVehicleToWatchlistApi, [], payload, 'POST', false);
+        if (
+          res?.message?.includes('violates foreign key constraint') ||
+          res?.message?.includes('User account not found') ||
+          res?.message?.includes('session expired')
+        ) {
+          setSubmitting(false);
+          Toast.show({
+            type: 'error',
+            text1: 'Session Expired',
+            text2: 'Your account was reset or not found. Please log in again.',
+          });
+          await AsyncStorage.multiRemove(['token', 'userId', 'role', 'user']);
+          navigation.navigate('Login');
+          return;
+        }
+        res = await apiFunction(addVehicleToWatchlistApi, [], payload, 'POST', true);
       }
       setSubmitting(false);
       if (res?.success) {

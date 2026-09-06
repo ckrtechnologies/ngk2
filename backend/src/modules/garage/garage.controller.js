@@ -12,7 +12,8 @@ export const addVehicleToGarage = async (req, res) => {
     const garage = await garageService.getGarageVehicles(id);
     return sendSuccess(res, { garage, vehicle: vehicleData }, 'Vehicle added to garage successfully');
   } catch (error) {
-    return sendError(res, error.message, 400, error);
+    const status = error.statusCode || 400;
+    return sendError(res, error.message, status, error);
   }
 };
 

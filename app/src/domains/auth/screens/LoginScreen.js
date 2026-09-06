@@ -42,7 +42,7 @@ const LoginScreen = ({ route, navigation }) => {
           badgeText: 'Distributor',
           badgeBg: 'rgba(255, 255, 255, 0.16)',
           badgeColor: '#F8FAFC',
-          showRegister: false,
+          showRegister: true,
         };
       case 'reseller':
         return {
@@ -239,22 +239,28 @@ const LoginScreen = ({ route, navigation }) => {
                 backgroundColor={roleConfig.buttonColor}
                 style={styles.submitBtn}
               />
+
+              {roleConfig.showRegister && (
+                <>
+                  <View style={styles.dividerRow}>
+                    <View style={styles.dividerLine} />
+                    <Text style={styles.dividerText}>OR</Text>
+                    <View style={styles.dividerLine} />
+                  </View>
+
+                  <AppButton
+                    title="Register New Account"
+                    variant="outline"
+                    onPress={() => navigation.navigate('Register', { role })}
+                    textColor={roleConfig.buttonColor}
+                    style={[styles.registerBtn, { borderColor: roleConfig.buttonColor }]}
+                  />
+                </>
+              )}
             </View>
 
-            {/* Footer & Registration */}
+            {/* Footer */}
             <View style={styles.footerContainer}>
-              {roleConfig.showRegister && (
-                <TouchableOpacity
-                  style={styles.registerRow}
-                  activeOpacity={0.7}
-                  onPress={() => navigation.navigate('Register', { role })}
-                >
-                  <Text style={styles.registerPrompt}>Don't have an account? </Text>
-                  <Text style={[styles.registerLink, { color: roleConfig.buttonColor }]}>
-                    Register
-                  </Text>
-                </TouchableOpacity>
-              )}
               <Text style={styles.copyrightText}>
                 Protected by NGK Technical Security System • 2026
               </Text>
@@ -382,21 +388,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
   },
-  registerRow: {
+  dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 6,
-    marginBottom: 6,
+    marginVertical: 14,
   },
-  registerPrompt: {
-    fontSize: 13,
-    color: '#475569',
-    fontWeight: '500',
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E2E8F0',
   },
-  registerLink: {
-    fontSize: 13,
-    fontWeight: '800',
+  dividerText: {
+    marginHorizontal: 12,
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#94A3B8',
+    letterSpacing: 0.8,
+  },
+  registerBtn: {
+    borderWidth: 1.5,
+    borderRadius: 12,
   },
   copyrightText: {
     fontSize: 11,

@@ -10,6 +10,7 @@ import {
   Platform,
   PermissionsAndroid,
   KeyboardAvoidingView,
+  RefreshControl,
 } from 'react-native';
 import {
   CheckCircle2,
@@ -36,7 +37,7 @@ import {
 } from '../../../components/icons/TechnicalEnquiryIcons';
 import EnquiryStepIndicator from '../../../components/common/EnquiryStepIndicator';
 import DealerFilterModal, { DEFAULT_FILTERS } from '../../../components/common/DealerFilterModal';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { apiFunction } from '../../../apis/apiFunction';
@@ -71,21 +72,39 @@ const TechnicalEnquiryScreen = () => {
     myself?.role?.toLowerCase() || 'vehicle_owner'
   );
 
+  const [storedUserId, setStoredUserId] = useState(null);
+  const [storedUserEmail, setStoredUserEmail] = useState(null);
+
   useEffect(() => {
-    const fetchRole = async () => {
+    const fetchRoleAndAuth = async () => {
       try {
         const storedRole = (await AsyncStorage.getItem('role')) || (await AsyncStorage.getItem('userRole'));
+        const uId = await AsyncStorage.getItem('userId');
+        const uEmail = await AsyncStorage.getItem('email');
+        if (uId) setStoredUserId(uId);
+        if (uEmail) setStoredUserEmail(uEmail.toLowerCase().trim());
         if (storedRole) {
           setCurrentUserRole(storedRole.toLowerCase());
         } else if (myself?.role) {
           setCurrentUserRole(myself.role.toLowerCase());
         }
       } catch (err) {
-        console.warn('Error reading role:', err);
+        console.warn('Error reading role or auth:', err);
       }
     };
-    fetchRole();
+    fetchRoleAndAuth();
   }, [myself?.role]);
+
+  // If logged in as reseller, default stockist role filter to distributor
+  useEffect(() => {
+    if (
+      currentUserRole === 'reseller' ||
+      currentUserRole === 'retailer' ||
+      currentUserRole === 'shop_owner'
+    ) {
+      setFilters((prev) => ({ ...prev, role: 'distributor' }));
+    }
+  }, [currentUserRole]);
 
   const isReseller =
     currentUserRole === 'reseller' ||
@@ -133,7 +152,9 @@ const TechnicalEnquiryScreen = () => {
     return c;
   }, [filters]);
 
-  // Fetch Nearby Stockists
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch Nearby Stockists (Always fresh real data from Supabase backend)
   const loadStockists = useCallback(async () => {
     const acquirePosition = async () => {
       if (Platform.OS === 'android') {
@@ -163,17 +184,7 @@ const TechnicalEnquiryScreen = () => {
           try {
             const res = await apiFunction(dealersApi, [], coords, 'GET', false);
             const list = res?.dealers || res?.data?.array || [];
-            if (list.length > 0) {
-              setStockists(list);
-              if (!selectedDealerId) {
-                const nearest = list[0];
-                const id = nearest.userId || nearest.dealerId || nearest.id;
-                const name = nearest.name || nearest.companyName;
-                setSelectedDealerId(id);
-                setSelectedDealerName(name);
-                setSelectedDealerObj(nearest);
-              }
-            }
+            setStockists(list);
           } catch (err) {
             console.warn('Geolocation dealer fetch failed:', err);
             fallbackFetch();
@@ -191,36 +202,60 @@ const TechnicalEnquiryScreen = () => {
       try {
         const res = await apiFunction(dealersApi, [], null, 'GET', false);
         const list = res?.dealers || res?.data?.array || [];
-        if (list.length > 0) {
-          setStockists(list);
-          if (!selectedDealerId) {
-            const first = list[0];
-            const id = first.userId || first.dealerId || first.id;
-            const name = first.name || first.companyName;
-            setSelectedDealerId(id);
-            setSelectedDealerName(name);
-            setSelectedDealerObj(first);
-          }
-        }
+        setStockists(list);
       } catch (err) {
         console.warn('Fallback dealer fetch failed:', err);
+        setStockists([]);
       }
     };
 
     acquirePosition();
   }, [selectedDealerId]);
 
-  useEffect(() => {
-    loadStockists();
-    if (!users || users.length === 0) {
-      dispatch(getUsersRedux());
+  // Pull-to-refresh handler to force re-fetch real data
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await Promise.all([
+        loadStockists(),
+        dispatch(getUsersRedux()),
+      ]);
+    } catch (e) {
+      console.warn('Refresh failed:', e);
+    } finally {
+      setRefreshing(false);
     }
-  }, [loadStockists, dispatch, users]);
+  }, [loadStockists, dispatch]);
+
+  // Always re-fetch real stockists and real users when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadStockists();
+      dispatch(getUsersRedux());
+    }, [loadStockists, dispatch])
+  );
 
   // Merge API dealers with Redux users with standardized roles and distanceKm
   const scopedCandidateDealers = useMemo(() => {
     const list = [];
     const seen = new Set();
+
+    const myUserId = String(myself?.id || myself?._id || storedUserId || '').toLowerCase().trim();
+    const myEmail = String(myself?.email || storedUserEmail || '').toLowerCase().trim();
+    const myName = String(myself?.name || myself?.companyName || myself?.company_name || '').toLowerCase().trim();
+
+    // Helper: Test if candidate dealer represents the logged-in user
+    const isSelf = (item) => {
+      const dUserId = String(item.userId || item.user_id || '').toLowerCase().trim();
+      const dId = String(item.id || item.dealerId || '').toLowerCase().trim();
+      const dEmail = String(item.email || item.contact_email || '').toLowerCase().trim();
+      const dName = String(item.name || item.companyName || item.company_name || '').toLowerCase().trim();
+
+      if (myUserId && (dUserId === myUserId || dId === myUserId)) return true;
+      if (myEmail && dEmail && dEmail === myEmail) return true;
+      if (myName && dName && dName === myName) return true;
+      return false;
+    };
 
     // 1. Process API stockists
     if (Array.isArray(stockists)) {
@@ -228,6 +263,19 @@ const TechnicalEnquiryScreen = () => {
         const id = d.userId || d.dealerId || d.id || d._id;
         const name = d.name || d.companyName;
         if (id && !seen.has(id)) {
+          // Exclude self: You cannot send queries to yourself
+          if (isSelf(d)) return;
+
+          // Exclude unapproved dealers
+          if (
+            d.isApproved === false ||
+            d.approvalStatus === 'pending_approval' ||
+            d.approvalStatus === 'rejected' ||
+            d.approvalStatus === 'suspended'
+          ) {
+            return;
+          }
+
           seen.add(id);
           const role = (d.role || '').toLowerCase();
           const isDistributor = role === 'distributor' || role === 'wholesaler';
@@ -250,6 +298,8 @@ const TechnicalEnquiryScreen = () => {
             rating: d.rating || '4.9',
             verified: true,
             isNearest: false,
+            email: d.email || d.contact_email || '',
+            userId: d.userId || d.user_id || id,
           });
         }
       });
@@ -268,6 +318,13 @@ const TechnicalEnquiryScreen = () => {
           role === 'reseller';
 
         if (id && !seen.has(id) && (isDistributor || isStockist)) {
+          // Exclude self: You cannot send queries to yourself
+          if (isSelf(u)) return;
+
+          // Exclude unapproved users
+          const isApproved = u.is_approved === true || u.approval_status === 'approved';
+          if (!isApproved) return;
+
           seen.add(id);
           list.push({
             id,
@@ -284,6 +341,8 @@ const TechnicalEnquiryScreen = () => {
             rating: '4.8',
             verified: true,
             isNearest: false,
+            email: u.email || '',
+            userId: id,
           });
         }
       });
@@ -297,7 +356,7 @@ const TechnicalEnquiryScreen = () => {
     }
 
     return list;
-  }, [stockists, users]);
+  }, [stockists, users, myself, storedUserId, storedUserEmail]);
 
   // Compute dynamic counts based on active search query & radius filter
   const counts = useMemo(() => {
@@ -390,14 +449,23 @@ const TechnicalEnquiryScreen = () => {
     return list;
   }, [scopedCandidateDealers, filters, dealerSearchQuery]);
 
-  // Sync selected dealer object when list updates
+  // Sync selected dealer object when list updates safely
   useEffect(() => {
-    if (selectedDealerId && scopedCandidateDealers.length > 0) {
+    if (scopedCandidateDealers.length > 0) {
       const found = scopedCandidateDealers.find((d) => d.id === selectedDealerId);
       if (found) {
         setSelectedDealerName(found.name);
         setSelectedDealerObj(found);
+      } else {
+        const first = scopedCandidateDealers[0];
+        setSelectedDealerId(first.id);
+        setSelectedDealerName(first.name);
+        setSelectedDealerObj(first);
       }
+    } else {
+      setSelectedDealerId(null);
+      setSelectedDealerName(null);
+      setSelectedDealerObj(null);
     }
   }, [scopedCandidateDealers, selectedDealerId]);
 
@@ -674,6 +742,25 @@ const TechnicalEnquiryScreen = () => {
         type: 'error',
         text1: 'Notes Required',
         text2: 'Please describe your fitment question, query, or quote requirements.',
+      });
+      return;
+    }
+
+    // Guard: Prevent sending technical inquiry to oneself
+    const myUserId = String(myself?.id || myself?._id || storedUserId || '').toLowerCase().trim();
+    const myEmail = String(myself?.email || storedUserEmail || '').toLowerCase().trim();
+    const selDealerId = String(selectedDealerId || '').toLowerCase().trim();
+    const selDealerUser = String(selectedDealerObj?.userId || selectedDealerObj?.user_id || '').toLowerCase().trim();
+    const selDealerEmail = String(selectedDealerObj?.email || selectedDealerObj?.contact_email || '').toLowerCase().trim();
+
+    if (
+      (myUserId && (selDealerId === myUserId || selDealerUser === myUserId)) ||
+      (myEmail && selDealerEmail && selDealerEmail === myEmail)
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Stockist Selection',
+        text2: 'You cannot dispatch a technical enquiry to your own business.',
       });
       return;
     }
@@ -1407,6 +1494,14 @@ const TechnicalEnquiryScreen = () => {
         includeTopInset={false}
         showStatusBar={false}
         contentContainerStyle={styles.enquiryScrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor="#D0142C"
+            colors={['#D0142C']}
+          />
+        }
       >
         {currentStep === 1 && renderStep1()}
         {currentStep === 2 && renderStep2()}

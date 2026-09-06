@@ -48,20 +48,20 @@ export const apiFunction = async (api, params = [], data = {}, method = "GET", w
         }
     } catch (error) {
         console.error("API call error:", error?.response?.data || error.message);
-        if (error.response?.status === 401 && withAuth) {
-            await AsyncStorage.removeItem("token")
-            let role = await AsyncStorage.getItem("role")
-            navigateTo('Login', { role })
+        if (error.response?.status === 401) {
+            await AsyncStorage.multiRemove(["token", "userId", "user"]);
+            let role = await AsyncStorage.getItem("role");
+            navigateTo('Login', { role });
         }
         return error.response?.data || { success: false, message: error.message || "Network Error" };
     }
 
     if (response) {
-        if (response.data?.status === 401 && withAuth) {
-            await AsyncStorage.removeItem("token")
-            let role = await AsyncStorage.getItem("role")
-            navigateTo('Login', { role })
-            return response.data
+        if (response.data?.status === 401) {
+            await AsyncStorage.multiRemove(["token", "userId", "user"]);
+            let role = await AsyncStorage.getItem("role");
+            navigateTo('Login', { role });
+            return response.data;
         }
         return response.data
     } else {

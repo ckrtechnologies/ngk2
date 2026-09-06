@@ -78,19 +78,23 @@ class DealerService {
       }
     }
 
-    // 2. Fallback: Query dealers table with user info and compute Haversine
+    // 2. Query dealers table with user info and compute Haversine
     let query = supabase
       .from('dealers')
-      .select('*, user:users(id, name, email, role, phone)')
+      .select('*, user:users(id, name, email, role, phone, is_approved, approval_status)')
       .order('company_name', { ascending: true });
 
     const { data: dealers, error } = await query;
 
+    // Also fetch any commercial users from users table to ensure 100% sync with registered accounts
+    const { data: commercialUsers } = await supabase
+      .from('users')
+      .select('id, name, email, role, phone, address, is_approved, approval_status')
+      .in('role', ['reseller', 'distributor']);
+
     if (error) {
       console.warn('Could not fetch from dealers table, falling back to users:', error.message);
-      let userQuery = supabase.from('users').select('*').in('role', ['reseller', 'distributor']);
-      const { data: usersData } = await userQuery;
-      return (usersData || []).map((u) => ({
+      let fallbackList = (commercialUsers || []).map((u) => ({
         id: u.id,
         dealerId: u.id,
         userId: u.id,
@@ -103,13 +107,24 @@ class DealerService {
         email: u.email,
         role: u.role || 'reseller',
         distance: 'N/A',
+        distanceKm: 999999,
         isApproved: u.is_approved ?? false,
         approvalStatus: u.approval_status || 'pending_approval',
       }));
+      if (!includeUnapproved) {
+        fallbackList = fallbackList.filter(
+          (d) => d.approvalStatus === 'approved' && Boolean(d.isApproved)
+        );
+      }
+      return fallbackList;
     }
 
+    const seenUserIds = new Set();
     let list = (dealers || []).map((d) => {
       const u = d.user || {};
+      if (d.user_id) seenUserIds.add(d.user_id);
+      if (u.id) seenUserIds.add(u.id);
+
       let distance = 'N/A';
       let distanceKm = 999999;
 
@@ -124,22 +139,23 @@ class DealerService {
         distanceKm = dist;
       }
 
-      // Check approval: default to true for backwards compatibility if null, otherwise respect boolean
+      // Check approval: respect boolean or approval_status
       const isApproved =
         u.is_approved !== undefined ? Boolean(u.is_approved) : d.is_live !== undefined ? Boolean(d.is_live) : true;
       const isLive = d.is_live !== undefined ? Boolean(d.is_live) : isApproved;
+      const approvalStatus = u.approval_status || (isApproved ? 'approved' : 'pending_approval');
 
       return {
         id: d.id,
         dealerId: d.id,
-        userId: d.user_id,
+        userId: d.user_id || u.id,
         name: d.company_name || u.name,
         companyName: d.company_name || u.name,
-        address: d.street_address,
-        streetAddress: d.street_address,
-        city: d.city,
+        address: d.street_address || u.address || '',
+        streetAddress: d.street_address || u.address || '',
+        city: d.city || 'Johannesburg',
         postalCode: d.postal_code,
-        country: d.country,
+        country: d.country || 'ZA',
         latitude: d.latitude,
         longitude: d.longitude,
         phone: d.phone || u.phone,
@@ -149,13 +165,50 @@ class DealerService {
         distanceKm,
         isApproved,
         isLive,
-        approvalStatus: u.approval_status || (isApproved ? 'approved' : 'pending_approval'),
+        approvalStatus,
       };
     });
 
-    // Unless explicitly requested (e.g. by Admin panel), only return approved & live dealers
+    // Append any commercial users (reseller/distributor) not already linked in dealers table
+    if (Array.isArray(commercialUsers)) {
+      commercialUsers.forEach((u) => {
+        if (!seenUserIds.has(u.id)) {
+          seenUserIds.add(u.id);
+          const isApproved = u.is_approved ?? false;
+          list.push({
+            id: u.id,
+            dealerId: u.id,
+            userId: u.id,
+            name: u.name,
+            companyName: u.name,
+            address: u.address || 'Address on file',
+            streetAddress: u.address || 'Address on file',
+            city: 'Johannesburg',
+            postalCode: null,
+            country: 'ZA',
+            latitude: null,
+            longitude: null,
+            phone: u.phone,
+            email: u.email,
+            role: u.role || 'reseller',
+            distance: 'N/A',
+            distanceKm: 999999,
+            isApproved,
+            isLive: isApproved,
+            approvalStatus: u.approval_status || (isApproved ? 'approved' : 'pending_approval'),
+          });
+        }
+      });
+    }
+
+    // Unless explicitly requested by Admin, only return verified, approved & live dealers
     if (!includeUnapproved) {
-      list = list.filter((d) => d.isApproved && d.isLive);
+      list = list.filter(
+        (d) =>
+          d.approvalStatus === 'approved' &&
+          Boolean(d.isApproved) &&
+          d.isLive !== false
+      );
     }
 
     // Role filter

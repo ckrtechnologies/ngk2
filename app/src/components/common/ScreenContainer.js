@@ -23,6 +23,7 @@ const ScreenContainer = ({
   paddingHorizontal = 20,
   includeTopInset = true,
   showStatusBar = true,
+  refreshControl,
 }) => {
   const insets = useSafeAreaInsets();
   const Container = scrollable ? ScrollView : View;
@@ -64,7 +65,8 @@ const ScreenContainer = ({
               style={styles.scrollView}
               contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
               showsVerticalScrollIndicator={false}
-              bounces={false}
+              bounces={Boolean(refreshControl)}
+              refreshControl={refreshControl}
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
             >

@@ -30,7 +30,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react-native';
 import Geolocation from '@react-native-community/geolocation';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiFunction } from '../../../apis/apiFunction';
 import { dealersApi } from '../../../apis/api';
@@ -39,13 +39,32 @@ import AppHeader from '../../../components/common/AppHeader';
 import DealerFilterModal, {
   DEFAULT_FILTERS,
 } from '../../../components/common/DealerFilterModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const DealerLocatorScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
 
-  const { dealers: apiDealersData } = useSelector((state) => state.getData);
+  const { dealers: apiDealersData, myself } = useSelector((state) => state.getData);
+
+  const [storedUserId, setStoredUserId] = useState(null);
+  const [storedUserEmail, setStoredUserEmail] = useState(null);
+
+  useEffect(() => {
+    const fetchStoredAuth = async () => {
+      try {
+        const uId = await AsyncStorage.getItem('userId');
+        const uEmail = await AsyncStorage.getItem('email');
+        if (uId) setStoredUserId(uId);
+        if (uEmail) setStoredUserEmail(uEmail.toLowerCase().trim());
+      } catch (e) {
+        // silent fallback
+      }
+    };
+    fetchStoredAuth();
+  }, [myself]);
 
   const [dealers, setDealers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -86,14 +105,7 @@ const DealerLocatorScreen = () => {
         dispatch(getDealersRedux(queryParams));
       } catch (err) {
         console.warn('Failed to load dealers:', err);
-        // Fallback to Redux data — read from ref, not deps, to avoid loop
-        const fallback = apiDealersDataRef.current;
-        const reduxList =
-          fallback?.data?.array ||
-          (Array.isArray(fallback) ? fallback : []) ||
-          fallback?.dealers ||
-          [];
-        if (reduxList.length > 0) setDealers(reduxList);
+        setDealers([]);
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -153,11 +165,12 @@ const DealerLocatorScreen = () => {
   const acquireGPSRef = useRef(acquireGPS);
   useEffect(() => { acquireGPSRef.current = acquireGPS; }, [acquireGPS]);
 
-  // Run ONCE on mount — use the ref so we always call the latest acquireGPS
-  // but the effect itself never re-fires due to dependency changes.
-  useEffect(() => {
-    acquireGPSRef.current();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Always re-fetch fresh real data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      acquireGPS();
+    }, [acquireGPS])
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -271,7 +284,38 @@ const DealerLocatorScreen = () => {
     Linking.openURL(`https://maps.google.com/?q=${query}`).catch(() => {});
   };
 
+  const isSelf = useCallback(
+    (dealer) => {
+      if (!dealer) return false;
+      const currentUid = String(myself?.id || storedUserId || myself?.userId || '').trim().toLowerCase();
+      const currentEmail = String(myself?.email || storedUserEmail || '').trim().toLowerCase();
+      const currentComp = String(
+        myself?.companyName || myself?.company_name || myself?.businessName || myself?.name || ''
+      ).trim().toLowerCase();
+
+      const dId = String(dealer.id || dealer.dealerId || dealer._id || '').trim().toLowerCase();
+      const dUserId = String(dealer.userId || dealer.user_id || '').trim().toLowerCase();
+      const dEmail = String(dealer.email || '').trim().toLowerCase();
+      const dComp = String(dealer.name || dealer.dealer_name || dealer.companyName || '').trim().toLowerCase();
+
+      if (currentUid && (dId === currentUid || dUserId === currentUid)) return true;
+      if (currentEmail && dEmail && dEmail === currentEmail) return true;
+      if (currentComp && currentComp.length > 2 && dComp && dComp === currentComp) return true;
+
+      return false;
+    },
+    [myself, storedUserId, storedUserEmail]
+  );
+
   const handleEnquire = (dealer) => {
+    if (isSelf(dealer)) {
+      Toast.show({
+        type: 'info',
+        text1: 'Self-Enquiry Restricted',
+        text2: 'You cannot send a stock or technical enquiry to your own business.',
+      });
+      return;
+    }
     navigation.navigate('TechnicalEnquiry', {
       dealerId: dealer.id || dealer.dealerId,
       dealerName: dealer.name || dealer.companyName,
@@ -711,13 +755,20 @@ const DealerLocatorScreen = () => {
                       <Text style={styles.actionTextMap}>Directions</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={styles.actionBtnEnquire}
-                      onPress={() => handleEnquire(item)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={styles.actionTextEnquire}>Enquire</Text>
-                    </TouchableOpacity>
+                    {isSelf(item) ? (
+                      <View style={styles.selfBadge}>
+                        <ShieldCheck size={12} color="#059669" />
+                        <Text style={styles.selfBadgeText}>Your Business</Text>
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.actionBtnEnquire}
+                        onPress={() => handleEnquire(item)}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={styles.actionTextEnquire}>Enquire</Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
               );
@@ -1176,6 +1227,23 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  selfBadge: {
+    marginLeft: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#ECFDF5',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  selfBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#059669',
   },
 });
 

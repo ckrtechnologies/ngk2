@@ -9,8 +9,36 @@ class GarageService {
       throw new Error('User ID and vehicle data are required');
     }
 
-    const make = (vehicleData.make || vehicleData.manuName || vehicleData.mfrName || 'Unknown').toUpperCase();
-    const model = (vehicleData.model || vehicleData.modelName || vehicleData.vehicleModelSeriesName || 'Unknown').toUpperCase();
+    // Verify user exists in public.users table before inserting
+    const { data: userRecord, error: userError } = await supabase
+      .from('users')
+      .select('id, email')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (userError || !userRecord) {
+      const err = new Error('User account not found or session expired. Please sign out and log in again.');
+      err.statusCode = 401;
+      throw err;
+    }
+
+    const make = (
+      vehicleData.make ||
+      vehicleData.manuName ||
+      vehicleData.mfrName ||
+      vehicleData.brand ||
+      'Unknown'
+    ).toUpperCase();
+
+    const model = (
+      vehicleData.model ||
+      vehicleData.modelName ||
+      vehicleData.vehicleDescription ||
+      vehicleData.vehicleModelSeriesName ||
+      vehicleData.seriesName ||
+      'Unknown'
+    ).toUpperCase();
+
     const year = vehicleData.year || vehicleData.yearOfConstrFrom || null;
     const engineCode = vehicleData.engine || vehicleData.engineCode || vehicleData.engineNumber || null;
     const licensePlate = (vehicleData.licensePlate || vehicleData.license_plate || '').toUpperCase() || null;

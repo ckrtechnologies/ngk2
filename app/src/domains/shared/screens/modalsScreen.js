@@ -26,6 +26,7 @@ const ModalsScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const dispatch = useDispatch();
+    const { myself } = useSelector((state) => state.getData);
     const [modelsList, setModalList] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(false);
@@ -48,10 +49,10 @@ const ModalsScreen = () => {
             };
             try {
                 const res = await apiFunction(serviceJsonApi, [], payload, "POST", false);
-                const list = res?.data?.array || res?.getModelSeries2?.array || res?.data || [];
-                setModalList(Array.isArray(list) ? list : []);
-            } catch (e) {
-                console.warn("Failed to load vehicle models:", e);
+                const array = res?.modelSeries?.array || res?.data?.array || res?.getModelSeries2?.array || res?.data || [];
+                setModalList(Array.isArray(array) ? array : []);
+            } catch (err) {
+                console.error("Failed to fetch vehicle models:", err);
             } finally {
                 setLoading(false);
             }
@@ -60,39 +61,67 @@ const ModalsScreen = () => {
     }, [manuId, appType]);
 
     const filteredModels = useMemo(() => {
-        if (!Array.isArray(modelsList)) return [];
         if (!searchQuery.trim()) return modelsList;
-        const q = searchQuery.toLowerCase();
         return modelsList.filter(item => {
-            const name = (item.modelname || item.name || '').toLowerCase();
-            return name.includes(q);
+            const name = (item.modelname || item.name || item.description || '').toLowerCase();
+            return name.includes(searchQuery.toLowerCase());
         });
     }, [modelsList, searchQuery]);
 
     const handleSelect = async (model) => {
         console.log("Model selected:", model);
-        const userId = await AsyncStorage.getItem("userId");
+        const storedUserId = await AsyncStorage.getItem("userId");
+        const effectiveUserId = myself?.id || storedUserId;
+        if (!effectiveUserId) {
+            Toast.show({
+                type: 'error',
+                text1: 'Sign In Required',
+                text2: 'Please sign in to save vehicles to your garage.',
+            });
+            navigation.navigate('Login');
+            return;
+        }
+
         const modal = {
+            make: mfrName || route.params?.manuName || 'Unknown',
+            model: model.modelname || model.name,
             modelId: model.modelId,
             vehicleDescription: model.modelname,
             yearOfConstrFrom: model.yearOfConstrFrom,
-            yearOfConstrTo: model.yearOfConstrTo
-        }
-        const res = await apiFunction(addVehicleToGarageApi, [userId], { modal }, "PUT", false)
-        console.log("response of add Vehicle ==>>>>", res)
+            yearOfConstrTo: model.yearOfConstrTo,
+            year: model.yearOfConstrFrom ? String(model.yearOfConstrFrom).substring(0, 4) : undefined,
+        };
+
+        const res = await apiFunction(addVehicleToGarageApi, [effectiveUserId], { modal, userId: effectiveUserId }, "PUT", true);
+        console.log("response of add Vehicle ==>>>>", res);
         if (res?.success) {
             Toast.show({
                 type: 'success',
-                text1: res?.message,
+                text1: 'Vehicle Added to Garage',
+                text2: `${modal.make} ${modal.model}`,
             });
             navigation.goBack();
         } else {
+            if (
+                res?.message?.includes('violates foreign key constraint') ||
+                res?.message?.includes('User account not found') ||
+                res?.message?.includes('session expired')
+            ) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Session Expired',
+                    text2: 'Your account was reset or not found. Please log in again.',
+                });
+                await AsyncStorage.multiRemove(['token', 'userId', 'role', 'user']);
+                navigation.navigate('Login');
+                return;
+            }
             Toast.show({
                 type: 'error',
-                text1: res?.message,
+                text1: 'Failed to Add Vehicle',
+                text2: res?.message || 'Error saving vehicle.',
             });
         }
-
     };
 
     const clearSearch = () => {
