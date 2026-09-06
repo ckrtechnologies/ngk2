@@ -1,11 +1,11 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RoleSelectionScreen from '../../../screens/RoleSelectionScreen';
 import LoginScreen from '../../../screens/LoginScreen';
 import RegisterScreen from '../../../screens/register';
 import ForgotPasswordScreen from '../../../screens/ForgotPasswordScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {
   return (

@@ -9,10 +9,10 @@ import {
   Modal,
   Image,
   ActivityIndicator,
-  RefreshControl,
-  BackHandler,
+BackHandler,
   Platform,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Tag,
@@ -755,8 +755,8 @@ const VerifiedPartsScreen = () => {
         <View style={styles.verifiedBanner}>
           <ShieldCheck size={18} color="#059669" />
           <Text style={styles.verifiedBannerText}>
-            {fallbackSiblingName
-              ? `OEM Series Verified • Shared fitment across ${selectedSeries?.modelname || selectedSeries?.name || 'Platform'} (${fallbackSiblingName})`
+            {selectedSeries
+              ? `OEM Series Verified • Shared fitment across ${selectedSeries?.modelname || selectedSeries?.name || 'Platform'}`
               : '100% Genuine NGK Components • OEM Fitment Guaranteed'}
           </Text>
         </View>

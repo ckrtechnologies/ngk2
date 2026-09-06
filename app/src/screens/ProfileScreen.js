@@ -228,7 +228,8 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
 
       {/* Solid Crimson Header */}
@@ -635,6 +636,7 @@ export default function ProfileScreen({ navigation }) {
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 

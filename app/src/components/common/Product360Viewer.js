@@ -400,7 +400,7 @@ const Product360Viewer = ({
         }, 2500);
       }
     },
-  }), [isStatic, getTouchDist, onAngleChange, onAutoSpinChange, onScaleChange, yawAnim, pitchAnim]);
+  }), [isStatic, getTouchDist, onAngleChange, onAutoSpinChange, onScaleChange, yawAnim, pitchAnim, pan]);
 
   // ── URI selection ────────────────────────────────────────────────────────
   const isGif = useCallback((url) => {

@@ -7,8 +7,8 @@ import {
   StatusBar,
   ScrollView,
   Image,
-  RefreshControl,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,

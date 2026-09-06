@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Platform,
   PermissionsAndroid,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   CheckCircle2,
@@ -1378,7 +1379,8 @@ const TechnicalEnquiryScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
       <AppHeader
         title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
         subtitle={
@@ -1421,6 +1423,7 @@ const TechnicalEnquiryScreen = () => {
         dealers={scopedCandidateDealers}
       />
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

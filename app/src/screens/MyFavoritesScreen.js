@@ -9,8 +9,8 @@ import {
   StatusBar,
   Modal,
   Image,
-  RefreshControl,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ChevronLeft, Home, Heart, Search, X, Info, Settings, ShoppingCart } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';

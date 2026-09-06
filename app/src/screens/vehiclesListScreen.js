@@ -8,10 +8,10 @@ import {
   StatusBar,
   TextInput,
   ActivityIndicator,
-  RefreshControl,
-  KeyboardAvoidingView,
+KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
@@ -145,7 +145,8 @@ const VehiclesListScreen = () => {
   };
 
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -300,6 +301,7 @@ const VehiclesListScreen = () => {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

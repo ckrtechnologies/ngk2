@@ -221,9 +221,23 @@ const PartFinder = () => {
           ? a.genericArticles[0].genericArticleDescription
           : a.genericArticleDescription;
 
-      const title = genericDesc || a.mfrName || a.dataSupplierName || 'Automotive Component';
-      const partNumber = a.articleNumber || a.directArticle?.articleNo || 'N/A';
-      const brandName = a.mfrName || a.dataSupplierName || 'NGK';
+      const title =
+        genericDesc ||
+        a.articleName ||
+        a.genericArticleDescription ||
+        a.mfrName ||
+        a.dataSupplierName ||
+        'Automotive Component';
+
+      const partNumber =
+        a.articleNumber ||
+        a.articleNo ||
+        a.partNumber ||
+        a.directArticle?.articleNo ||
+        a.tradeNumbers?.[0] ||
+        'N/A';
+
+      const brandName = a.mfrName || a.dataSupplierName || a.brand || 'NGK SPARK PLUG';
 
       const specs = [];
       if (a.articleCriteria && Array.isArray(a.articleCriteria)) {
@@ -234,21 +248,29 @@ const PartFinder = () => {
         a.articleAttributes.array.forEach((attr) => {
           specs.push({ label: attr.attrName, value: attr.attrValue });
         });
+      } else if (a.specs && Array.isArray(a.specs)) {
+        specs.push(...a.specs);
       }
 
-      let imageUrl = null;
-      if (a.images && a.images.length > 0) {
+      let imageUrl =
+        a.imageURL400 ||
+        a.imageURL800 ||
+        a.imageURL200 ||
+        a.imageUrl ||
+        null;
+
+      if (!imageUrl && a.images && a.images.length > 0) {
         imageUrl =
           a.images[0].imageURL800 ||
           a.images[0].imageURL400 ||
           a.images[0].imageURL100 ||
           a.images[0].docUrl;
-      } else if (a.articleDocuments?.array && a.articleDocuments.array.length > 0) {
+      } else if (!imageUrl && a.articleDocuments?.array && a.articleDocuments.array.length > 0) {
         imageUrl = a.articleDocuments.array[0].docUrl || null;
       }
 
       return {
-        id: a.articleId || a.directArticle?.articleId || `art_${idx}`,
+        id: a.articleId || a.directArticle?.articleId || a.id || `art_${idx}`,
         articleNumber: partNumber,
         title,
         brandName,

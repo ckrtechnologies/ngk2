@@ -9,10 +9,10 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
-  RefreshControl,
-  KeyboardAvoidingView,
+KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   MessageSquare,
@@ -511,7 +511,8 @@ const MyEnquiriesScreen = () => {
   };
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <AppHeader
         title={isWholesalerOrDealer ? 'Inquiry Leads' : 'Technical Enquiries'}
         subtitle={`${enquiry?.length || 0} Total Requests`}
@@ -1493,6 +1494,7 @@ const MyEnquiriesScreen = () => {
         </SafeAreaView>
       </Modal>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

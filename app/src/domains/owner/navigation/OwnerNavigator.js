@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import OwnerTabNavigator from './OwnerTabNavigator';
 import OwnerProfileScreen from '../screens/OwnerProfileScreen';
@@ -16,7 +16,7 @@ import ModalsScreen from '../../../screens/modalsScreen';
 import SuccessScreen from '../../../screens/SuccessScreen';
 import CustomDrawer from '../../../screens/CustomDrawer';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function OwnerNavigator() {
   return (

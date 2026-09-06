@@ -9,12 +9,12 @@ import {
   TextInput,
   Linking,
   ActivityIndicator,
-  RefreshControl,
-  Platform,
+Platform,
   PermissionsAndroid,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   MapPin,
@@ -331,7 +331,8 @@ const DealerLocatorScreen = () => {
   };
 
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -790,6 +791,7 @@ const DealerLocatorScreen = () => {
         dealers={dealers}
       />
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

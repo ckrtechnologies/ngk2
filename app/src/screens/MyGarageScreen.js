@@ -8,13 +8,13 @@ import {
   StatusBar,
   Modal,
   ActivityIndicator,
-  RefreshControl,
-  TextInput,
+TextInput,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
@@ -612,7 +612,8 @@ const MyGarageScreen = () => {
   console.log('[DEBUG_MODAL] MyGarageScreen render, modalVisible:', modalVisible);
 
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -1495,6 +1496,7 @@ const MyGarageScreen = () => {
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

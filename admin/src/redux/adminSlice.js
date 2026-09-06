@@ -260,13 +260,12 @@ export const searchArticlesCatalog = createAsyncThunk(
         };
       } else if (searchType === 'vehicle') {
         const vType = query.linkageTargetType || 'P';
-        const effectiveType = (vType === 'O' || vType === 'C') ? 'P' : vType;
         payload = {
           getArticles: {
             articleCountry: 'ZA',
             lang: 'en',
             linkageTargetId: parseInt(query.linkageTargetId || query.carId || query, 10),
-            linkageTargetType: effectiveType,
+            linkageTargetType: vType,
             includeAll: true,
           },
         };

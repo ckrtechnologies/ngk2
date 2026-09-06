@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import DistributorHomeScreen from '../../../screens/Distributor/DistributorHomeScreen';
 import DistributorProfileScreen from '../screens/DistributorProfileScreen';
@@ -11,7 +11,7 @@ import DealerLocatorScreen from '../../../screens/DealerLocatorScreen';
 import CustomDrawer from '../../../screens/CustomDrawer';
 import NotificationScreen from '../../../screens/Notification';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function DistributorNavigator() {
   return (

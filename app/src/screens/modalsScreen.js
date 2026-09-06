@@ -129,7 +129,8 @@ const ModalsScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.container}>
             <AppHeader
                 title={`Models for ${mfrName || 'Vehicle'}`}
                 subtitle="Select vehicle series"
@@ -177,7 +178,8 @@ const ModalsScreen = () => {
                 />
             </KeyboardAvoidingView>
         </View>
-    );
+    </KeyboardAvoidingView>
+  );
 };
 
 const styles = StyleSheet.create({

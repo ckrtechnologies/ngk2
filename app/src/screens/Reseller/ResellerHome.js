@@ -5,10 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  ScrollView,
   Image,
-  RefreshControl,
 } from 'react-native';
+import { ScrollView, RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,

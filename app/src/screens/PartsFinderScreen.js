@@ -550,7 +550,8 @@ const PartsFinderScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -1073,6 +1074,7 @@ const PartsFinderScreen = () => {
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

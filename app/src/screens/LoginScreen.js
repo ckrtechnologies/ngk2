@@ -139,7 +139,8 @@ const LoginScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.root}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
 
       {/* TOP 35% DARK HEADER SECTION */}
@@ -180,10 +181,7 @@ const LoginScreen = ({ route, navigation }) => {
       </View>
 
       {/* LOWER 65% FORM SECTION WITH CURVED WHITE SHEET */}
-      <KeyboardAvoidingView
-        style={styles.formSection}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <View style={styles.formSection}>
         <ScrollView
           contentContainerStyle={styles.scrollFormContent}
           showsVerticalScrollIndicator={false}
@@ -259,8 +257,9 @@ const LoginScreen = ({ route, navigation }) => {
             </Text>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+        </View>
+    </KeyboardAvoidingView>
   );
 };
 
