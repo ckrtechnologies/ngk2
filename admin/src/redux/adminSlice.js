@@ -246,12 +246,13 @@ export const searchArticlesCatalog = createAsyncThunk(
     try {
       let payload = {};
       if (searchType === 'number') {
+        const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
         payload = {
           getArticles: {
             articleCountry: 'ZA',
             lang: 'en',
-            searchQuery: query,
-            searchType: 0,
+            searchQuery: cleanQuery,
+            searchType: 10,
             perPage: 50,
             page: 1,
             includeAll: true,
@@ -264,17 +265,18 @@ export const searchArticlesCatalog = createAsyncThunk(
           getArticles: {
             articleCountry: 'ZA',
             lang: 'en',
-            linkageTargetId: query.linkageTargetId || query.carId || query,
+            linkageTargetId: parseInt(query.linkageTargetId || query.carId || query, 10),
             linkageTargetType: effectiveType,
             includeAll: true,
           },
         };
       } else {
+        const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
         payload = {
           getArticles: {
             articleCountry: 'ZA',
             lang: 'en',
-            searchQuery: query,
+            searchQuery: cleanQuery,
             searchType: 10,
             perPage: 50,
             page: 1,

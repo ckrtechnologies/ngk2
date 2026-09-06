@@ -67,7 +67,7 @@ const RoleSelectionScreen = ({ navigation }) => {
     {
       id: 'distributor',
       title: 'Authorized Distributor',
-      description: 'National freight, bulk stock management & regional stockist oversight.',
+      description: 'National freight, bulk stock management & regional reseller oversight.',
       IconComponent: DistributorRole3DIcon,
       badge: 'Enterprise Tier-1',
       badgeBg: '#E2E8F0',

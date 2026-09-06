@@ -4,6 +4,7 @@ import { optionalAuth } from '../../common/middleware/auth.middleware.js';
 
 const enquiryRouter = Router();
 
+enquiryRouter.get('/', optionalAuth, getEnquiries);
 enquiryRouter.post('/add', optionalAuth, addEnquiry);
 enquiryRouter.get('/getEnquiry', optionalAuth, getEnquiries);
 enquiryRouter.get('/getEnquiry/:userId', optionalAuth, getEnquiries);

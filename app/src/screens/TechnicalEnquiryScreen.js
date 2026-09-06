@@ -236,7 +236,7 @@ const TechnicalEnquiryScreen = () => {
 
           list.push({
             id,
-            name: name || 'Authorized Stockist',
+            name: name || 'Authorized Reseller',
             companyName: d.companyName || d.name,
             role: isDistributor ? 'distributor' : 'reseller',
             distance:
@@ -273,7 +273,7 @@ const TechnicalEnquiryScreen = () => {
             name:
               u.name ||
               u.companyName ||
-              (isDistributor ? 'Regional Distributor' : 'Authorized Stockist'),
+              (isDistributor ? 'Regional Distributor' : 'Authorized Reseller'),
             companyName: u.companyName || u.name,
             role: isDistributor ? 'distributor' : 'reseller',
             distance: null,
@@ -626,10 +626,10 @@ const TechnicalEnquiryScreen = () => {
     if (!selectedDealerId) {
       Toast.show({
         type: 'error',
-        text1: 'Stockist Required',
+        text1: 'Reseller Required',
         text2: isReseller
           ? 'Please select a Regional Distributor to proceed.'
-          : 'Please select an Authorized Stockist to proceed.',
+          : 'Please select an Authorized Reseller to proceed.',
       });
       return false;
     }
@@ -927,7 +927,7 @@ const TechnicalEnquiryScreen = () => {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.stepBannerTitle}>
-            {isReseller ? 'STEP 2: CHOOSE REGIONAL DISTRIBUTOR' : 'STEP 2: CHOOSE AUTHORIZED STOCKIST'}
+            {isReseller ? 'STEP 2: CHOOSE REGIONAL DISTRIBUTOR' : 'STEP 2: CHOOSE AUTHORIZED RESELLER'}
           </Text>
           <Text style={styles.stepBannerSubtitle}>
             {isReseller
@@ -937,7 +937,7 @@ const TechnicalEnquiryScreen = () => {
         </View>
       </View>
 
-      {/* Auto-Select Nearest Stockist Action */}
+      {/* Auto-Select Nearest Reseller Action */}
       <TouchableOpacity
         style={styles.autoSelectNearestBtn}
         onPress={handleAutoSelectNearest}
@@ -945,7 +945,7 @@ const TechnicalEnquiryScreen = () => {
       >
         <SolidLocationPinIcon size={16} color="#FFFFFF" />
         <Text style={styles.autoSelectNearestBtnText}>
-          Auto-Select Nearest Authorized Stockist
+          Auto-Select Nearest Authorized Reseller
         </Text>
       </TouchableOpacity>
 
@@ -1015,7 +1015,7 @@ const TechnicalEnquiryScreen = () => {
             {filters.role !== 'all' && (
               <View style={styles.activeChipPill}>
                 <Text style={styles.activeChipText}>
-                  {filters.role === 'distributor' ? 'Distributors' : 'Stockists'}
+                  {filters.role === 'distributor' ? 'Distributors' : 'Resellers'}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, role: 'all' }))}
@@ -1100,7 +1100,7 @@ const TechnicalEnquiryScreen = () => {
                 filters.role === 'reseller' && styles.modalFilterTabTextActive,
               ]}
             >
-              Retail Stockists ({counts.stockists})
+              Retail Resellers ({counts.stockists})
             </Text>
           </TouchableOpacity>
         )}
@@ -1170,7 +1170,7 @@ const TechnicalEnquiryScreen = () => {
                               : styles.roleTagTextStockist,
                           ]}
                         >
-                          {isDist ? 'DISTRIBUTOR' : 'STOCKIST'}
+                          {isDist ? 'DISTRIBUTOR' : 'RESELLER'}
                         </Text>
                       </View>
                     </View>
@@ -1206,7 +1206,7 @@ const TechnicalEnquiryScreen = () => {
                         isSelected && { color: '#D0142C', fontWeight: '800' },
                       ]}
                     >
-                      {isSelected ? '✓ Selected Stockist' : 'Tap to Select'}
+                      {isSelected ? '✓ Selected Reseller' : 'Tap to Select'}
                     </Text>
                   </View>
                 )}
@@ -1295,13 +1295,13 @@ const TechnicalEnquiryScreen = () => {
           </View>
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Text style={styles.summaryItemLabel}>Assigned Stockist</Text>
+              <Text style={styles.summaryItemLabel}>Assigned Reseller</Text>
               <TouchableOpacity onPress={() => setCurrentStep(2)} activeOpacity={0.7}>
                 <Text style={styles.summaryEditLink}>Change</Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.summaryItemValue}>
-              {selectedDealerName || 'Nearest Authorized Stockist'}
+              {selectedDealerName || 'Nearest Authorized Reseller'}
             </Text>
             {selectedDealerObj?.distance && (
               <Text style={styles.summaryItemSub}>

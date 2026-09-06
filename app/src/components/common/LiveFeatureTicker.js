@@ -1,95 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
-  Easing,
 } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
 
-export default function LiveFeatureTicker({ items, onItemPress }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsRef = useRef(items);
-  itemsRef.current = items;
-
-  const translateY = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
-  const scale = useRef(new Animated.Value(1)).current;
-  const isTransitioningRef = useRef(false);
-
-  const numItems = items?.length || 0;
-
-  useEffect(() => {
-    if (numItems <= 1) return;
-
-    const interval = setInterval(() => {
-      if (isTransitioningRef.current) return;
-      isTransitioningRef.current = true;
-
-      // 1. Slide up & fade out smoothly
-      Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: -12,
-          duration: 220,
-          useNativeDriver: true,
-          easing: Easing.in(Easing.ease),
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 180,
-          useNativeDriver: true,
-        }),
-      ]).start(({ finished }) => {
-        if (!finished) {
-          isTransitioningRef.current = false;
-          return;
-        }
-
-        // Set up starting position for entry
-        translateY.setValue(12);
-        scale.setValue(0.97);
-
-        // Advance to next item
-        setCurrentIndex((prev) => {
-          const currentCount = itemsRef.current?.length || 1;
-          return (prev + 1) % currentCount;
-        });
-
-        // 2. Slide in buttery smooth & fade in
-        Animated.parallel([
-          Animated.timing(translateY, {
-            toValue: 0,
-            duration: 280,
-            useNativeDriver: true,
-            easing: Easing.out(Easing.cubic),
-          }),
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 240,
-            useNativeDriver: true,
-          }),
-          Animated.timing(scale, {
-            toValue: 1,
-            duration: 260,
-            useNativeDriver: true,
-          }),
-        ]).start(() => {
-          isTransitioningRef.current = false;
-        });
-      });
-    }, 3800);
-
-    return () => {
-      clearInterval(interval);
-      isTransitioningRef.current = false;
-    };
-  }, [numItems, translateY, opacity, scale]);
-
+const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }) {
   if (!items || items.length === 0) return null;
 
-  const currentItem = items[currentIndex] || items[0];
+  // Use the primary highlight item with zero timer animations for maximum performance
+  const currentItem = items[0];
   const IconComp = currentItem.IconComponent;
 
   const handlePress = () => {
@@ -107,15 +29,7 @@ export default function LiveFeatureTicker({ items, onItemPress }) {
       style={styles.tickerContainer}
     >
       <View style={styles.tickerContent}>
-        <Animated.View
-          style={[
-            styles.animatedRow,
-            {
-              transform: [{ translateY }, { scale }],
-              opacity,
-            },
-          ]}
-        >
+        <View style={styles.row}>
           {/* Custom Vibrant Icon Container */}
           <View
             style={[
@@ -165,7 +79,7 @@ export default function LiveFeatureTicker({ items, onItemPress }) {
               </Text>
             </View>
           )}
-        </Animated.View>
+        </View>
       </View>
 
       <ChevronRight
@@ -175,7 +89,7 @@ export default function LiveFeatureTicker({ items, onItemPress }) {
       />
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   tickerContainer: {
@@ -197,12 +111,11 @@ const styles = StyleSheet.create({
   },
   tickerContent: {
     flex: 1,
-    overflow: 'hidden',
     height: 28,
     justifyContent: 'center',
     marginRight: 6,
   },
-  animatedRow: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -238,3 +151,5 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 });
+
+export default LiveFeatureTicker;

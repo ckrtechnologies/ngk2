@@ -32,6 +32,98 @@ function cleanModelString(model) {
 }
 
 /**
+ * SNO 12: Validates whether a Wikipedia article is actually about the vehicle.
+ * Checks title and description for the make name or automotive keywords.
+ * Prevents returning images from unrelated articles (parliament, geography, etc.).
+ */
+function isVehicleRelatedArticle(data, make, cleanModel, firstWord) {
+  const title = (data.title || '').toLowerCase();
+  const desc  = (data.description || '').toLowerCase();
+  const extract = (data.extract || '').toLowerCase().slice(0, 500);
+  const makeLower = (make || '').toLowerCase();
+  const modelLower = (cleanModel || '').toLowerCase();
+  const firstWordLower = (firstWord || '').toLowerCase();
+
+  // Automotive keywords that indicate the article is about a vehicle
+  const autoKeywords = [
+    'car', 'automobile', 'vehicle', 'sedan', 'hatchback', 'suv', 'coupe',
+    'convertible', 'wagon', 'truck', 'pickup', 'van', 'minivan', 'crossover',
+    'motor', 'engine', 'cylinder', 'turbo', 'diesel', 'petrol', 'electric vehicle',
+    'manufactured', 'production', 'model year', 'wheelbase', 'horsepower',
+    'compact car', 'mid-size', 'full-size', 'sports car', 'luxury',
+    'automaker', 'manufacturer',
+  ];
+
+  // Check 1: Does the title contain the vehicle make?
+  if (makeLower && title.includes(makeLower)) return true;
+
+  // Check 2: Does the description contain automotive terms?
+  for (const kw of autoKeywords) {
+    if (desc.includes(kw)) return true;
+  }
+
+  // Check 3: Does the article extract mention the make AND any automotive keyword?
+  if (makeLower && extract.includes(makeLower)) {
+    for (const kw of autoKeywords) {
+      if (extract.includes(kw)) return true;
+    }
+  }
+
+  // Check 4: Does the title contain the model first word AND the description isn't empty?
+  if (firstWordLower && firstWordLower.length > 2 && title.includes(firstWordLower) && desc.length > 0) {
+    // But reject clearly non-automotive descriptions
+    const rejectKeywords = ['politician', 'city', 'town', 'country', 'river', 'building',
+      'parliament', 'district', 'province', 'municipality', 'film', 'album', 'song',
+      'actor', 'actress', 'painter', 'writer', 'footballer', 'cricketer'];
+    for (const rk of rejectKeywords) {
+      if (desc.includes(rk)) return false;
+    }
+    return true;
+  }
+
+  // Default: reject — not confident this is about a vehicle
+  return false;
+}
+
+/**
+ * Synchronous in-memory vehicle image cache lookup.
+ * Returns the cached URL immediately if available in memory or explicitly on car object,
+ * avoiding initial spinner flash or re-render lag.
+ */
+export function getCachedVehicleImageUrlSync(car) {
+  if (!car) return null;
+
+  const explicitUrl =
+    car.imageUrl ||
+    car.image ||
+    car.photo ||
+    car.img ||
+    car.raw_specs?.imageUrl ||
+    car.raw_specs?.photo;
+
+  if (explicitUrl && typeof explicitUrl === 'string' && explicitUrl.startsWith('http')) {
+    return explicitUrl;
+  }
+
+  const rawMake = (car.make || '').trim();
+  const rawModel = (car.model || '').trim();
+  if (!rawMake && !rawModel) return null;
+
+  const make = toTitleCase(rawMake);
+  const cleanModel = cleanModelString(rawModel);
+  const cacheKey = `veh_v8_${make.toLowerCase()}_${cleanModel.toLowerCase()}`.replace(/[^a-z0-9_]/g, '');
+
+  if (memoryCache.has(cacheKey)) {
+    const cached = memoryCache.get(cacheKey);
+    if (cached && cached !== DEFAULT_VEHICLE_FALLBACK) {
+      return cached;
+    }
+  }
+
+  return null;
+}
+
+/**
  * Resolves a high-resolution authentic vehicle photograph.
  * Priority:
  * 1. Explicit vehicle image URL already stored on the vehicle object
@@ -124,8 +216,18 @@ export async function getVehicleImageUrl(car) {
         const data = await res.json();
         const source = data.originalimage?.source || data.thumbnail?.source;
         if (source && typeof source === 'string' && source.startsWith('http')) {
+          // SNO 12: Validate the article is actually about the vehicle
+          // Reject images from unrelated articles (parliament, geography, etc.)
+          if (!isVehicleRelatedArticle(data, make, cleanModel, firstWord)) {
+            continue; // Skip this term, try next
+          }
+          // Reject SVGs, icons, and tiny images that aren't real photos
+          const srcLower = source.toLowerCase();
+          if (srcLower.endsWith('.svg') || srcLower.includes('icon') || srcLower.includes('logo')) {
+            continue;
+          }
           memoryCache.set(cacheKey, source);
-          AsyncStorage.setItem(cacheKey, source).catch(() => {});
+          AsyncStorage.setItem(cacheKey, source).catch(() => { });
           return source;
         }
       }

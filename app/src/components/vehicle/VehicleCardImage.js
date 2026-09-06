@@ -1,29 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { View, Image, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { getVehicleImageUrl } from '../../utils/vehicleImageService';
+import {
+  getVehicleImageUrl,
+  getCachedVehicleImageUrlSync,
+  DEFAULT_VEHICLE_FALLBACK,
+} from '../../utils/vehicleImageService';
+import VehicleBlueprintFallback from './VehicleBlueprintFallback';
 
-export default function VehicleCardImage({
+function VehicleCardImage({
   car,
   style,
   height = 120,
   resizeMode = 'cover',
   compact = false,
 }) {
-  const [imageUrl, setImageUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const syncCachedUrl = getCachedVehicleImageUrlSync(car);
+  const [imageUrl, setImageUrl] = useState(syncCachedUrl);
+  const [loading, setLoading] = useState(!syncCachedUrl);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    const cached = getCachedVehicleImageUrlSync(car);
+    if (cached) {
+      setImageUrl(cached);
+      setLoading(false);
+      setHasError(false);
+      return;
+    }
+
     setLoading(true);
     setHasError(false);
 
     getVehicleImageUrl(car)
       .then((url) => {
         if (isMounted) {
-          if (url && typeof url === 'string' && url.startsWith('http')) {
+          if (url && typeof url === 'string' && url.startsWith('http') && url !== DEFAULT_VEHICLE_FALLBACK) {
             setImageUrl(url);
           } else {
+            // No real image — will render VehicleBlueprintFallback
             setHasError(true);
           }
           setLoading(false);
@@ -39,13 +54,13 @@ export default function VehicleCardImage({
     return () => {
       isMounted = false;
     };
-  }, [car?.id, car?.make, car?.model, car?.imageUrl]);
+  }, [car?.id, car?._id, car?.linkageTargetId, car?.make, car?.model, car?.imageUrl]);
 
   return (
     <View style={[styles.container, { height }, style]}>
       {loading && (
         <View style={[styles.loadingContainer, compact && { backgroundColor: 'rgba(15, 23, 42, 0.4)' }]}>
-          <ActivityIndicator size={compact ? 'small' : 'small'} color="#D0142C" />
+          <ActivityIndicator size="small" color="#D0142C" />
         </View>
       )}
 
@@ -63,25 +78,35 @@ export default function VehicleCardImage({
           onError={() => setHasError(true)}
         />
       ) : (
-        <View style={[styles.fallbackContainer, compact && { backgroundColor: '#1E293B' }]}>
-          <Image
-            source={require('../../assets/images/demonstration_car_fallback.png')}
-            style={[styles.fallbackImage, compact && { width: '85%', height: '80%' }]}
-            resizeMode="contain"
-          />
-          {!compact && (
-            <View style={styles.fallbackBadge}>
-              <Text style={styles.fallbackBadgeText}>Demonstration Vehicle</Text>
-            </View>
-          )}
-        </View>
+        <VehicleBlueprintFallback car={car} compact={compact} height={height} />
       )}
 
       {/* Subtle edge-to-edge shadow gradient for contrast (full size only) */}
-      {!compact && <View style={styles.bottomShadowOverlay} pointerEvents="none" />}
+      {!compact && imageUrl && !hasError && <View style={styles.bottomShadowOverlay} pointerEvents="none" />}
     </View>
   );
 }
+
+export default memo(VehicleCardImage, (prevProps, nextProps) => {
+  if (prevProps.height !== nextProps.height) return false;
+  if (prevProps.resizeMode !== nextProps.resizeMode) return false;
+  if (prevProps.compact !== nextProps.compact) return false;
+
+  const prevCar = prevProps.car;
+  const nextCar = nextProps.car;
+  if (prevCar === nextCar) return true;
+  if (!prevCar || !nextCar) return false;
+
+  const prevId = String(prevCar.id || prevCar._id || prevCar.linkageTargetId || '');
+  const nextId = String(nextCar.id || nextCar._id || nextCar.linkageTargetId || '');
+  if (prevId !== nextId) return false;
+
+  if (prevCar.make !== nextCar.make) return false;
+  if (prevCar.model !== nextCar.model) return false;
+  if (prevCar.imageUrl !== nextCar.imageUrl) return false;
+
+  return true;
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -103,31 +128,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#0F172A',
     zIndex: 2,
-  },
-  fallbackContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-  },
-  fallbackImage: {
-    width: '92%',
-    height: '84%',
-    alignSelf: 'center',
-  },
-  fallbackBadge: {
-    position: 'absolute',
-    bottom: 4,
-    backgroundColor: 'rgba(15, 23, 42, 0.72)',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
-  },
-  fallbackBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 0.3,
   },
   bottomShadowOverlay: {
     position: 'absolute',

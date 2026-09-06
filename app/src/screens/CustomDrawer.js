@@ -101,7 +101,7 @@ export default function CustomDrawer({ navigation }) {
     },
     {
       id: 'dealers',
-      label: 'Authorized Stockists',
+      label: 'Authorized Resellers',
       subtitle: 'Official certified network',
       Icon: DealerLocator3DIcon,
       bgColor: '#FFFBEB',
@@ -115,26 +115,25 @@ export default function CustomDrawer({ navigation }) {
       style={[
         styles.container,
         {
-          paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
       ]}
     >
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={false} />
 
-      {/* Drawer Header (No Avatar Image CDN required) */}
-      <View style={styles.header}>
+      {/* Drawer Header (Solid NGK Crimson Theme matching rest of the app) */}
+      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <TouchableOpacity
           style={styles.profileRow}
           onPress={() => navigation.navigate('Profile')}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
           <View style={styles.profileTextCol}>
             <View style={styles.nameRow}>
               <Text style={styles.userName} numberOfLines={1}>
                 {myself?.name || 'Account User'}
               </Text>
-              <ChevronRight size={16} color="#9CA3AF" />
+              <ChevronRight size={16} color="#FFFFFF" opacity={0.8} />
             </View>
             <View style={styles.badgeRow}>
               <View style={styles.roleBadge}>
@@ -153,7 +152,7 @@ export default function CustomDrawer({ navigation }) {
           onPress={() => navigation.goBack()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <X size={20} color="#6B7280" />
+          <X size={20} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
@@ -230,19 +229,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 16,
     paddingBottom: 20,
+    backgroundColor: '#D0142C',
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: '#B91024',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     marginRight: 10,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
     borderRadius: 12,
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -256,10 +260,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   userName: {
+    flex: 1,
     fontSize: 15,
     fontWeight: '800',
-    color: '#111827',
+    color: '#FFFFFF',
     letterSpacing: -0.2,
+    lineHeight: 20,
   },
   badgeRow: {
     flexDirection: 'row',
@@ -268,16 +274,14 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   roleBadge: {
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FECACA',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 5,
   },
   roleBadgeText: {
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: '900',
     color: '#D0142C',
     letterSpacing: 0.5,
   },
@@ -285,18 +289,20 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: '#FEE2E2',
   },
   verifiedText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: '#FEE2E2',
   },
   closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
   },

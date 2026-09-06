@@ -125,33 +125,30 @@ class EnquiryService {
   /**
    * 2. Get Enquiries by User ID & Role
    */
-  async getEnquiries(userId) {
-    if (!userId) {
-      throw new Error('User ID is required');
-    }
-
-    const { data: userRes, error: userError } = await supabase
-      .from('users')
-      .select('id, role')
-      .eq('id', userId);
-
-    if (userError || !userRes || userRes.length === 0) {
-      throw new Error('User not found');
-    }
-
-    const user = userRes[0];
+  async getEnquiries(userId = null) {
     let query = supabase
       .from('enquiries')
       .select('*, customer:users!enquiries_user_id_fkey(name, email, role), dealer:users!enquiries_dealer_id_fkey(name, email, role), messages:enquiry_messages(*)')
       .order('created_at', { ascending: false });
 
-    // Filter by role
-    if (user.role === 'owner') {
-      query = query.eq('user_id', userId);
-    } else if (user.role === 'reseller') {
-      query = query.eq('dealer_id', userId);
+    if (userId) {
+      const { data: userRes } = await supabase
+        .from('users')
+        .select('id, role')
+        .eq('id', userId);
+
+      if (userRes && userRes.length > 0) {
+        const user = userRes[0];
+        const normalizedRole = (user.role || '').toLowerCase().trim();
+
+        if (normalizedRole === 'owner') {
+          query = query.eq('user_id', userId);
+        } else if (normalizedRole === 'reseller') {
+          query = query.eq('dealer_id', userId);
+        }
+        // If distributor or admin, do not filter by userId - show all!
+      }
     }
-    // Admin and distributor see all
 
     const { data, error } = await query;
     if (error) {
@@ -217,7 +214,9 @@ class EnquiryService {
 
       return {
         ...item,
-        status: item.status || 'Pending',
+        status: partRef.workflow_status || item.status || 'Pending',
+        workflow_status: partRef.workflow_status || item.status || 'Pending',
+        status_note: partRef.status_note || null,
         title: item.title,
         description: item.description,
         quantity: item.quantity || partRef.quantity || 1,
@@ -320,7 +319,9 @@ class EnquiryService {
 
     return {
       ...data,
-      status: data.status || 'Pending',
+      status: partRef.workflow_status || data.status || 'Pending',
+      workflow_status: partRef.workflow_status || data.status || 'Pending',
+      status_note: partRef.status_note || null,
       title: data.title,
       description: data.description,
       quantity: data.quantity || partRef.quantity || 1,
@@ -354,15 +355,42 @@ class EnquiryService {
   /**
    * 3. Update Enquiry Status
    */
-  async updateStatus(id, { status, responderName, role }) {
-    // Normalize status to satisfy database constraint ('Pending', 'InProgress', 'Resolved', 'Closed')
-    let cleanStatus = status;
-    if (typeof status === 'string') {
-      const lower = status.toLowerCase().replace(/[\s_-]+/g, '');
-      if (lower === 'inprogress') cleanStatus = 'InProgress';
-      else if (lower === 'pending') cleanStatus = 'Pending';
-      else if (lower === 'resolved') cleanStatus = 'Resolved';
-      else if (lower === 'closed') cleanStatus = 'Closed';
+  async updateStatus(id, { status, responderName, role, note, notes }) {
+    let dbStatus = 'Pending';
+    let workflowStatus = 'Pending';
+    let displayStatusName = 'PENDING';
+
+    const clean = String(status || '').trim();
+    const lower = clean.toLowerCase().replace(/[\s_-]+/g, '');
+
+    if (lower === 'closed') {
+      dbStatus = 'Resolved';
+      workflowStatus = 'Closed';
+      displayStatusName = 'CLOSED';
+    } else if (lower === 'quotesent' || lower === 'quote') {
+      dbStatus = 'InProgress';
+      workflowStatus = 'QuoteSent';
+      displayStatusName = 'QUOTE SENT';
+    } else if (lower === 'awaitingstock' || lower === 'stock' || lower === 'backorder') {
+      dbStatus = 'InProgress';
+      workflowStatus = 'AwaitingStock';
+      displayStatusName = 'AWAITING STOCK';
+    } else if (lower === 'declined' || lower === 'cancelled' || lower === 'rejected') {
+      dbStatus = 'Resolved';
+      workflowStatus = 'Declined';
+      displayStatusName = 'DECLINED';
+    } else if (lower === 'resolved') {
+      dbStatus = 'Resolved';
+      workflowStatus = 'Resolved';
+      displayStatusName = 'RESOLVED';
+    } else if (lower === 'inprogress' || lower === 'reopen' || lower === 'open') {
+      dbStatus = 'InProgress';
+      workflowStatus = 'InProgress';
+      displayStatusName = 'IN PROGRESS';
+    } else {
+      dbStatus = 'Pending';
+      workflowStatus = 'Pending';
+      displayStatusName = 'PENDING';
     }
 
     const { data: enquiry, error: fetchError } = await supabase
@@ -375,25 +403,34 @@ class EnquiryService {
       throw new Error('Enquiry not found');
     }
 
-    // Update status in enquiries table
+    const existingPartRef = enquiry.part_reference || {};
+    const updatedPartRef = {
+      ...existingPartRef,
+      workflow_status: workflowStatus,
+      status_note: note || notes || existingPartRef.status_note || null,
+      status_updated_at: new Date().toISOString(),
+    };
+
+    // Update status in enquiries table (using DB permitted status: 'Pending', 'InProgress', 'Resolved')
     const { error: updateError } = await supabase
       .from('enquiries')
       .update({
-        status: cleanStatus,
+        status: dbStatus,
+        part_reference: updatedPartRef,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id);
 
     if (updateError) throw new Error(updateError.message || 'Failed to update status');
 
-    const displayStatusName = cleanStatus === 'InProgress' ? 'IN PROGRESS' : cleanStatus.toUpperCase();
+    const statusNoteText = note || notes ? ` - ${note || notes}` : '';
 
     // Add status update audit message in enquiry_messages
     await supabase.from('enquiry_messages').insert({
       enquiry_id: id,
       sender_name: responderName || (role === 'distributor' ? 'Distributor' : role === 'admin' ? 'Administrator' : 'Reseller'),
       sender_role: role || 'system',
-      message_text: `Enquiry status updated to ${displayStatusName}`,
+      message_text: `Enquiry status updated to ${displayStatusName}${statusNoteText}`,
       is_system: true,
     });
 
@@ -403,7 +440,7 @@ class EnquiryService {
         user_id: enquiry.user_id,
         message: `Your enquiry status changed to ${displayStatusName}`,
         event_type: 'enquiry_status',
-        metadata: { enquiryId: id, status: cleanStatus },
+        metadata: { enquiryId: id, status: workflowStatus, dbStatus },
       });
     }
 
@@ -432,7 +469,7 @@ class EnquiryService {
       throw new Error('Enquiry not found');
     }
 
-    const senderRole = payload.sender || payload.senderRole || payload.role || 'user';
+    const senderRole = (payload.sender || payload.senderRole || payload.role || 'user').toLowerCase();
     const senderName = payload.senderName || payload.sender_name || 'User';
     const senderId = payload.senderId || payload.sender_id || (senderRole === 'owner' ? enquiry.user_id : enquiry.dealer_id);
 
@@ -450,8 +487,40 @@ class EnquiryService {
 
     if (insertError) throw new Error(insertError.message || 'Failed to add message');
 
-    // Update enquiry updated_at timestamp
-    await supabase.from('enquiries').update({ updated_at: new Date().toISOString() }).eq('id', id);
+    // SNO 14-A: Auto-transition status from Pending/Open to InProgress on dealer/reseller/distributor reply
+    const isDealerRole = ['reseller', 'distributor', 'dealer', 'admin', 'wholesaler', 'retailer'].includes(senderRole);
+    const isPending = (enquiry.status || '').toLowerCase() === 'pending' || (enquiry.status || '').toLowerCase() === 'open';
+    if (isDealerRole && isPending) {
+      await supabase
+        .from('enquiries')
+        .update({
+          status: 'InProgress',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id);
+
+      // Audit system log
+      await supabase.from('enquiry_messages').insert({
+        enquiry_id: id,
+        sender_name: 'System',
+        sender_role: 'system',
+        message_text: 'Enquiry status automatically updated to IN PROGRESS upon partner reply',
+        is_system: true,
+      });
+
+      // Notify customer of status change
+      if (enquiry.user_id) {
+        await supabase.from('notifications').insert({
+          user_id: enquiry.user_id,
+          message: `Your technical enquiry status changed to IN PROGRESS by ${senderName}`,
+          event_type: 'enquiry_status',
+          metadata: { enquiryId: id, status: 'InProgress' },
+        });
+      }
+    } else {
+      // Update enquiry updated_at timestamp
+      await supabase.from('enquiries').update({ updated_at: new Date().toISOString() }).eq('id', id);
+    }
 
     // Notify other party
     const targetUserId = senderRole === 'owner' ? enquiry.dealer_id : enquiry.user_id;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Users,
@@ -30,6 +30,9 @@ import {
   Compass,
   XCircle,
   Hash,
+  Search,
+  X,
+  Crosshair,
 } from 'lucide-react';
 import {
   fetchUsers,
@@ -49,6 +52,7 @@ import {
   detectCurrentLocation,
   geocodeAddress,
   reverseGeocode,
+  searchAddressSuggestions,
   SOUTH_AFRICA_CITY_PRESETS,
 } from '../utils/locationService';
 
@@ -77,6 +81,10 @@ const UserManagement = () => {
   const [copiedId, setCopiedId] = useState(false);
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoNotice, setGeoNotice] = useState(null);
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [isSearchingAddress, setIsSearchingAddress] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const addressSearchTimerRef = useRef(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -223,19 +231,57 @@ const UserManagement = () => {
     setGeoNotice(null);
     try {
       const loc = await detectCurrentLocation();
+      const detectedCity = loc.city || (loc.address ? loc.address.split(',')[0].trim() : '');
       setFormData((prev) => ({
         ...prev,
         address: loc.address,
-        city: loc.city || prev.city || 'Johannesburg',
+        city: detectedCity || prev.city || '',
         latitude: String(loc.latitude),
         longitude: String(loc.longitude),
       }));
-      setGeoNotice(`📍 Location & address acquired: ${loc.city} (${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)})`);
+      setGeoNotice(`📍 Location acquired: ${detectedCity || 'Coordinates'} (${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)})`);
     } catch (err) {
       setGeoNotice(`⚠️ ${err.message}`);
     } finally {
       setGeoLoading(false);
     }
+  };
+
+  const handleAddressInputChange = (text) => {
+    setFormData((prev) => ({ ...prev, address: text }));
+    if (!text || text.trim().length < 2) {
+      setAddressSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    if (addressSearchTimerRef.current) clearTimeout(addressSearchTimerRef.current);
+
+    addressSearchTimerRef.current = setTimeout(async () => {
+      setIsSearchingAddress(true);
+      try {
+        const list = await searchAddressSuggestions(text);
+        setAddressSuggestions(list);
+        setShowSuggestions(list.length > 0);
+      } catch (e) {
+        setAddressSuggestions([]);
+      } finally {
+        setIsSearchingAddress(false);
+      }
+    }, 300);
+  };
+
+  const handlePickAddressSuggestion = (item) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: item.address,
+      city: item.city || prev.city || '',
+      latitude: String(item.latitude),
+      longitude: String(item.longitude),
+    }));
+    setAddressSuggestions([]);
+    setShowSuggestions(false);
+    setGeoNotice(`📍 Address picked: ${item.city || item.primaryText} (${item.latitude.toFixed(4)}, ${item.longitude.toFixed(4)})`);
   };
 
   const handleLookupCoordsFromAddress = async () => {
@@ -252,8 +298,9 @@ const UserManagement = () => {
         latitude: String(res.latitude),
         longitude: String(res.longitude),
         address: res.formattedAddress || prev.address,
+        city: res.city || prev.city || '',
       }));
-      setGeoNotice(`📍 GPS found: ${res.latitude.toFixed(4)}, ${res.longitude.toFixed(4)}`);
+      setGeoNotice(`📍 GPS found: ${res.city ? `${res.city} ` : ''}(${res.latitude.toFixed(4)}, ${res.longitude.toFixed(4)})`);
     } catch (err) {
       setGeoNotice(`⚠️ ${err.message}`);
     } finally {
@@ -273,9 +320,9 @@ const UserManagement = () => {
       setFormData((prev) => ({
         ...prev,
         address: res.address,
-        city: res.city || prev.city,
+        city: res.city || prev.city || '',
       }));
-      setGeoNotice(`📍 Address prefetched: ${res.city}`);
+      setGeoNotice(`📍 Address acquired: ${res.city || 'Location found'}`);
     } catch (err) {
       setGeoNotice(`⚠️ ${err.message}`);
     } finally {
@@ -310,6 +357,8 @@ const UserManagement = () => {
   // 2. Open Create User Modal
   const handleOpenCreate = () => {
     setGeoNotice(null);
+    setAddressSuggestions([]);
+    setShowSuggestions(false);
     setFormData({
       name: '',
       email: '',
@@ -318,9 +367,9 @@ const UserManagement = () => {
       address: '',
       phone: '',
       company_name: '',
-      city: 'Johannesburg',
-      latitude: '-26.2041',
-      longitude: '28.0473',
+      city: '',
+      latitude: '',
+      longitude: '',
       approval_status: 'approved',
       rejection_reason: '',
     });
@@ -331,6 +380,8 @@ const UserManagement = () => {
   const handleOpenUpdate = (user) => {
     setActiveUser(user);
     setGeoNotice(null);
+    setAddressSuggestions([]);
+    setShowSuggestions(false);
     const isCommercial = (user.role || '').toLowerCase() === 'reseller' || (user.role || '').toLowerCase() === 'distributor';
     setFormData({
       name: user.name || '',
@@ -340,9 +391,9 @@ const UserManagement = () => {
       address: user.address || user.dealer?.street_address || '',
       phone: user.phone || user.dealer?.phone || '',
       company_name: user.dealer?.company_name || user.name || '',
-      city: user.dealer?.city || 'Johannesburg',
-      latitude: user.dealer?.latitude !== undefined && user.dealer?.latitude !== null ? String(user.dealer.latitude) : '',
-      longitude: user.dealer?.longitude !== undefined && user.dealer?.longitude !== null ? String(user.dealer.longitude) : '',
+      city: user.dealer?.city || user.city || '',
+      latitude: user.dealer?.latitude !== undefined && user.dealer?.latitude !== null ? String(user.dealer.latitude) : (user.latitude ? String(user.latitude) : ''),
+      longitude: user.dealer?.longitude !== undefined && user.dealer?.longitude !== null ? String(user.dealer.longitude) : (user.longitude ? String(user.longitude) : ''),
       approval_status: user.approval_status || (user.is_approved ? 'approved' : isCommercial ? 'pending_approval' : 'approved'),
       rejection_reason: user.rejection_reason || '',
     });
@@ -369,7 +420,7 @@ const UserManagement = () => {
     };
     if (isCommercial) {
       payload.company_name = formData.company_name || formData.name;
-      payload.city = formData.city || 'Johannesburg';
+      payload.city = formData.city || (formData.address ? formData.address.split(',')[0].trim() : '') || 'City';
       if (formData.latitude) payload.latitude = parseFloat(formData.latitude);
       if (formData.longitude) payload.longitude = parseFloat(formData.longitude);
     }
@@ -403,7 +454,7 @@ const UserManagement = () => {
 
     if (isCommercial) {
       updatePayload.company_name = formData.company_name || formData.name;
-      updatePayload.city = formData.city || 'Johannesburg';
+      updatePayload.city = formData.city || (formData.address ? formData.address.split(',')[0].trim() : '') || 'City';
       if (formData.latitude) updatePayload.latitude = formData.latitude;
       if (formData.longitude) updatePayload.longitude = formData.longitude;
     }
@@ -1256,7 +1307,7 @@ const UserManagement = () => {
         icon={Plus}
         maxWidth="max-w-lg"
       >
-        <form onSubmit={handleCreateSubmit} className="space-y-3.5">
+        <form onSubmit={handleCreateSubmit} className="space-y-3.5" autoComplete="off">
           <div className="grid grid-cols-2 gap-2.5">
             <div className="col-span-2 sm:col-span-1">
               <label className="text-[11px] font-bold text-slate-600 block mb-1">Full Name</label>
@@ -1265,7 +1316,7 @@ const UserManagement = () => {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. John Doe / Sandton Spares"
+                placeholder="Full name or business name"
                 className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
               />
             </div>
@@ -1290,9 +1341,11 @@ const UserManagement = () => {
             <input
               type="email"
               required
+              name="master_record_email"
+              autoComplete="off"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="user@example.com"
+              placeholder="name@domain.com"
               className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
             />
           </div>
@@ -1303,9 +1356,11 @@ const UserManagement = () => {
               <input
                 type="password"
                 required
+                name="master_record_new_password"
+                autoComplete="new-password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder="Min 6 chars"
+                placeholder="Min 6 characters"
                 className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
               />
             </div>
@@ -1313,9 +1368,11 @@ const UserManagement = () => {
               <label className="text-[11px] font-bold text-slate-600 block mb-1">Contact Phone</label>
               <input
                 type="text"
+                name="master_record_phone"
+                autoComplete="off"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+27 11 000 0000"
+                placeholder="Contact phone number"
                 className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
               />
             </div>
@@ -1344,7 +1401,7 @@ const UserManagement = () => {
                 title="Auto-detect GPS and prefetch street address"
               >
                 <MapPin className="w-3 h-3 text-emerald-600" />
-                <span>📍 Auto-Detect GPS & Address</span>
+                <span>📍 Auto-Detect Current GPS</span>
               </button>
 
               <button
@@ -1368,33 +1425,19 @@ const UserManagement = () => {
                 <RefreshCw className="w-3 h-3 text-amber-600" />
                 <span>🔄 Address from GPS</span>
               </button>
-
-              <select
-                onChange={(e) => {
-                  if (e.target.value) handleSelectCityPreset(e.target.value);
-                }}
-                defaultValue=""
-                className="h-6.5 px-2 bg-white border border-slate-200 rounded-md text-[11px] font-bold text-slate-600 focus:outline-none focus:border-brand-red cursor-pointer"
-              >
-                <option value="" disabled>🇿🇦 Quick Presets...</option>
-                {SOUTH_AFRICA_CITY_PRESETS.map((p) => (
-                  <option key={p.name} value={p.name}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
             </div>
 
             {geoNotice && (
               <div className="text-[10px] font-bold text-slate-700 bg-white px-2.5 py-1 rounded-md border border-slate-200 flex items-center gap-1.5 animate-fade-in">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                 <span className="truncate">{geoNotice}</span>
-                <span className="text-[9px] text-slate-400 ml-auto font-medium italic whitespace-nowrap">Editable below</span>
+                <span className="text-[9px] text-slate-400 ml-auto font-medium italic whitespace-nowrap">Auto-synced</span>
               </div>
             )}
           </div>
 
-          <div>
+          {/* Physical Street Address with Live Autocomplete Search Dropdown */}
+          <div className="relative">
             <div className="flex items-center justify-between mb-1">
               <label className="text-[11px] font-bold text-slate-600">Physical Street Address / Location</label>
               {formData.address && (
@@ -1407,13 +1450,83 @@ const UserManagement = () => {
                 </button>
               )}
             </div>
-            <textarea
-              rows={2}
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              placeholder="e.g. 10 Main Road, Sandton, Johannesburg"
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
-            />
+
+            <div className="relative">
+              <div className="absolute left-2.5 top-2.5 pointer-events-none">
+                {isSearchingAddress ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-red" />
+                ) : (
+                  <Search className="w-3.5 h-3.5 text-slate-400" />
+                )}
+              </div>
+              <textarea
+                rows={2}
+                value={formData.address}
+                onChange={(e) => handleAddressInputChange(e.target.value)}
+                placeholder="Start typing address, street, or city to search & pick..."
+                className="w-full pl-8 pr-7 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
+              />
+              {formData.address ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData((prev) => ({ ...prev, address: '', city: '', latitude: '', longitude: '' }));
+                    setAddressSuggestions([]);
+                    setShowSuggestions(false);
+                  }}
+                  className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              ) : null}
+            </div>
+
+            {/* Floating Suggestions Dropdown */}
+            {showSuggestions && addressSuggestions.length > 0 && (
+              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 max-h-56 overflow-y-auto">
+                <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                  <span>Matching Address Results</span>
+                  <span>Click to Pick</span>
+                </div>
+                {addressSuggestions.map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handlePickAddressSuggestion(item)}
+                    className="w-full text-left p-2.5 hover:bg-rose-50/50 flex items-start gap-2.5 transition-colors cursor-pointer group"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-brand-red mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-slate-800 truncate">{item.primaryText}</div>
+                      <div className="text-[10px] text-slate-400 truncate">{item.secondaryText}</div>
+                    </div>
+                    {item.city ? (
+                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex-shrink-0">
+                        {item.city}
+                      </span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Picked Coordinates Tag */}
+            {formData.latitude && formData.longitude ? (
+              <div className="flex items-center gap-2 mt-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-800 animate-fade-in">
+                <MapPin className="w-3 h-3 text-emerald-600 flex-shrink-0" />
+                <span className="truncate">
+                  {formData.city ? `${formData.city} • ` : ''}({parseFloat(formData.latitude).toFixed(4)}, {parseFloat(formData.longitude).toFixed(4)})
+                </span>
+                <a
+                  href={`https://www.google.com/maps?q=${formData.latitude},${formData.longitude}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-emerald-700 hover:underline flex items-center gap-0.5 ml-auto text-[10px]"
+                >
+                  Verify <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </div>
+            ) : null}
           </div>
 
           {/* Commercial Specific Setup for Reseller & Distributor */}
@@ -1436,12 +1549,12 @@ const UserManagement = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">City / Province</label>
+                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">City / Region</label>
                   <input
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    placeholder="Johannesburg"
+                    placeholder="City / Region"
                     className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
                   />
                 </div>
@@ -1454,7 +1567,7 @@ const UserManagement = () => {
                     type="text"
                     value={formData.latitude}
                     onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                    placeholder="-26.2041"
+                    placeholder="Latitude coordinate"
                     className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
                   />
                 </div>
@@ -1464,7 +1577,7 @@ const UserManagement = () => {
                     type="text"
                     value={formData.longitude}
                     onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                    placeholder="28.0473"
+                    placeholder="Longitude coordinate"
                     className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
                   />
                 </div>
@@ -1503,7 +1616,7 @@ const UserManagement = () => {
         icon={Edit2}
         maxWidth="max-w-lg"
       >
-        <form onSubmit={handleUpdateSubmit} className="space-y-3.5">
+        <form onSubmit={handleUpdateSubmit} autoComplete="off" className="space-y-3.5">
           <div className="grid grid-cols-2 gap-2.5">
             <div className="col-span-2 sm:col-span-1">
               <label className="text-[11px] font-bold text-slate-600 block mb-1">Full Name</label>
@@ -1562,6 +1675,7 @@ const UserManagement = () => {
             </label>
             <input
               type="password"
+              autoComplete="new-password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               placeholder="Leave blank to keep existing password"
@@ -1673,7 +1787,8 @@ const UserManagement = () => {
             )}
           </div>
 
-          <div>
+          {/* Physical Address Search & Selection */}
+          <div className="relative">
             <div className="flex items-center justify-between mb-1">
               <label className="text-[11px] font-bold text-slate-600">Physical Street Address / Location</label>
               {formData.address && (
@@ -1686,12 +1801,83 @@ const UserManagement = () => {
                 </button>
               )}
             </div>
-            <textarea
-              rows={2}
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
-            />
+
+            <div className="relative">
+              <div className="absolute left-2.5 top-2.5 pointer-events-none">
+                {isSearchingAddress ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-red" />
+                ) : (
+                  <Search className="w-3.5 h-3.5 text-slate-400" />
+                )}
+              </div>
+              <textarea
+                rows={2}
+                value={formData.address}
+                onChange={(e) => handleAddressInputChange(e.target.value)}
+                placeholder="Start typing address, street, or city to search & pick..."
+                className="w-full pl-8 pr-7 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
+              />
+              {formData.address ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData((prev) => ({ ...prev, address: '', city: '', latitude: '', longitude: '' }));
+                    setAddressSuggestions([]);
+                    setShowSuggestions(false);
+                  }}
+                  className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              ) : null}
+            </div>
+
+            {/* Floating Suggestions Dropdown */}
+            {showSuggestions && addressSuggestions.length > 0 && (
+              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 max-h-56 overflow-y-auto">
+                <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                  <span>Matching Address Results</span>
+                  <span>Click to Pick</span>
+                </div>
+                {addressSuggestions.map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handlePickAddressSuggestion(item)}
+                    className="w-full text-left p-2.5 hover:bg-rose-50/50 flex items-start gap-2.5 transition-colors cursor-pointer group"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-brand-red mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-slate-800 truncate">{item.primaryText}</div>
+                      <div className="text-[10px] text-slate-400 truncate">{item.secondaryText}</div>
+                    </div>
+                    {item.city ? (
+                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex-shrink-0">
+                        {item.city}
+                      </span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Picked Coordinates Tag */}
+            {formData.latitude && formData.longitude ? (
+              <div className="flex items-center gap-2 mt-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-800 animate-fade-in">
+                <MapPin className="w-3 h-3 text-emerald-600 flex-shrink-0" />
+                <span className="truncate">
+                  {formData.city ? `${formData.city} • ` : ''}({parseFloat(formData.latitude).toFixed(4)}, {parseFloat(formData.longitude).toFixed(4)})
+                </span>
+                <a
+                  href={`https://www.google.com/maps?q=${formData.latitude},${formData.longitude}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-emerald-700 hover:underline flex items-center gap-0.5 ml-auto text-[10px]"
+                >
+                  Verify <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </div>
+            ) : null}
           </div>
 
           {/* Commercial Specific Fields */}
@@ -1730,7 +1916,7 @@ const UserManagement = () => {
                     type="text"
                     value={formData.latitude}
                     onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                    placeholder="-26.2041"
+                    placeholder="Latitude coordinate"
                     className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
                   />
                 </div>
@@ -1740,7 +1926,7 @@ const UserManagement = () => {
                     type="text"
                     value={formData.longitude}
                     onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                    placeholder="28.0473"
+                    placeholder="Longitude coordinate"
                     className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
                   />
                 </div>

@@ -3,735 +3,529 @@ import Svg, {
   Path,
   Circle,
   Rect,
-  Defs,
-  LinearGradient,
-  Stop,
   G,
   Line,
 } from 'react-native-svg';
 
-// 0. HOME DASHBOARD 3D ICON - Automotive HQ & Digital Tachometer Gateway
+/**
+ * High-End Industrial OEM Automotive Icons for NGK App
+ * Precision vector geometry with authentic automotive semantics.
+ * Completely free of pseudo-3D gradients, specular glares, or AI template artifacts.
+ */
+
+// 1. HOME DASHBOARD / PORTAL ICON
 export function HomeDashboard3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="homeRoofGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F87171" />
-          <Stop offset="50%" stopColor="#DC2626" />
-          <Stop offset="100%" stopColor="#991B1B" />
-        </LinearGradient>
-        <LinearGradient id="homeBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="100%" stopColor="#F1F5F9" />
-        </LinearGradient>
-        <LinearGradient id="speedDialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#38BDF8" />
-          <Stop offset="100%" stopColor="#0284C7" />
-        </LinearGradient>
-      </Defs>
+      {/* Precision Ground Platform Line */}
+      <Line x1="8" y1="42" x2="40" y2="42" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" />
 
-      {/* Ground Foundation Shadow */}
+      {/* Main Architectural Portal Structure */}
       <Path
-        d="M8 42h32"
-        stroke="#E2E8F0"
-        strokeWidth="3"
-        strokeLinecap="round"
+        d="M11 21v19a2 2 0 0 0 2 2h22a2 2 0 0 0 2-2V21l-13-11-13 11z"
+        fill="#F8FAFC"
+        stroke="#0F172A"
+        strokeWidth="2.2"
+        strokeLinejoin="round"
       />
 
-      {/* Main 3D Beveled House / Automotive HQ Body */}
+      {/* Crimson Crest Gable */}
       <Path
-        d="M10 21v18a3 3 0 0 0 3 3h22a3 3 0 0 0 3-3V21l-14-11-14 11z"
-        fill="url(#homeBodyGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1.5"
+        d="M24 7l15 12.5h-4.5L24 10.5 13.5 19.5H9L24 7z"
+        fill="#D0142C"
       />
 
-      {/* 3D Aerodynamic Crimson Roof Crest */}
+      {/* Central Tachometer Bay Arch */}
       <Path
-        d="M24 6l18 14.5a1.5 1.5 0 0 1-.9 2.5H38v-2L24 9.5 10 21v2H6.9a1.5 1.5 0 0 1-.9-2.5L24 6z"
-        fill="url(#homeRoofGrad)"
-      />
-      {/* Roof Specular Glare */}
-      <Path
-        d="M24 8l13 10.5"
-        stroke="#FFFFFF"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeOpacity="0.6"
-      />
-
-      {/* Central Tachometer / Gateway Core Arch */}
-      <Path
-        d="M17 42V28a7 7 0 0 1 14 0v14"
+        d="M18 42V28a6 6 0 0 1 12 0v14"
         fill="#0F172A"
       />
 
-      {/* Tachometer Glow Gauge Dial */}
+      {/* Tachometer Arc Scale */}
       <Path
-        d="M20 28a4 4 0 0 1 8 0"
-        stroke="url(#speedDialGrad)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      {/* High-Performance Redline Indicator */}
-      <Path
-        d="M27 26a4 4 0 0 1 1 2"
-        stroke="#EF4444"
-        strokeWidth="2.5"
+        d="M20.5 28a3.5 3.5 0 0 1 7 0"
+        stroke="#38BDF8"
+        strokeWidth="2"
         strokeLinecap="round"
       />
 
-      {/* Speedometer Needle pointing to peak power */}
+      {/* Speedometer Needle */}
       <Line
         x1="24"
         y1="28"
         x2="26.5"
         y2="25"
-        stroke="#F59E0B"
-        strokeWidth="1.8"
+        stroke="#EF4444"
+        strokeWidth="2"
         strokeLinecap="round"
       />
-      <Circle cx="24" cy="28" r="1.8" fill="#FFFFFF" />
+      <Circle cx="24" cy="28" r="1.5" fill="#FFFFFF" />
 
-      {/* NGK Spark Core / Ignition LED */}
-      <Circle cx="24" cy="15" r="2.5" fill="#EF4444" />
-      <Circle cx="24" cy="15" r="1" fill="#FFFFFF" />
+      {/* Ignition Spark Point Node */}
+      <Circle cx="24" cy="16" r="2.5" fill="#D0142C" />
+      <Circle cx="24" cy="16" r="1" fill="#FFFFFF" />
     </Svg>
   );
 }
 
-// 0.1 PROFILE CREDENTIALS 3D ICON - Digital Smart ID & Security Chip
+// 2. PROFILE / CREDENTIALS ICON
 export function Profile3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="idCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#6366F1" />
-          <Stop offset="50%" stopColor="#4F46E5" />
-          <Stop offset="100%" stopColor="#3730A3" />
-        </LinearGradient>
-        <LinearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#FDE68A" />
-          <Stop offset="100%" stopColor="#D97706" />
-        </LinearGradient>
-      </Defs>
-
-      {/* Card Drop Shadow Base */}
-      <Rect x="7" y="10" width="34" height="28" rx="6" fill="#1E1B4B" opacity="0.3" />
-
-      {/* Main 3D ID Card Body */}
+      {/* Smart Card Base Body */}
       <Rect
         x="6"
-        y="8"
+        y="9"
         width="36"
         height="30"
-        rx="5"
-        fill="url(#idCardGrad)"
-        stroke="#818CF8"
-        strokeWidth="1.2"
+        rx="4"
+        fill="#F8FAFC"
+        stroke="#0F172A"
+        strokeWidth="2.2"
       />
 
-      {/* Top Lanyard Slot */}
-      <Rect x="18" y="10" width="12" height="2" rx="1" fill="#312E81" />
+      {/* Top Lanyard Clip Hole */}
+      <Rect x="19" y="11" width="10" height="2" rx="1" fill="#CBD5E1" />
 
-      {/* Metallic Gold Smart Security Chip */}
-      <Rect x="10" y="15" width="8" height="7" rx="1.5" fill="url(#chipGrad)" />
-      <Line x1="14" y1="15" x2="14" y2="22" stroke="#B45309" strokeWidth="0.8" />
-      <Line x1="10" y1="18.5" x2="18" y2="18.5" stroke="#B45309" strokeWidth="0.8" />
+      {/* Metallic Chip Gold Contact */}
+      <Rect x="10" y="16" width="9" height="7" rx="1.5" fill="#F59E0B" stroke="#D97706" strokeWidth="1" />
+      <Line x1="14.5" y1="16" x2="14.5" y2="23" stroke="#92400E" strokeWidth="0.8" />
+      <Line x1="10" y1="19.5" x2="19" y2="19.5" stroke="#92400E" strokeWidth="0.8" />
 
-      {/* Verified User Silhouette */}
-      <Circle cx="30" cy="18" r="4.5" fill="#FFFFFF" />
+      {/* Verified Technician Profile Silhouette */}
+      <Circle cx="30" cy="19" r="4.5" fill="#0F172A" />
       <Path
-        d="M23 31c0-3.5 3-5.5 7-5.5s7 2 7 5.5"
-        fill="#FFFFFF"
+        d="M23 31c0-3.5 3.1-5.5 7-5.5s7 2 7 5.5"
+        fill="#0F172A"
       />
 
-      {/* Hologram / Biometric Waves */}
-      <Line x1="10" y1="26" x2="19" y2="26" stroke="#C7D2FE" strokeWidth="1.8" strokeLinecap="round" opacity="0.8" />
-      <Line x1="10" y1="30" x2="16" y2="30" stroke="#C7D2FE" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+      {/* Data Tracks / Circuit Lines */}
+      <Line x1="10" y1="27" x2="19" y2="27" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" />
+      <Line x1="10" y1="31" x2="16" y2="31" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" />
 
-      {/* Verified Green Shield Dot */}
-      <Circle cx="38" cy="12" r="3" fill="#10B981" />
-      <Circle cx="38" cy="12" r="1.2" fill="#FFFFFF" />
+      {/* Verified Account Seal Dot */}
+      <Circle cx="37" cy="13" r="3.5" fill="#059669" />
+      <Path d="M35.5 13l1 1 2-2" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 }
 
-// 0.15 LEGACY TECHNICIAN HELMET ICON
+// 3. TECHNICIAN DRAWER AVATAR ICON
 export function DrawerAvatar3DIcon({ size = 36, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="helmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#EF4444" />
-          <Stop offset="60%" stopColor="#D0142C" />
-          <Stop offset="100%" stopColor="#880B1F" />
-        </LinearGradient>
-        <LinearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#1E293B" />
-          <Stop offset="100%" stopColor="#0F172A" />
-        </LinearGradient>
-        <LinearGradient id="visorGlint" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#38BDF8" stopOpacity="0.8" />
-          <Stop offset="100%" stopColor="#0284C7" stopOpacity="0.1" />
-        </LinearGradient>
-      </Defs>
+      {/* Outer Circle Container */}
+      <Circle cx="24" cy="24" r="23" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1.5" />
 
-      {/* Outer Glow Disc */}
-      <Circle cx="24" cy="24" r="23" fill="#FEF2F2" stroke="#FECACA" strokeWidth="1" />
-
-      {/* Technician / Racing Driver Helmet Silhouette */}
+      {/* Technician Silhouette with Precision Collar */}
+      <Circle cx="24" cy="17" r="7" fill="#0F172A" />
       <Path
-        d="M24 7c-9 0-15 6.5-15 15.5 0 5 2.5 9.5 6 12v3.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3.5c3.5-2.5 6-7 6-12C39 13.5 33 7 24 7z"
-        fill="url(#helmGrad)"
+        d="M12 37c0-5.5 5.4-9 12-9s12 3.5 12 9"
+        fill="#0F172A"
       />
 
-      {/* Visor Area */}
+      {/* NGK Red Service Badge Overlap */}
+      <Circle cx="34" cy="34" r="7" fill="#D0142C" stroke="#FFFFFF" strokeWidth="2" />
+      {/* Wrench Silhouette on Badge */}
       <Path
-        d="M13 20h22c1 0 1.8.8 1.5 1.8l-1.5 5c-.4 1.2-1.5 2.2-2.8 2.2H15.8c-1.3 0-2.4-1-2.8-2.2l-1.5-5c-.3-1 .5-1.8 1.5-1.8z"
-        fill="url(#visorGrad)"
-      />
-      {/* Visor Aerodynamic Reflection Glint */}
-      <Path
-        d="M15 22h14l-2 4h-14l2-4z"
-        fill="url(#visorGlint)"
-      />
-
-      {/* Chrome Chin Intake Vent */}
-      <Rect x="20" y="32" width="8" height="2" rx="1" fill="#FFFFFF" opacity="0.9" />
-      <Line x1="22" y1="36" x2="26" y2="36" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
-
-      {/* Top Specular Glint */}
-      <Path
-        d="M19 10c2-1 4-1.5 6-1.5"
-        stroke="#FFFFFF"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeOpacity="0.7"
+        d="M32 36l3.5-3.5a1.2 1.2 0 0 1 1.7 0l.3.3a1.2 1.2 0 0 1 0 1.7L34 38l-2-2z"
+        fill="#FFFFFF"
       />
     </Svg>
   );
 }
 
-// 0.2 SIGN OUT 3D ICON
+// 4. SIGN OUT ICON
 export function DrawerSignOut3DIcon({ size = 20, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="exitArrowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#EF4444" />
-          <Stop offset="100%" stopColor="#B91C1C" />
-        </LinearGradient>
-      </Defs>
-      {/* Door Frame */}
+      {/* Portal Doorway Frame */}
       <Path
         d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"
-        stroke="#DC2626"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      {/* Dynamic Directional Arrow with Gradient */}
-      <Path
-        d="M14 8l5 4-5 4"
-        stroke="url(#exitArrowGrad)"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M7 12h12"
-        stroke="url(#exitArrowGrad)"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-    </Svg>
-  );
-}
-
-// 1. FIND PARTS 3D ICON - Precision Search Lens (Clean, Non-Overlapping)
-export function FindParts3DIcon({ size = 32, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="partsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#EF4444" />
-          <Stop offset="100%" stopColor="#B91C1C" />
-        </LinearGradient>
-        <LinearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
-          <Stop offset="100%" stopColor="#FEE2E2" stopOpacity="0.3" />
-        </LinearGradient>
-        <LinearGradient id="metalCollar" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F8FAFC" />
-          <Stop offset="100%" stopColor="#94A3B8" />
-        </LinearGradient>
-      </Defs>
-
-      {/* Ground Foundation Shadow */}
-      <Circle cx="21" cy="41" r="11" fill="#E2E8F0" opacity="0.4" />
-
-      {/* Ergonomic Crimson Search Lens Handle */}
-      <Path
-        d="M30 30l11 11"
-        stroke="url(#partsGrad)"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      {/* Chrome Handle Neck Collar */}
-      <Line
-        x1="28.5"
-        y1="28.5"
-        x2="32"
-        y2="32"
-        stroke="url(#metalCollar)"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-      {/* End Grip Cap */}
-      <Circle cx="41" cy="41" r="2.5" fill="#7F1D1D" />
-
-      {/* Main 3D Beveled Lens Rim */}
-      <Circle
-        cx="21"
-        cy="21"
-        r="13.5"
-        fill="url(#glassGrad)"
-        stroke="url(#partsGrad)"
-        strokeWidth="3.6"
-      />
-
-      {/* Inner Metallic Bezel Ring */}
-      <Circle
-        cx="21"
-        cy="21"
-        r="10.5"
-        stroke="#FFFFFF"
-        strokeWidth="1.2"
-        strokeOpacity="0.7"
-      />
-
-      {/* Specular Glare Arc */}
-      <Path
-        d="M14 16a8 8 0 0 1 11-4"
-        stroke="#FFFFFF"
+        stroke="#D0142C"
         strokeWidth="2.2"
         strokeLinecap="round"
       />
-
-      {/* Secondary Soft Specular Glint */}
-      <Circle cx="15.5" cy="15.5" r="1.5" fill="#FFFFFF" opacity="0.9" />
+      {/* Egress Direction Arrow */}
+      <Path
+        d="M14 8l5 4-5 4"
+        stroke="#D0142C"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Line
+        x1="7"
+        y1="12"
+        x2="19"
+        y2="12"
+        stroke="#D0142C"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
     </Svg>
   );
 }
 
-// 2. MY GARAGE 3D ICON - Aerodynamic Sports Coupe / GT Vehicle
+// 5. FIND PARTS ICON - Precision Search Lens with Spark Plug Cross-Section
+export function FindParts3DIcon({ size = 32, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
+      {/* Precision Lens Handle */}
+      <Path
+        d="M29 29l12 12"
+        stroke="#0F172A"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      {/* Collar Accent */}
+      <Line
+        x1="27"
+        y1="27"
+        x2="30"
+        y2="30"
+        stroke="#D0142C"
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+
+      {/* Main Search Lens Outer Ring */}
+      <Circle
+        cx="20"
+        cy="20"
+        r="14"
+        fill="#F8FAFC"
+        stroke="#D0142C"
+        strokeWidth="3.2"
+      />
+
+      {/* Internal Reticle Crosshairs */}
+      <Line x1="12" y1="20" x2="16" y2="20" stroke="#94A3B8" strokeWidth="1.2" strokeLinecap="round" />
+      <Line x1="24" y1="20" x2="28" y2="20" stroke="#94A3B8" strokeWidth="1.2" strokeLinecap="round" />
+      <Line x1="20" y1="12" x2="20" y2="16" stroke="#94A3B8" strokeWidth="1.2" strokeLinecap="round" />
+      <Line x1="20" y1="24" x2="20" y2="28" stroke="#94A3B8" strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* Spark Plug Electrode Target Center */}
+      <Rect x="18.5" y="16" width="3" height="6" rx="0.5" fill="#0F172A" />
+      <Line x1="20" y1="22" x2="20" y2="25" stroke="#D0142C" strokeWidth="1.6" strokeLinecap="round" />
+      <Circle cx="20" cy="20" r="1" fill="#FFFFFF" />
+    </Svg>
+  );
+}
+
+// 6. MY GARAGE ICON - Modern Aerodynamic Coupe on Workshop Lift Platform
 export function MyGarage3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="carGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#3B82F6" />
-          <Stop offset="100%" stopColor="#1D4ED8" />
-        </LinearGradient>
-        <LinearGradient id="glassCarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#93C5FD" />
-          <Stop offset="100%" stopColor="#1E3A8A" />
-        </LinearGradient>
-      </Defs>
+      {/* Lift Platform Base */}
+      <Line x1="6" y1="39" x2="42" y2="39" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" />
+      <Rect x="10" y="38" width="4" height="4" fill="#64748B" />
+      <Rect x="34" y="38" width="4" height="4" fill="#64748B" />
 
-      {/* Garage Platform Ground Shadow */}
+      {/* Modern Aerodynamic Coupe Body */}
       <Path
-        d="M6 38h36"
-        stroke="#93C5FD"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeOpacity="0.5"
+        d="M8 29c0-1.8 1.4-3.2 3.2-3.2h2.8l4-7c1-1.8 2.8-2.8 4.8-2.8h11.4c2 0 3.8 1 4.8 2.8l4 7h2.8c1.8 0 3.2 1.4 3.2 3.2v4c0 1.2-.8 2-2 2H10c-1.2 0-2-.8-2-2v-4z"
+        fill="#0F172A"
+        stroke="#0F172A"
+        strokeWidth="1"
       />
 
-      {/* Main Car Silhouette Body */}
+      {/* Glass Cabin */}
       <Path
-        d="M8 28l3-7c1-2.5 3-4 6-4.5l14-1c3 0 5 1.5 6.5 4l4.5 8.5c2 1 3 2.5 3 5 0 2-1 3-3 3H7c-2 0-3-1-3-3 0-2.5 1.5-4 4-5z"
-        fill="url(#carGrad)"
+        d="M17 25l3.5-5.5h14l3.5 5.5H17z"
+        fill="#38BDF8"
+        opacity="0.85"
       />
+      {/* B-Pillar */}
+      <Line x1="26" y1="19.5" x2="26" y2="25" stroke="#0F172A" strokeWidth="1.5" />
 
-      {/* Windshield & Cabin Glass */}
-      <Path
-        d="M17 19l-2 5h14l-2-5H17z"
-        fill="url(#glassCarGrad)"
-      />
-      {/* Front Windshield Pillar */}
-      <Path d="M26 19l3 5" stroke="#FFFFFF" strokeWidth="1" strokeOpacity="0.4" />
+      {/* Headlight & Tail Light */}
+      <Path d="M40 28l2 .5v1.5l-2 .5v-2.5z" fill="#FEF08A" />
+      <Path d="M8 28l-1 .5v1.5l1 .5v-2.5z" fill="#EF4444" />
 
-      {/* Xenon LED Headlights */}
-      <Path d="M39 28l3 1v2l-3-1v-2z" fill="#FEF08A" />
-      <Path d="M6 28l-2 1v2l2-1v-2z" fill="#EF4444" />
-
-      {/* Wheels - Front & Rear Alloy Wheels */}
-      <Circle cx="14" cy="34" r="5" fill="#0F172A" />
-      <Circle cx="14" cy="34" r="2.5" fill="#E2E8F0" />
-      <Circle cx="34" cy="34" r="5" fill="#0F172A" />
-      <Circle cx="34" cy="34" r="2.5" fill="#E2E8F0" />
-
-      {/* Speed Line Glow / Wing Mirror */}
-      <Rect x="18" y="24" width="4" height="2" rx="1" fill="#FFFFFF" opacity="0.8" />
+      {/* Wheels - Front & Rear Alloy */}
+      <Circle cx="15" cy="34" r="5" fill="#1E293B" stroke="#E2E8F0" strokeWidth="1.5" />
+      <Circle cx="15" cy="34" r="2" fill="#D0142C" />
+      <Circle cx="33" cy="34" r="5" fill="#1E293B" stroke="#E2E8F0" strokeWidth="1.5" />
+      <Circle cx="33" cy="34" r="2" fill="#D0142C" />
     </Svg>
   );
 }
 
-// 3. TECH ENQUIRY 3D ICON - Diagnostic Telemetry Scanner & Chat Bubble
+// 7. TECH ENQUIRY ICON - Diagnostic Oscilloscope Telemetry Bubble
 export function TechEnquiry3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="enqGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#10B981" />
-          <Stop offset="100%" stopColor="#047857" />
-        </LinearGradient>
-      </Defs>
-
-      {/* Main Dialogue Speech Bubble */}
+      {/* Dialogue Speech Bubble */}
       <Path
-        d="M8 12a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H18l-8 6v-6a6 6 0 0 1-2-4.5V12z"
-        fill="url(#enqGrad)"
+        d="M7 11a5 5 0 0 1 5-5h24a5 5 0 0 1 5 5v17a5 5 0 0 1-5 5H18l-8 7v-7a5 5 0 0 1-3-4.5V11z"
+        fill="#0F172A"
+        stroke="#0F172A"
+        strokeWidth="1.5"
       />
 
-      {/* Diagnostic Waveform Telemetry Display Screen */}
-      <Rect x="14" y="12" width="20" height="12" rx="3" fill="#064E3B" />
+      {/* Oscilloscope Screen Bezel */}
+      <Rect x="12" y="11" width="24" height="15" rx="3" fill="#0B1329" stroke="#334155" strokeWidth="1" />
 
-      {/* Real-time Oscilloscope Signal Wave */}
+      {/* Sinusoidal Diagnostic Pulse Waveform */}
       <Path
-        d="M16 18h2l2-3 2 6 2-4 2 2h4"
-        stroke="#6EE7B7"
-        strokeWidth="2"
+        d="M14 18.5h3l2.5-4.5 3 8.5 3-5 2.5 3 2.5-2h3.5"
+        stroke="#10B981"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
 
-      {/* Status LED Indicator */}
-      <Circle cx="31" cy="15" r="1.5" fill="#34D399" />
+      {/* Online Telemetry Status Indicator */}
+      <Circle cx="32" cy="14" r="1.5" fill="#10B981" />
     </Svg>
   );
 }
 
-// 4. DEALER LOCATOR 3D ICON - Geo Pin + Authorized Storefront Canopy
+// 8. DEALER LOCATOR ICON - Storefront Pin
 export function DealerLocator3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="dealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F59E0B" />
-          <Stop offset="100%" stopColor="#B45309" />
-        </LinearGradient>
-      </Defs>
+      {/* Base Radius Waves */}
+      <Circle cx="24" cy="42" r="8" stroke="#CBD5E1" strokeWidth="1.8" strokeDasharray="3 3" />
+      <Circle cx="24" cy="42" r="3" fill="#D0142C" />
 
-      {/* Concentric Base Ground Radar Wave */}
-      <Circle cx="24" cy="41" r="10" stroke="#FDE68A" strokeWidth="2" strokeDasharray="3 3" opacity="0.6" />
-      <Circle cx="24" cy="41" r="4" fill="#B45309" opacity="0.3" />
-
-      {/* Main 3D Teardrop Pin */}
+      {/* Precision Teardrop Pin */}
       <Path
         d="M24 5c-7.7 0-14 6.3-14 14 0 10.5 14 23 14 23s14-12.5 14-23c0-7.7-6.3-14-14-14z"
-        fill="url(#dealGrad)"
+        fill="#D0142C"
+        stroke="#B91C1C"
+        strokeWidth="1.2"
       />
 
-      {/* Inner White Target Stage */}
+      {/* Storefront Silhouette inside Pin */}
       <Circle cx="24" cy="18" r="8.5" fill="#FFFFFF" />
 
-      {/* Authorized Dealership Storefront Façade */}
+      {/* Dealership Awning Roof */}
       <Path
         d="M19 14h10l1 3H18l1-3z"
-        fill="#D97706"
+        fill="#0F172A"
       />
-      {/* Store Columns */}
-      <Rect x="19" y="17" width="2" height="4" fill="#78350F" />
-      <Rect x="23" y="17" width="2" height="4" fill="#78350F" />
-      <Rect x="27" y="17" width="2" height="4" fill="#78350F" />
-      {/* Base Floor */}
-      <Rect x="18" y="21" width="12" height="1.5" rx="0.5" fill="#D97706" />
+      {/* Store Pillars */}
+      <Rect x="19.5" y="17" width="2" height="4.5" fill="#0F172A" />
+      <Rect x="23" y="17" width="2" height="4.5" fill="#0F172A" />
+      <Rect x="26.5" y="17" width="2" height="4.5" fill="#0F172A" />
+      {/* Store Base */}
+      <Rect x="18" y="21.5" width="12" height="1.5" rx="0.5" fill="#0F172A" />
     </Svg>
   );
 }
 
-// 5. GENUINE GUARANTEE 3D SEAL ICON
+// 9. GENUINE GUARANTEE BADGE ICON
 export function GenuineGuarantee3DIcon({ size = 26, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="guarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#D0142C" />
-          <Stop offset="100%" stopColor="#880B1F" />
-        </LinearGradient>
-      </Defs>
-      {/* Golden Outer Shield Rim */}
+      {/* Solid Outer Shield */}
       <Path
         d="M16 2.5l11 4.5v8.5c0 8-5 13-11 14.5C10 28.5 5 23.5 5 15.5V7l11-4.5z"
-        fill="#FBBF24"
-      />
-      {/* Inner Red Core Shield */}
-      <Path
-        d="M16 4.5l9 3.8v7.2c0 6.8-4.2 11-9 12.3-4.8-1.3-9-5.5-9-12.3V8.3l9-3.8z"
-        fill="url(#guarGrad)"
-      />
-      {/* Crisp White Checkmark */}
-      <Path
-        d="M11 15.5l3.5 3.5 7-7"
-        stroke="#FFFFFF"
-        strokeWidth="2.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-}
-
-// 6. TICKER USP ICONS
-
-// Live Radar Beacon
-export function TickerLiveRadarIcon({ size = 18, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Circle cx="12" cy="12" r="10" fill="#FEE2E2" />
-      <Circle cx="12" cy="12" r="6.5" fill="#FECACA" />
-      <Circle cx="12" cy="12" r="3.5" fill="#D0142C" />
-    </Svg>
-  );
-}
-
-// TecDoc Catalog Icon
-export function TickerCatalogIcon({ size = 18, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Rect x="4" y="5" width="16" height="14" rx="2" fill="#DBEAFE" stroke="#2563EB" strokeWidth="1.5" />
-      <Line x1="7" y1="9" x2="17" y2="9" stroke="#1D4ED8" strokeWidth="1.5" strokeLinecap="round" />
-      <Line x1="7" y1="13" x2="14" y2="13" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-// 360° Showroom 3D Icon
-export function Ticker360Icon({ size = 18, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Circle cx="12" cy="12" r="9" stroke="#7C3AED" strokeWidth="1.5" strokeDasharray="3 2" />
-      <Circle cx="12" cy="12" r="4.5" fill="#EDE9FE" stroke="#6D28D9" strokeWidth="1.5" />
-      <Path d="M19 12l-2-2m2 2l-2 2" stroke="#7C3AED" strokeWidth="1.5" strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-// Dealer Beacon Icon
-export function TickerDealerIcon({ size = 18, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Path
-        d="M12 3a6 6 0 0 0-6 6c0 4.5 6 11 6 11s6-6.5 6-11a6 6 0 0 0-6-6z"
-        fill="#FEF3C7"
-        stroke="#D97706"
-        strokeWidth="1.5"
-      />
-      <Circle cx="12" cy="9" r="2" fill="#B45309" />
-    </Svg>
-  );
-}
-
-// Tech Quotes Icon
-export function TickerQuoteIcon({ size = 18, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Rect x="4" y="4" width="16" height="13" rx="3" fill="#D1FAE5" stroke="#059669" strokeWidth="1.5" />
-      <Path d="M8 17l-1 3 3-1" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <Path d="M8 9h8M8 12h5" stroke="#047857" strokeWidth="1.5" strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-// 1. BESPOKE 3D VEHICLE OWNER ROLE ICON - Aerodynamic Sports Coupe & Personal Key
-export function OwnerRole3DIcon({ size = 36, ...props }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="ownerCarBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F87171" />
-          <Stop offset="45%" stopColor="#D0142C" />
-          <Stop offset="100%" stopColor="#880819" />
-        </LinearGradient>
-        <LinearGradient id="ownerGlassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <Stop offset="0%" stopColor="#BAE6FD" />
-          <Stop offset="100%" stopColor="#0284C7" />
-        </LinearGradient>
-        <LinearGradient id="ownerWheelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#334155" />
-          <Stop offset="100%" stopColor="#0F172A" />
-        </LinearGradient>
-      </Defs>
-
-      {/* Ground Shadow */}
-      <Path d="M6 39h36" stroke="#FECDD3" strokeWidth="3" strokeLinecap="round" />
-
-      {/* Car Chassis / Body Lower */}
-      <Path
-        d="M4 27c0-2 1.5-3.5 3.5-3.5h33c2 0 3.5 1.5 3.5 3.5v7c0 1.5-1 2.5-2.5 2.5h-35C4.5 36.5 4 35.5 4 34v-7z"
-        fill="url(#ownerCarBodyGrad)"
+        fill="#D0142C"
         stroke="#991B1B"
         strokeWidth="1"
       />
 
-      {/* Aerodynamic Cockpit / Roof */}
+      {/* Inner Precision Border */}
       <Path
-        d="M12 23.5l4.5-8.5c1-1.8 2.8-2.8 4.8-2.8h13.4c2 0 3.8 1 4.8 2.8l4.5 8.5H12z"
-        fill="url(#ownerCarBodyGrad)"
+        d="M16 5l8.5 3.5v7c0 6.5-4 10.5-8.5 11.8C11.5 26 7.5 22 7.5 15.5v-7L16 5z"
+        fill="#FFFFFF"
       />
 
-      {/* Windshield & Cabin Glass */}
+      {/* Core Certified Seal */}
       <Path
-        d="M14 22.5l3.8-6.8c.6-1.1 1.8-1.8 3-1.8h8.4c1.2 0 2.4.7 3 1.8l3.8 6.8H14z"
-        fill="url(#ownerGlassGrad)"
+        d="M16 7l6.5 2.8v5.2c0 5-3.2 8-6.5 9.2-3.3-1.2-6.5-4.2-6.5-9.2V9.8L16 7z"
+        fill="#D0142C"
       />
 
-      {/* Specular Glare on Roof & Windshield */}
-      <Path d="M21 15.5h6" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.8" />
-      <Path d="M16 22l3-5.5" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.6" />
-
-      {/* Xenon Headlight Beam */}
-      <Path d="M41 28.5l3 .5v2.5l-3 .5v-3.5z" fill="#FEF08A" />
-
-      {/* Front Wheel */}
-      <Circle cx="13" cy="35" r="5" fill="url(#ownerWheelGrad)" stroke="#E2E8F0" strokeWidth="1.5" />
-      <Circle cx="13" cy="35" r="2" fill="#94A3B8" />
-
-      {/* Rear Wheel */}
-      <Circle cx="35" cy="35" r="5" fill="url(#ownerWheelGrad)" stroke="#E2E8F0" strokeWidth="1.5" />
-      <Circle cx="35" cy="35" r="2" fill="#94A3B8" />
+      {/* Crisp White Checkmark */}
+      <Path
+        d="M12 15.5l3 3 6-6"
+        stroke="#FFFFFF"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </Svg>
   );
 }
 
-// 2. BESPOKE 3D PROFESSIONAL RESELLER ROLE ICON - Workshop Storefront & Spark Plug Torque Wrench
-export function ResellerRole3DIcon({ size = 36, ...props }) {
+// 10. TICKER MICRO GLYPHS
+export function TickerLiveRadarIcon({ size = 18, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Circle cx="12" cy="12" r="9" stroke="#D0142C" strokeWidth="2" strokeDasharray="3 2" />
+      <Circle cx="12" cy="12" r="5" fill="#FEE2E2" />
+      <Circle cx="12" cy="12" r="2.5" fill="#D0142C" />
+    </Svg>
+  );
+}
+
+export function TickerCatalogIcon({ size = 18, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Rect x="4" y="4" width="16" height="16" rx="2.5" fill="#0F172A" />
+      <Line x1="8" y1="8" x2="16" y2="8" stroke="#38BDF8" strokeWidth="1.8" strokeLinecap="round" />
+      <Line x1="8" y1="12" x2="16" y2="12" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" />
+      <Line x1="8" y1="16" x2="13" y2="16" stroke="#94A3B8" strokeWidth="1.8" strokeLinecap="round" />
+    </Svg>
+  );
+}
+
+export function Ticker360Icon({ size = 18, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Circle cx="12" cy="12" r="8.5" stroke="#7C3AED" strokeWidth="2" strokeDasharray="4 2" />
+      <Path d="M18 12l-2-2m2 2l-2 2" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <Circle cx="12" cy="12" r="3.5" fill="#7C3AED" />
+    </Svg>
+  );
+}
+
+export function TickerDealerIcon({ size = 18, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Path
+        d="M12 3a5.5 5.5 0 0 0-5.5 5.5c0 4 5.5 11 5.5 11s5.5-7 5.5-11A5.5 5.5 0 0 0 12 3z"
+        fill="#F59E0B"
+      />
+      <Circle cx="12" cy="8.5" r="2.2" fill="#FFFFFF" />
+    </Svg>
+  );
+}
+
+export function TickerQuoteIcon({ size = 18, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Path
+        d="M5 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-4l-4 3v-3H7a2 2 0 0 1-2-2V6z"
+        fill="#059669"
+      />
+      <Path d="M8 8.5h8M8 11.5h5" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" />
+    </Svg>
+  );
+}
+
+// 11. B2B ROLE BADGE ICONS - Sharp & Executive OEM Design
+
+// Vehicle Owner Persona: Aerodynamic Coupe with Driver Smart Key
+export function OwnerRole3DIcon({ size = 36, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="resellerStoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#FDE68A" />
-          <Stop offset="50%" stopColor="#D97706" />
-          <Stop offset="100%" stopColor="#78350F" />
-        </LinearGradient>
-        <LinearGradient id="resellerCanopyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <Stop offset="0%" stopColor="#F59E0B" />
-          <Stop offset="100%" stopColor="#B45309" />
-        </LinearGradient>
-        <LinearGradient id="wrenchMetalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F1F5F9" />
-          <Stop offset="50%" stopColor="#94A3B8" />
-          <Stop offset="100%" stopColor="#475569" />
-        </LinearGradient>
-      </Defs>
+      {/* Base Shadow */}
+      <Line x1="6" y1="39" x2="42" y2="39" stroke="#FECDD3" strokeWidth="2.5" strokeLinecap="round" />
 
-      {/* Foundation Platform */}
-      <Path d="M8 40h32" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
-
-      {/* Workshop Wall Base */}
+      {/* Aerodynamic Vehicle Silhouette */}
       <Path
-        d="M10 21v17a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V21H10z"
-        fill="#FFFFFF"
-        stroke="#E2E8F0"
-        strokeWidth="1.5"
+        d="M5 28c0-1.8 1.4-3 3-3h34c1.6 0 3 1.2 3 3v6c0 1.2-1 2-2 2H7c-1 0-2-.8-2-2v-6z"
+        fill="#D0142C"
+      />
+      <Path
+        d="M13 25l4-8c1-1.6 2.5-2.5 4.5-2.5h12c2 0 3.5.9 4.5 2.5l4 8H13z"
+        fill="#991B1B"
+      />
+      <Path
+        d="M15 24l3.5-6.5h18l3.5 6.5H15z"
+        fill="#38BDF8"
+        opacity="0.85"
       />
 
-      {/* Commercial 3D Store Canopy */}
-      <Path
-        d="M8 12l2.5-3.5h27L40 12l-2 9H10l-2-9z"
-        fill="url(#resellerCanopyGrad)"
-      />
-      {/* Canopy Stripes */}
-      <Path d="M15 12v9M24 12v9M33 12v9" stroke="#FEF3C7" strokeWidth="1.8" strokeLinecap="round" />
+      {/* Wheels */}
+      <Circle cx="13" cy="35" r="5" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.5" />
+      <Circle cx="13" cy="35" r="2" fill="#D0142C" />
+      <Circle cx="35" cy="35" r="5" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.5" />
+      <Circle cx="35" cy="35" r="2" fill="#D0142C" />
 
-      {/* Store Entrance Door Glass */}
-      <Rect x="18" y="25" width="12" height="15" rx="1.5" fill="#FEF3C7" stroke="#D97706" strokeWidth="1" />
-
-      {/* Certified Gold Precision Torque Wrench Emblem */}
-      <G transform="translate(18, 14)">
-        <Circle cx="6" cy="6" r="10" fill="url(#resellerStoreGrad)" stroke="#FFFFFF" strokeWidth="1.5" />
-        <Path
-          d="M3 9l6-6M9 3l1.5 1.5M4.5 7.5L3 9"
-          stroke="#FFFFFF"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <Circle cx="6" cy="6" r="2" fill="#FFFFFF" />
+      {/* Smart Key Glyph Overlap */}
+      <G transform="translate(28, 8)">
+        <Circle cx="8" cy="8" r="7" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.8" />
+        <Circle cx="8" cy="7" r="2.5" fill="#FEF08A" />
+        <Line x1="8" y1="9.5" x2="8" y2="13" stroke="#FEF08A" strokeWidth="1.5" strokeLinecap="round" />
+        <Line x1="10" y1="11" x2="8" y2="11" stroke="#FEF08A" strokeWidth="1.5" strokeLinecap="round" />
       </G>
     </Svg>
   );
 }
 
-// 3. BESPOKE 3D AUTHORIZED DISTRIBUTOR ROLE ICON - Heavy Freight Tractor & Container Logistics
-export function DistributorRole3DIcon({ size = 36, ...props }) {
+// Professional Reseller Persona: Workshop Storefront & Torque Wrench
+export function ResellerRole3DIcon({ size = 36, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
-      <Defs>
-        <LinearGradient id="truckCabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#475569" />
-          <Stop offset="50%" stopColor="#1E293B" />
-          <Stop offset="100%" stopColor="#0F172A" />
-        </LinearGradient>
-        <LinearGradient id="cargoBoxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#F8FAFC" />
-          <Stop offset="50%" stopColor="#E2E8F0" />
-          <Stop offset="100%" stopColor="#CBD5E1" />
-        </LinearGradient>
-        <LinearGradient id="distBlueAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#38BDF8" />
-          <Stop offset="100%" stopColor="#0284C7" />
-        </LinearGradient>
-      </Defs>
+      {/* Base Platform */}
+      <Line x1="6" y1="41" x2="42" y2="41" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" />
 
-      {/* Highway Foundation */}
-      <Path d="M4 40h40" stroke="#CBD5E1" strokeWidth="3" strokeLinecap="round" />
+      {/* Workshop Wall Base */}
+      <Rect x="8" y="19" width="32" height="21" rx="2" fill="#F8FAFC" stroke="#0F172A" strokeWidth="2" />
 
-      {/* High-Cube Logistics Shipping Container */}
-      <Rect
-        x="6"
-        y="12"
-        width="22"
-        height="22"
-        rx="2"
-        fill="url(#cargoBoxGrad)"
-        stroke="#94A3B8"
-        strokeWidth="1.5"
-      />
-      {/* Container Corrugated Ribs */}
-      <Line x1="11" y1="14" x2="11" y2="32" stroke="#94A3B8" strokeWidth="1.2" />
-      <Line x1="16" y1="14" x2="16" y2="32" stroke="#94A3B8" strokeWidth="1.2" />
-      <Line x1="21" y1="14" x2="21" y2="32" stroke="#94A3B8" strokeWidth="1.2" />
+      {/* Workshop Shutter / Door */}
+      <Rect x="17" y="27" width="14" height="13" fill="#E2E8F0" />
+      <Line x1="17" y1="31" x2="31" y2="31" stroke="#94A3B8" strokeWidth="1.2" />
+      <Line x1="17" y1="35" x2="31" y2="35" stroke="#94A3B8" strokeWidth="1.2" />
 
-      {/* Distributor Enterprise Network Crest on Container */}
-      <Circle cx="17" cy="23" r="4" fill="url(#distBlueAccent)" />
-      <Circle cx="17" cy="23" r="1.5" fill="#FFFFFF" />
-
-      {/* Heavy Tractor Cab */}
+      {/* Commercial Store Canopy */}
       <Path
-        d="M28 20h7l5 7.5v6.5h-12V20z"
-        fill="url(#truckCabGrad)"
-        stroke="#0F172A"
-        strokeWidth="1"
+        d="M6 12l2.5-4h31L42 12l-2 7H8l-2-7z"
+        fill="#D97706"
       />
+      <Path d="M14 12v7M24 12v7M34 12v7" stroke="#FEF3C7" strokeWidth="1.5" />
 
-      {/* Truck Windshield & Driver Cab Window */}
-      <Path d="M30 22h4.5l3.5 5.5H30V22z" fill="#38BDF8" stroke="#0284C7" strokeWidth="0.8" />
-      <Path d="M31 23.5h2" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" />
-
-      {/* Chrome Front Grille */}
-      <Rect x="38" y="29.5" width="2" height="4" rx="0.5" fill="#FEF08A" />
-
-      {/* Rear Container Wheels */}
-      <Circle cx="11" cy="37" r="4" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-      <Circle cx="19" cy="37" r="4" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-
-      {/* Tractor Drive Wheels */}
-      <Circle cx="35" cy="37" r="4.5" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-      <Circle cx="35" cy="37" r="1.8" fill="#94A3B8" />
+      {/* Certified Torque Wrench Crest */}
+      <G transform="translate(26, 12)">
+        <Circle cx="8" cy="8" r="8" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.8" />
+        {/* Crossed Wrench & Spark Plug */}
+        <Path
+          d="M5 11l6-6M11 5l1.5 1.5M6.5 9.5L5 11"
+          stroke="#F59E0B"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </G>
     </Svg>
   );
 }
 
+// Authorized Distributor Persona: Logistics Fleet Freight & High-Cube Container
+export function DistributorRole3DIcon({ size = 36, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
+      {/* Highway Ground Line */}
+      <Line x1="4" y1="40" x2="44" y2="40" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* Heavy Logistics Container Box */}
+      <Rect
+        x="6"
+        y="13"
+        width="22"
+        height="21"
+        rx="2"
+        fill="#0F172A"
+        stroke="#0F172A"
+        strokeWidth="1"
+      />
+      {/* Container Ribs */}
+      <Line x1="11" y1="15" x2="11" y2="32" stroke="#334155" strokeWidth="1.2" />
+      <Line x1="16" y1="15" x2="16" y2="32" stroke="#334155" strokeWidth="1.2" />
+      <Line x1="21" y1="15" x2="21" y2="32" stroke="#334155" strokeWidth="1.2" />
+
+      {/* Tractor Truck Cab */}
+      <Path
+        d="M28 20h7l5 7.5v6.5h-12V20z"
+        fill="#D0142C"
+        stroke="#B91C1C"
+        strokeWidth="1"
+      />
+
+      {/* Driver Window */}
+      <Path d="M30 22h4.5l3 5H30V22z" fill="#38BDF8" opacity="0.85" />
+
+      {/* Wheels */}
+      <Circle cx="11" cy="37" r="4" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
+      <Circle cx="19" cy="37" r="4" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
+      <Circle cx="35" cy="37" r="4.5" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
+      <Circle cx="35" cy="37" r="1.8" fill="#D0142C" />
+    </Svg>
+  );
+}

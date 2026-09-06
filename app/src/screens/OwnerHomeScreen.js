@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
 import {
   View,
   Text,
@@ -78,7 +78,7 @@ const TICKER_ITEMS = [
     IconComponent: TickerDealerIcon,
     themeColor: '#D97706',
     badgeBg: '#FEF3C7',
-    countHighlight: 'Stockists Nearby',
+    countHighlight: 'Resellers Nearby',
     text: 'Verified NGK dealers',
     highlight: 'Dealers',
     route: 'DealerLocator',
@@ -94,6 +94,141 @@ const TICKER_ITEMS = [
     route: 'MyEnquiries',
   },
 ];
+
+const VehicleCarouselCard = memo(function VehicleCarouselCard({
+  car,
+  isActive,
+  onSelectActive,
+  onLookupParts,
+}) {
+  return (
+    <View
+      style={[
+        styles.vehicleCarouselCard,
+        isActive && styles.vehicleCarouselCardActive,
+      ]}
+    >
+      <View style={styles.vehicleCardTopRow}>
+        <View
+          style={[
+            styles.vehicleStatusBadge,
+            isActive ? styles.vehicleStatusActiveBg : styles.vehicleStatusInactiveBg,
+          ]}
+        >
+          {isActive ? (
+            <>
+              <CheckCircle2 size={13} color="#D0142C" strokeWidth={2.4} />
+              <Text style={styles.vehicleStatusActiveText}>ACTIVE VEHICLE</Text>
+            </>
+          ) : (
+            <>
+              <Car size={13} color="#475569" strokeWidth={2.2} />
+              <Text style={styles.vehicleStatusInactiveText}>IN GARAGE</Text>
+            </>
+          )}
+        </View>
+
+        {!isActive && (
+          <TouchableOpacity
+            style={styles.switchActivePill}
+            onPress={() => onSelectActive(car)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.switchActivePillText}>Select Active</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* Dynamic Authentic Vehicle Photo */}
+      <VehicleCardImage
+        car={car}
+        height={120}
+        resizeMode="cover"
+        style={styles.vehicleCardImageWrapper}
+      />
+
+      <Text style={styles.vehicleCardTitle} numberOfLines={1}>
+        {car.make} {car.model}
+      </Text>
+      <Text style={styles.vehicleCardDetails} numberOfLines={1}>
+        {car.year ? `${car.year} • ` : ''}{car.engine || 'Standard Trim'}
+        {car.licensePlate ? ` • ${car.licensePlate}` : ''}
+      </Text>
+
+      {isActive ? (
+        <TouchableOpacity
+          style={styles.activePartsCtaBtn}
+          onPress={() => onLookupParts(car)}
+          activeOpacity={0.8}
+        >
+          <Search size={13} color="#FFFFFF" strokeWidth={2.2} />
+          <Text style={styles.activePartsCtaText}>View Compatible Parts</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.inactiveSetBtn}
+          onPress={() => onSelectActive(car)}
+          activeOpacity={0.75}
+        >
+          <Text style={styles.inactiveSetBtnText}>Tap to Set as Active</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+});
+
+const PickerVehicleItem = memo(function PickerVehicleItem({
+  car,
+  isCurrentActive,
+  onPress,
+}) {
+  return (
+    <TouchableOpacity
+      style={[
+        styles.pickerVehicleItem,
+        isCurrentActive && styles.pickerVehicleItemActive,
+      ]}
+      onPress={() => onPress(car)}
+      activeOpacity={0.75}
+    >
+      <View style={styles.pickerItemLeft}>
+        <View
+          style={[
+            styles.pickerVehicleThumbContainer,
+            isCurrentActive && styles.pickerVehicleThumbContainerActive,
+          ]}
+        >
+          <VehicleCardImage
+            car={car}
+            height={54}
+            resizeMode="cover"
+            compact={true}
+            style={styles.pickerVehicleThumb}
+          />
+        </View>
+        <View style={{ flex: 1, minWidth: 0, paddingRight: 4 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Text style={[styles.pickerItemTitle, { flexShrink: 1 }]} numberOfLines={1}>
+              {car.make} {car.model}
+            </Text>
+            {isCurrentActive && (
+              <View style={styles.pickerActiveTag}>
+                <Text style={styles.pickerActiveTagText}>ACTIVE</Text>
+              </View>
+            )}
+          </View>
+          <Text style={styles.pickerItemSub} numberOfLines={1}>
+            {car.year ? `${car.year} • ` : ''}{car.engine || 'Standard Trim'}
+            {car.licensePlate ? ` • ${car.licensePlate}` : ''}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.pickerItemArrow}>
+        <ChevronRight size={18} color={isCurrentActive ? '#D0142C' : '#94A3B8'} strokeWidth={2.2} />
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 const OwnerHomeScreen = () => {
   const navigation = useNavigation();
@@ -132,23 +267,27 @@ const OwnerHomeScreen = () => {
   }, [myself?.notifications]);
 
   // Resilient multi-level garage vehicle resolution (handles garage, cars, vehicleId, or watchlist vehicle summaries)
-  const garageVehicles = (myself?.garage?.length
-    ? myself.garage
-    : (myself?.cars?.length
-      ? myself.cars
-      : (myself?.vehicleId?.length
-        ? myself.vehicleId
-        : (myself?.watchList?.filter(item => item.article_summary?.make || item.brand_name)?.map(item => ({
-            id: item.id || item._id,
-            make: item.article_summary?.make || item.brand_name,
-            model: item.article_summary?.model || item.part_number,
-            year: item.article_summary?.year || '',
-            engine: item.article_summary?.engine || 'Standard',
-            licensePlate: item.article_summary?.licensePlate || '',
-            vin: item.article_summary?.vin || '',
-            linkageTargetId: item.article_summary?.linkageTargetId || item.article_summary?.carId,
-            isPrimary: false,
-          })) || []))));
+  const garageVehicles = useMemo(() => {
+    if (myself?.garage?.length) return myself.garage;
+    if (myself?.cars?.length) return myself.cars;
+    if (myself?.vehicleId?.length) return myself.vehicleId;
+    if (myself?.watchList?.length) {
+      return myself.watchList
+        .filter((item) => item.article_summary?.make || item.brand_name)
+        .map((item) => ({
+          id: item.id || item._id,
+          make: item.article_summary?.make || item.brand_name,
+          model: item.article_summary?.model || item.part_number,
+          year: item.article_summary?.year || '',
+          engine: item.article_summary?.engine || 'Standard',
+          licensePlate: item.article_summary?.licensePlate || '',
+          vin: item.article_summary?.vin || '',
+          linkageTargetId: item.article_summary?.linkageTargetId || item.article_summary?.carId,
+          isPrimary: false,
+        }));
+    }
+    return [];
+  }, [myself?.garage, myself?.cars, myself?.vehicleId, myself?.watchList]);
 
   // Restore saved active vehicle preference
   useEffect(() => {
@@ -194,51 +333,49 @@ const OwnerHomeScreen = () => {
 
   const activeCar = sortedGarageVehicles[0] || null;
 
-  const handleSelectActiveVehicle = async (car) => {
+  const handleSelectActiveVehicle = useCallback((car) => {
+    if (!car) return;
     const carId = String(car.id || car._id || car.linkageTargetId);
     setActiveVehicleId(carId);
-    try {
-      await AsyncStorage.setItem('active_vehicle_id', carId);
-    } catch (e) {
-      // ignore
-    }
-  };
+    AsyncStorage.setItem('active_vehicle_id', carId).catch(() => {});
+  }, []);
 
   // Smart Direct Parts Lookup:
   // If registered vehicle has a TecDoc linkageTargetId, navigate directly to VerifiedPartsScreen!
   // Otherwise, route to PartsFinder with preselected vehicle data.
-  const handleLookupActiveCarParts = (car = activeCar) => {
-    if (!car) {
+  const handleLookupActiveCarParts = useCallback((car = activeCar) => {
+    const targetCar = car || activeCar;
+    if (!targetCar) {
       navigation.navigate('MyGarage');
       return;
     }
     const targetId =
-      car.linkageTargetId ||
-      car.linkage_target_id ||
-      car.raw_specs?.linkageTargetId ||
-      car.raw_specs?.carId;
+      targetCar.linkageTargetId ||
+      targetCar.linkage_target_id ||
+      targetCar.raw_specs?.linkageTargetId ||
+      targetCar.raw_specs?.carId;
 
     if (targetId) {
       navigation.navigate('VerifiedParts', {
         vehicle: {
           linkageTargetId: targetId,
-          description: `${car.make} ${car.model} ${car.year ? `(${car.year})` : ''} ${car.engine || ''}`.trim(),
+          description: `${targetCar.make} ${targetCar.model} ${targetCar.year ? `(${targetCar.year})` : ''} ${targetCar.engine || ''}`.trim(),
           linkageTargetType: 'P',
-          make: car.make,
-          model: car.model,
-          year: car.year,
-          engine: car.engine || car.engine_code,
-          licensePlate: car.licensePlate || car.license_plate,
+          make: targetCar.make,
+          model: targetCar.model,
+          year: targetCar.year,
+          engine: targetCar.engine || targetCar.engine_code,
+          licensePlate: targetCar.licensePlate || targetCar.license_plate,
         },
-        selectedManufacturer: { manuName: car.make },
-        selectedSeries: { modelname: car.model },
+        selectedManufacturer: { manuName: targetCar.make },
+        selectedSeries: { modelname: targetCar.model },
         appType: 'P',
         source: 'home_card',
       });
     } else {
-      navigation.navigate('PartsFinder', { preselectedVehicle: car });
+      navigation.navigate('PartsFinder', { preselectedVehicle: targetCar });
     }
-  };
+  }, [activeCar, navigation]);
 
   // Upgraded Quick Tools with bespoke multi-layered 3D SVG icons and iPhone app layout
   const quickActions = [
@@ -275,11 +412,11 @@ const OwnerHomeScreen = () => {
     {
       id: 'dealers',
       title: 'Dealer Locator',
-      subtitle: 'Find authorized stockists nearby',
+      subtitle: 'Find authorized resellers nearby',
       IconComponent: DealerLocator3DIcon,
       bg: '#FFFBEB',
       accentColor: '#D97706',
-      tag: 'Stockists',
+      tag: 'Resellers',
       route: 'DealerLocator',
     },
   ];
@@ -374,84 +511,15 @@ const OwnerHomeScreen = () => {
             decelerationRate="fast"
             snapToInterval={292}
           >
-            {sortedGarageVehicles.map((car, idx) => {
-              const isActive = idx === 0;
-              return (
-                <View
-                  key={car.id || car._id || `car-${idx}`}
-                  style={[
-                    styles.vehicleCarouselCard,
-                    isActive && styles.vehicleCarouselCardActive,
-                  ]}
-                >
-                  <View style={styles.vehicleCardTopRow}>
-                    <View
-                      style={[
-                        styles.vehicleStatusBadge,
-                        isActive ? styles.vehicleStatusActiveBg : styles.vehicleStatusInactiveBg,
-                      ]}
-                    >
-                      {isActive ? (
-                        <>
-                          <CheckCircle2 size={13} color="#D0142C" strokeWidth={2.4} />
-                          <Text style={styles.vehicleStatusActiveText}>ACTIVE VEHICLE</Text>
-                        </>
-                      ) : (
-                        <>
-                          <Car size={13} color="#475569" strokeWidth={2.2} />
-                          <Text style={styles.vehicleStatusInactiveText}>IN GARAGE</Text>
-                        </>
-                      )}
-                    </View>
-
-                    {!isActive && (
-                      <TouchableOpacity
-                        style={styles.switchActivePill}
-                        onPress={() => handleSelectActiveVehicle(car)}
-                        activeOpacity={0.7}
-                      >
-                        <Text style={styles.switchActivePillText}>Select Active</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-
-                  {/* Dynamic Authentic Vehicle Photo */}
-                  <VehicleCardImage
-                    car={car}
-                    height={120}
-                    resizeMode="cover"
-                    style={styles.vehicleCardImageWrapper}
-                  />
-
-                  <Text style={styles.vehicleCardTitle} numberOfLines={1}>
-                    {car.make} {car.model}
-                  </Text>
-                  <Text style={styles.vehicleCardDetails} numberOfLines={1}>
-                    {car.year ? `${car.year} • ` : ''}{car.engine || 'Standard Trim'}
-                    {car.licensePlate ? ` • ${car.licensePlate}` : ''}
-                  </Text>
-
-                  {isActive ? (
-                    <TouchableOpacity
-                      style={styles.activePartsCtaBtn}
-                      onPress={() => handleLookupActiveCarParts(car)}
-                      activeOpacity={0.8}
-                    >
-                      <Search size={13} color="#FFFFFF" strokeWidth={2.2} />
-                      <Text style={styles.activePartsCtaText}>View Compatible Parts</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.inactiveSetBtn}
-                      onPress={() => handleSelectActiveVehicle(car)}
-                      activeOpacity={0.75}
-                    >
-                      <Text style={styles.inactiveSetBtnText}>Tap to Set as Active</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              );
-            })}
+            {sortedGarageVehicles.map((car, idx) => (
+              <VehicleCarouselCard
+                key={car.id || car._id || `car-${idx}`}
+                car={car}
+                isActive={idx === 0}
+                onSelectActive={handleSelectActiveVehicle}
+                onLookupParts={handleLookupActiveCarParts}
+              />
+            ))}
 
             {/* Add Another Vehicle Card */}
             <TouchableOpacity
@@ -599,58 +667,20 @@ const OwnerHomeScreen = () => {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 16 }}
             >
-              {sortedGarageVehicles.map((car, idx) => {
-                const isCurrentActive = idx === 0;
-                return (
-                  <TouchableOpacity
-                    key={car.id || car._id || `pick-${idx}`}
-                    style={[
-                      styles.pickerVehicleItem,
-                      isCurrentActive && styles.pickerVehicleItemActive,
-                    ]}
-                    onPress={() => {
-                      handleSelectActiveVehicle(car);
-                      setVehiclePickerModalVisible(false);
-                      handleLookupActiveCarParts(car);
-                    }}
-                    activeOpacity={0.75}
-                  >
-                    <View style={styles.pickerItemLeft}>
-                      <View style={[
-                        styles.pickerVehicleThumbContainer,
-                        isCurrentActive && styles.pickerVehicleThumbContainerActive,
-                      ]}>
-                        <VehicleCardImage
-                          car={car}
-                          height={54}
-                          resizeMode="cover"
-                          compact={true}
-                          style={styles.pickerVehicleThumb}
-                        />
-                      </View>
-                      <View style={{ flex: 1, minWidth: 0, paddingRight: 4 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                          <Text style={[styles.pickerItemTitle, { flexShrink: 1 }]} numberOfLines={1}>
-                            {car.make} {car.model}
-                          </Text>
-                          {isCurrentActive && (
-                            <View style={styles.pickerActiveTag}>
-                              <Text style={styles.pickerActiveTagText}>ACTIVE</Text>
-                            </View>
-                          )}
-                        </View>
-                        <Text style={styles.pickerItemSub} numberOfLines={1}>
-                          {car.year ? `${car.year} • ` : ''}{car.engine || 'Standard Trim'}
-                          {car.licensePlate ? ` • ${car.licensePlate}` : ''}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.pickerItemArrow}>
-                      <ChevronRight size={18} color={isCurrentActive ? '#D0142C' : '#94A3B8'} strokeWidth={2.2} />
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
+              {sortedGarageVehicles.map((car, idx) => (
+                <PickerVehicleItem
+                  key={car.id || car._id || `pick-${idx}`}
+                  car={car}
+                  isCurrentActive={idx === 0}
+                  onPress={(selectedCar) => {
+                    handleSelectActiveVehicle(selectedCar);
+                    setVehiclePickerModalVisible(false);
+                    requestAnimationFrame(() => {
+                      handleLookupActiveCarParts(selectedCar);
+                    });
+                  }}
+                />
+              ))}
 
               {/* Manual search option */}
               <TouchableOpacity

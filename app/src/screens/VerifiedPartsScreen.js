@@ -10,6 +10,8 @@ import {
   Image,
   ActivityIndicator,
   RefreshControl,
+  BackHandler,
+  Platform,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -48,6 +50,7 @@ import AppButton from '../components/common/AppButton';
 import JourneyStepIndicator from '../components/common/JourneyStepIndicator';
 import Product360Viewer from '../components/common/Product360Viewer';
 import VehicleCardImage from '../components/vehicle/VehicleCardImage';
+import PartSchematicFallback from '../components/parts/PartSchematicFallback';
 
 const categorizePart = (item) => {
   if (item?.category?.id) {
@@ -165,13 +168,28 @@ const VerifiedPartsScreen = () => {
   const [peekPart, setPeekPart] = useState(null);
   const [peekModalVisible, setPeekModalVisible] = useState(false);
 
+  // Handle Android hardware back button when full-screen specs overlay is visible
+  useEffect(() => {
+    if (!specsModalVisible) return;
+    const onBackPress = () => {
+      if (isStudioFullscreen) {
+        setIsStudioFullscreen(false);
+      } else {
+        setSpecsModalVisible(false);
+      }
+      return true;
+    };
+    const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => sub.remove();
+  }, [specsModalVisible, isStudioFullscreen]);
+
   const vehicle = route.params?.vehicle;
   const searchQuery = route.params?.searchQuery;
   const appType = route.params?.appType || 'P';
   const selectedManufacturer = route.params?.selectedManufacturer;
   const selectedSeries = route.params?.selectedSeries;
-  const [fallbackSiblingName, setFallbackSiblingName] = useState(null);
   const fetchedTargetRef = useRef(null);
+  const fetchedSearchQueryRef = useRef(null);
 
   // Category Buckets and Filtered Parts
   const { categoryCounts, displayedParts, availableCategories } = useMemo(() => {
@@ -324,16 +342,43 @@ const VerifiedPartsScreen = () => {
     }
   }, [searchQuery, vehicle, appType, selectedManufacturer, selectedSeries]);
 
+  const handleOpenSpecs = useCallback((item) => {
+    if (!item) return;
+    setSelectedPart(item);
+    const allImgs = item?.images || item?.raw?.images || item?.articleMedia || [];
+    const has360 = allImgs.some(
+      (img) =>
+        img.fileName?.toLowerCase()?.includes('360') ||
+        img.headerDescription?.toLowerCase()?.includes('360')
+    );
+    setActiveMediaTab(has360 ? '3d' : 'photo');
+    setSelectedImageIndex(0);
+    setRotationY(0);
+    setZoomScale(1);
+    setIsAutoSpinning(has360);
+    setModalMainTab('studio');
+    setIsStudioFullscreen(false);
+    setSpecsModalVisible(true);
+  }, []);
+
   // Reactively sync parts when route.params change
   useEffect(() => {
     if (route.params?.articles) {
       setParts(route.params.articles);
     }
-  }, [route.params?.articles]);
+    if (route.params?.selectedPart || route.params?.initialPart) {
+      const p = route.params.selectedPart || route.params.initialPart;
+      setSelectedPart(p);
+      if (route.params?.openSpecs) {
+        handleOpenSpecs(p);
+      }
+    }
+  }, [route.params?.articles, route.params?.selectedPart, route.params?.initialPart, route.params?.openSpecs, handleOpenSpecs]);
 
-  // If navigated with searchQuery and parts is empty, auto-fetch
+  // If navigated with searchQuery and not yet fetched, auto-fetch
   useEffect(() => {
-    if ((!parts || parts.length === 0) && searchQuery) {
+    if (searchQuery && fetchedSearchQueryRef.current !== searchQuery) {
+      fetchedSearchQueryRef.current = searchQuery;
       const fetchByQuery = async () => {
         setLoading(true);
         try {
@@ -354,7 +399,7 @@ const VerifiedPartsScreen = () => {
       };
       fetchByQuery();
     }
-  }, [searchQuery, parts]);
+  }, [searchQuery]);
 
   useEffect(() => {
     if (!vehicle) return;
@@ -475,25 +520,6 @@ const VerifiedPartsScreen = () => {
     dispatch(setPart(item));
     if (vehicle) dispatch(setSelectedVehicle(vehicle));
     navigation.navigate('TechnicalEnquiry', { part: item, vehicle });
-  };
-
-  const handleOpenSpecs = (item) => {
-    setSelectedPart(item);
-    const allImgs = item?.images || item?.raw?.images || item?.articleMedia || [];
-    const has360 = allImgs.some(
-      (img) =>
-        img.fileName?.toLowerCase()?.includes('360') ||
-        img.headerDescription?.toLowerCase()?.includes('360')
-    );
-    setActiveMediaTab(has360 ? '3d' : 'photo');
-    setSelectedImageIndex(0);
-    setRotationY(0);
-    setZoomScale(1);
-    setIsAutoSpinning(has360);
-    setModalMainTab('studio');
-    // Open inline first — cache loads here. Fullscreen button available for user.
-    setIsStudioFullscreen(false);
-    setSpecsModalVisible(true);
   };
 
   const handleOpenPeek = (item) => {
@@ -1072,10 +1098,12 @@ const VerifiedPartsScreen = () => {
                             resizeMode="contain"
                           />
                         ) : (
-                          <View style={styles.thumbPlaceholder}>
-                            <Zap size={26} color="#D0142C" />
-                            <Text style={styles.thumbPlaceholderText}>{brand}</Text>
-                          </View>
+                          <PartSchematicFallback
+                            partName={partName}
+                            brand={brand}
+                            partNo={partNo}
+                            size="thumb"
+                          />
                         )}
                         <View style={styles.thumbPeekOverlay}>
                           <Eye size={10} color="#FFFFFF" />
@@ -1188,11 +1216,12 @@ const VerifiedPartsScreen = () => {
         )}
       </ScrollView>
 
-      {/* Quick Peek Modal */}
+      {/* Bottom Quick-Peek Modal */}
       <Modal
         visible={peekModalVisible}
-        animationType="fade"
+        animationType="slide"
         transparent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setPeekModalVisible(false)}
       >
         <View style={styles.peekModalOverlay}>
@@ -1233,10 +1262,12 @@ const VerifiedPartsScreen = () => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <View style={styles.peekLargePlaceholder}>
-                    <Zap size={44} color="#D0142C" />
-                    <Text style={styles.peekPlaceholderTitle}>Genuine {peekBrand} Component</Text>
-                  </View>
+                  <PartSchematicFallback
+                    partName={peekPartName}
+                    brand={peekBrand}
+                    partNo={selectedPart?.articleNo || selectedPart?.partNo}
+                    size="large"
+                  />
                 )}
                 <View style={styles.peekFitmentBadge}>
                   <ShieldCheck size={12} color="#059669" />
@@ -1287,8 +1318,9 @@ const VerifiedPartsScreen = () => {
               <TouchableOpacity
                 style={styles.peek360Btn}
                 onPress={() => {
+                  const part = peekPart;
                   setPeekModalVisible(false);
-                  if (peekPart) handleOpenSpecs(peekPart);
+                  if (part) handleOpenSpecs(part);
                 }}
                 activeOpacity={0.8}
               >
@@ -1299,8 +1331,9 @@ const VerifiedPartsScreen = () => {
               <TouchableOpacity
                 style={styles.peekEnquireBtn}
                 onPress={() => {
+                  const part = peekPart;
                   setPeekModalVisible(false);
-                  if (peekPart) handleEnquirePart(peekPart);
+                  if (part) handleEnquirePart(part);
                 }}
                 activeOpacity={0.8}
               >
@@ -1312,28 +1345,32 @@ const VerifiedPartsScreen = () => {
         </View>
       </Modal>
 
-      {/* Full-Screen Technical Specifications & 3D Interactive Model Modal */}
-      <Modal
-        visible={specsModalVisible}
-        animationType="slide"
-        presentationStyle="fullScreen"
-        statusBarTranslucent={true}
-        onRequestClose={() => { setIsStudioFullscreen(false); setSpecsModalVisible(false); }}
-      >
+      {/* Full-Screen Technical Specifications & 3D Interactive Model Sheet / Overlay */}
+      {specsModalVisible && (
         <View
           style={[
+            StyleSheet.absoluteFillObject,
             styles.fullScreenModal,
             {
-              paddingTop: insets.top,
+              zIndex: 9999,
               paddingBottom: insets.bottom,
             },
           ]}
         >
-          <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={true} />
+          <StatusBar
+            barStyle={isStudioFullscreen ? 'dark-content' : 'light-content'}
+            backgroundColor={isStudioFullscreen ? '#FFFFFF' : '#D0142C'}
+            translucent={false}
+          />
 
           {/* Top Modal Navigation Header - NGK Crimson Theme */}
           {!isStudioFullscreen && (
-            <View style={styles.modalHeaderLight}>
+            <View
+              style={[
+                styles.modalHeaderLight,
+                { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
+              ]}
+            >
               <View style={styles.modalHeaderInfo}>
                 <View style={styles.modalBrandPillLight}>
                   <Text style={styles.modalBrandTextLight}>
@@ -1417,14 +1454,19 @@ const VerifiedPartsScreen = () => {
           {isStudioFullscreen ? (
             /* True Full-Screen Studio Mode */
             <View style={styles.fullScreenStudioContainer}>
-              <View style={styles.fullScreenStudioTopBar}>
+              <View
+                style={[
+                  styles.fullScreenStudioTopBar,
+                  { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
+                ]}
+              >
                 <View style={styles.fullScreenStudioTopLeft}>
                   <TouchableOpacity
                     style={styles.fullScreenExitBtn}
-                    onPress={() => { setIsStudioFullscreen(false); setSpecsModalVisible(false); }}
+                    onPress={() => setIsStudioFullscreen(false)}
                     hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                   >
-                    <X size={18} color="#1E293B" />
+                    <Minimize2 size={18} color="#1E293B" />
                   </TouchableOpacity>
 
                   <View style={{ marginLeft: 4 }}>
@@ -1513,6 +1555,18 @@ const VerifiedPartsScreen = () => {
                     <Sliders size={12} color="#D0142C" />
                     <Text style={styles.fullScreenSpecsBtnText}>Specs</Text>
                   </TouchableOpacity>
+
+                  {/* Dismiss entire modal */}
+                  <TouchableOpacity
+                    style={[styles.fullScreenExitBtn, { marginLeft: 4 }]}
+                    onPress={() => {
+                      setIsStudioFullscreen(false);
+                      setSpecsModalVisible(false);
+                    }}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  >
+                    <X size={18} color="#64748B" />
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -1534,21 +1588,35 @@ const VerifiedPartsScreen = () => {
                   onAngleChange={(deg) => setRotationY(deg)}
                   onAutoSpinChange={(spinning) => setIsAutoSpinning(spinning)}
                   onScaleChange={(scale) => setZoomScale(scale)}
+                  partName={
+                    selectedPart?.genericArticles?.[0]?.genericArticleDescription ||
+                    selectedPart?.articleName ||
+                    'OEM Component'
+                  }
+                  brand={selectedPart?.mfrName || selectedPart?.brandName || 'NGK'}
+                  partNo={
+                    selectedPart?.tradeNumbers?.[0] ||
+                    selectedPart?.articleNumber ||
+                    selectedPart?.articleNo ||
+                    selectedPart?.partNumber ||
+                    ''
+                  }
                 />
               </View>
 
               <View style={styles.fullScreenStudioBottomBar}>
                 {/* Drag hint */}
-
                 <View style={[styles.dragHintBox, { paddingVertical: 3 }]}>
                   <Text style={[styles.dragHintText, { fontSize: 10 }]}>
-                    👆 Drag horizontally to rotate • Drag vertically to tilt • Pinch to zoom
+                    {activeMediaTab === '3d'
+                      ? '👆 Drag horizontally to rotate • Drag vertically to tilt • Pinch to zoom'
+                      : '🔍 Pinch or double-tap to zoom • Drag in any direction to pan'}
                   </Text>
                 </View>
 
                 {/* Main controls row */}
                 <View style={styles.toolActionButtonsRow}>
-                  {gif360 && (
+                  {activeMediaTab === '3d' && gif360 && (
                     <TouchableOpacity
                       style={[styles.toolBtn, isAutoSpinning && styles.toolBtnActive]}
                       onPress={() => setIsAutoSpinning((prev) => !prev)}
@@ -1571,7 +1639,9 @@ const VerifiedPartsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <RotateCcw size={13} color="#374151" />
-                    <Text style={styles.toolBtnText}>Reset</Text>
+                    <Text style={styles.toolBtnText}>
+                      {activeMediaTab === '3d' ? 'Reset' : 'Reset Zoom'}
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -1601,8 +1671,8 @@ const VerifiedPartsScreen = () => {
                   )}
                 </View>
 
-                {/* Preset Angle Buttons */}
-                {gif360 && (
+                {/* Preset Angle Buttons - only in 3D mode */}
+                {activeMediaTab === '3d' && gif360 && (
                   <View style={styles.anglePresetRow}>
                     {[
                       { label: '0° Front', deg: 0 },
@@ -1629,6 +1699,35 @@ const VerifiedPartsScreen = () => {
                       );
                     })}
                   </View>
+                )}
+
+                {/* Photo Thumbnails in Fullscreen if multiple regular photos exist */}
+                {activeMediaTab === 'photo' && regularImages.length > 1 && (
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={[styles.thumbnailRowLight, { marginVertical: 6 }]}
+                  >
+                    {regularImages.map((img, idx) => (
+                      <TouchableOpacity
+                        key={idx}
+                        style={[
+                          styles.thumbBoxLight,
+                          selectedImageIndex === idx && styles.thumbBoxActiveLight,
+                        ]}
+                        onPress={() => {
+                          setSelectedImageIndex(idx);
+                          setZoomScale(1);
+                        }}
+                      >
+                        <Image
+                          source={{ uri: img.imageURL200 || img.imageURL100 }}
+                          style={styles.thumbImg}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
                 )}
 
                 {/* Direct Quote Request CTA in Full Screen */}
@@ -1745,8 +1844,20 @@ const VerifiedPartsScreen = () => {
                         onAngleChange={(deg) => setRotationY(deg)}
                         onAutoSpinChange={(spinning) => setIsAutoSpinning(spinning)}
                         onScaleChange={(scale) => setZoomScale(scale)}
-                        onPressImage={() => setIsStudioFullscreen(true)}
                         showTapHint={false}
+                        partName={
+                          selectedPart?.genericArticles?.[0]?.genericArticleDescription ||
+                          selectedPart?.articleName ||
+                          'OEM Component'
+                        }
+                        brand={selectedPart?.mfrName || selectedPart?.brandName || 'NGK'}
+                        partNo={
+                          selectedPart?.tradeNumbers?.[0] ||
+                          selectedPart?.articleNumber ||
+                          selectedPart?.articleNo ||
+                          selectedPart?.partNumber ||
+                          ''
+                        }
                       />
                     </View>
 
@@ -1903,7 +2014,10 @@ const VerifiedPartsScreen = () => {
                               styles.thumbBoxLight,
                               selectedImageIndex === idx && styles.thumbBoxActiveLight,
                             ]}
-                            onPress={() => setSelectedImageIndex(idx)}
+                            onPress={() => {
+                              setSelectedImageIndex(idx);
+                              setZoomScale(1);
+                            }}
                           >
                             <Image
                               source={{ uri: img.imageURL200 || img.imageURL100 }}
@@ -2071,7 +2185,7 @@ const VerifiedPartsScreen = () => {
            * spinReady fires after a single rAF → zero remount flicker.
            */}
         </View>
-      </Modal>
+      )}
     </SafeAreaView>
   );
 };

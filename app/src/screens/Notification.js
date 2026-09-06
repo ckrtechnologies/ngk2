@@ -12,17 +12,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Home,
-  BellOff,
   Clock,
   MessageSquare,
   RefreshCw,
   FileText,
   ShieldCheck,
-  ChevronRight,
   CheckCheck,
   Tag,
   Store,
+  ChevronRight,
 } from 'lucide-react-native';
+import NotificationsEmptyIllustration from '../components/icons/NotificationsEmptyIllustration';
 import { useNavigation } from '@react-navigation/native';
 import { getMyselfRedux } from '../redux/getData';
 import { apiFunction } from '../apis/apiFunction';
@@ -64,6 +64,23 @@ const Notification = () => {
     }
   }, [myself, getMyself]);
 
+  const handleGoHome = useCallback(() => {
+    const role = (myself?.role || '').toLowerCase();
+    try {
+      if (role === 'distributor') {
+        navigation.navigate('DistributorHome');
+      } else if (role === 'reseller') {
+        navigation.navigate('ResellerHome');
+      } else {
+        navigation.navigate('OwnerHome');
+      }
+    } catch (err) {
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
+    }
+  }, [myself?.role, navigation]);
+
   // Check if an item is unread (considering optimistic local overrides)
   const isItemUnread = useCallback(
     (item) => {
@@ -78,7 +95,11 @@ const Notification = () => {
   // Memoize all notifications, latest first
   const allNotifications = useMemo(() => {
     if (!myself?.notifications || !Array.isArray(myself.notifications)) return [];
-    return [...myself.notifications].reverse();
+    return [...myself.notifications].sort((a, b) => {
+      const timeA = new Date(a.created_at || a.createdAt || a.timestamp || a.date || 0).getTime();
+      const timeB = new Date(b.created_at || b.createdAt || b.timestamp || b.date || 0).getTime();
+      return timeB - timeA;
+    });
   }, [myself]);
 
   // Filter unread notifications
@@ -384,7 +405,7 @@ const Notification = () => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              onPress={() => navigation.navigate('OwnerHome')}
+              onPress={handleGoHome}
               style={styles.headerHomeBtn}
               activeOpacity={0.8}
             >
@@ -462,7 +483,7 @@ const Notification = () => {
         {displayedNotifications.length === 0 ? (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconContainer}>
-              <ShieldCheck color="#10B981" size={38} strokeWidth={2} />
+              <NotificationsEmptyIllustration size={110} />
             </View>
             <Text style={styles.emptyTitle}>
               {activeTab === 'unread' ? 'No Pending Alerts' : 'All Caught Up!'}

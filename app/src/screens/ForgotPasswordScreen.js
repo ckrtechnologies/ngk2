@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  StatusBar,
 } from 'react-native';
 import { Mail, KeyRound, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react-native';
 import { apiFunction } from '../apis/apiFunction';
@@ -114,7 +115,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
       const response = await apiFunction(
         updatePasswordApi,
         [],
-        { email: email.trim(), newPassword },
+        { email: email.trim(), password: newPassword, newPassword },
         'POST',
         false
       );
@@ -136,28 +137,41 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
     }
   };
 
+  const portalSubtitle =
+    role === 'distributor'
+      ? 'Distributor Portal'
+      : role === 'reseller'
+      ? 'Reseller Portal'
+      : 'Vehicle Owner';
+
   return (
-    <ScreenContainer
-      scrollable={true}
-      footer={
-        <View style={styles.footerContainer}>
-          <TouchableOpacity
-            style={styles.backToLoginBtn}
-            onPress={() => navigation.navigate('Login', { role })}
-          >
-            <Text style={styles.backToLoginText}>
-              Remember your password? <Text style={{ color: buttonColor, fontWeight: '700' }}>Sign In</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      }
-    >
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={false} />
       <AppHeader
-        variant="light"
-        includeTopInset={false}
+        title={step === 1 ? 'Reset Password' : step === 2 ? 'Verify Code' : 'Set New Password'}
+        subtitle={portalSubtitle}
+        variant="solid"
         showStatusBar={false}
         onBack={() => (step > 1 ? setStep(step - 1) : navigation.goBack())}
       />
+
+      <ScreenContainer
+        scrollable={true}
+        includeTopInset={false}
+        showStatusBar={false}
+        footer={
+          <View style={styles.footerContainer}>
+            <TouchableOpacity
+              style={styles.backToLoginBtn}
+              onPress={() => navigation.navigate('Login', { role })}
+            >
+              <Text style={styles.backToLoginText}>
+                Remember your password? <Text style={{ color: buttonColor, fontWeight: '700' }}>Sign In</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        }
+      >
 
       <View style={styles.content}>
         {/* Step Indicator / Icon */}
@@ -284,7 +298,8 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
           )}
         </View>
       </View>
-    </ScreenContainer>
+      </ScreenContainer>
+    </View>
   );
 };
 

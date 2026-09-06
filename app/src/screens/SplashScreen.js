@@ -156,7 +156,7 @@ const SplashScreen = ({ navigation }) => {
         >
           <View style={styles.logoFrame}>
             <Image
-              source={require('../assets/images/logo_cropped.png')}
+              source={require('../assets/images/ngk_emblem_clean.png')}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -219,21 +219,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   logoFrame: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 28,
-    paddingVertical: 18,
-    borderRadius: 26,
-    shadowColor: '#D0142C',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    elevation: 8,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo: {
-    width: wp('28%'),
-    height: wp('28%'),
+    width: wp('34%'),
+    height: wp('34%'),
   },
   textContainer: {
     alignItems: 'center',

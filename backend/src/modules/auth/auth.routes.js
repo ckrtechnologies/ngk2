@@ -10,6 +10,7 @@ authRouter.post('/send-otp', sendOtp);
 authRouter.post('/verifyOtp', verifyOtp);
 authRouter.post('/verify-otp', verifyOtp);
 authRouter.put('/updatePassword', updatePassword);
+authRouter.post('/updatePassword', updatePassword);
 authRouter.post('/reset-password', updatePassword);
 
 export default authRouter;

@@ -52,13 +52,23 @@ const DistributorHomeScreen = () => {
     fetchHubData();
   }, [fetchHubData]);
 
-  const pendingCount =
-    enquiry?.filter((e) => (e.status || 'Pending').toLowerCase() === 'pending')
-      ?.length || 0;
-  const inProgressCount =
-    enquiry?.filter(
-      (e) => (e.status || '').toLowerCase() === 'in progress'
-    )?.length || 0;
+  const pendingCount = useMemo(() => {
+    return (
+      enquiry?.filter((e) => {
+        const s = (e.status || 'Pending').toLowerCase().replace(/[\s_-]+/g, '');
+        return s === 'pending' || s === 'open';
+      })?.length || 0
+    );
+  }, [enquiry]);
+
+  const inProgressCount = useMemo(() => {
+    return (
+      enquiry?.filter((e) => {
+        const s = (e.status || '').toLowerCase().replace(/[\s_-]+/g, '');
+        return s === 'inprogress' || s === 'inprocess';
+      })?.length || 0
+    );
+  }, [enquiry]);
 
   const hasUnreadNotifications = useMemo(() => {
     if (!myself?.notifications || !Array.isArray(myself.notifications)) return false;
@@ -182,23 +192,35 @@ const DistributorHomeScreen = () => {
 
         {/* KPI Metric Chips */}
         <View style={styles.kpiRow}>
-          <View style={styles.kpiCard}>
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'pending' })}
+            activeOpacity={0.75}
+          >
             <View style={styles.kpiIconWrapper}>
               <Clock size={16} color="#D0142C" />
             </View>
             <Text style={styles.kpiValue}>{pendingCount}</Text>
             <Text style={styles.kpiLabel}>Pending Actions</Text>
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.kpiCard}>
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'inprogress' })}
+            activeOpacity={0.75}
+          >
             <View style={[styles.kpiIconWrapper, { backgroundColor: '#DBEAFE' }]}>
               <TrendingUp size={16} color="#2563EB" />
             </View>
             <Text style={styles.kpiValue}>{inProgressCount}</Text>
             <Text style={styles.kpiLabel}>Active Tickets</Text>
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.kpiCard}>
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'all' })}
+            activeOpacity={0.75}
+          >
             <View style={[styles.kpiIconWrapper, { backgroundColor: '#D1FAE5' }]}>
               <CheckCircle2 size={16} color="#059669" />
             </View>
@@ -206,7 +228,7 @@ const DistributorHomeScreen = () => {
               {enquiry?.length || 0}
             </Text>
             <Text style={styles.kpiLabel}>Total Managed</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* 2x2 Quick Action Grid */}

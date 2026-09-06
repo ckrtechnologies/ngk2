@@ -9,6 +9,7 @@ import TechnicalEnquiryScreen from '../../../screens/TechnicalEnquiryScreen';
 import MyEnquiriesScreen from '../../../screens/MyEnquiriesScreen';
 import DealerLocatorScreen from '../../../screens/DealerLocatorScreen';
 import CustomDrawer from '../../../screens/CustomDrawer';
+import NotificationScreen from '../../../screens/Notification';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,8 @@ export default function DistributorNavigator() {
       <Stack.Screen name="DealerLocator" component={DealerLocatorScreen} />
       <Stack.Screen name="DealerLocatorScreen" component={DealerLocatorScreen} />
       <Stack.Screen name="CustomDrawer" component={CustomDrawer} />
+      <Stack.Screen name="Notifications" component={NotificationScreen} />
+      <Stack.Screen name="Notification" component={NotificationScreen} />
     </Stack.Navigator>
   );
 }

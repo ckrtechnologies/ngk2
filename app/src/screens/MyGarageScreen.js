@@ -40,6 +40,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyselfRedux } from '../redux/getData';
 import { apiFunction } from '../apis/apiFunction';
 import VehicleCardImage from '../components/vehicle/VehicleCardImage';
+import GarageEmptyStateIllustration from '../components/vehicle/GarageEmptyStateIllustration';
 import {
   addVehicleToGarageApi,
   updateVehicleInGarageApi,
@@ -210,6 +211,7 @@ const MyGarageScreen = () => {
   };
 
   const handleOpenModal = () => {
+    console.log('[DEBUG_MODAL] handleOpenModal CALLED, setting modalVisible to true');
     resetForm();
     setEntryMode('catalog');
     setModalVisible(true);
@@ -440,7 +442,6 @@ const MyGarageScreen = () => {
         text1: 'Active Vehicle Set',
         text2: `${car.make} ${car.model} is now active on your dashboard.`,
       });
-      refreshUser();
     } catch (e) {
       // ignore
     }
@@ -608,6 +609,8 @@ const MyGarageScreen = () => {
     return [];
   }, [pickerType, pickerSearch, allManufacturers, popularBrands, seriesList, vehiclesList]);
 
+  console.log('[DEBUG_MODAL] MyGarageScreen render, modalVisible:', modalVisible);
+
   return (
     <SafeAreaView
       edges={['bottom', 'left', 'right']}
@@ -642,10 +645,8 @@ const MyGarageScreen = () => {
       >
         {garageVehicles.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <View style={styles.emptyIconCircle}>
-              <Car size={36} color="#D0142C" />
-            </View>
-            <Text style={styles.emptyTitle}>Your Garage is Empty</Text>
+            <GarageEmptyStateIllustration size={110} />
+            <Text style={[styles.emptyTitle, { marginTop: 16 }]}>Your Garage is Empty</Text>
             <Text style={styles.emptySubtitle}>
               Save your vehicles here to instantly find 100% verified spark plugs, glow plugs, and oxygen sensors.
             </Text>
@@ -745,7 +746,7 @@ const MyGarageScreen = () => {
                         onPress={() => handleSetActive(car)}
                         activeOpacity={0.75}
                       >
-                        <Zap size={13} color="#475569" />
+                        <CheckCircle2 size={13} color="#FFFFFF" strokeWidth={2.4} />
                         <Text style={styles.setActiveBtnText}>Set Active</Text>
                       </TouchableOpacity>
                     )}
@@ -754,7 +755,7 @@ const MyGarageScreen = () => {
                       onPress={() => handleLookupParts(car)}
                       activeOpacity={0.75}
                     >
-                      <Search size={14} color="#D0142C" />
+                      <Search size={14} color="#FFFFFF" strokeWidth={2.4} />
                       <Text style={styles.findPartsText}>
                         {hasCatalogLink ? 'View 100% Compatible Parts' : 'Lookup Compatible Parts'}
                       </Text>
@@ -770,9 +771,10 @@ const MyGarageScreen = () => {
 
       {/* Main Add Vehicle Modal */}
       <Modal
-        visible={modalVisible}
+        visible={modalVisible && !pickerVisible}
         animationType="slide"
         transparent={true}
+        statusBarTranslucent={true}
         onRequestClose={() => setModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -1228,6 +1230,7 @@ const MyGarageScreen = () => {
         visible={pickerVisible}
         animationType="slide"
         transparent={false}
+        statusBarTranslucent={true}
         onRequestClose={() => setPickerVisible(false)}
       >
         <KeyboardAvoidingView
@@ -1380,6 +1383,7 @@ const MyGarageScreen = () => {
         visible={editModalVisible}
         animationType="slide"
         transparent={true}
+        statusBarTranslucent={true}
         onRequestClose={() => setEditModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -1640,16 +1644,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#2563EB',
     paddingVertical: 9,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
   setActiveBtnText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   findPartsBtn: {
     flex: 1,
@@ -1657,14 +1659,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: '#D0142C',
     paddingVertical: 9,
     borderRadius: 8,
   },
   findPartsText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#FFFFFF',
   },
 
   /* Modal Bottom Sheet */

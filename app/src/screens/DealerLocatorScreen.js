@@ -171,7 +171,7 @@ const DealerLocatorScreen = () => {
   // Compute how many non-default filter settings are active
   const activeFilterCount = useMemo(() => {
     let c = 0;
-    if (filters.radius !== 50) c++;
+    if (filters.radius !== 50 && filters.radius !== 1500) c++;
     if (filters.role !== 'all') c++;
     if (filters.sortBy !== 'nearest') c++;
     return c;
@@ -337,7 +337,7 @@ const DealerLocatorScreen = () => {
     >
       <AppHeader
         title="Authorized Dealers"
-        subtitle={`${filteredDealers.length} Official Stockists & Hubs`}
+        subtitle={`${filteredDealers.length} Official Resellers & Hubs`}
         onBack={() => navigation.goBack()}
       />
 
@@ -414,7 +414,7 @@ const DealerLocatorScreen = () => {
                 : userCoords
                 ? `Mobile GPS • ${
                     filters.radius === 1500
-                      ? 'All SA'
+                      ? 'National directory'
                       : `Within ${filters.radius}km`
                   }`
                 : 'GPS inactive • Showing national directory'}
@@ -443,12 +443,10 @@ const DealerLocatorScreen = () => {
             >
               <Text style={styles.activeChipsLabel}>Filters:</Text>
 
-              {filters.radius !== 50 && (
+              {filters.radius !== 50 && filters.radius !== 1500 && (
                 <View style={styles.activeChipPill}>
                   <Text style={styles.activeChipText}>
-                    {filters.radius === 1500
-                      ? 'All SA'
-                      : `≤ ${filters.radius}km`}
+                    {`≤ ${filters.radius}km`}
                   </Text>
                   <TouchableOpacity
                     onPress={() =>
@@ -574,7 +572,7 @@ const DealerLocatorScreen = () => {
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#D0142C" />
             <Text style={styles.loadingText}>
-              Loading authorized stockists...
+              Loading authorized resellers...
             </Text>
           </View>
         ) : (
@@ -599,7 +597,7 @@ const DealerLocatorScreen = () => {
                 item.name ||
                 item.companyName ||
                 item.dealer_name ||
-                'Authorized Stockist';
+                'Authorized Reseller';
               const address = item.address || item.streetAddress;
               const cityProvince =
                 [item.city, item.province].filter(Boolean).join(' • ') ||
@@ -728,16 +726,16 @@ const DealerLocatorScreen = () => {
               <View style={styles.emptyContainer}>
                 <Store size={40} color="#9CA3AF" />
                 <Text style={styles.emptyTitle}>
-                  No Stockists Within Radius
+                  No Resellers Within Radius
                 </Text>
                 <Text style={styles.emptySubtitle}>
                   {searchQuery
                     ? `No dealers match "${searchQuery}". Try adjusting your filters or radius.`
                     : dealers.length > 0 && dealers[0]?.distanceKm > filters.radius
-                    ? `Nearest authorized stockist is ${dealers[0]?.distance || `${dealers[0]?.distanceKm} km`} away. Expand your search radius or type a higher distance in km.`
+                    ? `Nearest authorized reseller is ${dealers[0]?.distance || `${dealers[0]?.distanceKm} km`} away. Expand your search radius or type a higher distance in km.`
                     : activeFilterCount > 0
-                    ? 'No stockists match the active filters. Try expanding the search radius or resetting filters.'
-                    : 'No stockists currently available in this category.'}
+                    ? 'No resellers match the active filters. Try expanding the search radius or resetting filters.'
+                    : 'No resellers currently available in this category.'}
                 </Text>
 
                 <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 12 }}>

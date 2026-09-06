@@ -73,35 +73,44 @@ export default function DistanceSlider({
     }).start();
   }, [value, kmToRatio, animatedProgress]);
 
-  const updateFromPosition = (pageX) => {
-    if (trackWidth <= 0) return;
-    if (!trackRef.current) return;
+  const trackRef = useRef(null);
+  const trackLayoutRef = useRef({ px: 0, width: 280 });
 
-    trackRef.current.measure((fx, fy, width, height, px, py) => {
-      const relativeX = Math.max(0, Math.min(width, pageX - px));
-      const ratio = relativeX / width;
-      const km = ratioToKm(ratio);
-      setInternalKm(km);
-      setTextVal(km >= ALL_SA_VAL ? '1500' : String(km));
-      animatedProgress.setValue(ratio);
-      if (onValueChange) onValueChange(km);
-    });
+  const applyPosition = (pageX, px, width) => {
+    const relativeX = Math.max(0, Math.min(width, pageX - px));
+    const ratio = relativeX / width;
+    const km = ratioToKm(ratio);
+    setInternalKm(km);
+    setTextVal(km >= ALL_SA_VAL ? '1500' : String(km));
+    animatedProgress.setValue(ratio);
+    if (onValueChange) onValueChange(km);
   };
 
-  const trackRef = useRef(null);
+  const updateFromPosition = (pageX, isInitial = false) => {
+    if (!trackRef.current) return;
+    if (isInitial || trackLayoutRef.current.width <= 0) {
+      trackRef.current.measure((fx, fy, width, height, px, py) => {
+        trackLayoutRef.current = { px, width: width || 280 };
+        applyPosition(pageX, px, width || 280);
+      });
+    } else {
+      const { px, width } = trackLayoutRef.current;
+      applyPosition(pageX, px, width);
+    }
+  };
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt) => {
-        updateFromPosition(evt.nativeEvent.pageX);
+        updateFromPosition(evt.nativeEvent.pageX, true);
       },
       onPanResponderMove: (evt) => {
-        updateFromPosition(evt.nativeEvent.pageX);
+        updateFromPosition(evt.nativeEvent.pageX, false);
       },
       onPanResponderRelease: (evt) => {
-        updateFromPosition(evt.nativeEvent.pageX);
+        updateFromPosition(evt.nativeEvent.pageX, false);
       },
     })
   ).current;

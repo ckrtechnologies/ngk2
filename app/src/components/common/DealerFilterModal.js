@@ -119,7 +119,7 @@ export default function DealerFilterModal({
               <View style={styles.modalHeader}>
                 <View>
                   <View style={styles.headerTitleRow}>
-                    <Text style={styles.modalTitle}>Stockist Filters</Text>
+                    <Text style={styles.modalTitle}>Dealer & Reseller Filters</Text>
                     {activeCount > 0 && (
                       <View style={styles.activePillBadge}>
                         <Text style={styles.activePillBadgeText}>
@@ -129,7 +129,7 @@ export default function DealerFilterModal({
                     )}
                   </View>
                   <Text style={styles.modalSubtitle}>
-                    Refine stockist radius, partner tier & capabilities
+                    Refine distance radius, partner tier & capabilities
                   </Text>
                 </View>
 
@@ -245,9 +245,9 @@ export default function DealerFilterModal({
                               styles.tierButtonTextActive,
                           ]}
                         >
-                          Retail Stockists
+                          Retail Resellers
                         </Text>
-                        <Text style={styles.tierSubtext}>Resellers & Shops</Text>
+                        <Text style={styles.tierSubtext}>Workshops & Trade Shops</Text>
                       </View>
                       {draft.role === 'reseller' && (
                         <Check size={14} color="#D0142C" strokeWidth={3} />
@@ -333,7 +333,7 @@ export default function DealerFilterModal({
                   style={styles.applyBtn}
                 >
                   <Text style={styles.applyBtnText}>
-                    Apply Filters ({matchingCount} Stockists)
+                    Apply Filters ({matchingCount} Partners)
                   </Text>
                 </TouchableOpacity>
               </View>

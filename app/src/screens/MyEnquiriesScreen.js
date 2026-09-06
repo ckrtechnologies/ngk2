@@ -39,6 +39,8 @@ import {
   MapPin,
   CheckCircle2,
   Layers,
+  RotateCw,
+  TrendingUp,
 } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +48,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { getEnquiryRedux } from '../redux/getData';
 import { apiFunction } from '../apis/apiFunction';
-import { addEnquiryMessageApi } from '../apis/api';
+import { addEnquiryMessageApi, updateEnquiryStatusApi } from '../apis/api';
 import AppHeader from '../components/common/AppHeader';
 
 const MyEnquiriesScreen = () => {
@@ -111,7 +113,7 @@ const MyEnquiriesScreen = () => {
     }
   }, [enquiry, selectedTicket?.id]);
 
-  // Handle openTicketId from navigation params (e.g. from Notifications)
+  // Handle openTicketId or initialFilter from navigation params
   useEffect(() => {
     const openTicketId = route?.params?.openTicketId;
     if (openTicketId && enquiry && enquiry.length > 0) {
@@ -124,18 +126,39 @@ const MyEnquiriesScreen = () => {
     }
   }, [route?.params?.openTicketId, enquiry, route?.params]);
 
-  const filterTabs = ['ALL', 'PENDING', 'IN PROGRESS', 'RESOLVED'];
+  useEffect(() => {
+    if (route?.params?.initialFilter) {
+      const f = route.params.initialFilter.toLowerCase().replace(/[\s_-]+/g, '');
+      if (f === 'pending') setActiveFilter('PENDING');
+      else if (f === 'inprogress' || f === 'inprocess') setActiveFilter('IN PROGRESS');
+      else if (f === 'resolved') setActiveFilter('RESOLVED');
+      else setActiveFilter('ALL');
+    }
+  }, [route?.params?.initialFilter]);
+
+  const filterTabs = ['ALL', 'PENDING', 'IN PROGRESS', 'RESOLVED', 'CLOSED'];
 
   const getFilteredList = () => {
     if (!enquiry) return [];
     if (activeFilter === 'ALL') return enquiry;
-    return enquiry.filter(
-      (e) => (e.status || 'Pending').toUpperCase() === activeFilter
-    );
+    const normActive = activeFilter.replace(/[\s_-]+/g, '').toUpperCase();
+    return enquiry.filter((e) => {
+      const pRef = e.part_reference || e.partReference || {};
+      const parsedRef = typeof pRef === 'string' ? (() => { try { return JSON.parse(pRef); } catch (err) { return {}; } })() : pRef;
+      const effectiveStatus = (e.workflow_status || parsedRef.workflow_status || e.status || 'Pending')
+        .replace(/[\s_-]+/g, '')
+        .toUpperCase();
+
+      if (normActive === 'CLOSED') return effectiveStatus === 'CLOSED';
+      if (normActive === 'INPROGRESS') return effectiveStatus === 'INPROGRESS' || effectiveStatus === 'QUOTESENT' || effectiveStatus === 'AWAITINGSTOCK';
+      if (normActive === 'RESOLVED') return effectiveStatus === 'RESOLVED' || effectiveStatus === 'APPROVED';
+      if (normActive === 'PENDING') return effectiveStatus === 'PENDING';
+      return effectiveStatus === normActive;
+    });
   };
 
   const getStatusBadge = (status) => {
-    const s = (status || 'Pending').toLowerCase();
+    const s = (status || 'Pending').toLowerCase().replace(/[\s_-]+/g, '');
     switch (s) {
       case 'resolved':
       case 'approved':
@@ -144,17 +167,41 @@ const MyEnquiriesScreen = () => {
           color: '#059669',
           label: 'Resolved',
         };
-      case 'in progress':
+      case 'inprogress':
+      case 'inprocess':
         return {
           bg: '#DBEAFE',
           color: '#2563EB',
           label: 'In Progress',
         };
+      case 'quotesent':
+      case 'quote':
+        return {
+          bg: '#EDE9FE',
+          color: '#7C3AED',
+          label: 'Quote Sent',
+        };
+      case 'awaitingstock':
+      case 'stock':
+      case 'backorder':
+        return {
+          bg: '#FFEDD5',
+          color: '#EA580C',
+          label: 'Awaiting Stock',
+        };
       case 'closed':
         return {
-          bg: '#F3F4F6',
-          color: '#4B5563',
+          bg: '#F1F5F9',
+          color: '#475569',
           label: 'Closed',
+        };
+      case 'declined':
+      case 'cancelled':
+      case 'rejected':
+        return {
+          bg: '#FFE4E6',
+          color: '#E11D48',
+          label: 'Declined',
         };
       default:
         return {
@@ -262,13 +309,13 @@ const MyEnquiriesScreen = () => {
       carName = [make, model, year].filter(Boolean).join(' ').trim();
     }
 
-    // Dealer / Stockist Name
+    // Dealer / Reseller Name
     const dealerName =
       item.dealerName ||
       item.dealer?.name ||
       pRef.dealerName ||
       vObj.dealerName ||
-      'Authorized Stockist';
+      'Authorized Reseller';
 
     return {
       partNumber,
@@ -291,7 +338,7 @@ const MyEnquiriesScreen = () => {
     const senderDisplayName =
       myself?.name ||
       myself?.companyName ||
-      (isWholesalerOrDealer ? 'Authorized Stockist' : 'Vehicle Owner');
+      (isWholesalerOrDealer ? 'Authorized Reseller' : 'Vehicle Owner');
 
     const trimmed = replyMessage.trim();
 
@@ -347,6 +394,105 @@ const MyEnquiriesScreen = () => {
         type: 'error',
         text1: 'Failed to send reply',
         text2: 'Network connection error or server timeout.',
+      });
+    }
+  };
+
+  // SNO 7: Navigate to VerifiedParts screen
+  const navigateToProductScreen = (ticket) => {
+    const target = ticket || selectedTicket;
+    if (!target) return;
+    const info = getTicketVehicleAndPartInfo(target);
+    const pRef = target.part_reference || target.partReference || target.partObject || {};
+    const parsedRef = typeof pRef === 'string' ? (() => { try { return JSON.parse(pRef); } catch (e) { return {}; } })() : pRef;
+
+    const partObj = {
+      articleNo: info.partNumber || parsedRef.partNumber || parsedRef.articleNo || 'GENUINE-OE',
+      articleNumber: info.partNumber || parsedRef.partNumber || parsedRef.articleNumber || 'GENUINE-OE',
+      articleName: info.partName || parsedRef.partName || parsedRef.title || 'NGK Component',
+      mfrName: parsedRef.mfrName || parsedRef.brandName || 'NGK SPARK PLUG',
+      tradeNumbers: [info.partNumber].filter(Boolean),
+      genericArticles: [{ genericArticleDescription: info.partName }],
+      ...(parsedRef.part || {}),
+      ...(parsedRef || {}),
+    };
+
+    const vehicleObj = {
+      make: info.make || parsedRef.make || '',
+      model: info.model || parsedRef.model || '',
+      year: info.year || parsedRef.year || '',
+      engine: info.engine || parsedRef.engine || '',
+      ...(parsedRef.vehicle || {}),
+    };
+
+    setSpecsModalVisible(false);
+    setSelectedTicket(null);
+    navigation.navigate('VerifiedParts', {
+      articles: [partObj],
+      selectedPart: partObj,
+      vehicle: vehicleObj,
+      openSpecs: true,
+    });
+  };
+
+  // SNO 14-B: Partner status update handler & modal
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [statusNoteText, setStatusNoteText] = useState('');
+  const [pendingStatusChoice, setPendingStatusChoice] = useState('InProgress');
+
+  const STATUS_OPTIONS = [
+    { id: 'InProgress', label: 'In Progress', desc: 'Reviewing inquiry & checking catalog', bg: '#DBEAFE', color: '#1D4ED8', border: '#BFDBFE' },
+    { id: 'QuoteSent', label: 'Quote Sent', desc: 'Price & availability sent to customer', bg: '#EDE9FE', color: '#6D28D9', border: '#DDD6FE' },
+    { id: 'AwaitingStock', label: 'Awaiting Stock', desc: 'Parts backordered from regional hub', bg: '#FFEDD5', color: '#C2410C', border: '#FED7AA' },
+    { id: 'Resolved', label: 'Mark Resolved', desc: 'Query answered / order ready for pickup', bg: '#D1FAE5', color: '#047857', border: '#A7F3D0' },
+    { id: 'Closed', label: 'Close Ticket', desc: 'Transaction completed & archived', bg: '#F1F5F9', color: '#334155', border: '#CBD5E1' },
+    { id: 'Declined', label: 'Decline / Cancel', desc: 'Out of stock / unable to supply', bg: '#FFE4E6', color: '#BE123C', border: '#FECDD3' },
+  ];
+
+  const handleUpdateStatus = async (newStatus, note = '') => {
+    if (!selectedTicket || updatingStatus) return;
+    setUpdatingStatus(true);
+    const role = currentUserRole || 'reseller';
+    const responderName = myself?.name || (role === 'distributor' ? 'Regional Distributor' : 'Authorized Reseller');
+
+    try {
+      const res = await apiFunction(
+        updateEnquiryStatusApi,
+        [selectedTicket.id],
+        { status: newStatus, responderName, role, note: note || statusNoteText },
+        'PUT',
+        true
+      );
+      setUpdatingStatus(false);
+      setShowStatusModal(false);
+      setStatusNoteText('');
+      if (res && res.success !== false) {
+        setSelectedTicket((prev) => prev ? {
+          ...prev,
+          status: newStatus,
+          workflow_status: newStatus,
+          part_reference: { ...(prev.part_reference || {}), workflow_status: newStatus },
+        } : prev);
+        Toast.show({
+          type: 'success',
+          text1: 'Status Updated',
+          text2: `Ticket status updated to ${newStatus.toUpperCase()}`,
+        });
+        refreshEnquiries();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Status Update Failed',
+          text2: res?.message || 'Could not update ticket status',
+        });
+      }
+    } catch (err) {
+      setUpdatingStatus(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Status Update Failed',
+        text2: err.message || 'Could not update ticket status',
       });
     }
   };
@@ -445,7 +591,8 @@ const MyEnquiriesScreen = () => {
         ) : (
           <View style={styles.ticketList}>
             {filtered.map((item, idx) => {
-              const statusStyle = getStatusBadge(item.status);
+              const effectiveCardStatus = item.workflow_status || item.part_reference?.workflow_status || item.status;
+              const statusStyle = getStatusBadge(effectiveCardStatus);
               const info = getTicketVehicleAndPartInfo(item);
               const messagesCount = item.messages?.length || 0;
 
@@ -486,12 +633,17 @@ const MyEnquiriesScreen = () => {
                   {/* Compact Badges for Part # and Vehicle */}
                   <View style={styles.metaRow}>
                     {info.partNumber && (
-                      <View style={styles.partBadge}>
+                      <TouchableOpacity
+                        style={styles.partBadge}
+                        onPress={() => navigateToProductScreen(item)}
+                        activeOpacity={0.7}
+                      >
                         <Tag size={11} color="#D0142C" strokeWidth={2.2} />
                         <Text style={styles.partBadgeText} numberOfLines={1}>
                           #{info.partNumber}
                         </Text>
-                      </View>
+                        <ChevronRight size={10} color="#D0142C" strokeWidth={2.4} />
+                      </TouchableOpacity>
                     )}
                     {info.carName && (
                       <View style={styles.vehicleBadge}>
@@ -535,6 +687,7 @@ const MyEnquiriesScreen = () => {
         visible={!!selectedTicket}
         transparent={false}
         animationType="slide"
+        statusBarTranslucent={true}
         onRequestClose={() => {
           if (specsModalVisible) {
             setSpecsModalVisible(false);
@@ -564,35 +717,39 @@ const MyEnquiriesScreen = () => {
                   <Text style={styles.convHeaderTitle} numberOfLines={1}>
                     Ticket #{selectedTicket?.ticket_number || selectedTicket?.id}
                   </Text>
-                  {selectedTicket && (
-                    <View
-                      style={[
-                        styles.convStatusBadge,
-                        {
-                          backgroundColor: getStatusBadge(selectedTicket.status).bg,
-                        },
-                      ]}
-                    >
+                  {selectedTicket && (() => {
+                    const effectiveDetailStatus = selectedTicket?.workflow_status || selectedTicket?.part_reference?.workflow_status || selectedTicket?.status;
+                    const badge = getStatusBadge(effectiveDetailStatus);
+                    return (
                       <View
                         style={[
-                          styles.convStatusDot,
+                          styles.convStatusBadge,
                           {
-                            backgroundColor: getStatusBadge(selectedTicket.status).color,
-                          },
-                        ]}
-                      />
-                      <Text
-                        style={[
-                          styles.convStatusBadgeText,
-                          {
-                            color: getStatusBadge(selectedTicket.status).color,
+                            backgroundColor: badge.bg,
                           },
                         ]}
                       >
-                        {getStatusBadge(selectedTicket.status).label}
-                      </Text>
-                    </View>
-                  )}
+                        <View
+                          style={[
+                            styles.convStatusDot,
+                            {
+                              backgroundColor: badge.color,
+                            },
+                          ]}
+                        />
+                        <Text
+                          style={[
+                            styles.convStatusBadgeText,
+                            {
+                              color: badge.color,
+                            },
+                          ]}
+                        >
+                          {badge.label}
+                        </Text>
+                      </View>
+                    );
+                  })()}
                 </View>
                 <Text style={styles.convHeaderSubtitle}>
                   {selectedTicket?.created_at
@@ -619,12 +776,12 @@ const MyEnquiriesScreen = () => {
             {(() => {
               const info = getTicketVehicleAndPartInfo(selectedTicket);
               return (
-                <TouchableOpacity
-                  style={styles.pinnedContextCard}
-                  activeOpacity={0.85}
-                  onPress={() => setSpecsModalVisible(true)}
-                >
-                  <View style={styles.pinnedLeftCol}>
+                <View style={styles.pinnedContextCard}>
+                  <TouchableOpacity
+                    style={styles.pinnedLeftCol}
+                    activeOpacity={0.8}
+                    onPress={() => navigateToProductScreen()}
+                  >
                     <View style={styles.pinnedPartRow}>
                       <View style={styles.pinnedPartBadge}>
                         <Tag size={10.5} color="#D0142C" strokeWidth={2.4} />
@@ -654,16 +811,130 @@ const MyEnquiriesScreen = () => {
                         </Text>
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
 
                   <View style={styles.pinnedRightCol}>
-                    <View style={styles.viewSpecsPill}>
+                    <TouchableOpacity
+                      style={styles.viewPartPill}
+                      onPress={() => navigateToProductScreen()}
+                      activeOpacity={0.8}
+                    >
+                      <Car size={11} color="#FFFFFF" strokeWidth={2.2} />
+                      <Text style={styles.viewPartPillText}>Part</Text>
+                      <ChevronRight size={11} color="#FFFFFF" strokeWidth={2.4} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.viewSpecsPill}
+                      onPress={() => setSpecsModalVisible(true)}
+                      activeOpacity={0.8}
+                    >
                       <Wrench size={11} color="#D0142C" strokeWidth={2.2} />
                       <Text style={styles.viewSpecsPillText}>Specs</Text>
-                      <ChevronRight size={12} color="#D0142C" strokeWidth={2.4} />
-                    </View>
+                      <ChevronRight size={11} color="#D0142C" strokeWidth={2.4} />
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
+                </View>
+              );
+            })()}
+
+            {/* SNO 14-B: Partner Status Action Controls */}
+            {isWholesalerOrDealer && selectedTicket && (() => {
+              const effectiveStatus = selectedTicket.workflow_status || selectedTicket.part_reference?.workflow_status || selectedTicket.status || 'Pending';
+              const currentStatusBadge = getStatusBadge(effectiveStatus);
+              const normalizedStatus = (effectiveStatus || '').toLowerCase().replace(/[\s_-]+/g, '');
+              return (
+                <View style={styles.partnerStatusBar}>
+                  <View style={styles.partnerStatusHeaderRow}>
+                    <View style={styles.partnerStatusLabelGroup}>
+                      <Text style={styles.partnerStatusLabel}>STATUS:</Text>
+                      <View style={[styles.statusBadgePill, { backgroundColor: currentStatusBadge.bg }]}>
+                        <Text style={[styles.statusBadgePillText, { color: currentStatusBadge.color }]}>
+                          {currentStatusBadge.label}
+                        </Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.openStatusModalBtn}
+                      onPress={() => {
+                        setPendingStatusChoice(effectiveStatus);
+                        setShowStatusModal(true);
+                      }}
+                      activeOpacity={0.8}
+                    >
+                      <RotateCw size={11} color="#334155" />
+                      <Text style={styles.openStatusModalBtnText}>Change Status</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Direct One-Touch Shortcut Actions */}
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.partnerStatusButtonsScroll}>
+                    {/* 1. Quick Quote Sent */}
+                    {normalizedStatus !== 'quotesent' && (
+                      <TouchableOpacity
+                        style={[styles.statusActionBtn, { backgroundColor: '#EDE9FE', borderColor: '#DDD6FE' }]}
+                        onPress={() => handleUpdateStatus('QuoteSent', 'Price & availability quotation provided.')}
+                        disabled={updatingStatus}
+                        activeOpacity={0.8}
+                      >
+                        <Tag size={11} color="#6D28D9" />
+                        <Text style={[styles.statusActionBtnText, { color: '#6D28D9' }]}>Quote Sent</Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* 2. Quick Awaiting Stock */}
+                    {normalizedStatus !== 'awaitingstock' && (
+                      <TouchableOpacity
+                        style={[styles.statusActionBtn, { backgroundColor: '#FFEDD5', borderColor: '#FED7AA' }]}
+                        onPress={() => handleUpdateStatus('AwaitingStock', 'Parts on order from regional hub.')}
+                        disabled={updatingStatus}
+                        activeOpacity={0.8}
+                      >
+                        <Clock size={11} color="#C2410C" />
+                        <Text style={[styles.statusActionBtnText, { color: '#C2410C' }]}>Awaiting Stock</Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* 3. Quick In Progress */}
+                    {normalizedStatus !== 'inprogress' && (
+                      <TouchableOpacity
+                        style={[styles.statusActionBtn, { backgroundColor: '#DBEAFE', borderColor: '#BFDBFE' }]}
+                        onPress={() => handleUpdateStatus('InProgress')}
+                        disabled={updatingStatus}
+                        activeOpacity={0.8}
+                      >
+                        <TrendingUp size={11} color="#1D4ED8" />
+                        <Text style={[styles.statusActionBtnText, { color: '#1D4ED8' }]}>In Progress</Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* 4. Quick Resolve */}
+                    {normalizedStatus !== 'resolved' && (
+                      <TouchableOpacity
+                        style={[styles.statusActionBtn, { backgroundColor: '#D1FAE5', borderColor: '#A7F3D0' }]}
+                        onPress={() => handleUpdateStatus('Resolved', 'Inquiry answered and parts ready for pickup.')}
+                        disabled={updatingStatus}
+                        activeOpacity={0.8}
+                      >
+                        <CheckCircle2 size={11} color="#047857" />
+                        <Text style={[styles.statusActionBtnText, { color: '#047857' }]}>Resolved</Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* 5. Quick Close */}
+                    {normalizedStatus !== 'closed' && (
+                      <TouchableOpacity
+                        style={[styles.statusActionBtn, { backgroundColor: '#F1F5F9', borderColor: '#CBD5E1' }]}
+                        onPress={() => handleUpdateStatus('Closed', 'Ticket completed and archived.')}
+                        disabled={updatingStatus}
+                        activeOpacity={0.8}
+                      >
+                        <X size={11} color="#334155" />
+                        <Text style={[styles.statusActionBtnText, { color: '#334155' }]}>Close Ticket</Text>
+                      </TouchableOpacity>
+                    )}
+                  </ScrollView>
+                </View>
               );
             })()}
 
@@ -932,26 +1203,18 @@ const MyEnquiriesScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </Modal>
 
-      {/* =========================================================================
-          PRODUCT TECHNICAL SPECIFICATIONS MODAL (SLIDE OVERLAY)
-         ========================================================================= */}
-      <Modal
-        visible={specsModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setSpecsModalVisible(false)}
-      >
-        <View style={styles.specsModalBackdrop}>
-          <TouchableOpacity
-            style={styles.specsModalOverlayTap}
-            activeOpacity={1}
-            onPress={() => setSpecsModalVisible(false)}
-          />
-          <View style={styles.specsModalCard}>
+            {/* =========================================================================
+                PRODUCT TECHNICAL SPECIFICATIONS OVERLAY SHEET (IN-VIEW FOR 100% ANDROID RELIABILITY)
+               ========================================================================= */}
+            {specsModalVisible && (
+              <View style={[StyleSheet.absoluteFillObject, styles.specsModalBackdrop, { zIndex: 9999 }]}>
+                <TouchableOpacity
+                  style={styles.specsModalOverlayTap}
+                  activeOpacity={1}
+                  onPress={() => setSpecsModalVisible(false)}
+                />
+                <View style={styles.specsModalCard}>
             {/* Modal Drag Handle */}
             <View style={styles.specsDragHandleContainer}>
               <View style={styles.specsDragHandle} />
@@ -1087,7 +1350,7 @@ const MyEnquiriesScreen = () => {
                       <View style={styles.specsCell}>
                         <View style={styles.specsCellLabelRow}>
                           <Store size={9} color="#059669" />
-                          <Text style={styles.specsCellLabel}>STOCKIST / DEALER</Text>
+                          <Text style={styles.specsCellLabel}>RESELLER / DEALER</Text>
                         </View>
                         <Text style={styles.specsCellVal} numberOfLines={1}>
                           {info.dealerName}
@@ -1111,6 +1374,17 @@ const MyEnquiriesScreen = () => {
                     </View>
                   )}
 
+                  {/* Primary Action: Navigate to Product Screen & 3D Studio */}
+                  <TouchableOpacity
+                    style={styles.specsNavigateBtn}
+                    onPress={() => navigateToProductScreen()}
+                    activeOpacity={0.85}
+                  >
+                    <Car size={15} color="#FFFFFF" strokeWidth={2.4} />
+                    <Text style={styles.specsNavigateBtnText}>View Verified Product & 3D Studio</Text>
+                    <ChevronRight size={16} color="#FFFFFF" strokeWidth={2.4} />
+                  </TouchableOpacity>
+
                   {/* Return Button */}
                   <TouchableOpacity
                     style={styles.specsDismissBtn}
@@ -1124,6 +1398,99 @@ const MyEnquiriesScreen = () => {
             })()}
           </View>
         </View>
+      )}
+
+      {/* SNO 14-C: Partner Status Management Overlay Sheet */}
+      <Modal
+        visible={showStatusModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowStatusModal(false)}
+      >
+        <View style={styles.statusModalBackdrop}>
+          <TouchableOpacity
+            style={styles.specsModalOverlayTap}
+            activeOpacity={1}
+            onPress={() => setShowStatusModal(false)}
+          />
+          <View style={styles.statusModalCard}>
+            <View style={styles.statusModalHeader}>
+              <View>
+                <Text style={styles.statusModalTitle}>Update Inquiry Status</Text>
+                <Text style={styles.statusModalSubtitle}>Select workflow status for Ticket #{selectedTicket?.id}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.statusModalCloseBtn}
+                onPress={() => setShowStatusModal(false)}
+              >
+                <X size={16} color="#64748B" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 260 }} showsVerticalScrollIndicator={false}>
+              {STATUS_OPTIONS.map((opt) => {
+                const isSelected = pendingStatusChoice === opt.id;
+                return (
+                  <TouchableOpacity
+                    key={opt.id}
+                    style={[
+                      styles.statusOptionRow,
+                      isSelected && { backgroundColor: opt.bg, borderColor: opt.border, borderWidth: 1.5 }
+                    ]}
+                    onPress={() => setPendingStatusChoice(opt.id)}
+                    activeOpacity={0.7}
+                  >
+                    <View style={[styles.statusOptionRadio, isSelected && { borderColor: opt.color }]}>
+                      {isSelected && <View style={[styles.statusOptionRadioDot, { backgroundColor: opt.color }]} />}
+                    </View>
+                    <View style={{ flex: 1, marginLeft: 10 }}>
+                      <Text style={[styles.statusOptionLabel, isSelected && { color: opt.color, fontWeight: '800' }]}>
+                        {opt.label}
+                      </Text>
+                      <Text style={styles.statusOptionDesc}>{opt.desc}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            {/* Optional Status Note Input */}
+            <View style={styles.statusNoteBox}>
+              <Text style={styles.statusNoteLabel}>Optional Note for Customer / Audit:</Text>
+              <TextInput
+                style={styles.statusNoteInput}
+                placeholder="e.g. Quotation emailed or stock arriving tomorrow..."
+                placeholderTextColor="#94A3B8"
+                value={statusNoteText}
+                onChangeText={setStatusNoteText}
+              />
+            </View>
+
+            {/* Action Buttons */}
+            <View style={styles.statusModalActions}>
+              <TouchableOpacity
+                style={styles.statusModalCancelBtn}
+                onPress={() => setShowStatusModal(false)}
+              >
+                <Text style={styles.statusModalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.statusModalConfirmBtn}
+                disabled={updatingStatus}
+                onPress={() => handleUpdateStatus(pendingStatusChoice, statusNoteText)}
+              >
+                {updatingStatus ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.statusModalConfirmText}>Save Status</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
       </Modal>
     </SafeAreaView>
   );
@@ -1491,7 +1858,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#CBD5E1',
   },
   pinnedRightCol: {
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  viewPartPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3.5,
+    backgroundColor: '#D0142C',
+    paddingHorizontal: 8,
+    paddingVertical: 4.5,
+    borderRadius: 14,
+  },
+  viewPartPillText: {
+    fontSize: 10.5,
+    fontWeight: '800',
+    color: '#FFFFFF',
   },
   viewSpecsPill: {
     flexDirection: 'row',
@@ -1508,6 +1891,213 @@ const styles = StyleSheet.create({
     fontSize: 10.5,
     fontWeight: '800',
     color: '#D0142C',
+  },
+  partnerStatusBar: {
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
+  },
+  partnerStatusHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  partnerStatusLabelGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  partnerStatusLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#64748B',
+    letterSpacing: 0.5,
+  },
+  statusBadgePill: {
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
+    borderRadius: 8,
+  },
+  statusBadgePillText: {
+    fontSize: 10.5,
+    fontWeight: '800',
+  },
+  openStatusModalBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  openStatusModalBtnText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#334155',
+  },
+  partnerStatusButtonsScroll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingRight: 10,
+  },
+  statusActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 9,
+    paddingVertical: 4.5,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  statusActionBtnText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+  },
+
+  // SNO 14-C: Status Management Overlay Sheet Styles
+  statusModalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    justifyContent: 'flex-end',
+  },
+  statusModalCard: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    paddingHorizontal: 18,
+    paddingTop: 16,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 20,
+  },
+  statusModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  statusModalTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#0F172A',
+  },
+  statusModalSubtitle: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#64748B',
+    marginTop: 2,
+  },
+  statusModalCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F1F5F9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusOptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginBottom: 7,
+  },
+  statusOptionRadio: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
+    borderColor: '#94A3B8',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusOptionRadioDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  statusOptionLabel: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#1E293B',
+  },
+  statusOptionDesc: {
+    fontSize: 10.5,
+    fontWeight: '500',
+    color: '#64748B',
+    marginTop: 1,
+  },
+  statusNoteBox: {
+    marginTop: 8,
+    marginBottom: 14,
+  },
+  statusNoteLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#475569',
+    marginBottom: 5,
+  },
+  statusNoteInput: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 12,
+    color: '#0F172A',
+  },
+  statusModalActions: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  statusModalCancelBtn: {
+    flex: 1,
+    paddingVertical: 11,
+    borderRadius: 10,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusModalCancelText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  statusModalConfirmBtn: {
+    flex: 2,
+    paddingVertical: 11,
+    borderRadius: 10,
+    backgroundColor: '#D0142C',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusModalConfirmText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFFFFF',
   },
 
   // Specifications Sheet Modal
@@ -1706,13 +2296,35 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontStyle: 'italic',
   },
+  specsNavigateBtn: {
+    backgroundColor: '#D0142C',
+    borderRadius: 9,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 10,
+    shadowColor: '#D0142C',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  specsNavigateBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 0.2,
+  },
   specsDismissBtn: {
     backgroundColor: '#0F172A',
     borderRadius: 9,
     paddingVertical: 11,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 4,
+    marginTop: 8,
   },
   specsDismissBtnText: {
     fontSize: 13,

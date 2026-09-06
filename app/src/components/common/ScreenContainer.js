@@ -48,9 +48,9 @@ const ScreenContainer = ({
         />
       )}
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
-        keyboardVerticalOffset={keyboardVerticalOffset}
+        keyboardVerticalOffset={keyboardVerticalOffset || (Platform.OS === 'ios' ? 0 : 24)}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View

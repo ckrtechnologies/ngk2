@@ -160,7 +160,7 @@ class AuthService {
 
     return {
       email: cleanEmail,
-      otp: ENV.NODE_ENV === 'development' ? otp : undefined,
+      otp: otp,
       expiresAt,
       message: 'OTP sent successfully to your email address',
     };
@@ -209,9 +209,10 @@ class AuthService {
   /**
    * Reset password with reset token or direct email match
    */
-  async updatePassword({ email, password }) {
-    if (!email || !password) throw new Error('Email and new password are required');
-    if (password.length < 6) throw new Error('Password must be at least 6 characters');
+  async updatePassword({ email, password, newPassword }) {
+    const targetPassword = password || newPassword;
+    if (!email || !targetPassword) throw new Error('Email and new password are required');
+    if (targetPassword.length < 6) throw new Error('Password must be at least 6 characters');
 
     const cleanEmail = email.toLowerCase().trim();
     const { data: users } = await supabase.from('users').select('id').eq('email', cleanEmail);
@@ -220,7 +221,7 @@ class AuthService {
       throw new Error('User not found');
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(targetPassword, 10);
 
     const { data: updated, error } = await supabase
       .from('users')

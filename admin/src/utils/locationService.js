@@ -13,6 +13,74 @@ export const SOUTH_AFRICA_CITY_PRESETS = [
 ];
 
 /**
+ * Intelligent City / Locality Extractor (Global Support, No Dummy Fallbacks)
+ */
+export const extractCityFromAddress = (addr, displayName = '') => {
+  if (addr && typeof addr === 'object') {
+    const candidate =
+      addr.city ||
+      addr.town ||
+      addr.municipality ||
+      addr.suburb ||
+      addr.village ||
+      addr.hamlet ||
+      addr.county ||
+      addr.state_district ||
+      addr.state;
+    if (candidate) return candidate.trim();
+  }
+
+  if (displayName && typeof displayName === 'string') {
+    const parts = displayName.split(',').map((p) => p.trim());
+    if (parts.length > 2) return parts[1];
+    if (parts.length > 1) return parts[0];
+  }
+
+  return '';
+};
+
+/**
+ * Search Address Suggestions (Live Autocomplete for Address Picker)
+ */
+export const searchAddressSuggestions = async (queryText) => {
+  if (!queryText || queryText.trim().length < 2) return [];
+  const clean = queryText.trim();
+
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(clean)}&limit=6`;
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'NGKApp/1.0 (support@ngk.com)',
+        'Accept-Language': 'en',
+      },
+    });
+    const data = await res.json();
+
+    if (!Array.isArray(data)) return [];
+
+    return data.map((item) => {
+      const addr = item.address || {};
+      const city = extractCityFromAddress(addr, item.display_name);
+      const road = addr.road || addr.pedestrian || addr.suburb || '';
+      const area = [road, city].filter(Boolean).join(', ') || item.display_name.split(',')[0];
+
+      return {
+        address: item.display_name,
+        city: city || (item.display_name.split(',')[0] || '').trim(),
+        latitude: parseFloat(item.lat),
+        longitude: parseFloat(item.lon),
+        primaryText: area,
+        secondaryText: item.display_name,
+        country: addr.country || '',
+      };
+    });
+  } catch (err) {
+    console.warn('Address autocomplete search error:', err.message);
+    return [];
+  }
+};
+
+/**
  * Reverse geocode coordinates to human-readable address & city
  */
 export const reverseGeocode = async (lat, lon) => {
@@ -25,7 +93,7 @@ export const reverseGeocode = async (lat, lon) => {
     if (data && data.success && data.formattedAddress) {
       return {
         address: data.formattedAddress,
-        city: data.city || 'Johannesburg',
+        city: data.city || extractCityFromAddress(null, data.formattedAddress),
         latitude: parseFloat(lat),
         longitude: parseFloat(lon),
       };
@@ -35,15 +103,20 @@ export const reverseGeocode = async (lat, lon) => {
   }
 
   // 2. Direct Nominatim fallback
-  const directUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
-  const directRes = await fetch(directUrl);
+  const directUrl = `https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+  const directRes = await fetch(directUrl, {
+    headers: {
+      'User-Agent': 'NGKApp/1.0 (support@ngk.com)',
+      'Accept-Language': 'en',
+    },
+  });
   const directData = await directRes.json();
   if (!directData || !directData.display_name) {
     throw new Error('Address not found for these coordinates');
   }
 
   const addr = directData.address || {};
-  const city = addr.city || addr.town || addr.municipality || addr.suburb || 'Johannesburg';
+  const city = extractCityFromAddress(addr, directData.display_name);
 
   return {
     address: directData.display_name,
@@ -69,6 +142,7 @@ export const geocodeAddress = async (addressText) => {
         latitude: parseFloat(data.latitude),
         longitude: parseFloat(data.longitude),
         formattedAddress: data.formattedAddress || clean,
+        city: data.city || extractCityFromAddress(null, data.formattedAddress || clean),
       };
     }
   } catch {
@@ -76,32 +150,26 @@ export const geocodeAddress = async (addressText) => {
   }
 
   // 2. Direct Nominatim fallback
-  const directUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(clean)}&countrycodes=za&limit=1`;
-  const directRes = await fetch(directUrl);
-  const directData = await directRes.json();
-  if (directData && directData.length > 0) {
-    const item = directData[0];
-    return {
-      latitude: parseFloat(item.lat),
-      longitude: parseFloat(item.lon),
-      formattedAddress: item.display_name,
-    };
-  }
-
-  // Fallback search without country filter
-  const fbUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(clean)}&limit=1`;
-  const fbRes = await fetch(fbUrl);
+  const fbUrl = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(clean)}&limit=1`;
+  const fbRes = await fetch(fbUrl, {
+    headers: {
+      'User-Agent': 'NGKApp/1.0 (support@ngk.com)',
+      'Accept-Language': 'en',
+    },
+  });
   const fbData = await fbRes.json();
   if (fbData && fbData.length > 0) {
     const item = fbData[0];
+    const city = extractCityFromAddress(item.address, item.display_name);
     return {
       latitude: parseFloat(item.lat),
       longitude: parseFloat(item.lon),
       formattedAddress: item.display_name,
+      city,
     };
   }
 
-  throw new Error('Could not find coordinates for this address. Please verify or use city presets.');
+  throw new Error('Could not find coordinates for this address. Please verify address details.');
 };
 
 /**
@@ -121,12 +189,12 @@ export const detectCurrentLocation = () => {
           const result = await reverseGeocode(latitude, longitude);
           resolve(result);
         } catch {
-          // If reverse geocoding fails, return raw coordinates
+          // If reverse geocoding fails, return raw coordinates without dummy city
           resolve({
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
             address: `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`,
-            city: 'Johannesburg',
+            city: '',
           });
         }
       },
