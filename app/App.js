@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
@@ -16,15 +17,26 @@ const App = () => {
       <Provider store={store}>
         <AuthProvider>
           <SafeAreaProvider>
-            <NavigationContainer ref={navigationRef}>
-              <RootNavigator />
-            </NavigationContainer>
-            <AppModal />
+            <KeyboardAvoidingView
+              style={styles.rootAvoid}
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            >
+              <NavigationContainer ref={navigationRef}>
+                <RootNavigator />
+              </NavigationContainer>
+              <AppModal />
+            </KeyboardAvoidingView>
           </SafeAreaProvider>
         </AuthProvider>
       </Provider>
     </ErrorBoundary>
   );
 };
+
+const styles = StyleSheet.create({
+  rootAvoid: {
+    flex: 1,
+  },
+});
 
 export default App;
