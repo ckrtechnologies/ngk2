@@ -35,21 +35,21 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { apiFunction } from '../apis/apiFunction';
+import { apiFunction } from '../../../apis/apiFunction';
 import {
   serviceJsonApi,
   addSearchHistoryApi,
   vehiclesApi,
   popularBrandsApi,
   articlesByPartApi,
-} from '../apis/api';
-import { getMyselfRedux } from '../redux/getData';
+} from '../../../apis/api';
+import { getMyselfRedux } from '../../../redux/getData';
 import Toast from 'react-native-toast-message';
-import AppHeader from '../components/common/AppHeader';
-import AppButton from '../components/common/AppButton';
-import AppInput from '../components/common/AppInput';
-import JourneyStepIndicator from '../components/common/JourneyStepIndicator';
-import BrandLogoCard from '../components/parts/BrandLogoCard';
+import AppHeader from '../../../components/common/AppHeader';
+import AppButton from '../../../components/common/AppButton';
+import AppInput from '../../../components/common/AppInput';
+import JourneyStepIndicator from '../../../components/common/JourneyStepIndicator';
+import BrandLogoCard from '../../../components/parts/BrandLogoCard';
 const DEFAULT_POPULAR_BRANDS = {
   passenger: [
     { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/toyota.png' },
@@ -550,8 +550,7 @@ const PartsFinderScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <SafeAreaView
+    <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -1074,7 +1073,6 @@ const PartsFinderScreen = () => {
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 };
 

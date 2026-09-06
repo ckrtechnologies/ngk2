@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { User, Mail, Lock, MapPin, Eye, EyeOff, Navigation as NavigationIcon } from 'lucide-react-native';
-import { apiFunction } from '../apis/apiFunction';
-import { registerApi } from '../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import { registerApi } from '../../../apis/api';
 import Toast from 'react-native-toast-message';
-import ScreenContainer from '../components/common/ScreenContainer';
-import AppHeader from '../components/common/AppHeader';
-import AppInput from '../components/common/AppInput';
-import AppButton from '../components/common/AppButton';
+import ScreenContainer from '../../../components/common/ScreenContainer';
+import AppHeader from '../../../components/common/AppHeader';
+import AppInput from '../../../components/common/AppInput';
+import AppButton from '../../../components/common/AppButton';
 
 const RegisterScreen = ({ route, navigation }) => {
   const role = route?.params?.role || 'owner';

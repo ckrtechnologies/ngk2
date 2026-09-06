@@ -15,7 +15,7 @@ import {
   OwnerRole3DIcon,
   ResellerRole3DIcon,
   DistributorRole3DIcon,
-} from '../components/icons/HomeIcons';
+} from '../../../components/icons/HomeIcons';
 
 const RoleSelectionScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -90,7 +90,7 @@ const RoleSelectionScreen = ({ navigation }) => {
       <View style={[styles.solidHeader, { paddingTop: insets.top + 20 }]}>
         <View style={styles.headerBrandingPill}>
           <Image
-            source={require('../assets/images/logo_cropped.png')}
+            source={require('../../../assets/images/logo_cropped.png')}
             style={styles.headerLogo}
             resizeMode="contain"
           />

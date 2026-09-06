@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   UserGroupIcon,
-  BuildingStorefrontIcon,
   MagnifyingGlassIcon,
   ChatBubbleBottomCenterTextIcon,
   ArrowRightOnRectangleIcon,
@@ -14,9 +13,8 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const { enquiries } = useSelector((state) => state.admin);
 
-  const pendingEnquiriesCount = (enquiries || []).filter(
-    (e) => (e.status || '').toLowerCase() === 'pending'
-  ).length;
+  const pendingEnquiriesCount =
+    enquiries?.filter((e) => e.status === 'open' || e.status === 'pending')?.length || 0;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -31,12 +29,7 @@ const Sidebar = () => {
           path: '/users',
           icon: UserGroupIcon,
           description: 'Accounts, Garages & Roles',
-        },
-        {
-          name: 'Resellers & Stockists',
-          path: '/dealers',
-          icon: BuildingStorefrontIcon,
-          description: 'Approved Dealer Network',
+          colorClass: 'text-blue-400 bg-blue-500/10 group-hover:bg-blue-500/20 group-hover:text-blue-300',
         },
       ],
     },
@@ -48,6 +41,7 @@ const Sidebar = () => {
           path: '/parts',
           icon: MagnifyingGlassIcon,
           description: 'Pegasus 3.0 Database',
+          colorClass: 'text-purple-400 bg-purple-500/10 group-hover:bg-purple-500/20 group-hover:text-purple-300',
         },
       ],
     },
@@ -60,6 +54,7 @@ const Sidebar = () => {
           icon: ChatBubbleBottomCenterTextIcon,
           badge: pendingEnquiriesCount > 0 ? pendingEnquiriesCount : null,
           description: 'Buyer-to-Seller Audit Log',
+          colorClass: 'text-orange-400 bg-orange-500/10 group-hover:bg-orange-500/20 group-hover:text-orange-300',
         },
       ],
     },
@@ -114,7 +109,7 @@ const Sidebar = () => {
                             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                               isActive
                                 ? 'bg-white/20 text-white'
-                                : 'bg-slate-800 text-slate-400 group-hover:text-white group-hover:bg-slate-700'
+                                : item.colorClass
                             }`}
                           >
                             <Icon className="w-4 h-4" />

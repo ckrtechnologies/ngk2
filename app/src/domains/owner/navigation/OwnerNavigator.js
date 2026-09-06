@@ -3,18 +3,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import OwnerTabNavigator from './OwnerTabNavigator';
 import OwnerProfileScreen from '../screens/OwnerProfileScreen';
-import MyGarageScreen from '../../../screens/MyGarageScreen';
-import PartsFinderScreen from '../../../screens/PartsFinderScreen';
-import VerifiedPartsScreen from '../../../screens/VerifiedPartsScreen';
-import TechnicalEnquiryScreen from '../../../screens/TechnicalEnquiryScreen';
-import MyEnquiriesScreen from '../../../screens/MyEnquiriesScreen';
-import DealerLocatorScreen from '../../../screens/DealerLocatorScreen';
-import MyFavoritesScreen from '../../../screens/MyFavoritesScreen';
-import Notification from '../../../screens/Notification';
-import VehiclesListScreen from '../../../screens/vehiclesListScreen';
-import ModalsScreen from '../../../screens/modalsScreen';
-import SuccessScreen from '../../../screens/SuccessScreen';
-import CustomDrawer from '../../../screens/CustomDrawer';
+import MyGarageScreen from '../screens/MyGarageScreen';
+import PartsFinderScreen from '../../shared/screens/PartsFinderScreen';
+import VerifiedPartsScreen from '../../shared/screens/VerifiedPartsScreen';
+import TechnicalEnquiryScreen from '../../shared/screens/TechnicalEnquiryScreen';
+import MyEnquiriesScreen from '../../shared/screens/MyEnquiriesScreen';
+import DealerLocatorScreen from '../../shared/screens/DealerLocatorScreen';
+import MyFavoritesScreen from '../screens/MyFavoritesScreen';
+import Notification from '../../shared/screens/Notification';
+import VehiclesListScreen from '../../shared/screens/vehiclesListScreen';
+import ModalsScreen from '../../shared/screens/modalsScreen';
+import SuccessScreen from '../../shared/screens/SuccessScreen';
+import CustomDrawer from '../../shared/screens/CustomDrawer';
 
 const Stack = createNativeStackNavigator();
 

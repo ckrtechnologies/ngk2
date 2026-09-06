@@ -16,11 +16,11 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { ChevronLeft, Search, Car, ChevronRight, X } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiFunction } from '../apis/apiFunction';
-import { addVehicleToGarageApi, serviceJsonApi } from '../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import { addVehicleToGarageApi, serviceJsonApi } from '../../../apis/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import AppHeader from '../components/common/AppHeader';
+import AppHeader from '../../../components/common/AppHeader';
 
 const ModalsScreen = () => {
     const navigation = useNavigation();
@@ -129,57 +129,55 @@ const ModalsScreen = () => {
     };
 
     return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.container}>
-            <AppHeader
-                title={`Models for ${mfrName || 'Vehicle'}`}
-                subtitle="Select vehicle series"
-                onBack={() => navigation.goBack()}
-            />
+        <AppHeader
+          title={`Models for ${mfrName || 'Vehicle'}`}
+          subtitle="Select vehicle series"
+          onBack={() => navigation.goBack()}
+        />
 
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                style={{ flex: 1 }}
-            >
-                {/* Search Bar Container */}
-                <View style={styles.searchContainer}>
-                    <View style={styles.searchBox}>
-                        <Search color="#8E8E8E" size={wp('5%')} style={styles.searchIcon} />
-                        <TextInput
-                            style={styles.searchInput}
-                            placeholder="Search models..."
-                            placeholderTextColor="#8E8E8E"
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
-                            returnKeyType="done"
-                        />
-                        {searchQuery.length > 0 && (
-                            <TouchableOpacity onPress={clearSearch} style={{ padding: wp('2%') }}>
-                                <X color="#8E8E8E" size={wp('5%')} />
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          {/* Search Bar Container */}
+          <View style={styles.searchContainer}>
+            <View style={styles.searchBox}>
+              <Search color="#8E8E8E" size={wp('5%')} style={styles.searchIcon} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search models..."
+                placeholderTextColor="#8E8E8E"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                returnKeyType="done"
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity onPress={clearSearch} style={{ padding: wp('2%') }}>
+                  <X color="#8E8E8E" size={wp('5%')} />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
 
-                {/* List */}
-                <FlatList
-                    data={filteredModels}
-                    keyExtractor={(item, index) => item.modelId?.toString() || item.id?.toString() || index.toString()}
-                    renderItem={renderModelItem}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={
-                        <View style={styles.emptyContainer}>
-                            <Text style={styles.emptyText}>
-                                {loading ? "Loading models..." : "No models found."}
-                            </Text>
-                        </View>
-                    }
-                />
-            </KeyboardAvoidingView>
-        </View>
-    </KeyboardAvoidingView>
-  );
+          {/* List */}
+          <FlatList
+            data={filteredModels}
+            keyExtractor={(item, index) => item.modelId?.toString() || item.id?.toString() || index.toString()}
+            renderItem={renderModelItem}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>
+                  {loading ? "Loading models..." : "No models found."}
+                </Text>
+              </View>
+            }
+          />
+        </KeyboardAvoidingView>
+      </View>
+    );
 };
 
 const styles = StyleSheet.create({

@@ -13,12 +13,12 @@ import {
 import { Mail, Lock, Eye, EyeOff, ChevronLeft } from 'lucide-react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { apiFunction } from '../apis/apiFunction';
-import { loginApi } from '../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import { loginApi } from '../../../apis/api';
 import Toast from 'react-native-toast-message';
-import AppInput from '../components/common/AppInput';
-import AppButton from '../components/common/AppButton';
-import { useAuth } from '../core/auth/useAuth';
+import AppInput from '../../../components/common/AppInput';
+import AppButton from '../../../components/common/AppButton';
+import { useAuth } from '../../../core/auth/useAuth';
 
 const LoginScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
@@ -141,124 +141,127 @@ const LoginScreen = ({ route, navigation }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
+        <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
 
-      {/* TOP 35% DARK HEADER SECTION */}
-      <View style={[styles.darkHeaderSection, { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) }]}>
-        {/* Navigation Bar Row */}
-        <View style={styles.navRow}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.7}
-          >
-            <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
-          </TouchableOpacity>
+        <ScrollView
+          style={styles.mainScrollView}
+          contentContainerStyle={styles.scrollMainContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          bounces={false}
+        >
+          {/* TOP DARK HEADER SECTION */}
+          <View style={[styles.darkHeaderSection, { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) }]}>
+            {/* Navigation Bar Row */}
+            <View style={styles.navRow}>
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+                activeOpacity={0.7}
+              >
+                <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
+              </TouchableOpacity>
 
-          <View style={styles.headerBadgeContainer}>
-            <View style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}>
-              <Text style={[styles.badgePillText, { color: roleConfig.badgeColor }]}>
-                {roleConfig.badgeText}
-              </Text>
+              <View style={styles.headerBadgeContainer}>
+                <View style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}>
+                  <Text style={[styles.badgePillText, { color: roleConfig.badgeColor }]}>
+                    {roleConfig.badgeText}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={{ width: 40 }} />
+            </View>
+
+            {/* Center Brand Identity */}
+            <View style={styles.headerHeroBox}>
+              <View style={styles.logoCapsule}>
+                <Image
+                  source={require('../../../assets/images/logo_cropped.png')}
+                  style={styles.brandLogo}
+                  resizeMode="contain"
+                />
+              </View>
+              <Text style={styles.heroTitle}>{roleConfig.title}</Text>
+              <Text style={styles.heroSubtitle}>{roleConfig.subtitle}</Text>
             </View>
           </View>
 
-          <View style={{ width: 40 }} />
-        </View>
+          {/* LOWER FORM SECTION WITH CURVED WHITE SHEET */}
+          <View style={styles.formSection}>
+            <View style={styles.formCard}>
+              <AppInput
+                label="Email Address"
+                placeholder={roleConfig.emailPlaceholder}
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                leftIcon={<Mail size={18} color="#64748B" />}
+                error={errors.email}
+              />
 
-        {/* Center Brand Identity */}
-        <View style={styles.headerHeroBox}>
-          <View style={styles.logoCapsule}>
-            <Image
-              source={require('../assets/images/logo_cropped.png')}
-              style={styles.brandLogo}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={styles.heroTitle}>{roleConfig.title}</Text>
-          <Text style={styles.heroSubtitle}>{roleConfig.subtitle}</Text>
-        </View>
-      </View>
+              <AppInput
+                label="Password"
+                placeholder="••••••••"
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (errors.password)
+                    setErrors((prev) => ({ ...prev, password: null }));
+                }}
+                secureTextEntry={!showPassword}
+                leftIcon={<Lock size={18} color="#64748B" />}
+                rightIcon={
+                  showPassword ? (
+                    <Eye size={18} color="#475569" />
+                  ) : (
+                    <EyeOff size={18} color="#475569" />
+                  )
+                }
+                onRightIconPress={() => setShowPassword((prev) => !prev)}
+                rightActionText="Forgot?"
+                rightActionColor={roleConfig.buttonColor}
+                onRightActionPress={() =>
+                  navigation.navigate('ForgotPassword', { role })
+                }
+                error={errors.password}
+              />
 
-      {/* LOWER 65% FORM SECTION WITH CURVED WHITE SHEET */}
-      <View style={styles.formSection}>
-        <ScrollView
-          contentContainerStyle={styles.scrollFormContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.formCard}>
-            <AppInput
-              label="Email Address"
-              placeholder={roleConfig.emailPlaceholder}
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              leftIcon={<Mail size={18} color="#64748B" />}
-              error={errors.email}
-            />
+              <AppButton
+                title="Sign In"
+                onPress={handleLogin}
+                loading={loading}
+                backgroundColor={roleConfig.buttonColor}
+                style={styles.submitBtn}
+              />
+            </View>
 
-            <AppInput
-              label="Password"
-              placeholder="••••••••"
-              value={password}
-              onChangeText={(text) => {
-                setPassword(text);
-                if (errors.password)
-                  setErrors((prev) => ({ ...prev, password: null }));
-              }}
-              secureTextEntry={!showPassword}
-              leftIcon={<Lock size={18} color="#64748B" />}
-              rightIcon={
-                showPassword ? (
-                  <Eye size={18} color="#475569" />
-                ) : (
-                  <EyeOff size={18} color="#475569" />
-                )
-              }
-              onRightIconPress={() => setShowPassword((prev) => !prev)}
-              rightActionText="Forgot?"
-              rightActionColor={roleConfig.buttonColor}
-              onRightActionPress={() =>
-                navigation.navigate('ForgotPassword', { role })
-              }
-              error={errors.password}
-            />
-
-            <AppButton
-              title="Sign In"
-              onPress={handleLogin}
-              loading={loading}
-              backgroundColor={roleConfig.buttonColor}
-              style={styles.submitBtn}
-            />
-          </View>
-
-          {/* Footer & Registration */}
-          <View style={styles.footerContainer}>
-            {roleConfig.showRegister && (
-              <TouchableOpacity
-                style={styles.registerRow}
-                activeOpacity={0.7}
-                onPress={() => navigation.navigate('Register', { role })}
-              >
-                <Text style={styles.registerPrompt}>Don't have an account? </Text>
-                <Text style={[styles.registerLink, { color: roleConfig.buttonColor }]}>
-                  Register
-                </Text>
-              </TouchableOpacity>
-            )}
-            <Text style={styles.copyrightText}>
-              Protected by NGK Technical Security System • 2026
-            </Text>
+            {/* Footer & Registration */}
+            <View style={styles.footerContainer}>
+              {roleConfig.showRegister && (
+                <TouchableOpacity
+                  style={styles.registerRow}
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate('Register', { role })}
+                >
+                  <Text style={styles.registerPrompt}>Don't have an account? </Text>
+                  <Text style={[styles.registerLink, { color: roleConfig.buttonColor }]}>
+                    Register
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <Text style={styles.copyrightText}>
+                Protected by NGK Technical Security System • 2026
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </View>
-        </View>
     </KeyboardAvoidingView>
   );
 };
@@ -268,13 +271,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0F121C',
   },
+  mainScrollView: {
+    flex: 1,
+    backgroundColor: '#0F121C',
+  },
+  scrollMainContent: {
+    flexGrow: 1,
+    backgroundColor: '#0F121C',
+  },
   darkHeaderSection: {
-    height: hp('35%'),
-    minHeight: 250,
+    minHeight: 220,
     backgroundColor: '#0F121C',
     paddingHorizontal: 20,
     justifyContent: 'space-between',
-    paddingBottom: 32,
+    paddingBottom: 24,
   },
   navRow: {
     flexDirection: 'row',
@@ -352,18 +362,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     marginTop: -20,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 36,
+    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 8,
-  },
-  scrollFormContent: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 28,
-    flexGrow: 1,
-    justifyContent: 'space-between',
   },
   formCard: {
     width: '100%',

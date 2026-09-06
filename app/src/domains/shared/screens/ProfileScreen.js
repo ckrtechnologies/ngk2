@@ -39,7 +39,7 @@ import {
   getEnquiryRedux,
   updateUserRedux,
   deleteUserRedux,
-} from '../redux/getData';
+} from '../../../redux/getData';
 import Toast from 'react-native-toast-message';
 
 export default function ProfileScreen({ navigation }) {
@@ -228,8 +228,7 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
 
       {/* Solid Crimson Header */}
@@ -636,7 +635,6 @@ export default function ProfileScreen({ navigation }) {
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 }
 

@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { X, ChevronRight } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyselfRedux } from '../redux/getData';
+import { getMyselfRedux } from '../../../redux/getData';
 import {
   HomeDashboard3DIcon,
   FindParts3DIcon,
@@ -20,9 +20,9 @@ import {
   DealerLocator3DIcon,
   Profile3DIcon,
   DrawerSignOut3DIcon,
-} from '../components/icons/HomeIcons';
+} from '../../../components/icons/HomeIcons';
 
-import { useAuth } from '../core/auth/useAuth';
+import { useAuth } from '../../../core/auth/useAuth';
 
 export default function CustomDrawer({ navigation }) {
   const dispatch = useDispatch();

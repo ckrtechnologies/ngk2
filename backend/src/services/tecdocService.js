@@ -618,15 +618,21 @@ class TecDocService {
       const title = a.articleName || genericDesc || a.mfrName || a.dataSupplierName || 'Automotive Component';
       const partNumber = a.articleNo || a.articleNumber || a.directArticle?.articleNo || a.partNumber || '';
 
-      const specs = a.specs || [];
+      const specs = [...(a.specs || [])];
       if (specs.length === 0) {
-        if (a.articleCriteria && Array.isArray(a.articleCriteria)) {
-          a.articleCriteria.forEach((c) => {
-            specs.push({ label: c.criteriaDescription, value: c.formattedValue || c.rawValue });
-          });
-        } else if (a.articleAttributes?.array) {
-          a.articleAttributes.array.forEach((attr) => {
-            specs.push({ label: attr.attrName, value: attr.attrValue });
+        const rawCriteria =
+          (Array.isArray(a.articleCriteria) ? a.articleCriteria : a.articleCriteria?.array) ||
+          (Array.isArray(a.directArticle?.articleCriteria) ? a.directArticle?.articleCriteria : a.directArticle?.articleCriteria?.array) ||
+          (Array.isArray(a.articleAttributes?.array) ? a.articleAttributes.array : (Array.isArray(a.articleAttributes) ? a.articleAttributes : [])) ||
+          (Array.isArray(a.immediateAttributs?.array) ? a.immediateAttributs.array : []);
+
+        if (Array.isArray(rawCriteria) && rawCriteria.length > 0) {
+          rawCriteria.forEach((c) => {
+            const label = c.criteriaDescription || c.criteriaName || c.label || c.attrName || c.name || '';
+            const val = c.formattedValue || c.rawValue || c.value || c.attrValue || '';
+            if (label && val && val !== '-') {
+              specs.push({ label, value: val });
+            }
           });
         }
       }

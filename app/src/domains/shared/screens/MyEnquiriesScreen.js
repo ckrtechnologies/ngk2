@@ -46,10 +46,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { getEnquiryRedux } from '../redux/getData';
-import { apiFunction } from '../apis/apiFunction';
-import { addEnquiryMessageApi, updateEnquiryStatusApi } from '../apis/api';
-import AppHeader from '../components/common/AppHeader';
+import { getEnquiryRedux } from '../../../redux/getData';
+import { apiFunction } from '../../../apis/apiFunction';
+import { addEnquiryMessageApi, updateEnquiryStatusApi } from '../../../apis/api';
+import AppHeader from '../../../components/common/AppHeader';
 
 const MyEnquiriesScreen = () => {
   const navigation = useNavigation();
@@ -511,8 +511,7 @@ const MyEnquiriesScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <AppHeader
         title={isWholesalerOrDealer ? 'Inquiry Leads' : 'Technical Enquiries'}
         subtitle={`${enquiry?.length || 0} Total Requests`}
@@ -699,7 +698,7 @@ const MyEnquiriesScreen = () => {
       >
         <SafeAreaView style={styles.fullScreenConvSafeArea} edges={['top', 'bottom', 'left', 'right']}>
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={styles.fullScreenConvContainer}
           >
             {/* Top Native Crimson Header */}
@@ -1494,7 +1493,6 @@ const MyEnquiriesScreen = () => {
         </SafeAreaView>
       </Modal>
     </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 };
 

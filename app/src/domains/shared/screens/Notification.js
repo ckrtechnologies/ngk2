@@ -22,13 +22,13 @@ import {
   Store,
   ChevronRight,
 } from 'lucide-react-native';
-import NotificationsEmptyIllustration from '../components/icons/NotificationsEmptyIllustration';
+import NotificationsEmptyIllustration from '../../../components/icons/NotificationsEmptyIllustration';
 import { useNavigation } from '@react-navigation/native';
-import { getMyselfRedux } from '../redux/getData';
-import { apiFunction } from '../apis/apiFunction';
-import { readNotificationsApi } from '../apis/api';
+import { getMyselfRedux } from '../../../redux/getData';
+import { apiFunction } from '../../../apis/apiFunction';
+import { readNotificationsApi } from '../../../apis/api';
 import Toast from 'react-native-toast-message';
-import AppHeader from '../components/common/AppHeader';
+import AppHeader from '../../../components/common/AppHeader';
 
 const Notification = () => {
   const navigation = useNavigation();

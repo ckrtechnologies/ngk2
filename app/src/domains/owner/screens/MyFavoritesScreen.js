@@ -17,10 +17,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { getMyselfRedux, setPart } from '../redux/getData';
-import { removeFromWatchlistApi } from '../apis/api';
-import { apiFunction } from '../apis/apiFunction';
-import AppHeader from '../components/common/AppHeader';
+import { getMyselfRedux, setPart } from '../../../redux/getData';
+import { removeFromWatchlistApi } from '../../../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import AppHeader from '../../../components/common/AppHeader';
 
 const MyFavoritesScreen = () => {
   const navigation = useNavigation();

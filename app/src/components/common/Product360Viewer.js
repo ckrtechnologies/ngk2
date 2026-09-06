@@ -504,6 +504,7 @@ const Product360Viewer = ({
               >
                 {isStatic ? (
                   <Image
+                    key={`static-${staticImageUrl || gifUrl || 'img'}`}
                     source={staticSource || (staticImageUrl ? { uri: staticImageUrl } : { uri: gifUrl })}
                     style={styles.frameImage}
                     resizeMode="contain"

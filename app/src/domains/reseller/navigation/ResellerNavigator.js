@@ -1,15 +1,15 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ResellerHomeScreen from '../../../screens/Reseller/ResellerHome';
+import ResellerHomeScreen from '../screens/ResellerHome';
 import ResellerProfileScreen from '../screens/ResellerProfileScreen';
-import PartsFinderScreen from '../../../screens/PartsFinderScreen';
-import VerifiedPartsScreen from '../../../screens/VerifiedPartsScreen';
-import TechnicalEnquiryScreen from '../../../screens/TechnicalEnquiryScreen';
-import MyEnquiriesScreen from '../../../screens/MyEnquiriesScreen';
-import DealerLocatorScreen from '../../../screens/DealerLocatorScreen';
-import CustomDrawer from '../../../screens/CustomDrawer';
-import NotificationScreen from '../../../screens/Notification';
+import PartsFinderScreen from '../../shared/screens/PartsFinderScreen';
+import VerifiedPartsScreen from '../../shared/screens/VerifiedPartsScreen';
+import TechnicalEnquiryScreen from '../../shared/screens/TechnicalEnquiryScreen';
+import MyEnquiriesScreen from '../../shared/screens/MyEnquiriesScreen';
+import DealerLocatorScreen from '../../shared/screens/DealerLocatorScreen';
+import CustomDrawer from '../../shared/screens/CustomDrawer';
+import NotificationScreen from '../../shared/screens/Notification';
 
 const Stack = createNativeStackNavigator();
 

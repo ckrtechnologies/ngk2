@@ -12,10 +12,10 @@ import {
   DealersTabIcon,
 } from '../../../components/icons/NavigationTabIcons';
 
-import OwnerHomeScreen from '../../../screens/OwnerHomeScreen';
-import PartsFinderScreen from '../../../screens/PartsFinderScreen';
-import MyEnquiriesScreen from '../../../screens/MyEnquiriesScreen';
-import DealerLocatorScreen from '../../../screens/DealerLocatorScreen';
+import OwnerHomeScreen from '../screens/OwnerHomeScreen';
+import PartsFinderScreen from '../../shared/screens/PartsFinderScreen';
+import MyEnquiriesScreen from '../../shared/screens/MyEnquiriesScreen';
+import DealerLocatorScreen from '../../shared/screens/DealerLocatorScreen';
 
 const Tab = createBottomTabNavigator();
 

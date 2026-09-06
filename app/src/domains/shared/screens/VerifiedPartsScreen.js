@@ -37,20 +37,20 @@ import {
   Layers,
 } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { apiFunction } from '../apis/apiFunction';
+import { apiFunction } from '../../../apis/apiFunction';
 import {
   serviceJsonApi,
   articlesByPartApi,
   articlesByVehicleApi,
-} from '../apis/api';
-import { setPart, setSelectedVehicle } from '../redux/getData';
+} from '../../../apis/api';
+import { setPart, setSelectedVehicle } from '../../../redux/getData';
 import { useDispatch } from 'react-redux';
-import AppHeader from '../components/common/AppHeader';
-import AppButton from '../components/common/AppButton';
-import JourneyStepIndicator from '../components/common/JourneyStepIndicator';
-import Product360Viewer from '../components/common/Product360Viewer';
-import VehicleCardImage from '../components/vehicle/VehicleCardImage';
-import PartSchematicFallback from '../components/parts/PartSchematicFallback';
+import AppHeader from '../../../components/common/AppHeader';
+import AppButton from '../../../components/common/AppButton';
+import JourneyStepIndicator from '../../../components/common/JourneyStepIndicator';
+import Product360Viewer from '../../../components/common/Product360Viewer';
+import VehicleCardImage from '../../../components/vehicle/VehicleCardImage';
+import PartSchematicFallback from '../../../components/parts/PartSchematicFallback';
 
 const categorizePart = (item) => {
   if (item?.category?.id) {
@@ -1745,10 +1745,9 @@ const VerifiedPartsScreen = () => {
             </View>
           ) : (
             <ScrollView showsVerticalScrollIndicator={false} style={styles.modalBodyLight}>
-              {modalMainTab === 'studio' ? (
-                <>
-                  {/* 3D Interactive Showroom Stage */}
-                  <View style={styles.showroomStageLight}>
+              {/* 3D Interactive Showroom Stage Container */}
+              <View style={{ display: modalMainTab === 'studio' ? 'flex' : 'none' }}>
+                <View style={styles.showroomStageLight}>
                     {/* Top stage controls: Media toggle, Fullscreen button, Orbit badge */}
                     <View style={styles.showroomControlsLight}>
                       <View style={styles.mediaToggleBoxLight}>
@@ -2065,9 +2064,10 @@ const VerifiedPartsScreen = () => {
                     </View>
                     <Text style={styles.viewFullSpecsBannerAction}>View Specs →</Text>
                   </TouchableOpacity>
-                </>
-              ) : (
-                <>
+                </View>
+
+                {/* Complete Technical Specifications View Container */}
+                <View style={{ display: modalMainTab === 'specs' ? 'flex' : 'none' }}>
                   {/* Complete Technical Specifications Table */}
                   <View style={styles.specsCardLight}>
                     <View style={styles.specsSectionHeader}>
@@ -2142,7 +2142,6 @@ const VerifiedPartsScreen = () => {
                     style={styles.viewFullSpecsBanner}
                     onPress={() => {
                       setModalMainTab('studio');
-                      setIsStudioFullscreen(true);
                     }}
                     activeOpacity={0.8}
                   >
@@ -2155,8 +2154,7 @@ const VerifiedPartsScreen = () => {
                     </View>
                     <Text style={[styles.viewFullSpecsBannerAction, { color: '#059669' }]}>Open Studio ↗</Text>
                   </TouchableOpacity>
-                </>
-              )}
+                </View>
 
               <View style={{ height: 95 }} />
             </ScrollView>

@@ -27,7 +27,7 @@ const ProtectedLayout = ({ children }) => {
       <Sidebar />
       <div className="flex-1 pl-64 flex flex-col min-w-0">
         <Navbar />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto w-full">
           {children}
         </main>
       </div>
@@ -75,11 +75,7 @@ const AppRoutes = () => {
 
       <Route
         path="/dealers"
-        element={
-          <ProtectedLayout>
-            <Dealers />
-          </ProtectedLayout>
-        }
+        element={<Navigate to="/users" replace />}
       />
 
       {/* Default Fallback */}

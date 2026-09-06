@@ -25,10 +25,10 @@ import {
 } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { apiFunction } from '../apis/apiFunction';
-import { serviceJsonApi, vehiclesApi } from '../apis/api';
-import AppHeader from '../components/common/AppHeader';
-import JourneyStepIndicator from '../components/common/JourneyStepIndicator';
+import { apiFunction } from '../../../apis/apiFunction';
+import { serviceJsonApi, vehiclesApi } from '../../../apis/api';
+import AppHeader from '../../../components/common/AppHeader';
+import JourneyStepIndicator from '../../../components/common/JourneyStepIndicator';
 
 const VehiclesListScreen = () => {
   const navigation = useNavigation();
@@ -145,8 +145,7 @@ const VehiclesListScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <SafeAreaView
+    <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -301,7 +300,6 @@ const VehiclesListScreen = () => {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 };
 

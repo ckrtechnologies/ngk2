@@ -8,13 +8,13 @@ import {
   StatusBar,
 } from 'react-native';
 import { Mail, KeyRound, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react-native';
-import { apiFunction } from '../apis/apiFunction';
-import { sendOtpApi, verifyOtpApi, updatePasswordApi } from '../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import { sendOtpApi, verifyOtpApi, updatePasswordApi } from '../../../apis/api';
 import Toast from 'react-native-toast-message';
-import ScreenContainer from '../components/common/ScreenContainer';
-import AppHeader from '../components/common/AppHeader';
-import AppInput from '../components/common/AppInput';
-import AppButton from '../components/common/AppButton';
+import ScreenContainer from '../../../components/common/ScreenContainer';
+import AppHeader from '../../../components/common/AppHeader';
+import AppInput from '../../../components/common/AppInput';
+import AppButton from '../../../components/common/AppButton';
 
 const ForgotPasswordScreen = ({ route, navigation }) => {
   const role = route?.params?.role || 'owner';

@@ -723,7 +723,7 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="p-5 max-w-[1600px] mx-auto space-y-4 font-sans select-none">
+    <div className="p-6 w-full space-y-4 font-sans select-none">
       {/* Top Header & Metrics Strip */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
         <div>

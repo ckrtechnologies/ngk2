@@ -13,6 +13,7 @@ import {
   readNotificationsApi,
   dealersApi,
   brandsApi,
+  articlesByVehicleApi,
 } from '../config/api';
 
 // Helper for authenticated fetch headers
@@ -221,17 +222,14 @@ export const addEnquiryMessage = createAsyncThunk(
  */
 export const fetchDealersCatalog = createAsyncThunk('admin/fetchDealersCatalog', async (_, { rejectWithValue }) => {
   try {
-    // 1. Try fetching backend database dealers
-    const res = await fetch(dealersApi, { headers: getAuthHeaders() });
+    // 1. Fetch backend database dealers
+    const res = await fetch(`${dealersApi}?includeUnapproved=true`, { headers: getAuthHeaders() });
     const data = await res.json();
-    if (data.dealers && data.dealers.length > 0) {
+    if (data.dealers && Array.isArray(data.dealers)) {
       return { data: { array: data.dealers } };
     }
 
-    // 2. Fallback to TecDoc brands via backend proxy
-    const fallbackRes = await fetch(brandsApi, { headers: getAuthHeaders() });
-    const fallbackData = await fallbackRes.json();
-    return fallbackData;
+    return { data: { array: [] } };
   } catch (error) {
     return rejectWithValue(error.message || 'Network error');
   }
@@ -244,45 +242,99 @@ export const searchArticlesCatalog = createAsyncThunk(
   'admin/searchArticlesCatalog',
   async ({ searchType, query }, { rejectWithValue }) => {
     try {
-      let payload = {};
-      if (searchType === 'number') {
-        const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
-        payload = {
-          getArticles: {
-            articleCountry: 'ZA',
-            lang: 'en',
-            searchQuery: cleanQuery,
-            searchType: 10,
-            perPage: 50,
-            page: 1,
-            includeAll: true,
-          },
-        };
-      } else if (searchType === 'vehicle') {
-        const vType = query.linkageTargetType || 'P';
-        payload = {
-          getArticles: {
-            articleCountry: 'ZA',
-            lang: 'en',
-            linkageTargetId: parseInt(query.linkageTargetId || query.carId || query, 10),
-            linkageTargetType: vType,
-            includeAll: true,
-          },
-        };
-      } else {
-        const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
-        payload = {
-          getArticles: {
-            articleCountry: 'ZA',
-            lang: 'en',
-            searchQuery: cleanQuery,
-            searchType: 10,
-            perPage: 50,
-            page: 1,
-            includeAll: true,
-          },
-        };
+      if (searchType === 'vehicle') {
+        const targetId = parseInt(query.linkageTargetId || query.carId || query, 10);
+        const incomingType = query.linkageTargetType || query.appType || 'P';
+        // In TecDoc Pegasus ZA catalog (NGK/NTK/KYB), articles are linked under 'P' (and 'V').
+        // Queries with raw 'O' or 'C' often return 0 articles directly.
+        const primaryType = (incomingType === 'O' || incomingType === 'C') ? 'P' : incomingType;
+
+        // 1. Try Pegasus direct with primaryType ('P' for commercial/passenger)
+        try {
+          const response = await fetch(serviceJsonApi, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+              getArticles: {
+                articleCountry: 'ZA',
+                lang: 'en',
+                linkageTargetId: targetId,
+                linkageTargetType: primaryType,
+                perPage: 50,
+                page: 1,
+                includeAll: true,
+              },
+            }),
+          });
+          const data = await response.json();
+          const articles = data?.articles || data?.data?.array || data?.getArticles?.array;
+          if (Array.isArray(articles) && articles.length > 0) {
+            return { articles, data: { array: articles } };
+          }
+        } catch (e) {
+          console.warn('Pegasus primaryType lookup failed, attempting alternate types:', e);
+        }
+
+        // 2. Try alternate linkage target types
+        for (const altType of ['P', 'V', incomingType]) {
+          if (altType === primaryType) continue;
+          try {
+            const response = await fetch(serviceJsonApi, {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({
+                getArticles: {
+                  articleCountry: 'ZA',
+                  lang: 'en',
+                  linkageTargetId: targetId,
+                  linkageTargetType: altType,
+                  perPage: 50,
+                  page: 1,
+                  includeAll: true,
+                },
+              }),
+            });
+            const data = await response.json();
+            const articles = data?.articles || data?.data?.array || data?.getArticles?.array;
+            if (Array.isArray(articles) && articles.length > 0) {
+              return { articles, data: { array: articles } };
+            }
+          } catch (e) {
+            // continue loop
+          }
+        }
+
+        // 3. Fallback to backend /articles/by-vehicle endpoint which has built-in Pegasus proxy and fallback catalog
+        try {
+          const restRes = await fetch(
+            `${articlesByVehicleApi}?vehicleId=${targetId}&type=${incomingType}`,
+            { headers: getAuthHeaders() }
+          );
+          const restData = await restRes.json();
+          const articles = restData?.articles || restData?.data?.array || restData?.data;
+          if (Array.isArray(articles) && articles.length > 0) {
+            return { articles, data: { array: articles } };
+          }
+        } catch (e) {
+          console.warn('Backend articlesByVehicleApi fallback failed:', e);
+        }
+
+        return { articles: [], data: { array: [] } };
       }
+
+      // Search by Part Number
+      const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
+      const payload = {
+        getArticles: {
+          articleCountry: 'ZA',
+          lang: 'en',
+          searchQuery: cleanQuery,
+          searchType: 10,
+          perPage: 50,
+          page: 1,
+          includeAll: true,
+        },
+      };
 
       const response = await fetch(serviceJsonApi, {
         method: 'POST',
@@ -556,10 +608,16 @@ const adminSlice = createSlice({
       })
       .addCase(searchArticlesCatalog.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload?.articles) {
+        if (Array.isArray(action.payload?.articles)) {
           state.catalogArticles = action.payload.articles;
-        } else if (action.payload?.data?.array) {
+        } else if (Array.isArray(action.payload?.data?.array)) {
           state.catalogArticles = action.payload.data.array;
+        } else if (Array.isArray(action.payload?.data)) {
+          state.catalogArticles = action.payload.data;
+        } else if (Array.isArray(action.payload)) {
+          state.catalogArticles = action.payload;
+        } else {
+          state.catalogArticles = [];
         }
       })
       .addCase(searchArticlesCatalog.rejected, (state, action) => {

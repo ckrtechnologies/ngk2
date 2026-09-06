@@ -32,13 +32,13 @@ import {
 import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiFunction } from '../apis/apiFunction';
-import { dealersApi } from '../apis/api';
-import { getDealersRedux } from '../redux/getData';
-import AppHeader from '../components/common/AppHeader';
+import { apiFunction } from '../../../apis/apiFunction';
+import { dealersApi } from '../../../apis/api';
+import { getDealersRedux } from '../../../redux/getData';
+import AppHeader from '../../../components/common/AppHeader';
 import DealerFilterModal, {
   DEFAULT_FILTERS,
-} from '../components/common/DealerFilterModal';
+} from '../../../components/common/DealerFilterModal';
 
 const DealerLocatorScreen = () => {
   const navigation = useNavigation();
@@ -331,8 +331,7 @@ const DealerLocatorScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <SafeAreaView
+    <SafeAreaView
       edges={['bottom', 'left', 'right']}
       style={styles.safeArea}
     >
@@ -791,7 +790,6 @@ const DealerLocatorScreen = () => {
         dealers={dealers}
       />
     </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 };
 

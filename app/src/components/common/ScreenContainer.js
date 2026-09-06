@@ -48,11 +48,11 @@ const ScreenContainer = ({
         />
       )}
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardAvoid}
-        keyboardVerticalOffset={keyboardVerticalOffset || (Platform.OS === 'ios' ? 0 : 24)}
+        keyboardVerticalOffset={keyboardVerticalOffset}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        {scrollable ? (
           <View
             style={[
               styles.innerWrapper,
@@ -60,22 +60,34 @@ const ScreenContainer = ({
               style,
             ]}
           >
-            <Container
-              style={scrollable ? styles.scrollView : styles.flexView}
-              contentContainerStyle={
-                scrollable
-                  ? [styles.scrollContent, contentContainerStyle]
-                  : undefined
-              }
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
               showsVerticalScrollIndicator={false}
               bounces={false}
               keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
             >
               {children}
-            </Container>
+            </ScrollView>
             {footer && <View style={styles.footerContainer}>{footer}</View>}
           </View>
-        </TouchableWithoutFeedback>
+        ) : (
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View
+              style={[
+                styles.innerWrapper,
+                { paddingHorizontal },
+                style,
+              ]}
+            >
+              <View style={styles.flexView}>
+                {children}
+              </View>
+              {footer && <View style={styles.footerContainer}>{footer}</View>}
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </KeyboardAvoidingView>
     </View>
   );
@@ -99,6 +111,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 24,
   },
   footerContainer: {
     paddingTop: 8,

@@ -25,8 +25,8 @@ import {
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyselfRedux } from '../redux/getData';
-import LiveFeatureTicker from '../components/common/LiveFeatureTicker';
+import { getMyselfRedux } from '../../../redux/getData';
+import LiveFeatureTicker from '../../../components/common/LiveFeatureTicker';
 import {
   FindParts3DIcon,
   MyGarage3DIcon,
@@ -38,8 +38,8 @@ import {
   Ticker360Icon,
   TickerDealerIcon,
   TickerQuoteIcon,
-} from '../components/icons/HomeIcons';
-import VehicleCardImage from '../components/vehicle/VehicleCardImage';
+} from '../../../components/icons/HomeIcons';
+import VehicleCardImage from '../../../components/vehicle/VehicleCardImage';
 
 // Static Live Feature Ticker items (auto-cycles every 3.6s with spring-back animation)
 const TICKER_ITEMS = [
@@ -449,7 +449,7 @@ const OwnerHomeScreen = () => {
         <View style={styles.headerRightCluster}>
           <View style={styles.headerLogoPill}>
             <Image
-              source={require('../assets/images/ngk_emblem_clean.png')}
+              source={require('../../../assets/images/ngk_emblem_clean.png')}
               style={styles.headerLogo}
               resizeMode="contain"
             />

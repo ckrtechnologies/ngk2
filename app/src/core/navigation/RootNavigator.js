@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../auth/useAuth';
-import SplashScreen from '../../screens/SplashScreen';
+import SplashScreen from '../../domains/auth/screens/SplashScreen';
 import AuthNavigator from '../../domains/auth/navigation/AuthNavigator';
 import OwnerNavigator from '../../domains/owner/navigation/OwnerNavigator';
 import ResellerNavigator from '../../domains/reseller/navigation/ResellerNavigator';

@@ -156,7 +156,7 @@ const SplashScreen = ({ navigation }) => {
         >
           <View style={styles.logoFrame}>
             <Image
-              source={require('../assets/images/ngk_emblem_clean.png')}
+              source={require('../../../assets/images/ngk_emblem_clean.png')}
               style={styles.logo}
               resizeMode="contain"
             />

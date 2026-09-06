@@ -33,20 +33,20 @@ import {
   SolidLocationPinIcon,
   SolidStepperMinusIcon,
   SolidStepperPlusIcon,
-} from '../components/icons/TechnicalEnquiryIcons';
-import EnquiryStepIndicator from '../components/common/EnquiryStepIndicator';
-import DealerFilterModal, { DEFAULT_FILTERS } from '../components/common/DealerFilterModal';
+} from '../../../components/icons/TechnicalEnquiryIcons';
+import EnquiryStepIndicator from '../../../components/common/EnquiryStepIndicator';
+import DealerFilterModal, { DEFAULT_FILTERS } from '../../../components/common/DealerFilterModal';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { apiFunction } from '../apis/apiFunction';
-import { addEnquiryApi, dealersApi } from '../apis/api';
+import { apiFunction } from '../../../apis/apiFunction';
+import { addEnquiryApi, dealersApi } from '../../../apis/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsersRedux } from '../redux/getData';
+import { getUsersRedux } from '../../../redux/getData';
 import Geolocation from '@react-native-community/geolocation';
-import ScreenContainer from '../components/common/ScreenContainer';
-import AppHeader from '../components/common/AppHeader';
-import AppInput from '../components/common/AppInput';
+import ScreenContainer from '../../../components/common/ScreenContainer';
+import AppHeader from '../../../components/common/AppHeader';
+import AppInput from '../../../components/common/AppInput';
 
 const TechnicalEnquiryScreen = () => {
   const navigation = useNavigation();
@@ -1379,8 +1379,7 @@ const TechnicalEnquiryScreen = () => {
   );
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
+    <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
       <AppHeader
         title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
         subtitle={
@@ -1407,6 +1406,7 @@ const TechnicalEnquiryScreen = () => {
         scrollable={true}
         includeTopInset={false}
         showStatusBar={false}
+        contentContainerStyle={styles.enquiryScrollContent}
       >
         {currentStep === 1 && renderStep1()}
         {currentStep === 2 && renderStep2()}
@@ -1423,11 +1423,13 @@ const TechnicalEnquiryScreen = () => {
         dealers={scopedCandidateDealers}
       />
     </View>
-    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  enquiryScrollContent: {
+    paddingBottom: 60,
+  },
   // Role Notice Card
   resellerNoticeCard: {
     flexDirection: 'row',

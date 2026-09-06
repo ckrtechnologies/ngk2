@@ -5,18 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  ScrollView,
   Image,
 } from 'react-native';
-import { RefreshControl } from 'react-native-gesture-handler';
+import { ScrollView, RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,
   Bell,
   Search,
   MessageSquare,
-  Truck,
-  Layers,
+  Package,
+  MapPin,
   Clock,
   CheckCircle2,
   TrendingUp,
@@ -24,9 +23,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getEnquiryRedux, getMyselfRedux } from '../../redux/getData';
+import { getEnquiryRedux, getMyselfRedux } from '../../../redux/getData';
 
-const DistributorHomeScreen = () => {
+const ResellerHomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
@@ -34,7 +33,7 @@ const DistributorHomeScreen = () => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchHubData = useCallback(async () => {
+  const fetchDashboardData = useCallback(async () => {
     const userId = await AsyncStorage.getItem('userId');
     if (userId) {
       dispatch(getMyselfRedux(userId));
@@ -44,13 +43,13 @@ const DistributorHomeScreen = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchHubData();
+    await fetchDashboardData();
     setRefreshing(false);
   };
 
   useEffect(() => {
-    fetchHubData();
-  }, [fetchHubData]);
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   const pendingCount = useMemo(() => {
     return (
@@ -79,35 +78,35 @@ const DistributorHomeScreen = () => {
 
   const quickActions = [
     {
-      id: 'catalog',
-      title: 'Bulk Catalog',
-      subtitle: 'TecDoc OE & application index',
-      icon: <Search size={22} color="#111827" />,
-      bg: '#F3F4F6',
+      id: 'lookup',
+      title: 'Parts Lookup',
+      subtitle: 'Fast OE & cross-reference',
+      icon: <Search size={22} color="#D0142C" />,
+      bg: '#FEE2E2',
       route: 'PartsFinder',
     },
     {
       id: 'enquiries',
-      title: 'Regional Tickets',
-      subtitle: `${pendingCount} open technical enquiries`,
-      icon: <MessageSquare size={22} color="#D0142C" />,
-      bg: '#FEE2E2',
+      title: 'Active Tickets',
+      subtitle: `${pendingCount} pending customer requests`,
+      icon: <MessageSquare size={22} color="#2563EB" />,
+      bg: '#DBEAFE',
       route: 'MyEnquiries',
     },
     {
-      id: 'logistics',
-      title: 'Stock Allocation',
-      subtitle: 'Regional inventory levels',
-      icon: <Truck size={22} color="#2563EB" />,
-      bg: '#DBEAFE',
+      id: 'orders',
+      title: 'Trade Supply',
+      subtitle: 'Distributor order requests',
+      icon: <Package size={22} color="#059669" />,
+      bg: '#D1FAE5',
       route: 'PartsFinder',
     },
     {
       id: 'dealers',
-      title: 'Reseller Network',
-      subtitle: 'Authorized dealer management',
-      icon: <Layers size={22} color="#059669" />,
-      bg: '#D1FAE5',
+      title: 'Distributors',
+      subtitle: 'Regional supplier network',
+      icon: <MapPin size={22} color="#D97706" />,
+      bg: '#FEF3C7',
       route: 'DealerLocator',
     },
   ];
@@ -129,14 +128,14 @@ const DistributorHomeScreen = () => {
         <View style={styles.headerCenter}>
           <View style={styles.logoBadgeContainer}>
             <Image
-              source={require('../../assets/images/ngk_emblem_clean.png')}
+              source={require('../../../assets/images/ngk_emblem_clean.png')}
               style={styles.headerLogoImg}
               resizeMode="contain"
             />
             <Text style={styles.headerBrandText}>NGK</Text>
           </View>
           <View style={styles.headerUserContainer}>
-            <Text style={styles.headerGreetingHello}>DISTRIBUTOR,</Text>
+            <Text style={styles.headerGreetingHello}>WORKSHOP,</Text>
             <Text style={styles.headerUserName} numberOfLines={1}>
               {myself?.name ? myself.name : 'Partner'}
             </Text>
@@ -165,13 +164,13 @@ const DistributorHomeScreen = () => {
           />
         }
       >
-        {/* Distributor Header */}
+        {/* Workshop Header */}
         <View style={styles.greetingSection}>
-          <View style={styles.distributorBadge}>
-            <Text style={styles.distributorBadgeText}>AUTHORIZED DISTRIBUTOR</Text>
+          <View style={styles.resellerBadge}>
+            <Text style={styles.resellerBadgeText}>RESELLER & WORKSHOP</Text>
           </View>
           <Text style={styles.greetingName}>
-            {myself?.name ? myself.name : 'Distribution Partner'}
+            {myself?.name ? myself.name : 'Workshop Partner'}
           </Text>
         </View>
 
@@ -182,9 +181,9 @@ const DistributorHomeScreen = () => {
               <Clock size={16} color="#D97706" />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.reviewBannerTitle}>Regional Hub Under Review</Text>
+              <Text style={styles.reviewBannerTitle}>Trade Account Under Review</Text>
               <Text style={styles.reviewBannerDesc}>
-                Your distributor credentials are under verification by NGK Admin. Network queries will activate once approved.
+                Your reseller profile is pending NGK Admin verification. Live customer parts queries will activate once approved.
               </Text>
             </View>
           </View>
@@ -198,10 +197,10 @@ const DistributorHomeScreen = () => {
             activeOpacity={0.75}
           >
             <View style={styles.kpiIconWrapper}>
-              <Clock size={16} color="#D0142C" />
+              <Clock size={16} color="#D97706" />
             </View>
             <Text style={styles.kpiValue}>{pendingCount}</Text>
-            <Text style={styles.kpiLabel}>Pending Actions</Text>
+            <Text style={styles.kpiLabel}>Pending Tickets</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -213,7 +212,7 @@ const DistributorHomeScreen = () => {
               <TrendingUp size={16} color="#2563EB" />
             </View>
             <Text style={styles.kpiValue}>{inProgressCount}</Text>
-            <Text style={styles.kpiLabel}>Active Tickets</Text>
+            <Text style={styles.kpiLabel}>In Progress</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -227,13 +226,13 @@ const DistributorHomeScreen = () => {
             <Text style={styles.kpiValue}>
               {enquiry?.length || 0}
             </Text>
-            <Text style={styles.kpiLabel}>Total Managed</Text>
+            <Text style={styles.kpiLabel}>Total Queries</Text>
           </TouchableOpacity>
         </View>
 
         {/* 2x2 Quick Action Grid */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Distribution Hub</Text>
+          <Text style={styles.sectionTitle}>Workshop Tools</Text>
         </View>
 
         <View style={styles.gridContainer}>
@@ -357,18 +356,18 @@ const styles = StyleSheet.create({
   greetingSection: {
     marginBottom: 14,
   },
-  distributorBadge: {
+  resellerBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#111827',
+    backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
     marginBottom: 4,
   },
-  distributorBadgeText: {
+  resellerBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#D97706',
   },
   greetingName: {
     fontSize: 22,
@@ -399,7 +398,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 8,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FEF3C7',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 6,
@@ -494,4 +493,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DistributorHomeScreen;
+export default ResellerHomeScreen;
