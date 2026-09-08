@@ -5,6 +5,8 @@ import { navigateTo } from "../functions/navigationRefFunc"
 export const apiFunction = async (api, params = [], data = {}, method = "GET", withAuth = false) => {
     let headers = {
         'Content-Type': 'application/json',
+        'x-catalog-brand': 'ngk',
+        'x-brand': 'ngk',
     }
     let response
 

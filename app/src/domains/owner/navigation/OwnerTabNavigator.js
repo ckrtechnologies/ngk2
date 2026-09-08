@@ -84,7 +84,7 @@ export default function OwnerTabNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     height: hp('10%'),
     borderTopLeftRadius: wp('8%'),
     borderTopRightRadius: wp('8%'),

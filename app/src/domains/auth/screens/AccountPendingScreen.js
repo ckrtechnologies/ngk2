@@ -129,8 +129,8 @@ export default function AccountPendingScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   brandSubtitle: {
-    color: '#D0142C',
+    color: '#008752',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1,
@@ -496,10 +496,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingVertical: 14,
     borderRadius: 12,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,

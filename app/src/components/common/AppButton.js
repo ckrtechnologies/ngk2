@@ -25,7 +25,7 @@ const AppButton = ({
     if (backgroundColor) return backgroundColor;
     switch (variant) {
       case 'primary':
-        return '#D0142C'; // NGK Crimson Red
+        return '#008752'; // NGK Brand Green
       case 'dark':
         return '#111827'; // Executive Slate Black
       case 'secondary':
@@ -34,7 +34,7 @@ const AppButton = ({
       case 'ghost':
         return 'transparent';
       default:
-        return '#D0142C';
+        return '#008752';
     }
   };
 
@@ -47,7 +47,7 @@ const AppButton = ({
       case 'secondary':
         return '#1F2937';
       case 'outline':
-        return '#D0142C';
+        return '#008752';
       case 'ghost':
         return '#4B5563';
       default:
@@ -64,7 +64,7 @@ const AppButton = ({
         {
           height,
           backgroundColor: disabled ? '#E5E7EB' : getBackgroundColor(),
-          borderColor: isOutline ? (disabled ? '#D1D5DB' : '#D0142C') : 'transparent',
+          borderColor: isOutline ? (disabled ? '#D1D5DB' : '#008752') : 'transparent',
           borderWidth: isOutline ? 1.5 : 0,
         },
         variant === 'primary' && !disabled ? styles.primaryShadow : null,
@@ -77,7 +77,7 @@ const AppButton = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'outline' || variant === 'secondary' ? '#D0142C' : '#FFFFFF'}
+          color={variant === 'outline' || variant === 'secondary' ? '#008752' : '#FFFFFF'}
         />
       ) : (
         <View style={styles.contentRow}>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   primaryShadow: {
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

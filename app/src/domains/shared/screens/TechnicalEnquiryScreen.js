@@ -845,7 +845,7 @@ const TechnicalEnquiryScreen = () => {
       {isReseller && (
         <View style={styles.resellerNoticeCard}>
           <View style={styles.resellerNoticeIconBox}>
-            <ShieldCheck size={18} color="#D0142C" />
+            <ShieldCheck size={18} color="#008752" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.resellerNoticeTitle}>
@@ -876,7 +876,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.garageSelectorContainer}>
           <View style={styles.sectionHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <SolidGarageBayIcon size={16} color="#D0142C" />
+              <SolidGarageBayIcon size={16} color="#008752" />
               <Text style={styles.sectionTitle}>SELECT FROM MY GARAGE</Text>
             </View>
             <Text style={styles.garageCountBadge}>
@@ -925,7 +925,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Part Identification Fields */}
       <View style={styles.formCard}>
         <View style={styles.cardHeaderRow}>
-          <SolidPartTagIcon size={17} color="#D0142C" />
+          <SolidPartTagIcon size={17} color="#008752" />
           <Text style={styles.cardTitle}>PART IDENTIFICATION</Text>
         </View>
         <Text style={styles.cardSubtitle}>
@@ -1011,7 +1011,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Step 2 Banner */}
       <View style={styles.stepBannerCard}>
         <View style={[styles.stepBannerIconBox, { backgroundColor: '#FEF2F2' }]}>
-          <SolidStoreIcon size={18} color="#D0142C" />
+          <SolidStoreIcon size={18} color="#008752" />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.stepBannerTitle}>
@@ -1095,7 +1095,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, radius: 50 }))}
                 >
-                  <X size={11} color="#D0142C" strokeWidth={2.4} />
+                  <X size={11} color="#008752" strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1108,7 +1108,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, role: 'all' }))}
                 >
-                  <X size={11} color="#D0142C" strokeWidth={2.4} />
+                  <X size={11} color="#008752" strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1119,7 +1119,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, sortBy: 'nearest' }))}
                 >
-                  <X size={11} color="#D0142C" strokeWidth={2.4} />
+                  <X size={11} color="#008752" strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1236,7 +1236,7 @@ const TechnicalEnquiryScreen = () => {
                   <View style={styles.modalDealerIconBox}>
                     <SolidStoreIcon
                       size={18}
-                      color={isDist ? '#D0142C' : '#059669'}
+                      color={isDist ? '#008752' : '#059669'}
                     />
                   </View>
                   <View style={{ flex: 1, marginRight: 8 }}>
@@ -1291,7 +1291,7 @@ const TechnicalEnquiryScreen = () => {
                     <Text
                       style={[
                         styles.selectPrompt,
-                        isSelected && { color: '#D0142C', fontWeight: '800' },
+                        isSelected && { color: '#008752', fontWeight: '800' },
                       ]}
                     >
                       {isSelected ? '✓ Selected Reseller' : 'Tap to Select'}
@@ -1353,7 +1353,7 @@ const TechnicalEnquiryScreen = () => {
         {/* Part Item */}
         <View style={styles.summaryItemRow}>
           <View style={[styles.summaryItemIconBox, { backgroundColor: '#FEF2F2' }]}>
-            <SolidPartTagIcon size={14} color="#D0142C" />
+            <SolidPartTagIcon size={14} color="#008752" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.summaryItemLabel}>Selected Part</Text>
@@ -1498,8 +1498,8 @@ const TechnicalEnquiryScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#D0142C"
-            colors={['#D0142C']}
+            tintColor="#008752"
+            colors={['#008752']}
           />
         }
       >
@@ -1543,7 +1543,7 @@ const styles = StyleSheet.create({
   resellerNoticeTitle: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.5,
     marginBottom: 2,
   },
@@ -1733,12 +1733,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     gap: 6,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -1763,12 +1763,12 @@ const styles = StyleSheet.create({
     flex: 2,
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     gap: 6,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -1837,14 +1837,14 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   filterTriggerBtnActive: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   filterBadgeCircle: {
     position: 'absolute',
     top: -4,
     right: -4,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: 8,
     width: 16,
     height: 16,
@@ -1888,7 +1888,7 @@ const styles = StyleSheet.create({
   activeChipText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   clearAllBtn: {
     paddingHorizontal: 8,
@@ -1915,8 +1915,8 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   modalFilterTabActive: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   modalFilterTabText: {
     fontSize: 11,
@@ -1937,7 +1937,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   modalDealerCardSelected: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     backgroundColor: '#FFFBFB',
     borderWidth: 1.5,
   },
@@ -1982,7 +1982,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   roleTagTextDistributor: {
-    color: '#D0142C',
+    color: '#008752',
   },
   roleTagTextStockist: {
     color: '#059669',
@@ -2000,7 +2000,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -2057,7 +2057,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   emptyResetBtnText: {
     fontSize: 12,
@@ -2097,7 +2097,7 @@ const styles = StyleSheet.create({
   summaryEditLink: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   summaryItemRow: {
     flexDirection: 'row',

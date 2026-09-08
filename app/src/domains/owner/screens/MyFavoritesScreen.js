@@ -127,8 +127,8 @@ const MyFavoritesScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={['#D0142C']}
-              tintColor="#D0142C"
+              colors={['#008752']}
+              tintColor="#008752"
             />
           }
         >
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     height: hp('9%'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   editListText: {
     fontSize: wp('3.2%'),
     fontWeight: 'bold',
-    color: '#D0142C',
+    color: '#008752',
   },
   scrollContent: {
     paddingBottom: hp('5%'),
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
   partNumber: {
     fontSize: wp('3.5%'),
     fontWeight: 'bold',
-    color: '#D0142C',
+    color: '#008752',
   },
   viewDetailsButton: {
     backgroundColor: '#000000',
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
   dotActive: {
     width: wp('8%'),
     height: hp('0.6%'),
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: 3,
     marginRight: wp('1.5%'),
   },
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: wp('6%'),
     left: wp('6%'),
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: wp('4%'),
     paddingVertical: hp('1%'),
     borderRadius: wp('3%'),
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   },
   modalPartSubtitle: {
     fontSize: wp('4.5%'),
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: 'bold',
     marginTop: hp('0.5%'),
     marginBottom: hp('3%'),
@@ -679,7 +679,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     height: hp('7.5%'),
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: wp('3%'),
     justifyContent: 'center',
     alignItems: 'center',

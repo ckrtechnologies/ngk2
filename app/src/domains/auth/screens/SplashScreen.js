@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     width: wp('55%'),
     height: wp('55%'),
     borderRadius: wp('27.5%'),
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   logoContainer: {
     alignItems: 'center',
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: 2,
   },
   footerText: {

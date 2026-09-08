@@ -191,11 +191,27 @@ const VerifiedPartsScreen = () => {
   const fetchedTargetRef = useRef(null);
   const fetchedSearchQueryRef = useRef(null);
 
-  // Category Buckets and Filtered Parts
-  const { categoryCounts, displayedParts, availableCategories } = useMemo(() => {
-    const counts = { all: parts.length, ignition: 0, sensors: 0, suspension: 0, general: 0 };
+  // Filter out any KYB items to enforce strict NGK brand isolation
+  const ngkParts = useMemo(() => {
+    return (parts || []).filter((p) => {
+      const b = (
+        p.brandName ||
+        p.mfrName ||
+        p.brand ||
+        p.dataSupplierName ||
+        p.directArticle?.brandName ||
+        ''
+      ).toUpperCase();
+      const cat = categorizePart(p);
+      return !b.includes('KYB') && cat.id !== 'suspension';
+    });
+  }, [parts]);
 
-    parts.forEach((p) => {
+  // Category Buckets and Filtered Parts (NGK / NTK Only)
+  const { categoryCounts, displayedParts, availableCategories } = useMemo(() => {
+    const counts = { all: ngkParts.length, ignition: 0, sensors: 0, general: 0 };
+
+    ngkParts.forEach((p) => {
       const cat = categorizePart(p);
       if (counts[cat.id] !== undefined) {
         counts[cat.id] += 1;
@@ -205,7 +221,7 @@ const VerifiedPartsScreen = () => {
     });
 
     const cats = [
-      { id: 'all', label: 'All Parts', count: counts.all, icon: 'Layers' },
+      { id: 'all', label: 'All NGK Parts', count: counts.all, icon: 'Layers' },
     ];
     if (counts.ignition > 0) {
       cats.push({ id: 'ignition', label: 'Ignition & Glow', count: counts.ignition, icon: 'Zap' });
@@ -213,27 +229,24 @@ const VerifiedPartsScreen = () => {
     if (counts.sensors > 0) {
       cats.push({ id: 'sensors', label: 'Sensors & NTK', count: counts.sensors, icon: 'Activity' });
     }
-    if (counts.suspension > 0) {
-      cats.push({ id: 'suspension', label: 'Suspension (KYB)', count: counts.suspension, icon: 'ShieldCheck' });
-    }
     if (counts.general > 0) {
       cats.push({ id: 'general', label: 'Other', count: counts.general, icon: 'Layers' });
     }
 
     const filtered =
       selectedCategory === 'all'
-        ? parts
-        : parts.filter((p) => categorizePart(p).id === selectedCategory);
+        ? ngkParts
+        : ngkParts.filter((p) => categorizePart(p).id === selectedCategory);
 
     return { categoryCounts: counts, displayedParts: filtered, availableCategories: cats };
-  }, [parts, selectedCategory]);
+  }, [ngkParts, selectedCategory]);
 
   const reloadParts = useCallback(async () => {
     setRefreshing(true);
     try {
       if (searchQuery) {
         const restRes = await apiFunction(
-          `${articlesByPartApi}?searchQuery=${encodeURIComponent(searchQuery)}`,
+          `${articlesByPartApi}?searchQuery=${encodeURIComponent(searchQuery)}&brand=ngk`,
           [],
           {},
           'GET',
@@ -251,8 +264,7 @@ const VerifiedPartsScreen = () => {
           vehicle.targetId
         );
         const incomingType = vehicle.linkageTargetType || appType || 'P';
-        // In TecDoc Pegasus ZA catalog (NGK/NTK/KYB), articles are indexed under 'P' (and 'V').
-        // Queries with 'O' or 'C' return 0 articles.
+        // In TecDoc Pegasus ZA catalog (NGK/NTK), articles are indexed under 'P' (and 'V').
         const primaryType = (incomingType === 'O' || incomingType === 'C') ? 'P' : incomingType;
 
         const fetchWithPegasus = async (tType, id = targetId) => {
@@ -261,6 +273,7 @@ const VerifiedPartsScreen = () => {
               articleCountry: 'ZA',
               linkageTargetId: id,
               linkageTargetType: tType,
+              dataSupplierIds: [15, 5414],
               lang: 'en',
               perPage: 40,
               page: 1,
@@ -285,7 +298,7 @@ const VerifiedPartsScreen = () => {
         if (!list || list.length === 0) {
           try {
             const restRes = await apiFunction(
-              `${articlesByVehicleApi}?vehicleId=${targetId}&type=${primaryType}`,
+              `${articlesByVehicleApi}?vehicleId=${targetId}&type=${primaryType}&brand=ngk`,
               [],
               {},
               'GET',
@@ -548,7 +561,34 @@ const VerifiedPartsScreen = () => {
     if (nonGifImg) {
       return nonGifImg.imageURL400 || nonGifImg.imageURL200 || nonGifImg.imageURL800;
     }
-    return item.imageUrl && !item.imageUrl.toLowerCase().includes('.gif') ? item.imageUrl : null;
+    if (item.imageUrl && !item.imageUrl.toLowerCase().includes('.gif')) {
+      return item.imageUrl;
+    }
+
+    // Authentic fallback product photography by brand & category
+    const brand = (item.brandName || item.brand || item.mfrName || '').toLowerCase();
+    const title = (item.articleName || item.title || item.partName || '').toLowerCase();
+    const partNo = (item.articleNumber || item.articleNo || item.partNumber || '').toLowerCase();
+
+    if (brand.includes('kyb') || title.includes('shock') || title.includes('strut') || title.includes('damper')) {
+      if (title.includes('strut')) {
+        return 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg';
+      }
+      if (title.includes('gas') || partNo.startsWith('55')) {
+        return 'https://digital-assets.tecalliance.services/images/400/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg';
+      }
+      return 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg';
+    }
+    if (title.includes('sensor') || title.includes('lambda') || title.includes('oxygen') || brand.includes('ntk') || partNo.startsWith('oz')) {
+      return 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg';
+    }
+    if (title.includes('glow') || partNo.startsWith('y-') || partNo.startsWith('cz')) {
+      return 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg';
+    }
+    if (title.includes('coil') || title.includes('cable') || title.includes('lead') || partNo.startsWith('u')) {
+      return 'https://digital-assets.tecalliance.services/images/400/04607d6d30b012c7e1397cb27758371f3229ecaa.jpg';
+    }
+    return 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg';
   };
 
   const getBriefSpecs = (item) => {
@@ -746,8 +786,8 @@ const VerifiedPartsScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={reloadParts}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -763,7 +803,7 @@ const VerifiedPartsScreen = () => {
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#D0142C" />
+            <ActivityIndicator size="large" color="#008752" />
             <Text style={styles.loadingText}>Fetching technical specifications...</Text>
           </View>
         ) : parts.length === 0 ? (
@@ -831,7 +871,7 @@ const VerifiedPartsScreen = () => {
                 </View>
                 <View style={styles.vehicleContextLeft}>
                   <View style={styles.vehicleContextBadge}>
-                    <Car size={13} color="#D0142C" strokeWidth={2.2} />
+                    <Car size={13} color="#008752" strokeWidth={2.2} />
                     <Text style={styles.vehicleContextBadgeText}>
                       REGISTERED VEHICLE
                     </Text>
@@ -888,7 +928,7 @@ const VerifiedPartsScreen = () => {
                       {cat.id === 'ignition' && (
                         <Zap
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#D0142C'}
+                          color={isSelected ? '#FFFFFF' : '#008752'}
                           strokeWidth={2.2}
                         />
                       )}
@@ -969,7 +1009,7 @@ const VerifiedPartsScreen = () => {
                 >
                   <LayoutGrid
                     size={13}
-                    color={layoutMode === 'cards' ? '#D0142C' : '#6B7280'}
+                    color={layoutMode === 'cards' ? '#008752' : '#6B7280'}
                   />
                   <Text
                     style={[
@@ -991,7 +1031,7 @@ const VerifiedPartsScreen = () => {
                 >
                   <List
                     size={13}
-                    color={layoutMode === 'compact' ? '#D0142C' : '#6B7280'}
+                    color={layoutMode === 'compact' ? '#008752' : '#6B7280'}
                   />
                   <Text
                     style={[
@@ -1079,7 +1119,7 @@ const VerifiedPartsScreen = () => {
                         activeOpacity={0.7}
                         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
-                        <Eye size={13} color="#D0142C" />
+                        <Eye size={13} color="#008752" />
                         <Text style={styles.peekHeaderBtnText}>Peek View</Text>
                       </TouchableOpacity>
                     </View>
@@ -1181,8 +1221,8 @@ const VerifiedPartsScreen = () => {
                         onPress={() => handleOpenPeek(item)}
                         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
-                        <Eye size={13} color="#D0142C" />
-                        <Text style={[styles.specsBtnText, { color: '#D0142C' }]}>Peek</Text>
+                        <Eye size={13} color="#008752" />
+                        <Text style={[styles.specsBtnText, { color: '#008752' }]}>Peek</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.specsBtn}
@@ -1324,7 +1364,7 @@ const VerifiedPartsScreen = () => {
                 }}
                 activeOpacity={0.8}
               >
-                <RotateCw size={14} color="#D0142C" />
+                <RotateCw size={14} color="#008752" />
                 <Text style={styles.peek360BtnText}>360° & Specs</Text>
               </TouchableOpacity>
 
@@ -1359,7 +1399,7 @@ const VerifiedPartsScreen = () => {
         >
           <StatusBar
             barStyle={isStudioFullscreen ? 'dark-content' : 'light-content'}
-            backgroundColor={isStudioFullscreen ? '#FFFFFF' : '#D0142C'}
+            backgroundColor={isStudioFullscreen ? '#FFFFFF' : '#008752'}
             translucent={false}
           />
 
@@ -1415,7 +1455,7 @@ const VerifiedPartsScreen = () => {
               >
                 <RotateCw
                   size={13}
-                  color={modalMainTab === 'studio' ? '#D0142C' : '#64748B'}
+                  color={modalMainTab === 'studio' ? '#008752' : '#64748B'}
                 />
                 <Text
                   style={[
@@ -1437,7 +1477,7 @@ const VerifiedPartsScreen = () => {
               >
                 <FileText
                   size={13}
-                  color={modalMainTab === 'specs' ? '#D0142C' : '#64748B'}
+                  color={modalMainTab === 'specs' ? '#008752' : '#64748B'}
                 />
                 <Text
                   style={[
@@ -1552,7 +1592,7 @@ const VerifiedPartsScreen = () => {
                     }}
                     activeOpacity={0.8}
                   >
-                    <Sliders size={12} color="#D0142C" />
+                    <Sliders size={12} color="#008752" />
                     <Text style={styles.fullScreenSpecsBtnText}>Specs</Text>
                   </TouchableOpacity>
 
@@ -2056,7 +2096,7 @@ const VerifiedPartsScreen = () => {
                     activeOpacity={0.8}
                   >
                     <View style={styles.viewFullSpecsBannerContent}>
-                      <Sliders size={18} color="#D0142C" />
+                      <Sliders size={18} color="#008752" />
                       <View>
                         <Text style={styles.viewFullSpecsBannerTitle}>Complete Technical Specifications</Text>
                         <Text style={styles.viewFullSpecsBannerSub}>Dimensions, electrical criteria & OEM part references</Text>
@@ -2071,7 +2111,7 @@ const VerifiedPartsScreen = () => {
                   {/* Complete Technical Specifications Table */}
                   <View style={styles.specsCardLight}>
                     <View style={styles.specsSectionHeader}>
-                      <Sliders size={15} color="#D0142C" />
+                      <Sliders size={15} color="#008752" />
                       <Text style={styles.specsSectionTitleLight}>Technical Specifications</Text>
                     </View>
 
@@ -2268,7 +2308,7 @@ const styles = StyleSheet.create({
   partBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.4,
   },
   kybBadge: {
@@ -2366,7 +2406,7 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   layoutToggleTextActive: {
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: '700',
   },
   // Rich Visual Card Styles
@@ -2404,7 +2444,7 @@ const styles = StyleSheet.create({
   brandBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.4,
   },
   verifiedMicroPill: {
@@ -2437,7 +2477,7 @@ const styles = StyleSheet.create({
   peekHeaderBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   cardMiddleRow: {
     flexDirection: 'row',
@@ -2571,7 +2611,7 @@ const styles = StyleSheet.create({
     gap: 6,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   cardEnquireBtnText: {
     fontSize: 12,
@@ -2585,8 +2625,8 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 46,
     borderRadius: 10,
-    backgroundColor: '#D0142C',
-    shadowColor: '#D0142C',
+    backgroundColor: '#008752',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -2800,7 +2840,7 @@ const styles = StyleSheet.create({
   peek360BtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   peekEnquireBtn: {
     flex: 1.4,
@@ -2810,7 +2850,7 @@ const styles = StyleSheet.create({
     gap: 6,
     height: 44,
     borderRadius: 10,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   peekEnquireBtnText: {
     fontSize: 13,
@@ -2844,7 +2884,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 18,
     paddingVertical: 14,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
@@ -2932,7 +2972,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   mediaToggleBtnActiveLight: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   mediaToggleTextLight: {
     fontSize: 11,
@@ -3061,7 +3101,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   anglePresetChipTextActive: {
-    color: '#D0142C',
+    color: '#008752',
   },
   thumbnailRowLight: {
     flexDirection: 'row',
@@ -3078,7 +3118,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   thumbBoxActiveLight: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     borderWidth: 2,
   },
   thumbImg: {
@@ -3391,7 +3431,7 @@ const styles = StyleSheet.create({
   viewFullSpecsBannerAction: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
     marginLeft: 8,
   },
   fullScreenSpecsBtn: {
@@ -3408,7 +3448,7 @@ const styles = StyleSheet.create({
   fullScreenSpecsBtnText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   vehicleContextCard: {
     backgroundColor: '#FFFFFF',
@@ -3454,7 +3494,7 @@ const styles = StyleSheet.create({
   vehicleContextBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.5,
   },
   vehicleContextTitle: {
@@ -3598,7 +3638,7 @@ const styles = StyleSheet.create({
   },
   resetCategoryBtn: {
     marginTop: 10,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,

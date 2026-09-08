@@ -497,7 +497,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, radius: 50 }))
                     }
                   >
-                    <X size={11} color="#D0142C" strokeWidth={2.4} />
+                    <X size={11} color="#008752" strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -514,7 +514,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, role: 'all' }))
                     }
                   >
-                    <X size={11} color="#D0142C" strokeWidth={2.4} />
+                    <X size={11} color="#008752" strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -527,7 +527,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, sortBy: 'nearest' }))
                     }
                   >
-                    <X size={11} color="#D0142C" strokeWidth={2.4} />
+                    <X size={11} color="#008752" strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -614,7 +614,7 @@ const DealerLocatorScreen = () => {
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#D0142C" />
+            <ActivityIndicator size="large" color="#008752" />
             <Text style={styles.loadingText}>
               Loading authorized resellers...
             </Text>
@@ -631,8 +631,8 @@ const DealerLocatorScreen = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={['#D0142C']}
-                tintColor="#D0142C"
+                colors={['#008752']}
+                tintColor="#008752"
               />
             }
             renderItem={({ item }) => {
@@ -653,9 +653,9 @@ const DealerLocatorScreen = () => {
                   <View style={styles.cardHeader}>
                     <View style={styles.dealerIconBox}>
                       {isDistributor ? (
-                        <Building2 size={18} color="#D0142C" />
+                        <Building2 size={18} color="#008752" />
                       ) : (
-                        <Store size={18} color="#D0142C" />
+                        <Store size={18} color="#008752" />
                       )}
                     </View>
 
@@ -673,7 +673,7 @@ const DealerLocatorScreen = () => {
                         >
                           {item.distance && item.distance !== 'N/A' && (
                             <View style={styles.distanceBadge}>
-                              <NavigationIcon size={9} color="#D0142C" />
+                              <NavigationIcon size={9} color="#008752" />
                               <Text style={styles.distanceBadgeText}>
                                 {item.distance}
                               </Text>
@@ -793,7 +793,7 @@ const DealerLocatorScreen = () => {
                   {dealers.length > 0 && filters.radius < 1500 && (
                     <TouchableOpacity
                       onPress={() => setFilters((prev) => ({ ...prev, radius: 1500 }))}
-                      style={[styles.emptyResetBtn, { backgroundColor: '#D0142C' }]}
+                      style={[styles.emptyResetBtn, { backgroundColor: '#008752' }]}
                       activeOpacity={0.8}
                     >
                       <Text style={[styles.emptyResetBtnText, { color: '#FFFFFF' }]}>
@@ -895,8 +895,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   filterTriggerBtnActive: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   filterBadgeCircle: {
     position: 'absolute',
@@ -944,7 +944,7 @@ const styles = StyleSheet.create({
   locateBtnText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   activeChipsContainer: {
     marginBottom: 8,
@@ -976,7 +976,7 @@ const styles = StyleSheet.create({
   activeChipText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   clearAllBtn: {
     paddingHorizontal: 6,
@@ -1005,8 +1005,8 @@ const styles = StyleSheet.create({
     borderColor: '#E5E7EB',
   },
   filterPillActive: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   filterPillText: {
     fontSize: 11,
@@ -1049,7 +1049,7 @@ const styles = StyleSheet.create({
   },
   emptyResetBtn: {
     marginTop: 10,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -1073,7 +1073,7 @@ const styles = StyleSheet.create({
   distanceBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   dealerCard: {
     backgroundColor: '#FFFFFF',
@@ -1218,7 +1218,7 @@ const styles = StyleSheet.create({
   },
   actionBtnEnquire: {
     marginLeft: 'auto',
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 8,

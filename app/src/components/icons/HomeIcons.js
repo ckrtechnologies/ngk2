@@ -32,7 +32,7 @@ export function HomeDashboard3DIcon({ size = 32, ...props }) {
       {/* Crimson Crest Gable */}
       <Path
         d="M24 7l15 12.5h-4.5L24 10.5 13.5 19.5H9L24 7z"
-        fill="#D0142C"
+        fill="#008752"
       />
 
       {/* Central Tachometer Bay Arch */}
@@ -62,7 +62,7 @@ export function HomeDashboard3DIcon({ size = 32, ...props }) {
       <Circle cx="24" cy="28" r="1.5" fill="#FFFFFF" />
 
       {/* Ignition Spark Point Node */}
-      <Circle cx="24" cy="16" r="2.5" fill="#D0142C" />
+      <Circle cx="24" cy="16" r="2.5" fill="#008752" />
       <Circle cx="24" cy="16" r="1" fill="#FFFFFF" />
     </Svg>
   );
@@ -125,7 +125,7 @@ export function DrawerAvatar3DIcon({ size = 36, ...props }) {
       />
 
       {/* NGK Red Service Badge Overlap */}
-      <Circle cx="34" cy="34" r="7" fill="#D0142C" stroke="#FFFFFF" strokeWidth="2" />
+      <Circle cx="34" cy="34" r="7" fill="#008752" stroke="#FFFFFF" strokeWidth="2" />
       {/* Wrench Silhouette on Badge */}
       <Path
         d="M32 36l3.5-3.5a1.2 1.2 0 0 1 1.7 0l.3.3a1.2 1.2 0 0 1 0 1.7L34 38l-2-2z"
@@ -142,14 +142,14 @@ export function DrawerSignOut3DIcon({ size = 20, ...props }) {
       {/* Portal Doorway Frame */}
       <Path
         d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="2.2"
         strokeLinecap="round"
       />
       {/* Egress Direction Arrow */}
       <Path
         d="M14 8l5 4-5 4"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -159,7 +159,7 @@ export function DrawerSignOut3DIcon({ size = 20, ...props }) {
         y1="12"
         x2="19"
         y2="12"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="2.2"
         strokeLinecap="round"
       />
@@ -184,7 +184,7 @@ export function FindParts3DIcon({ size = 32, ...props }) {
         y1="27"
         x2="30"
         y2="30"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="4"
         strokeLinecap="round"
       />
@@ -195,7 +195,7 @@ export function FindParts3DIcon({ size = 32, ...props }) {
         cy="20"
         r="14"
         fill="#F8FAFC"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="3.2"
       />
 
@@ -207,7 +207,7 @@ export function FindParts3DIcon({ size = 32, ...props }) {
 
       {/* Spark Plug Electrode Target Center */}
       <Rect x="18.5" y="16" width="3" height="6" rx="0.5" fill="#0F172A" />
-      <Line x1="20" y1="22" x2="20" y2="25" stroke="#D0142C" strokeWidth="1.6" strokeLinecap="round" />
+      <Line x1="20" y1="22" x2="20" y2="25" stroke="#008752" strokeWidth="1.6" strokeLinecap="round" />
       <Circle cx="20" cy="20" r="1" fill="#FFFFFF" />
     </Svg>
   );
@@ -245,9 +245,9 @@ export function MyGarage3DIcon({ size = 32, ...props }) {
 
       {/* Wheels - Front & Rear Alloy */}
       <Circle cx="15" cy="34" r="5" fill="#1E293B" stroke="#E2E8F0" strokeWidth="1.5" />
-      <Circle cx="15" cy="34" r="2" fill="#D0142C" />
+      <Circle cx="15" cy="34" r="2" fill="#008752" />
       <Circle cx="33" cy="34" r="5" fill="#1E293B" stroke="#E2E8F0" strokeWidth="1.5" />
-      <Circle cx="33" cy="34" r="2" fill="#D0142C" />
+      <Circle cx="33" cy="34" r="2" fill="#008752" />
     </Svg>
   );
 }
@@ -288,12 +288,12 @@ export function DealerLocator3DIcon({ size = 32, ...props }) {
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
       {/* Base Radius Waves */}
       <Circle cx="24" cy="42" r="8" stroke="#CBD5E1" strokeWidth="1.8" strokeDasharray="3 3" />
-      <Circle cx="24" cy="42" r="3" fill="#D0142C" />
+      <Circle cx="24" cy="42" r="3" fill="#008752" />
 
       {/* Precision Teardrop Pin */}
       <Path
         d="M24 5c-7.7 0-14 6.3-14 14 0 10.5 14 23 14 23s14-12.5 14-23c0-7.7-6.3-14-14-14z"
-        fill="#D0142C"
+        fill="#008752"
         stroke="#B91C1C"
         strokeWidth="1.2"
       />
@@ -323,7 +323,7 @@ export function GenuineGuarantee3DIcon({ size = 26, ...props }) {
       {/* Solid Outer Shield */}
       <Path
         d="M16 2.5l11 4.5v8.5c0 8-5 13-11 14.5C10 28.5 5 23.5 5 15.5V7l11-4.5z"
-        fill="#D0142C"
+        fill="#008752"
         stroke="#991B1B"
         strokeWidth="1"
       />
@@ -337,7 +337,7 @@ export function GenuineGuarantee3DIcon({ size = 26, ...props }) {
       {/* Core Certified Seal */}
       <Path
         d="M16 7l6.5 2.8v5.2c0 5-3.2 8-6.5 9.2-3.3-1.2-6.5-4.2-6.5-9.2V9.8L16 7z"
-        fill="#D0142C"
+        fill="#008752"
       />
 
       {/* Crisp White Checkmark */}
@@ -356,9 +356,9 @@ export function GenuineGuarantee3DIcon({ size = 26, ...props }) {
 export function TickerLiveRadarIcon({ size = 18, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
-      <Circle cx="12" cy="12" r="9" stroke="#D0142C" strokeWidth="2" strokeDasharray="3 2" />
+      <Circle cx="12" cy="12" r="9" stroke="#008752" strokeWidth="2" strokeDasharray="3 2" />
       <Circle cx="12" cy="12" r="5" fill="#FEE2E2" />
-      <Circle cx="12" cy="12" r="2.5" fill="#D0142C" />
+      <Circle cx="12" cy="12" r="2.5" fill="#008752" />
     </Svg>
   );
 }
@@ -420,7 +420,7 @@ export function OwnerRole3DIcon({ size = 36, ...props }) {
       {/* Aerodynamic Vehicle Silhouette */}
       <Path
         d="M5 28c0-1.8 1.4-3 3-3h34c1.6 0 3 1.2 3 3v6c0 1.2-1 2-2 2H7c-1 0-2-.8-2-2v-6z"
-        fill="#D0142C"
+        fill="#008752"
       />
       <Path
         d="M13 25l4-8c1-1.6 2.5-2.5 4.5-2.5h12c2 0 3.5.9 4.5 2.5l4 8H13z"
@@ -434,9 +434,9 @@ export function OwnerRole3DIcon({ size = 36, ...props }) {
 
       {/* Wheels */}
       <Circle cx="13" cy="35" r="5" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.5" />
-      <Circle cx="13" cy="35" r="2" fill="#D0142C" />
+      <Circle cx="13" cy="35" r="2" fill="#008752" />
       <Circle cx="35" cy="35" r="5" fill="#0F172A" stroke="#FFFFFF" strokeWidth="1.5" />
-      <Circle cx="35" cy="35" r="2" fill="#D0142C" />
+      <Circle cx="35" cy="35" r="2" fill="#008752" />
 
       {/* Smart Key Glyph Overlap */}
       <G transform="translate(28, 8)">
@@ -513,7 +513,7 @@ export function DistributorRole3DIcon({ size = 36, ...props }) {
       {/* Tractor Truck Cab */}
       <Path
         d="M28 20h7l5 7.5v6.5h-12V20z"
-        fill="#D0142C"
+        fill="#008752"
         stroke="#B91C1C"
         strokeWidth="1"
       />
@@ -525,7 +525,7 @@ export function DistributorRole3DIcon({ size = 36, ...props }) {
       <Circle cx="11" cy="37" r="4" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
       <Circle cx="19" cy="37" r="4" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
       <Circle cx="35" cy="37" r="4.5" fill="#1E293B" stroke="#FFFFFF" strokeWidth="1.2" />
-      <Circle cx="35" cy="37" r="1.8" fill="#D0142C" />
+      <Circle cx="35" cy="37" r="1.8" fill="#008752" />
     </Svg>
   );
 }

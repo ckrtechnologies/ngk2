@@ -6,12 +6,13 @@ import {
   MagnifyingGlassIcon,
   ChatBubbleBottomCenterTextIcon,
   ArrowRightOnRectangleIcon,
+  Squares2X2Icon,
 } from '@heroicons/react/24/solid';
 import { logout } from '../redux/adminSlice';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const { enquiries } = useSelector((state) => state.admin);
+  const { enquiries, selectedBrand } = useSelector((state) => state.admin);
 
   const pendingEnquiriesCount =
     enquiries?.filter((e) => e.status === 'open' || e.status === 'pending')?.length || 0;
@@ -22,6 +23,25 @@ const Sidebar = () => {
 
   const navigationSections = [
     {
+      category: 'Brand & Catalog Portal',
+      items: [
+        {
+          name: 'Switch Brand Portal',
+          path: '/portal',
+          icon: Squares2X2Icon,
+          description: 'NGK & KYB Switcher',
+          colorClass: 'text-emerald-400 bg-emerald-500/10 group-hover:bg-emerald-500/20 group-hover:text-emerald-300',
+        },
+        {
+          name: selectedBrand === 'kyb' ? 'KYB Part Finder' : selectedBrand === 'ngk' ? 'NGK Part Finder' : 'TecDoc Part Finder',
+          path: '/parts',
+          icon: MagnifyingGlassIcon,
+          description: selectedBrand === 'kyb' ? 'KYB Suspension Catalog' : selectedBrand === 'ngk' ? 'NGK & NTK Catalog' : 'Pegasus 3.0 Database',
+          colorClass: selectedBrand === 'kyb' ? 'text-red-400 bg-red-500/10' : 'text-emerald-400 bg-emerald-500/10',
+        },
+      ],
+    },
+    {
       category: 'Network & Accounts',
       items: [
         {
@@ -30,18 +50,6 @@ const Sidebar = () => {
           icon: UserGroupIcon,
           description: 'Accounts, Garages & Roles',
           colorClass: 'text-blue-400 bg-blue-500/10 group-hover:bg-blue-500/20 group-hover:text-blue-300',
-        },
-      ],
-    },
-    {
-      category: 'Catalog & Vehicle Linking',
-      items: [
-        {
-          name: 'TecDoc Part Finder',
-          path: '/parts',
-          icon: MagnifyingGlassIcon,
-          description: 'Pegasus 3.0 Database',
-          colorClass: 'text-purple-400 bg-purple-500/10 group-hover:bg-purple-500/20 group-hover:text-purple-300',
         },
       ],
     },
@@ -65,15 +73,25 @@ const Sidebar = () => {
       {/* Brand Header */}
       <div className="h-16 flex items-center px-5 border-b border-slate-800 bg-slate-950/80 justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-brand-red flex items-center justify-center font-black text-white text-sm tracking-wider shadow-md shadow-brand-red/30">
-            NGK
+          <div
+            className={`w-10 h-10 rounded-xl flex items-center justify-center p-1.5 shadow-md ${
+              selectedBrand === 'kyb'
+                ? 'bg-white shadow-red-600/30 ring-1 ring-red-500/30'
+                : 'bg-white shadow-emerald-600/30 ring-1 ring-emerald-500/30'
+            }`}
+          >
+            <img
+              src={selectedBrand === 'kyb' ? '/images/branding/kyb_logo.png' : '/images/branding/ngk_logo.png'}
+              alt={selectedBrand === 'kyb' ? 'KYB' : 'NGK'}
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-[13px] tracking-tight text-white leading-tight">
-              NGK SPARK PLUG
+              {selectedBrand === 'kyb' ? 'KYB SUSPENSION' : 'NGK SPARK PLUG'}
             </span>
             <span className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase leading-tight mt-0.5">
-              Administration Portal
+              {selectedBrand === 'kyb' ? 'Damping Catalog' : 'Administration Portal'}
             </span>
           </div>
         </div>
@@ -97,7 +115,9 @@ const Sidebar = () => {
                     className={({ isActive }) =>
                       `flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-xs tracking-normal transition-all duration-150 group ${
                         isActive
-                          ? 'bg-brand-red text-white shadow-md shadow-brand-red/30'
+                          ? selectedBrand === 'kyb'
+                            ? 'bg-[#E31837] text-white shadow-md shadow-red-600/30'
+                            : 'bg-[#008752] text-white shadow-md shadow-emerald-600/30'
                           : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
                       }`
                     }

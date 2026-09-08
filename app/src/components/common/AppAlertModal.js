@@ -39,9 +39,9 @@ export default function AppAlertModal({
     switch (type) {
       case 'danger':
         return {
-          icon: <XCircle size={24} color="#D0142C" strokeWidth={2.4} />,
+          icon: <XCircle size={24} color="#008752" strokeWidth={2.4} />,
           badgeBg: '#FEF2F2',
-          primaryBg: '#D0142C',
+          primaryBg: '#008752',
         };
       case 'warning':
         return {
@@ -60,7 +60,7 @@ export default function AppAlertModal({
         return {
           icon: <Info size={24} color="#2563EB" strokeWidth={2.4} />,
           badgeBg: '#DBEAFE',
-          primaryBg: '#D0142C',
+          primaryBg: '#008752',
         };
     }
   };

@@ -49,7 +49,7 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
               <Text
                 style={[
                   styles.countHighlight,
-                  { color: currentItem.themeColor || '#D0142C' },
+                  { color: currentItem.themeColor || '#008752' },
                 ]}
               >
                 {currentItem.countHighlight}{' '}
@@ -65,14 +65,14 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
                 styles.tickerHighlightBadge,
                 {
                   backgroundColor:
-                    (currentItem.themeColor || '#D0142C') + '15',
+                    (currentItem.themeColor || '#008752') + '15',
                 },
               ]}
             >
               <Text
                 style={[
                   styles.tickerHighlightText,
-                  { color: currentItem.themeColor || '#D0142C' },
+                  { color: currentItem.themeColor || '#008752' },
                 ]}
               >
                 {currentItem.highlight}
@@ -84,7 +84,7 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
 
       <ChevronRight
         size={14}
-        color={currentItem.themeColor || '#D0142C'}
+        color={currentItem.themeColor || '#008752'}
         strokeWidth={2.4}
       />
     </TouchableOpacity>

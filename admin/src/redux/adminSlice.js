@@ -14,6 +14,7 @@ import {
   dealersApi,
   brandsApi,
   articlesByVehicleApi,
+  articlesByPartApi,
 } from '../config/api';
 
 // Helper for authenticated fetch headers
@@ -240,59 +241,49 @@ export const fetchDealersCatalog = createAsyncThunk('admin/fetchDealersCatalog',
  */
 export const searchArticlesCatalog = createAsyncThunk(
   'admin/searchArticlesCatalog',
-  async ({ searchType, query }, { rejectWithValue }) => {
+  async ({ searchType, query, brand }, { getState, rejectWithValue }) => {
     try {
+      const activeBrand = (brand || getState().admin?.selectedBrand || '').toLowerCase();
+      const authHeaders = {
+        ...getAuthHeaders(),
+        ...(activeBrand ? { 'x-catalog-brand': activeBrand } : {}),
+      };
+
       if (searchType === 'vehicle') {
         const targetId = parseInt(query.linkageTargetId || query.carId || query, 10);
-        const incomingType = query.linkageTargetType || query.appType || 'P';
-        // In TecDoc Pegasus ZA catalog (NGK/NTK/KYB), articles are linked under 'P' (and 'V').
-        // Queries with raw 'O' or 'C' often return 0 articles directly.
-        const primaryType = (incomingType === 'O' || incomingType === 'C') ? 'P' : incomingType;
+        const incomingType = query.linkageTargetType || query.appType || query.carType || 'P';
+        // Check candidate linkage types: 'L' (Light commercial / bakkie), 'P' (Passenger), 'V' (Commercial engine/vehicle), 'O' (Commercial)
+        const candidateTypes = Array.from(
+          new Set([incomingType, query.carType, 'L', 'P', 'V', 'O', 'C'].filter(Boolean))
+        );
 
-        // 1. Try Pegasus direct with primaryType ('P' for commercial/passenger)
-        try {
-          const response = await fetch(serviceJsonApi, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify({
+        const getSupplierIds = () => {
+          if (activeBrand === 'kyb') return [7729];
+          if (activeBrand === 'ngk') return [15, 5414];
+          return undefined;
+        };
+
+        // 1. Try direct Pegasus with each candidate type
+        for (const cType of candidateTypes) {
+          try {
+            const payload = {
               getArticles: {
                 articleCountry: 'ZA',
                 lang: 'en',
                 linkageTargetId: targetId,
-                linkageTargetType: primaryType,
+                linkageTargetType: cType,
                 perPage: 50,
                 page: 1,
                 includeAll: true,
               },
-            }),
-          });
-          const data = await response.json();
-          const articles = data?.articles || data?.data?.array || data?.getArticles?.array;
-          if (Array.isArray(articles) && articles.length > 0) {
-            return { articles, data: { array: articles } };
-          }
-        } catch (e) {
-          console.warn('Pegasus primaryType lookup failed, attempting alternate types:', e);
-        }
+            };
+            const sIds = getSupplierIds();
+            if (sIds) payload.getArticles.dataSupplierIds = sIds;
 
-        // 2. Try alternate linkage target types
-        for (const altType of ['P', 'V', incomingType]) {
-          if (altType === primaryType) continue;
-          try {
             const response = await fetch(serviceJsonApi, {
               method: 'POST',
-              headers: getAuthHeaders(),
-              body: JSON.stringify({
-                getArticles: {
-                  articleCountry: 'ZA',
-                  lang: 'en',
-                  linkageTargetId: targetId,
-                  linkageTargetType: altType,
-                  perPage: 50,
-                  page: 1,
-                  includeAll: true,
-                },
-              }),
+              headers: authHeaders,
+              body: JSON.stringify(payload),
             });
             const data = await response.json();
             const articles = data?.articles || data?.data?.array || data?.getArticles?.array;
@@ -300,23 +291,26 @@ export const searchArticlesCatalog = createAsyncThunk(
               return { articles, data: { array: articles } };
             }
           } catch (e) {
-            // continue loop
+            // continue candidate loop
           }
         }
 
-        // 3. Fallback to backend /articles/by-vehicle endpoint which has built-in Pegasus proxy and fallback catalog
-        try {
-          const restRes = await fetch(
-            `${articlesByVehicleApi}?vehicleId=${targetId}&type=${incomingType}`,
-            { headers: getAuthHeaders() }
-          );
-          const restData = await restRes.json();
-          const articles = restData?.articles || restData?.data?.array || restData?.data;
-          if (Array.isArray(articles) && articles.length > 0) {
-            return { articles, data: { array: articles } };
+        // 2. Fallback to backend /articles/by-vehicle endpoint across candidate types
+        for (const bType of candidateTypes) {
+          try {
+            const brandParam = activeBrand ? `&brand=${activeBrand}` : '';
+            const restRes = await fetch(
+              `${articlesByVehicleApi}?vehicleId=${targetId}&type=${bType}${brandParam}`,
+              { headers: authHeaders }
+            );
+            const restData = await restRes.json();
+            const articles = restData?.articles || restData?.data?.array || restData?.data;
+            if (Array.isArray(articles) && articles.length > 0) {
+              return { articles, data: { array: articles } };
+            }
+          } catch (e) {
+            // continue candidate loop
           }
-        } catch (e) {
-          console.warn('Backend articlesByVehicleApi fallback failed:', e);
         }
 
         return { articles: [], data: { array: [] } };
@@ -336,13 +330,44 @@ export const searchArticlesCatalog = createAsyncThunk(
         },
       };
 
-      const response = await fetch(serviceJsonApi, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      return data;
+      if (activeBrand === 'kyb') {
+        payload.getArticles.dataSupplierIds = [7729];
+      } else if (activeBrand === 'ngk') {
+        payload.getArticles.dataSupplierIds = [15, 5414];
+      }
+
+      try {
+        const response = await fetch(serviceJsonApi, {
+          method: 'POST',
+          headers: authHeaders,
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        const articles = data?.articles || data?.data?.array || data?.getArticles?.array;
+        if (Array.isArray(articles) && articles.length > 0) {
+          return { articles, data: { array: articles } };
+        }
+      } catch (e) {
+        console.warn('Direct Pegasus part search failed, trying backend fallback:', e);
+      }
+
+      // Fallback to backend /articles/by-part endpoint with brand and fuzzy matching
+      try {
+        const brandParam = activeBrand ? `&brand=${activeBrand}` : '';
+        const partRes = await fetch(
+          `${articlesByPartApi}?partNo=${encodeURIComponent(cleanQuery)}${brandParam}`,
+          { headers: authHeaders }
+        );
+        const partData = await partRes.json();
+        const articles = partData?.articles || partData?.data?.array || partData?.data;
+        if (Array.isArray(articles) && articles.length > 0) {
+          return { articles, data: { array: articles } };
+        }
+      } catch (e) {
+        console.warn('Backend articlesByPartApi fallback failed:', e);
+      }
+
+      return { articles: [], data: { array: [] } };
     } catch (error) {
       return rejectWithValue(error.message || 'Network error');
     }
@@ -403,6 +428,7 @@ const getInitialUser = () => {
 const initialState = {
   adminUser: getInitialUser(),
   isAuthenticated: !!localStorage.getItem('token') || !!localStorage.getItem('adminUser'),
+  selectedBrand: localStorage.getItem('adminSelectedBrand') || null,
   users: [],
   enquiries: [],
   catalogDealers: [],
@@ -419,13 +445,23 @@ const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
+    setSelectedBrand: (state, action) => {
+      state.selectedBrand = action.payload;
+      if (action.payload) {
+        localStorage.setItem('adminSelectedBrand', action.payload);
+      } else {
+        localStorage.removeItem('adminSelectedBrand');
+      }
+    },
     logout: (state) => {
       state.adminUser = null;
       state.isAuthenticated = false;
+      state.selectedBrand = null;
       localStorage.removeItem('adminUser');
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('apiKey');
+      localStorage.removeItem('adminSelectedBrand');
     },
     clearError: (state) => {
       state.error = null;
@@ -656,5 +692,5 @@ const adminSlice = createSlice({
   },
 });
 
-export const { logout, clearError, clearSuccess, clearSelectedUserDetails } = adminSlice.actions;
+export const { logout, clearError, clearSuccess, clearSelectedUserDetails, setSelectedBrand } = adminSlice.actions;
 export default adminSlice.reducer;

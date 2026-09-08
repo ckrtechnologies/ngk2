@@ -15,7 +15,7 @@ import Svg, {
  */
 
 // 1. SOLID STORE / DEALERSHIP ICON
-export function SolidStoreIcon({ size = 22, color = '#D0142C', ...props }) {
+export function SolidStoreIcon({ size = 22, color = '#008752', ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Defs>
@@ -27,7 +27,7 @@ export function SolidStoreIcon({ size = 22, color = '#D0142C', ...props }) {
       {/* Store Roof Awning */}
       <Path
         d="M2.5 9L4.2 3.8A1.5 1.5 0 0 1 5.6 2.8h12.8a1.5 1.5 0 0 1 1.4 1l1.7 5.2a1 1 0 0 1-.3 1 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 1 1 0 0 1-.3-1z"
-        fill={color === '#D0142C' ? 'url(#dealerRoofGrad)' : color}
+        fill={color === '#008752' ? 'url(#dealerRoofGrad)' : color}
       />
       {/* Building Body */}
       <Path
@@ -44,7 +44,7 @@ export function SolidStoreIcon({ size = 22, color = '#D0142C', ...props }) {
 }
 
 // 2. SOLID PART / SPARK PLUG COMPONENT ICON
-export function SolidPartTagIcon({ size = 18, color = '#D0142C', ...props }) {
+export function SolidPartTagIcon({ size = 18, color = '#008752', ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Defs>
@@ -57,11 +57,11 @@ export function SolidPartTagIcon({ size = 18, color = '#D0142C', ...props }) {
       {/* Solid Tag Body with Beveled Notch */}
       <Path
         d="M2.5 3.5A1.5 1.5 0 0 1 4 2h7.2a2 2 0 0 1 1.4.6l9.8 9.8a2 2 0 0 1 0 2.8l-7.2 7.2a2 2 0 0 1-2.8 0L2.6 12.6A2 2 0 0 1 2 11.2V3.5h.5z"
-        fill={color === '#D0142C' ? 'url(#tagSolidGrad)' : color}
+        fill={color === '#008752' ? 'url(#tagSolidGrad)' : color}
       />
       {/* Precision Aperture Center */}
       <Circle cx="7.5" cy="7.5" r="2.2" fill="#FFFFFF" />
-      <Circle cx="7.5" cy="7.5" r="1.1" fill={color === '#D0142C' ? '#B91C1C' : '#FFFFFF'} />
+      <Circle cx="7.5" cy="7.5" r="1.1" fill={color === '#008752' ? '#B91C1C' : '#FFFFFF'} />
       {/* Spark Plug Electrode Accents */}
       <Rect x="13.5" y="12.5" width="4" height="1.5" rx="0.5" transform="rotate(45 13.5 12.5)" fill="#FFFFFF" opacity={0.8} />
       <Rect x="15.5" y="14.5" width="3" height="1.5" rx="0.5" transform="rotate(45 15.5 14.5)" fill="#FFFFFF" opacity={0.6} />

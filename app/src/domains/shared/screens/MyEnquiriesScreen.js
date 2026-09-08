@@ -533,7 +533,7 @@ const MyEnquiriesScreen = () => {
       {/* Role View Banner */}
       {isWholesalerOrDealer && (
         <View style={styles.roleBanner}>
-          <Building2 size={15} color="#D0142C" />
+          <Building2 size={15} color="#008752" />
           <Text style={styles.roleBannerText}>
             Wholesaler & Reseller Portal: Customer inquiries appear as leads. Reply below to relay assistance.
           </Text>
@@ -573,15 +573,15 @@ const MyEnquiriesScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
         {filtered.length === 0 ? (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconCircle}>
-              <MessageSquare size={32} color="#D0142C" />
+              <MessageSquare size={32} color="#008752" />
             </View>
             <Text style={styles.emptyTitle}>No Enquiries Found</Text>
             <Text style={styles.emptySubtitle}>
@@ -638,11 +638,11 @@ const MyEnquiriesScreen = () => {
                         onPress={() => navigateToProductScreen(item)}
                         activeOpacity={0.7}
                       >
-                        <Tag size={11} color="#D0142C" strokeWidth={2.2} />
+                        <Tag size={11} color="#008752" strokeWidth={2.2} />
                         <Text style={styles.partBadgeText} numberOfLines={1}>
                           #{info.partNumber}
                         </Text>
-                        <ChevronRight size={10} color="#D0142C" strokeWidth={2.4} />
+                        <ChevronRight size={10} color="#008752" strokeWidth={2.4} />
                       </TouchableOpacity>
                     )}
                     {info.carName && (
@@ -665,7 +665,7 @@ const MyEnquiriesScreen = () => {
 
                     {messagesCount > 0 && (
                       <View style={styles.messageCountChip}>
-                        <MessageSquare size={10} color="#D0142C" strokeWidth={2.2} />
+                        <MessageSquare size={10} color="#008752" strokeWidth={2.2} />
                         <Text style={styles.messageCountChipText}>
                           {messagesCount} msg{messagesCount > 1 ? 's' : ''}
                         </Text>
@@ -784,7 +784,7 @@ const MyEnquiriesScreen = () => {
                   >
                     <View style={styles.pinnedPartRow}>
                       <View style={styles.pinnedPartBadge}>
-                        <Tag size={10.5} color="#D0142C" strokeWidth={2.4} />
+                        <Tag size={10.5} color="#008752" strokeWidth={2.4} />
                         <Text style={styles.pinnedPartBadgeText}>
                           #{info.partNumber || 'PART-SPEC'}
                         </Text>
@@ -829,9 +829,9 @@ const MyEnquiriesScreen = () => {
                       onPress={() => setSpecsModalVisible(true)}
                       activeOpacity={0.8}
                     >
-                      <Wrench size={11} color="#D0142C" strokeWidth={2.2} />
+                      <Wrench size={11} color="#008752" strokeWidth={2.2} />
                       <Text style={styles.viewSpecsPillText}>Specs</Text>
-                      <ChevronRight size={11} color="#D0142C" strokeWidth={2.4} />
+                      <ChevronRight size={11} color="#008752" strokeWidth={2.4} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -952,7 +952,7 @@ const MyEnquiriesScreen = () => {
               <View style={styles.initialInquiryCard}>
                 <View style={styles.inquiryCardHeader}>
                   <View style={styles.inquiryBadge}>
-                    <FileText size={12} color="#D0142C" />
+                    <FileText size={12} color="#008752" />
                     <Text style={styles.inquiryBadgeText}>
                       {isWholesalerOrDealer ? 'Customer Inquiry' : 'Your Initial Inquiry'}
                     </Text>
@@ -1223,7 +1223,7 @@ const MyEnquiriesScreen = () => {
             {/* Modal Header */}
             <View style={styles.specsModalHeader}>
               <View style={styles.specsHeaderIconBox}>
-                <Wrench size={16} color="#D0142C" strokeWidth={2.4} />
+                <Wrench size={16} color="#008752" strokeWidth={2.4} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.specsModalTitle}>Technical Specifications</Text>
@@ -1250,7 +1250,7 @@ const MyEnquiriesScreen = () => {
                   {/* Compact Header Pill Bar */}
                   <View style={styles.specsHeaderPillRow}>
                     <View style={styles.specsPartPill}>
-                      <Hash size={10.5} color="#D0142C" strokeWidth={2.5} />
+                      <Hash size={10.5} color="#008752" strokeWidth={2.5} />
                       <Text style={styles.specsPartPillText}>
                         {info.partNumber || 'STANDARD-OE'}
                       </Text>
@@ -1319,17 +1319,17 @@ const MyEnquiriesScreen = () => {
                   {/* SECTION 2: COMPONENT & ORDER SPECIFICATIONS */}
                   <View style={styles.specsSection}>
                     <View style={styles.specsSectionHeader}>
-                      <Layers size={13} color="#D0142C" strokeWidth={2.4} />
+                      <Layers size={13} color="#008752" strokeWidth={2.4} />
                       <Text style={styles.specsSectionTitle}>COMPONENT ATTRIBUTES</Text>
                     </View>
 
                     <View style={styles.specsGridCompact}>
                       <View style={styles.specsCell}>
                         <View style={styles.specsCellLabelRow}>
-                          <Hash size={9} color="#D0142C" />
+                          <Hash size={9} color="#008752" />
                           <Text style={styles.specsCellLabel}>OEM PART #</Text>
                         </View>
-                        <Text style={[styles.specsCellVal, { color: '#D0142C' }]} numberOfLines={1}>
+                        <Text style={[styles.specsCellVal, { color: '#008752' }]} numberOfLines={1}>
                           {info.partNumber || 'OE Standard'}
                         </Text>
                       </View>
@@ -1533,7 +1533,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   tabPillSelected: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   tabPillText: {
     fontSize: 12,
@@ -1636,7 +1636,7 @@ const styles = StyleSheet.create({
   partBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   vehicleBadge: {
     flexDirection: 'row',
@@ -1687,7 +1687,7 @@ const styles = StyleSheet.create({
   messageCountChipText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   newTicketHeaderBtn: {
     flexDirection: 'row',
@@ -1709,7 +1709,7 @@ const styles = StyleSheet.create({
   // Full Screen Conversation Styles
   fullScreenConvSafeArea: {
     flex: 1,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   fullScreenConvContainer: {
     flex: 1,
@@ -1718,7 +1718,7 @@ const styles = StyleSheet.create({
   convHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 8 : 14,
     paddingBottom: 14,
@@ -1826,7 +1826,7 @@ const styles = StyleSheet.create({
   pinnedPartBadgeText: {
     fontSize: 10.5,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   pinnedPartNameText: {
     fontSize: 13,
@@ -1866,7 +1866,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 8,
     paddingVertical: 4.5,
     borderRadius: 14,
@@ -1890,7 +1890,7 @@ const styles = StyleSheet.create({
   viewSpecsPillText: {
     fontSize: 10.5,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   partnerStatusBar: {
     backgroundColor: '#F8FAFC',
@@ -2090,7 +2090,7 @@ const styles = StyleSheet.create({
     flex: 2,
     paddingVertical: 11,
     borderRadius: 10,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2197,7 +2197,7 @@ const styles = StyleSheet.create({
   specsPartPillText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   specsFitmentGuaranteePill: {
     flexDirection: 'row',
@@ -2297,7 +2297,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   specsNavigateBtn: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: 9,
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -2306,7 +2306,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     marginTop: 10,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -2344,7 +2344,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     borderLeftWidth: 4,
-    borderLeftColor: '#D0142C',
+    borderLeftColor: '#008752',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -2370,7 +2370,7 @@ const styles = StyleSheet.create({
   inquiryBadgeText: {
     fontSize: 10.5,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   inquiryTimeText: {
     fontSize: 10,
@@ -2483,7 +2483,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2508,12 +2508,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   bubbleRight: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 4,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
@@ -2612,7 +2612,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -42,13 +42,14 @@ export const getVehicles = async (req, res) => {
 
 export const getArticlesByVehicle = async (req, res) => {
   try {
-    const { linkageTargetId, carId, vehicleId, type, country, lang } = req.query;
+    const { linkageTargetId, carId, vehicleId, type, country, lang, brand: queryBrand } = req.query;
+    const brand = queryBrand || req.headers['x-catalog-brand'] || req.headers['x-brand'];
     const id = linkageTargetId || carId || vehicleId;
     if (!id) {
       return sendError(res, 'linkageTargetId or vehicleId query parameter is required', 400);
     }
-    const articles = await tecdocService.getArticlesByVehicle(id, type, country, lang);
-    const categorized = tecdocService.groupArticlesByCategory(articles);
+    const articles = await tecdocService.getArticlesByVehicle(id, type, country, lang, brand);
+    const categorized = tecdocService.groupArticlesByCategory(articles, brand);
 
     return sendSuccess(
       res,
@@ -68,12 +69,13 @@ export const getArticlesByVehicle = async (req, res) => {
 
 export const getArticlesByPartNumber = async (req, res) => {
   try {
-    const { searchQuery, partNumber, query, country, lang } = req.query;
+    const { searchQuery, partNumber, query, country, lang, brand: queryBrand } = req.query;
+    const brand = queryBrand || req.headers['x-catalog-brand'] || req.headers['x-brand'];
     const search = searchQuery || partNumber || query;
     if (!search) {
       return sendError(res, 'searchQuery query parameter is required', 400);
     }
-    const articles = await tecdocService.getArticlesByPartNumber(search, country, lang);
+    const articles = await tecdocService.getArticlesByPartNumber(search, country, lang, brand);
     return sendSuccess(res, { status: 200, articles, count: articles.length }, 'Articles fetched successfully');
   } catch (error) {
     return sendError(res, error.message, 500, error);
@@ -82,8 +84,9 @@ export const getArticlesByPartNumber = async (req, res) => {
 
 export const getBrands = async (req, res) => {
   try {
-    const { country, lang } = req.query;
-    const brands = await tecdocService.getBrands(country, lang);
+    const { country, lang, brand: queryBrand } = req.query;
+    const brand = queryBrand || req.headers['x-catalog-brand'] || req.headers['x-brand'];
+    const brands = await tecdocService.getBrands(country, lang, brand);
     return sendSuccess(res, { data: { array: brands }, count: brands.length }, 'Brands fetched successfully');
   } catch (error) {
     return sendError(res, error.message, 500, error);
@@ -129,6 +132,17 @@ export const getPopularBrands = async (req, res) => {
 export const proxyServiceJson = async (req, res) => {
   try {
     const payload = req.body;
+    const brand = (req.query.brand || req.headers['x-catalog-brand'] || req.headers['x-brand'] || '').toLowerCase();
+
+    // If payload contains getArticles and brand is specified, auto-scope dataSupplierIds
+    if (payload && payload.getArticles && brand) {
+      if (brand === 'kyb' && !payload.getArticles.dataSupplierIds) {
+        payload.getArticles.dataSupplierIds = [7729];
+      } else if (brand === 'ngk' && !payload.getArticles.dataSupplierIds) {
+        payload.getArticles.dataSupplierIds = [15, 5414];
+      }
+    }
+
     const data = await tecdocService.execute(payload);
     return res.status(200).json(data);
   } catch (error) {

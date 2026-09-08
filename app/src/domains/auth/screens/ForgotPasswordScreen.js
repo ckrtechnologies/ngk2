@@ -18,7 +18,7 @@ import AppButton from '../../../components/common/AppButton';
 
 const ForgotPasswordScreen = ({ route, navigation }) => {
   const role = route?.params?.role || 'owner';
-  const buttonColor = role === 'distributor' ? '#111827' : '#D0142C';
+  const buttonColor = role === 'distributor' ? '#111827' : '#008752';
 
   const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
   const [email, setEmail] = useState('');
@@ -146,7 +146,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" translucent={false} />
       <AppHeader
         title={step === 1 ? 'Reset Password' : step === 2 ? 'Verify Code' : 'Set New Password'}
         subtitle={portalSubtitle}

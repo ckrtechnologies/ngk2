@@ -36,12 +36,12 @@ export default function NotificationsEmptyIllustration({ size = 120 }) {
       <Rect x="32" y="74" width="32" height="6" rx="2" fill="#0F172A" />
       {/* LED Status Row */}
       <Circle cx="37" cy="77" r="1.5" fill="#10B981" />
-      <Circle cx="43" cy="77" r="1.5" fill="#D0142C" />
+      <Circle cx="43" cy="77" r="1.5" fill="#008752" />
       <Circle cx="49" cy="77" r="1.5" fill="#FBBF24" />
       {/* Chip Grid */}
       <Rect x="33" y="57" width="8" height="8" rx="1.5" fill="#E2E8F0" stroke="#94A3B8" strokeWidth="1" />
       <Rect x="44" y="57" width="8" height="8" rx="1.5" fill="#E2E8F0" stroke="#94A3B8" strokeWidth="1" />
-      <Rect x="55" y="57" width="8" height="8" rx="1.5" fill="#D0142C" />
+      <Rect x="55" y="57" width="8" height="8" rx="1.5" fill="#008752" />
       {/* NGK chip label lines */}
       <Line x1="34.5" y1="69" x2="44.5" y2="69" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
       <Line x1="34.5" y1="72" x2="51" y2="72" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
@@ -72,7 +72,7 @@ export default function NotificationsEmptyIllustration({ size = 120 }) {
       {/* Arc 3 – outermost accent */}
       <Path
         d="M36 8.5a16.5 16.5 0 0 1 24 0"
-        stroke="#D0142C"
+        stroke="#008752"
         strokeWidth="1.8"
         strokeLinecap="round"
         opacity={0.4}

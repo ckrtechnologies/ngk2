@@ -31,7 +31,7 @@ const RegisterScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const buttonColor = role === 'distributor' ? '#111827' : '#D0142C';
+  const buttonColor = role === 'distributor' ? '#111827' : '#008752';
 
   const validate = () => {
     const errs = {};

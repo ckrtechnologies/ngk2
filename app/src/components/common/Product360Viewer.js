@@ -533,7 +533,7 @@ const Product360Viewer = ({
       {/* Non-blocking loading pill — top-right corner during fetch */}
       {isLoadingPhase && !isStatic && (
         <View style={styles.loadingOverlay} pointerEvents="none">
-          <ActivityIndicator size="small" color="#D0142C" />
+          <ActivityIndicator size="small" color="#008752" />
           <Text style={styles.loadingOverlayText}>Loading 360° Studio...</Text>
         </View>
       )}

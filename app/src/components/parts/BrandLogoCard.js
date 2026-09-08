@@ -56,7 +56,7 @@ const BrandLogoCard = ({ item, isSelected, onPress }) => {
           />
         ) : (
           <View style={styles.fallbackCircle}>
-            <Car size={18} color={isSelected ? '#D0142C' : '#6B7280'} />
+            <Car size={18} color={isSelected ? '#008752' : '#6B7280'} />
           </View>
         )}
       </View>
@@ -96,9 +96,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   cardSelected: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     backgroundColor: '#FEF2F2',
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOpacity: 0.18,
     shadowRadius: 5,
     elevation: 2,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   brandNameSelected: {
-    color: '#D0142C',
+    color: '#008752',
   },
 });
 

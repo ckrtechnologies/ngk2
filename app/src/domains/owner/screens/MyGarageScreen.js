@@ -666,8 +666,8 @@ const MyGarageScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -712,7 +712,7 @@ const MyGarageScreen = () => {
                 <View key={car.id || idx} style={styles.carCard}>
                   <View style={styles.carCardTop}>
                     <View style={styles.carIconBox}>
-                      <Car size={20} color="#D0142C" />
+                      <Car size={20} color="#008752" />
                     </View>
                     <View style={{ flex: 1 }}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
@@ -840,7 +840,7 @@ const MyGarageScreen = () => {
               >
                 <BookOpen
                   size={15}
-                  color={entryMode === 'catalog' ? '#D0142C' : '#6B7280'}
+                  color={entryMode === 'catalog' ? '#008752' : '#6B7280'}
                 />
                 <Text
                   style={[
@@ -862,7 +862,7 @@ const MyGarageScreen = () => {
               >
                 <Edit3
                   size={15}
-                  color={entryMode === 'manual' ? '#D0142C' : '#6B7280'}
+                  color={entryMode === 'manual' ? '#008752' : '#6B7280'}
                 />
                 <Text
                   style={[
@@ -902,7 +902,7 @@ const MyGarageScreen = () => {
                               }}
                               style={styles.stepResetLink}
                             >
-                              <RotateCcw size={12} color="#D0142C" />
+                              <RotateCcw size={12} color="#008752" />
                               <Text style={styles.stepResetText}>Change</Text>
                             </TouchableOpacity>
                           )}
@@ -964,7 +964,7 @@ const MyGarageScreen = () => {
                                 }}
                                 style={styles.stepResetLink}
                               >
-                                <RotateCcw size={12} color="#D0142C" />
+                                <RotateCcw size={12} color="#008752" />
                                 <Text style={styles.stepResetText}>Change</Text>
                               </TouchableOpacity>
                             )}
@@ -972,7 +972,7 @@ const MyGarageScreen = () => {
 
                           {loadingSeries ? (
                             <View style={styles.inlineLoading}>
-                              <ActivityIndicator size="small" color="#D0142C" />
+                              <ActivityIndicator size="small" color="#008752" />
                               <Text style={styles.inlineLoadingText}>
                                 Loading series for {selectedManu.manuName || selectedManu.name}...
                               </Text>
@@ -1013,7 +1013,7 @@ const MyGarageScreen = () => {
 
                           {loadingVehicles ? (
                             <View style={styles.inlineLoading}>
-                              <ActivityIndicator size="small" color="#D0142C" />
+                              <ActivityIndicator size="small" color="#008752" />
                               <Text style={styles.inlineLoadingText}>
                                 Loading engines & trims from TecDoc...
                               </Text>
@@ -1043,7 +1043,7 @@ const MyGarageScreen = () => {
                                 onPress={() => openPickerModal('trim')}
                                 activeOpacity={0.75}
                               >
-                                <Zap size={16} color="#D0142C" />
+                                <Zap size={16} color="#008752" />
                                 <Text style={styles.selectorDropdownText}>
                                   Choose Engine / Trim ({vehiclesList.length} options)...
                                 </Text>
@@ -1079,7 +1079,7 @@ const MyGarageScreen = () => {
                                           {[powerStr, yearRange, v.fuelType].filter(Boolean).join(' • ')}
                                         </Text>
                                       </View>
-                                      <ChevronRight size={16} color="#D0142C" />
+                                      <ChevronRight size={16} color="#008752" />
                                     </TouchableOpacity>
                                   );
                                 })}
@@ -1313,7 +1313,7 @@ const MyGarageScreen = () => {
 
           {loadingManu && pickerType === 'manu' ? (
             <View style={styles.pickerCenterLoading}>
-              <ActivityIndicator size="large" color="#D0142C" />
+              <ActivityIndicator size="large" color="#008752" />
               <Text style={styles.pickerLoadingText}>Loading manufacturers...</Text>
             </View>
           ) : (
@@ -1342,7 +1342,7 @@ const MyGarageScreen = () => {
                       activeOpacity={0.7}
                     >
                       <View style={styles.pickerListIconBox}>
-                        <Car size={18} color="#D0142C" />
+                        <Car size={18} color="#008752" />
                       </View>
                       <Text style={styles.pickerListItemText}>{name}</Text>
                       <ChevronRight size={16} color="#D1D5DB" />
@@ -1359,7 +1359,7 @@ const MyGarageScreen = () => {
                       activeOpacity={0.7}
                     >
                       <View style={styles.pickerListIconBox}>
-                        <Layers size={18} color="#D0142C" />
+                        <Layers size={18} color="#008752" />
                       </View>
                       <Text style={styles.pickerListItemText}>{name}</Text>
                       <ChevronRight size={16} color="#D1D5DB" />
@@ -1388,7 +1388,7 @@ const MyGarageScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.pickerListIconBox}>
-                      <Zap size={18} color="#D0142C" />
+                      <Zap size={18} color="#008752" />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.pickerTrimTitle}>{title}</Text>
@@ -1687,7 +1687,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingVertical: 9,
     borderRadius: 8,
   },
@@ -1765,7 +1765,7 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   modeSegmentTextActive: {
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: '700',
   },
 
@@ -1789,7 +1789,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -1817,7 +1817,7 @@ const styles = StyleSheet.create({
   stepResetText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   selectedPillCard: {
     flexDirection: 'row',
@@ -1915,7 +1915,7 @@ const styles = StyleSheet.create({
   quickManualBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   quickTrimCard: {
     flexDirection: 'row',
@@ -2153,8 +2153,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxBoxChecked: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   primaryToggleTitle: {
     fontSize: 13,

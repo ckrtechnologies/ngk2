@@ -229,7 +229,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" />
 
       {/* Solid Crimson Header */}
       <View style={[styles.headerBar, { paddingTop: insets.top + 8 }]}>
@@ -294,7 +294,7 @@ export default function ProfileScreen({ navigation }) {
             onPress={openEditModal}
             activeOpacity={0.75}
           >
-            <Pencil size={14} color="#D0142C" />
+            <Pencil size={14} color="#008752" />
             <Text style={styles.editPillText}>Edit Profile Details</Text>
           </TouchableOpacity>
         </View>
@@ -447,7 +447,7 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={0.7}
           >
             <View style={styles.navIconBadgeRed}>
-              <Wrench size={16} color="#D0142C" />
+              <Wrench size={16} color="#008752" />
             </View>
             <View style={styles.navTextCol}>
               <Text style={styles.navTitle}>TecDoc Parts & Catalog</Text>
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   headerBar: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 16,
     paddingBottom: 16,
     flexDirection: 'row',
@@ -707,13 +707,13 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 18,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderWidth: 2.5,
     borderColor: '#FDE047',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
   editPillText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   statsGrid: {
     flexDirection: 'row',
@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
   sectionEditLink: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   detailRow: {
     flexDirection: 'row',
@@ -1096,12 +1096,12 @@ const styles = StyleSheet.create({
   modalSaveBtn: {
     flex: 2,
     flexDirection: 'row',
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 6,

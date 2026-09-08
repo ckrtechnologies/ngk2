@@ -90,7 +90,7 @@ const DistributorHomeScreen = () => {
       id: 'enquiries',
       title: 'Regional Tickets',
       subtitle: `${pendingCount} open technical enquiries`,
-      icon: <MessageSquare size={22} color="#D0142C" />,
+      icon: <MessageSquare size={22} color="#008752" />,
       bg: '#FEE2E2',
       route: 'MyEnquiries',
     },
@@ -114,7 +114,7 @@ const DistributorHomeScreen = () => {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" />
 
       {/* Solid Crimson NGK Header */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
@@ -160,8 +160,8 @@ const DistributorHomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -198,7 +198,7 @@ const DistributorHomeScreen = () => {
             activeOpacity={0.75}
           >
             <View style={styles.kpiIconWrapper}>
-              <Clock size={16} color="#D0142C" />
+              <Clock size={16} color="#008752" />
             </View>
             <Text style={styles.kpiValue}>{pendingCount}</Text>
             <Text style={styles.kpiLabel}>Pending Actions</Text>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   solidHeader: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   headerBrandText: {
     fontSize: 12,
     fontWeight: '900',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.8,
     marginLeft: 5,
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FBBF24',
     borderWidth: 1.5,
-    borderColor: '#D0142C',
+    borderColor: '#008752',
   },
   scrollContent: {
     paddingHorizontal: 16,

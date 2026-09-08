@@ -188,7 +188,7 @@ const VehiclesListScreen = () => {
 
         {loading ? (
           <View style={styles.centerLoading}>
-            <ActivityIndicator size="large" color="#D0142C" />
+            <ActivityIndicator size="large" color="#008752" />
             <Text style={styles.loadingText}>Fetching matching engines & trims...</Text>
             <Text style={styles.loadingSub}>TecDoc Pegasus 3.0 Catalog</Text>
           </View>
@@ -204,8 +204,8 @@ const VehiclesListScreen = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={['#D0142C']}
-                tintColor="#D0142C"
+                colors={['#008752']}
+                tintColor="#008752"
               />
             }
             renderItem={({ item }) => {
@@ -239,7 +239,7 @@ const VehiclesListScreen = () => {
                   activeOpacity={0.75}
                 >
                   <View style={styles.iconCircle}>
-                    <Car size={20} color="#D0142C" />
+                    <Car size={20} color="#008752" />
                   </View>
 
                   <View style={styles.infoCol}>
@@ -290,7 +290,7 @@ const VehiclesListScreen = () => {
                   We could not find engine trims for {seriesName}. Try refreshing or choosing another model.
                 </Text>
                 <TouchableOpacity style={styles.retryBtn} onPress={fetchVehicles}>
-                  <RotateCcw size={14} color="#D0142C" />
+                  <RotateCcw size={14} color="#008752" />
                   <Text style={styles.retryText}>Retry Fetching</Text>
                 </TouchableOpacity>
               </View>
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
 });
 

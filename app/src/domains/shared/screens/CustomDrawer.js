@@ -119,7 +119,7 @@ export default function CustomDrawer({ navigation }) {
         },
       ]}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" translucent={false} />
 
       {/* Drawer Header (Solid NGK Crimson Theme matching rest of the app) */}
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 20,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     borderBottomWidth: 1,
     borderBottomColor: '#B91024',
     shadowColor: '#000000',
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   roleBadgeText: {
     fontSize: 9.5,
     fontWeight: '900',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.5,
   },
   verifiedDot: {

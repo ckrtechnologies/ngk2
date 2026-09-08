@@ -45,7 +45,7 @@ export default function VehicleBlueprintFallback({
           {/* Precision Vehicle Silhouette */}
           <G transform="translate(10, 8)">
             {/* Ground Line */}
-            <Line x1="5" y1="44" x2="135" y2="44" stroke="#D0142C" strokeWidth="1.2" strokeOpacity="0.7" />
+            <Line x1="5" y1="44" x2="135" y2="44" stroke="#008752" strokeWidth="1.2" strokeOpacity="0.7" />
 
             {/* Aerodynamic Coupe Body */}
             <Path
@@ -65,9 +65,9 @@ export default function VehicleBlueprintFallback({
 
             {/* Wheels */}
             <Circle cx="38" cy="44" r="7" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-            <Circle cx="38" cy="44" r="3" fill="#D0142C" />
+            <Circle cx="38" cy="44" r="3" fill="#008752" />
             <Circle cx="102" cy="44" r="7" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-            <Circle cx="102" cy="44" r="3" fill="#D0142C" />
+            <Circle cx="102" cy="44" r="3" fill="#008752" />
           </G>
         </Svg>
 
@@ -116,13 +116,13 @@ export default function VehicleBlueprintFallback({
         </G>
 
         {/* Center Target Crosshairs */}
-        <Line x1="170" y1="15" x2="170" y2="25" stroke="#D0142C" strokeWidth="1.5" />
-        <Line x1="165" y1="20" x2="175" y2="20" stroke="#D0142C" strokeWidth="1.5" />
+        <Line x1="170" y1="15" x2="170" y2="25" stroke="#008752" strokeWidth="1.5" />
+        <Line x1="165" y1="20" x2="175" y2="20" stroke="#008752" strokeWidth="1.5" />
 
         {/* Dynamic Datum / Ground Reference Line with Tech Markers */}
-        <Line x1="20" y1="126" x2="320" y2="126" stroke="#D0142C" strokeWidth="1.5" strokeOpacity="0.8" />
-        <Circle cx="20" cy="126" r="2.5" fill="#D0142C" />
-        <Circle cx="320" cy="126" r="2.5" fill="#D0142C" />
+        <Line x1="20" y1="126" x2="320" y2="126" stroke="#008752" strokeWidth="1.5" strokeOpacity="0.8" />
+        <Circle cx="20" cy="126" r="2.5" fill="#008752" />
+        <Circle cx="320" cy="126" r="2.5" fill="#008752" />
 
         {/* Vehicle Blueprint Silhouette */}
         <G transform="translate(20, 26)">
@@ -154,12 +154,12 @@ export default function VehicleBlueprintFallback({
           {/* Front Alloy Wheel & Ceramic Brake Disc */}
           <Circle cx="76" cy="94" r="14" fill="#0A0F1D" stroke="#94A3B8" strokeWidth="1.8" />
           <Circle cx="76" cy="94" r="8" fill="#1E293B" stroke="#475569" strokeWidth="1" />
-          <Circle cx="76" cy="94" r="3.5" fill="#D0142C" />
+          <Circle cx="76" cy="94" r="3.5" fill="#008752" />
 
           {/* Rear Alloy Wheel & Ceramic Brake Disc */}
           <Circle cx="204" cy="94" r="14" fill="#0A0F1D" stroke="#94A3B8" strokeWidth="1.8" />
           <Circle cx="204" cy="94" r="8" fill="#1E293B" stroke="#475569" strokeWidth="1" />
-          <Circle cx="204" cy="94" r="3.5" fill="#D0142C" />
+          <Circle cx="204" cy="94" r="3.5" fill="#008752" />
 
           {/* Aerodynamic Air Flow Vector Lines */}
           <Path d="M22 62 C50 60, 80 50, 110 50" stroke="#38BDF8" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.5" />
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   yearPill: {
-    backgroundColor: 'rgba(208, 20, 44, 0.85)',
+    backgroundColor: 'rgba(0, 135, 82, 0.85)',
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,

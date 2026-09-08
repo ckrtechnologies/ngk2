@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: 'rgba(208, 20, 44, 0.15)',
     borderWidth: 1.5,
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp('1.8%'),
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     flex: 1,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingVertical: hp('1.8%'),
     borderRadius: 12,
     alignItems: 'center',

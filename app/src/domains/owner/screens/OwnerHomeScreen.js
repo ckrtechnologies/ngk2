@@ -46,7 +46,7 @@ const TICKER_ITEMS = [
   {
     id: 'oem_fit',
     IconComponent: TickerLiveRadarIcon,
-    themeColor: '#D0142C',
+    themeColor: '#008752',
     badgeBg: '#FEE2E2',
     countHighlight: '100% Genuine',
     text: 'OEM spark plugs & coils',
@@ -117,7 +117,7 @@ const VehicleCarouselCard = memo(function VehicleCarouselCard({
         >
           {isActive ? (
             <>
-              <CheckCircle2 size={13} color="#D0142C" strokeWidth={2.4} />
+              <CheckCircle2 size={13} color="#008752" strokeWidth={2.4} />
               <Text style={styles.vehicleStatusActiveText}>ACTIVE VEHICLE</Text>
             </>
           ) : (
@@ -224,7 +224,7 @@ const PickerVehicleItem = memo(function PickerVehicleItem({
         </View>
       </View>
       <View style={styles.pickerItemArrow}>
-        <ChevronRight size={18} color={isCurrentActive ? '#D0142C' : '#94A3B8'} strokeWidth={2.2} />
+        <ChevronRight size={18} color={isCurrentActive ? '#008752' : '#94A3B8'} strokeWidth={2.2} />
       </View>
     </TouchableOpacity>
   );
@@ -385,7 +385,7 @@ const OwnerHomeScreen = () => {
       subtitle: 'Spark plugs, sensors & ignition coils',
       IconComponent: FindParts3DIcon,
       bg: '#FEF2F2',
-      accentColor: '#D0142C',
+      accentColor: '#008752',
       tag: '50k+ Parts',
       route: 'PartsFinder',
     },
@@ -423,7 +423,7 @@ const OwnerHomeScreen = () => {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.rootContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" />
 
       {/* Solid Branded NGK Crimson Header: Spacious, Elegant, Non-Sticky */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 8 }]}>
@@ -473,8 +473,8 @@ const OwnerHomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -528,7 +528,7 @@ const OwnerHomeScreen = () => {
               activeOpacity={0.75}
             >
               <View style={styles.addVehicleCircle}>
-                <Plus size={22} color="#D0142C" strokeWidth={2.4} />
+                <Plus size={22} color="#008752" strokeWidth={2.4} />
               </View>
               <Text style={styles.addVehicleTitle}>Add Vehicle</Text>
               <Text style={styles.addVehicleSub}>Expand garage</Text>
@@ -542,7 +542,7 @@ const OwnerHomeScreen = () => {
               activeOpacity={0.7}
             >
               <View style={styles.addCarCircle}>
-                <Plus size={20} color="#D0142C" strokeWidth={2.4} />
+                <Plus size={20} color="#008752" strokeWidth={2.4} />
               </View>
               <View style={styles.emptyGarageTextContainer}>
                 <Text style={styles.emptyGarageTitle}>Add your vehicle to garage</Text>
@@ -692,7 +692,7 @@ const OwnerHomeScreen = () => {
                 activeOpacity={0.75}
               >
                 <View style={styles.pickerManualSearchIconBox}>
-                  <Search size={18} color="#D0142C" strokeWidth={2.2} />
+                  <Search size={18} color="#008752" strokeWidth={2.2} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pickerManualSearchTitle}>Select Another Vehicle</Text>
@@ -714,7 +714,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   solidHeader: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -793,7 +793,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FBBF24',
     borderWidth: 1.5,
-    borderColor: '#D0142C',
+    borderColor: '#008752',
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   manageGarageLink: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   vehicleScrollContainer: {
     paddingRight: 16,
@@ -842,9 +842,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   vehicleCarouselCardActive: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     borderWidth: 2,
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOpacity: 0.12,
     shadowRadius: 10,
     elevation: 3,
@@ -879,7 +879,7 @@ const styles = StyleSheet.create({
   vehicleStatusActiveText: {
     fontSize: 9.5,
     fontWeight: '900',
-    color: '#D0142C',
+    color: '#008752',
     letterSpacing: 0.3,
   },
   vehicleStatusInactiveText: {
@@ -897,7 +897,7 @@ const styles = StyleSheet.create({
   switchActivePillText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#D0142C',
+    color: '#008752',
   },
   vehicleCardTitle: {
     fontSize: 14.5,
@@ -1086,7 +1086,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderLeftWidth: 3.5,
-    borderLeftColor: '#D0142C',
+    borderLeftColor: '#008752',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     shadowColor: '#000000',
@@ -1120,7 +1120,7 @@ const styles = StyleSheet.create({
   tipBadgeText: {
     fontSize: 9,
     fontWeight: '900',
-    color: '#D0142C',
+    color: '#008752',
   },
   tipText: {
     fontSize: 10.5,
@@ -1225,7 +1225,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   pickerVehicleThumbContainerActive: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     borderWidth: 1.5,
   },
   pickerVehicleThumb: {
@@ -1240,7 +1240,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   pickerActiveTag: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 6,
     paddingVertical: 1.5,
     borderRadius: 4,

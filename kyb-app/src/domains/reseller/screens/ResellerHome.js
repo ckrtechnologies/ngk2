@@ -1,0 +1,496 @@
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  Image,
+} from 'react-native';
+import { ScrollView, RefreshControl } from 'react-native-gesture-handler';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  Menu,
+  Bell,
+  Search,
+  MessageSquare,
+  Package,
+  MapPin,
+  Clock,
+  CheckCircle2,
+  TrendingUp,
+} from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getEnquiryRedux, getMyselfRedux } from '../../../redux/getData';
+
+const ResellerHomeScreen = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
+  const { enquiry, myself } = useSelector((state) => state.getData);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchDashboardData = useCallback(async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    if (userId) {
+      dispatch(getMyselfRedux(userId));
+      dispatch(getEnquiryRedux(userId));
+    }
+  }, [dispatch]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchDashboardData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const pendingCount = useMemo(() => {
+    return (
+      enquiry?.filter((e) => {
+        const s = (e.status || 'Pending').toLowerCase().replace(/[\s_-]+/g, '');
+        return s === 'pending' || s === 'open';
+      })?.length || 0
+    );
+  }, [enquiry]);
+
+  const inProgressCount = useMemo(() => {
+    return (
+      enquiry?.filter((e) => {
+        const s = (e.status || '').toLowerCase().replace(/[\s_-]+/g, '');
+        return s === 'inprogress' || s === 'inprocess';
+      })?.length || 0
+    );
+  }, [enquiry]);
+
+  const hasUnreadNotifications = useMemo(() => {
+    if (!myself?.notifications || !Array.isArray(myself.notifications)) return false;
+    return myself.notifications.some(
+      (n) => n.isRead === false || n.is_read === false
+    );
+  }, [myself?.notifications]);
+
+  const quickActions = [
+    {
+      id: 'lookup',
+      title: 'Parts Lookup',
+      subtitle: 'Fast OE & cross-reference',
+      icon: <Search size={22} color="#E31837" />,
+      bg: '#FEE2E2',
+      route: 'PartsFinder',
+    },
+    {
+      id: 'enquiries',
+      title: 'Active Tickets',
+      subtitle: `${pendingCount} pending customer requests`,
+      icon: <MessageSquare size={22} color="#2563EB" />,
+      bg: '#DBEAFE',
+      route: 'MyEnquiries',
+    },
+    {
+      id: 'orders',
+      title: 'Trade Supply',
+      subtitle: 'Distributor order requests',
+      icon: <Package size={22} color="#059669" />,
+      bg: '#D1FAE5',
+      route: 'PartsFinder',
+    },
+    {
+      id: 'dealers',
+      title: 'Distributors',
+      subtitle: 'Regional supplier network',
+      icon: <MapPin size={22} color="#D97706" />,
+      bg: '#FEF3C7',
+      route: 'DealerLocator',
+    },
+  ];
+
+  return (
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#E31837" />
+
+      {/* Solid Crimson NGK Header */}
+      <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
+        <TouchableOpacity
+          style={styles.headerBtn}
+          onPress={() => navigation.navigate('CustomDrawer')}
+          activeOpacity={0.75}
+        >
+          <Menu size={22} color="#FFFFFF" strokeWidth={2.4} />
+        </TouchableOpacity>
+
+        <View style={styles.headerCenter}>
+          <View style={styles.logoBadgeContainer}>
+            <Image
+              source={require('../../../assets/images/branding/kyb_logo.png')}
+              style={styles.headerLogoImg}
+              resizeMode="contain"
+            />
+            <Text style={styles.headerBrandText}>KYB</Text>
+          </View>
+          <View style={styles.headerUserContainer}>
+            <Text style={styles.headerGreetingHello}>WORKSHOP,</Text>
+            <Text style={styles.headerUserName} numberOfLines={1}>
+              {myself?.name ? myself.name : 'Partner'}
+            </Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.headerBtn}
+          onPress={() => navigation.navigate('Notifications')}
+          activeOpacity={0.75}
+        >
+          <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
+          {hasUnreadNotifications && <View style={styles.badgeDot} />}
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#E31837']}
+            tintColor="#E31837"
+          />
+        }
+      >
+        {/* Workshop Header */}
+        <View style={styles.greetingSection}>
+          <View style={styles.resellerBadge}>
+            <Text style={styles.resellerBadgeText}>RESELLER & WORKSHOP</Text>
+          </View>
+          <Text style={styles.greetingName}>
+            {myself?.name ? myself.name : 'Workshop Partner'}
+          </Text>
+        </View>
+
+        {/* Account Approval Review Banner */}
+        {myself && (myself.is_approved === false || myself.approval_status === 'pending_approval') && (
+          <View style={styles.reviewBanner}>
+            <View style={styles.reviewBannerIconBox}>
+              <Clock size={16} color="#D97706" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.reviewBannerTitle}>Trade Account Under Review</Text>
+              <Text style={styles.reviewBannerDesc}>
+                Your reseller profile is pending KYB Admin verification. Live customer parts queries will activate once approved.
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* KPI Metric Chips */}
+        <View style={styles.kpiRow}>
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'pending' })}
+            activeOpacity={0.75}
+          >
+            <View style={styles.kpiIconWrapper}>
+              <Clock size={16} color="#D97706" />
+            </View>
+            <Text style={styles.kpiValue}>{pendingCount}</Text>
+            <Text style={styles.kpiLabel}>Pending Tickets</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'inprogress' })}
+            activeOpacity={0.75}
+          >
+            <View style={[styles.kpiIconWrapper, { backgroundColor: '#DBEAFE' }]}>
+              <TrendingUp size={16} color="#2563EB" />
+            </View>
+            <Text style={styles.kpiValue}>{inProgressCount}</Text>
+            <Text style={styles.kpiLabel}>In Progress</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.kpiCard}
+            onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'all' })}
+            activeOpacity={0.75}
+          >
+            <View style={[styles.kpiIconWrapper, { backgroundColor: '#D1FAE5' }]}>
+              <CheckCircle2 size={16} color="#059669" />
+            </View>
+            <Text style={styles.kpiValue}>
+              {enquiry?.length || 0}
+            </Text>
+            <Text style={styles.kpiLabel}>Total Queries</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 2x2 Quick Action Grid */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Workshop Tools</Text>
+        </View>
+
+        <View style={styles.gridContainer}>
+          {quickActions.map((action) => (
+            <TouchableOpacity
+              key={action.id}
+              style={styles.gridTile}
+              onPress={() => navigation.navigate(action.route)}
+              activeOpacity={0.75}
+            >
+              <View style={[styles.tileIconCircle, { backgroundColor: action.bg }]}>
+                {action.icon}
+              </View>
+              <Text style={styles.tileTitle}>{action.title}</Text>
+              <Text style={styles.tileSubtitle} numberOfLines={2}>
+                {action.subtitle}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  solidHeader: {
+    backgroundColor: '#E31837',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#A50E26',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  headerBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.28)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  headerCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flexShrink: 1,
+    paddingHorizontal: 8,
+  },
+  logoBadgeContainer: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.16,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  headerLogoImg: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+  },
+  headerBrandText: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#E31837',
+    letterSpacing: 0.8,
+    marginLeft: 5,
+  },
+  headerUserContainer: {
+    justifyContent: 'center',
+    flexShrink: 1,
+  },
+  headerGreetingHello: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: 'rgba(255, 255, 255, 0.82)',
+    letterSpacing: 0.8,
+  },
+  headerUserName: {
+    fontSize: 14.5,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -0.2,
+  },
+  badgeDot: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 7.5,
+    height: 7.5,
+    borderRadius: 4,
+    backgroundColor: '#FBBF24',
+    borderWidth: 1.5,
+    borderColor: '#E31837',
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
+  },
+  greetingSection: {
+    marginBottom: 14,
+  },
+  resellerBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginBottom: 4,
+  },
+  resellerBadgeText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#D97706',
+  },
+  greetingName: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#111827',
+    letterSpacing: -0.4,
+  },
+  kpiRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 18,
+  },
+  kpiCard: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  kpiIconWrapper: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: '#FEF3C7',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  kpiValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#111827',
+  },
+  kpiLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginTop: 2,
+    textAlign: 'center',
+  },
+  sectionHeader: {
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  gridTile: {
+    width: '48%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  tileIconCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  tileTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 2,
+  },
+  tileSubtitle: {
+    fontSize: 11,
+    color: '#6B7280',
+    lineHeight: 15,
+  },
+  reviewBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FCD34D',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 14,
+  },
+  reviewBannerIconBox: {
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    backgroundColor: '#FDE68A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  reviewBannerTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#92400E',
+  },
+  reviewBannerDesc: {
+    fontSize: 11,
+    color: '#B45309',
+    marginTop: 2,
+    lineHeight: 15,
+  },
+});
+
+export default ResellerHomeScreen;

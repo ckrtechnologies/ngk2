@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#059669', // Emerald Green
   },
   circleActive: {
-    backgroundColor: '#D0142C', // NGK Crimson Red
-    shadowColor: '#D0142C',
+    backgroundColor: '#008752', // NGK Brand Green
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   labelActive: {
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: '700',
   },
   labelCompleted: {

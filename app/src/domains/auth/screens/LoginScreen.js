@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
-  KeyboardAvoidingView,
+  Keyboard,
   Platform,
 } from 'react-native';
 import { Mail, Lock, Eye, EyeOff, ChevronLeft } from 'lucide-react-native';
@@ -29,6 +29,28 @@ const LoginScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showEvent, () => {
+      setIsKeyboardVisible(true);
+      setTimeout(() => {
+        scrollViewRef.current?.scrollTo({ y: 120, animated: true });
+      }, 60);
+    });
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   // Role Configuration
   const roleConfig = useMemo(() => {
@@ -48,83 +70,87 @@ const LoginScreen = ({ route, navigation }) => {
         return {
           title: 'Reseller Portal',
           subtitle: 'Workshop & Trade Inquiries Access',
-          emailPlaceholder: 'reseller@workshop.com',
-          buttonColor: '#D0142C',
-          badgeText: 'Professional Reseller',
-          badgeBg: 'rgba(245, 158, 11, 0.2)',
-          badgeColor: '#FBBF24',
+          emailPlaceholder: 'workshop@reseller.com',
+          buttonColor: '#16A34A',
+          badgeText: 'Reseller / Workshop',
+          badgeBg: 'rgba(255, 255, 255, 0.16)',
+          badgeColor: '#F8FAFC',
           showRegister: true,
         };
+      case 'owner':
       default:
         return {
           title: 'Welcome Back',
           subtitle: 'Sign in to your garage & catalog portal',
           emailPlaceholder: 'owner@example.com',
-          buttonColor: '#D0142C',
+          buttonColor: '#008752',
           badgeText: 'Vehicle Owner',
-          badgeBg: 'rgba(208, 20, 44, 0.25)',
-          badgeColor: '#FCA5A5',
+          badgeBg: 'rgba(255, 255, 255, 0.16)',
+          badgeColor: '#F8FAFC',
           showRegister: true,
         };
     }
   }, [role]);
 
   const validate = () => {
-    const errs = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const newErrors = {};
     if (!email.trim()) {
-      errs.email = 'Email is required';
-    } else if (!emailRegex.test(email.trim())) {
-      errs.email = 'Enter a valid email address';
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
+      newErrors.email = 'Invalid email address';
     }
-
     if (!password) {
-      errs.password = 'Password is required';
-    } else if (password.length < 4) {
-      errs.password = 'Password must be at least 4 characters';
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
-
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = async () => {
     if (!validate()) return;
+    Keyboard.dismiss();
 
     setLoading(true);
     try {
       const response = await apiFunction(
         loginApi,
         [],
-        { email: email.trim(), password, role },
+        { email: email.trim(), password },
         'POST',
         false
       );
 
-      if (response?.success) {
-        const userObj =
-          response.profile || (response.user && response.user[0]) || response.user;
-        const userId = userObj?.id || response.user?.[0]?.id;
+      setLoading(false);
 
-        await signIn({
-          token: response.token,
-          role,
-          user: userObj,
-          userId: userId ? String(userId) : undefined,
-        });
+      const token = response?.token || response?.data?.token;
+      const user =
+        response?.profile ||
+        (Array.isArray(response?.user) ? response?.user[0] : response?.user) ||
+        (Array.isArray(response?.data?.user) ? response?.data?.user[0] : response?.data?.user);
 
-        setLoading(false);
+      if (token) {
+        const assignedRole = user?.role || role;
+
         Toast.show({
           type: 'success',
-          text1: 'Login Successful',
-          text2: `Welcome back, ${userObj?.name || 'User'}!`,
+          text1: 'Welcome to NGK NTK South Africa',
+          text2: `Logged in as ${user?.name || email}`,
+        });
+
+        signIn({
+          token: token,
+          user: {
+            ...user,
+            role: assignedRole,
+          },
         });
       } else {
-        setLoading(false);
         Toast.show({
           type: 'error',
           text1: 'Authentication Failed',
-          text2: response?.message || 'Invalid credentials. Please try again.',
+          text2: response?.message || 'Invalid email or password.',
         });
       }
     } catch (error) {
@@ -138,44 +164,60 @@ const LoginScreen = ({ route, navigation }) => {
     }
   };
 
+  const scrollToInput = () => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ y: 120, animated: true });
+    }, 100);
+  };
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={styles.root}>
-        <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
+    <View style={styles.root}>
+      <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
 
-        <ScrollView
-          style={styles.mainScrollView}
-          contentContainerStyle={styles.scrollMainContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          bounces={false}
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.mainScrollView}
+        contentContainerStyle={[
+          styles.scrollMainContent,
+          isKeyboardVisible && { paddingBottom: 180 },
+        ]}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        bounces={false}
+      >
+        {/* TOP DARK HEADER SECTION */}
+        <View
+          style={[
+            styles.darkHeaderSection,
+            { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
+            isKeyboardVisible && styles.darkHeaderSectionCompact,
+          ]}
         >
-          {/* TOP DARK HEADER SECTION */}
-          <View style={[styles.darkHeaderSection, { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) }]}>
-            {/* Navigation Bar Row */}
-            <View style={styles.navRow}>
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => navigation.goBack()}
-                activeOpacity={0.7}
-              >
-                <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
-              </TouchableOpacity>
+          {/* Navigation Bar Row */}
+          <View style={styles.navRow}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.7}
+            >
+              <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
+            </TouchableOpacity>
 
-              <View style={styles.headerBadgeContainer}>
-                <View style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}>
-                  <Text style={[styles.badgePillText, { color: roleConfig.badgeColor }]}>
-                    {roleConfig.badgeText}
-                  </Text>
-                </View>
+            <View style={styles.headerBadgeContainer}>
+              <View style={[styles.badgePill, { backgroundColor: roleConfig.badgeBg }]}>
+                <Text style={[styles.badgePillText, { color: roleConfig.badgeColor }]}>
+                  {roleConfig.badgeText}
+                </Text>
               </View>
-
-              <View style={{ width: 40 }} />
             </View>
 
-            {/* Center Brand Identity */}
-            <View style={styles.headerHeroBox}>
+            <View style={{ width: 40 }} />
+          </View>
+
+          {/* Center Brand Identity */}
+          <View style={[styles.headerHeroBox, isKeyboardVisible && styles.headerHeroBoxCompact]}>
+            {!isKeyboardVisible && (
               <View style={styles.logoCapsule}>
                 <Image
                   source={require('../../../assets/images/logo_cropped.png')}
@@ -183,92 +225,98 @@ const LoginScreen = ({ route, navigation }) => {
                   resizeMode="contain"
                 />
               </View>
-              <Text style={styles.heroTitle}>{roleConfig.title}</Text>
+            )}
+            <Text style={[styles.heroTitle, isKeyboardVisible && styles.heroTitleCompact]}>
+              {roleConfig.title}
+            </Text>
+            {!isKeyboardVisible && (
               <Text style={styles.heroSubtitle}>{roleConfig.subtitle}</Text>
-            </View>
+            )}
+          </View>
+        </View>
+
+        {/* LOWER FORM SECTION WITH CURVED WHITE SHEET */}
+        <View style={[styles.formSection, isKeyboardVisible && styles.formSectionCompact]}>
+          <View style={styles.formCard}>
+            <AppInput
+              label="Email Address"
+              placeholder={roleConfig.emailPlaceholder}
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+              }}
+              onFocus={scrollToInput}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              leftIcon={<Mail size={18} color="#64748B" />}
+              error={errors.email}
+            />
+
+            <AppInput
+              label="Password"
+              placeholder="••••••••"
+              value={password}
+              onChangeText={(text) => {
+                setPassword(text);
+                if (errors.password)
+                  setErrors((prev) => ({ ...prev, password: null }));
+              }}
+              onFocus={scrollToInput}
+              secureTextEntry={!showPassword}
+              leftIcon={<Lock size={18} color="#64748B" />}
+              rightIcon={
+                showPassword ? (
+                  <Eye size={18} color="#475569" />
+                ) : (
+                  <EyeOff size={18} color="#475569" />
+                )
+              }
+              onRightIconPress={() => setShowPassword((prev) => !prev)}
+              rightActionText="Forgot?"
+              rightActionColor={roleConfig.buttonColor}
+              onRightActionPress={() =>
+                navigation.navigate('ForgotPassword', { role })
+              }
+              error={errors.password}
+            />
+
+            <AppButton
+              title="Sign In"
+              onPress={handleLogin}
+              loading={loading}
+              backgroundColor={roleConfig.buttonColor}
+              style={styles.submitBtn}
+            />
+
+            {roleConfig.showRegister && (
+              <>
+                <View style={styles.dividerRow}>
+                  <View style={styles.dividerLine} />
+                  <Text style={styles.dividerText}>OR</Text>
+                  <View style={styles.dividerLine} />
+                </View>
+
+                <AppButton
+                  title="Register New Account"
+                  variant="outline"
+                  onPress={() => navigation.navigate('Register', { role })}
+                  textColor={roleConfig.buttonColor}
+                  style={[styles.registerBtn, { borderColor: roleConfig.buttonColor }]}
+                />
+              </>
+            )}
           </View>
 
-          {/* LOWER FORM SECTION WITH CURVED WHITE SHEET */}
-          <View style={styles.formSection}>
-            <View style={styles.formCard}>
-              <AppInput
-                label="Email Address"
-                placeholder={roleConfig.emailPlaceholder}
-                value={email}
-                onChangeText={(text) => {
-                  setEmail(text);
-                  if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
-                }}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                leftIcon={<Mail size={18} color="#64748B" />}
-                error={errors.email}
-              />
-
-              <AppInput
-                label="Password"
-                placeholder="••••••••"
-                value={password}
-                onChangeText={(text) => {
-                  setPassword(text);
-                  if (errors.password)
-                    setErrors((prev) => ({ ...prev, password: null }));
-                }}
-                secureTextEntry={!showPassword}
-                leftIcon={<Lock size={18} color="#64748B" />}
-                rightIcon={
-                  showPassword ? (
-                    <Eye size={18} color="#475569" />
-                  ) : (
-                    <EyeOff size={18} color="#475569" />
-                  )
-                }
-                onRightIconPress={() => setShowPassword((prev) => !prev)}
-                rightActionText="Forgot?"
-                rightActionColor={roleConfig.buttonColor}
-                onRightActionPress={() =>
-                  navigation.navigate('ForgotPassword', { role })
-                }
-                error={errors.password}
-              />
-
-              <AppButton
-                title="Sign In"
-                onPress={handleLogin}
-                loading={loading}
-                backgroundColor={roleConfig.buttonColor}
-                style={styles.submitBtn}
-              />
-
-              {roleConfig.showRegister && (
-                <>
-                  <View style={styles.dividerRow}>
-                    <View style={styles.dividerLine} />
-                    <Text style={styles.dividerText}>OR</Text>
-                    <View style={styles.dividerLine} />
-                  </View>
-
-                  <AppButton
-                    title="Register New Account"
-                    variant="outline"
-                    onPress={() => navigation.navigate('Register', { role })}
-                    textColor={roleConfig.buttonColor}
-                    style={[styles.registerBtn, { borderColor: roleConfig.buttonColor }]}
-                  />
-                </>
-              )}
-            </View>
-
-            {/* Footer */}
-            <View style={styles.footerContainer}>
-              <Text style={styles.copyrightText}>
-                Protected by NGK Technical Security System • 2026
-              </Text>
-            </View>
+          {/* Footer */}
+          <View style={styles.footerContainer}>
+            <Text style={styles.copyrightText}>
+              Protected by NGK Technical Security System • 2026
+            </Text>
           </View>
-        </ScrollView>
-      </View>
-    </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -414,6 +462,22 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     textAlign: 'center',
     fontWeight: '600',
+  },
+  darkHeaderSectionCompact: {
+    minHeight: 110,
+    paddingBottom: 8,
+  },
+  headerHeroBoxCompact: {
+    marginBottom: 0,
+    marginTop: 2,
+  },
+  heroTitleCompact: {
+    fontSize: 18,
+    marginBottom: 0,
+  },
+  formSectionCompact: {
+    paddingTop: 16,
+    paddingBottom: 20,
   },
 });
 

@@ -34,13 +34,13 @@ export default function GarageEmptyStateIllustration({ size = 120 }) {
         <Rect x="28" y="32" width="6" height="56" rx="1.5" fill="#0F172A" />
         <Rect x="26" y="86" width="10" height="4" rx="1" fill="#0F172A" />
         {/* Left Lift Arm */}
-        <Path d="M34 68l14 4v3l-14-3v-4z" fill="#D0142C" />
+        <Path d="M34 68l14 4v3l-14-3v-4z" fill="#008752" />
 
         {/* Right Post */}
         <Rect x="86" y="32" width="6" height="56" rx="1.5" fill="#0F172A" />
         <Rect x="84" y="86" width="10" height="4" rx="1" fill="#0F172A" />
         {/* Right Lift Arm */}
-        <Path d="M86 68l-14 4v3l14-3v-4z" fill="#D0142C" />
+        <Path d="M86 68l-14 4v3l14-3v-4z" fill="#008752" />
 
         {/* Top Crossbeam / Cable Bridge */}
         <Line x1="31" y1="34" x2="89" y2="34" stroke="#0F172A" strokeWidth="2.5" />
@@ -67,12 +67,12 @@ export default function GarageEmptyStateIllustration({ size = 120 }) {
         </G>
 
         {/* Central Precision Calibration Crosshair */}
-        <Circle cx="60" cy="50" r="8" stroke="#D0142C" strokeWidth="1.2" strokeDasharray="3 2" />
-        <Line x1="60" y1="40" x2="60" y2="44" stroke="#D0142C" strokeWidth="1.5" strokeLinecap="round" />
-        <Line x1="60" y1="56" x2="60" y2="60" stroke="#D0142C" strokeWidth="1.5" strokeLinecap="round" />
-        <Line x1="50" y1="50" x2="54" y2="50" stroke="#D0142C" strokeWidth="1.5" strokeLinecap="round" />
-        <Line x1="66" y1="50" x2="70" y2="50" stroke="#D0142C" strokeWidth="1.5" strokeLinecap="round" />
-        <Circle cx="60" cy="50" r="2" fill="#D0142C" />
+        <Circle cx="60" cy="50" r="8" stroke="#008752" strokeWidth="1.2" strokeDasharray="3 2" />
+        <Line x1="60" y1="40" x2="60" y2="44" stroke="#008752" strokeWidth="1.5" strokeLinecap="round" />
+        <Line x1="60" y1="56" x2="60" y2="60" stroke="#008752" strokeWidth="1.5" strokeLinecap="round" />
+        <Line x1="50" y1="50" x2="54" y2="50" stroke="#008752" strokeWidth="1.5" strokeLinecap="round" />
+        <Line x1="66" y1="50" x2="70" y2="50" stroke="#008752" strokeWidth="1.5" strokeLinecap="round" />
+        <Circle cx="60" cy="50" r="2" fill="#008752" />
       </Svg>
     </View>
   );

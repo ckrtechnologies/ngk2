@@ -25,17 +25,17 @@ export function PortalTabIcon({ focused = false, size = 24 }) {
         {/* Crimson Gable Crest */}
         <Path
           d="M16 3.5l10 8H22.5L16 6.5 9.5 11.5H6l10-8z"
-          fill="#D0142C"
+          fill="#008752"
         />
         {/* Central Tachometer Bay */}
         <Path
           d="M12.5 28v-9a3.5 3.5 0 0 1 7 0v9"
-          fill="#D0142C"
+          fill="#008752"
         />
         {/* Speedometer Arc */}
         <Path
           d="M14 19.5a2 2 0 0 1 4 0"
-          stroke="#D0142C"
+          stroke="#008752"
           strokeWidth="1.4"
           strokeLinecap="round"
         />
@@ -76,7 +76,7 @@ export function SearchTabIcon({ focused = false, size = 24 }) {
         {/* Outer Lens Ring */}
         <Circle cx="13" cy="13" r="9.5" fill="#FFFFFF" />
         {/* Inner NGK Crimson Core */}
-        <Circle cx="13" cy="13" r="6" fill="#D0142C" />
+        <Circle cx="13" cy="13" r="6" fill="#008752" />
         {/* Reticle Crosshairs */}
         <Line x1="13" y1="8.5" x2="13" y2="10.5" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
         <Line x1="13" y1="15.5" x2="13" y2="17.5" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
@@ -85,7 +85,7 @@ export function SearchTabIcon({ focused = false, size = 24 }) {
         {/* Search Handle */}
         <Line x1="20" y1="20" x2="28" y2="28" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
         {/* Handle Collar */}
-        <Line x1="18.5" y1="18.5" x2="20.5" y2="20.5" stroke="#D0142C" strokeWidth="3.5" strokeLinecap="round" />
+        <Line x1="18.5" y1="18.5" x2="20.5" y2="20.5" stroke="#008752" strokeWidth="3.5" strokeLinecap="round" />
       </Svg>
     );
   }
@@ -124,7 +124,7 @@ export function EnquiriesTabIcon({ focused = false, size = 24 }) {
         {/* Oscilloscope Waveform */}
         <Path
           d="M9 12h2.5l2-3 3 6 2-3h3.5"
-          stroke="#D0142C"
+          stroke="#008752"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -167,7 +167,7 @@ export function DealersTabIcon({ focused = false, size = 24 }) {
           fill="#FFFFFF"
         />
         {/* Inner Circle Stage */}
-        <Circle cx="16" cy="11.5" r="5.5" fill="#D0142C" />
+        <Circle cx="16" cy="11.5" r="5.5" fill="#008752" />
         {/* Dealership Awning */}
         <Path
           d="M13 10h6l.5 2H12.5L13 10z"

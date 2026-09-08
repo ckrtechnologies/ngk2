@@ -21,7 +21,7 @@ const AppInput = ({
   onRightIconPress,
   rightActionText,
   onRightActionPress,
-  rightActionColor = '#D0142C',
+  rightActionColor = '#008752',
   error,
   containerStyle,
   inputStyle,

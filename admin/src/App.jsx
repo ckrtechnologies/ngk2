@@ -11,6 +11,8 @@ import EnquiriesManagement from './pages/EnquiriesManagement';
 import PartFinder from './pages/PartFinder';
 import Dealers from './pages/Dealers';
 
+import BrandPortal from './pages/BrandPortal';
+
 const ProtectedLayout = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.admin);
 
@@ -36,13 +38,24 @@ const ProtectedLayout = ({ children }) => {
 };
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useSelector((state) => state.admin);
+  const { isAuthenticated, selectedBrand } = useSelector((state) => state.admin);
+  const defaultAuthPath = selectedBrand ? '/parts' : '/portal';
 
   return (
     <Routes>
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/users" replace /> : <Login />}
+        element={isAuthenticated ? <Navigate to={defaultAuthPath} replace /> : <Login />}
+      />
+
+      {/* Brand Selection Landing Portal */}
+      <Route
+        path="/portal"
+        element={
+          <ProtectedLayout>
+            <BrandPortal />
+          </ProtectedLayout>
+        }
       />
 
       {/* Protected Routes */}
@@ -79,7 +92,7 @@ const AppRoutes = () => {
       />
 
       {/* Default Fallback */}
-      <Route path="*" element={<Navigate to={isAuthenticated ? "/users" : "/login"} replace />} />
+      <Route path="*" element={<Navigate to={isAuthenticated ? defaultAuthPath : "/login"} replace />} />
     </Routes>
   );
 };

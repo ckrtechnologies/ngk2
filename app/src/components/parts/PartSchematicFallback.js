@@ -57,7 +57,7 @@ export default function PartSchematicFallback({
             <Line x1="18" y1="43" x2="32" y2="43" stroke="#64748B" strokeWidth="1" />
 
             {/* Ground Electrode & Center Spark Point */}
-            <Path d="M22 47v6h6" stroke="#D0142C" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            <Path d="M22 47v6h6" stroke="#008752" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             <Circle cx="25" cy="50" r="1" fill="#FEF08A" />
           </G>
         </Svg>
@@ -96,8 +96,8 @@ export default function PartSchematicFallback({
         </G>
 
         {/* Center Crosshairs */}
-        <Line x1="140" y1="15" x2="140" y2="165" stroke="#D0142C" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
-        <Line x1="20" y1="90" x2="260" y2="90" stroke="#D0142C" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        <Line x1="140" y1="15" x2="140" y2="165" stroke="#008752" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        <Line x1="20" y1="90" x2="260" y2="90" stroke="#008752" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
 
         {/* Horizontal Technical Spark Plug Blueprint */}
         <G transform="translate(45, 62)">
@@ -129,7 +129,7 @@ export default function PartSchematicFallback({
 
           {/* Center Electrode & Ground Electrode Tip */}
           <Rect x="143" y="26" width="10" height="4" fill="#E2E8F0" />
-          <Path d="M145 35h12v-12" stroke="#D0142C" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M145 35h12v-12" stroke="#008752" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
 
           {/* Spark Glow Point */}
           <Circle cx="155" cy="28" r="2.5" fill="#FEF08A" />
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   thumbBrandTag: {
     position: 'absolute',
     bottom: 3,
-    backgroundColor: 'rgba(208, 20, 44, 0.9)',
+    backgroundColor: 'rgba(0, 135, 82, 0.9)',
     paddingHorizontal: 5,
     paddingVertical: 1,
     borderRadius: 3,

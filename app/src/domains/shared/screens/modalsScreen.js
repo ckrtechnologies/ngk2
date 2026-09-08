@@ -143,7 +143,7 @@ const ModalsScreen = () => {
                     {imageUrl ? (
                         <Image source={{ uri: imageUrl }} style={styles.modelImage} resizeMode="cover" />
                     ) : (
-                        <Car color="#D0142C" size={wp('8%')} />
+                        <Car color="#008752" size={wp('8%')} />
                     )}
                 </View>
                 <View style={styles.textContainer}>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F6FA',
     },
     header: {
-        backgroundColor: '#D0142C',
+        backgroundColor: '#008752',
         height: hp('8%'),
         flexDirection: 'row',
         alignItems: 'center',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp('6%'),
         paddingBottom: hp('2%'),
         paddingTop: hp('2%'),
-        backgroundColor: '#D0142C',
+        backgroundColor: '#008752',
         borderBottomLeftRadius: wp('6%'),
         borderBottomRightRadius: wp('6%'),
         marginBottom: hp('1%'),

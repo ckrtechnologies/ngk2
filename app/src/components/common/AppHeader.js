@@ -19,7 +19,7 @@ const AppHeader = ({
   rightElement,
   centerElement,
   style,
-  variant = 'solid', // 'solid' (official #D0142C) or 'light' / 'transparent'
+  variant = 'solid', // 'solid' (official #008752) or 'light' / 'transparent'
   backgroundColor,
   titleColor,
   subtitleColor,

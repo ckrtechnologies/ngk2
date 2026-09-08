@@ -16,6 +16,8 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Car,
+  Truck,
+  Bike,
   Wrench,
   Search,
   ChevronDown,
@@ -60,6 +62,7 @@ const DEFAULT_POPULAR_BRANDS = {
     { id: 5, manuId: 5, name: 'AUDI', manuName: 'AUDI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/audi.png' },
     { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/nissan.png' },
     { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/hyundai.png' },
+    { id: 63, manuId: 63, name: 'MARUTI SUZUKI', manuName: 'MARUTI SUZUKI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/suzuki.png' },
     { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/isuzu.png' },
   ],
   commercial: [
@@ -107,7 +110,9 @@ const PartsFinderScreen = () => {
 
   const applications = [
     { id: 'Passenger', label: 'Vehicle', icon: Car, type: 'P' },
-    { id: 'Commercial', label: 'Commercial', icon: Wrench, type: 'O' },
+    { id: 'Commercial', label: 'Commercial', icon: Truck, type: 'O' },
+    { id: 'LightCommercial', label: 'LCV / Van', icon: Wrench, type: 'L' },
+    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike, type: 'B' },
   ];
 
   useEffect(() => {
@@ -460,7 +465,7 @@ const PartsFinderScreen = () => {
       let results = [];
       try {
         const restRes = await apiFunction(
-          `${articlesByPartApi}?searchQuery=${encodeURIComponent(trimmed)}`,
+          `${articlesByPartApi}?searchQuery=${encodeURIComponent(trimmed)}&brand=ngk`,
           [],
           {},
           'GET',
@@ -478,6 +483,7 @@ const PartsFinderScreen = () => {
             articleCountry: 'ZA',
             searchQuery: trimmed,
             searchType: 10,
+            dataSupplierIds: [15, 5414],
             lang: 'en',
             perPage: 30,
             page: 1,
@@ -487,6 +493,12 @@ const PartsFinderScreen = () => {
         const rawRes = await apiFunction(serviceJsonApi, [], payload, 'POST', false);
         results = rawRes?.articles || rawRes?.data?.array || rawRes?.data || [];
       }
+
+      // Strict NGK brand isolation
+      results = (results || []).filter((p) => {
+        const b = (p.brandName || p.mfrName || p.brand || p.dataSupplierName || '').toUpperCase();
+        return !b.includes('KYB');
+      });
 
       setPartSearching(false);
 
@@ -580,7 +592,7 @@ const PartsFinderScreen = () => {
           >
             <Car
               size={16}
-              color={searchMode === 'vehicle' ? '#D0142C' : '#6B7280'}
+              color={searchMode === 'vehicle' ? '#008752' : '#6B7280'}
             />
             <Text
               style={[
@@ -602,7 +614,7 @@ const PartsFinderScreen = () => {
           >
             <Search
               size={16}
-              color={searchMode === 'part' ? '#D0142C' : '#6B7280'}
+              color={searchMode === 'part' ? '#008752' : '#6B7280'}
             />
             <Text
               style={[
@@ -771,7 +783,7 @@ const PartsFinderScreen = () => {
                   </Text>
                 </View>
                 {loadingVehicles ? (
-                  <ActivityIndicator size="small" color="#D0142C" />
+                  <ActivityIndicator size="small" color="#008752" />
                 ) : (
                   <ChevronDown size={14} color="#9CA3AF" />
                 )}
@@ -829,7 +841,7 @@ const PartsFinderScreen = () => {
             />
 
             <View style={styles.infoHintCard}>
-              <Sparkles size={18} color="#D0142C" />
+              <Sparkles size={18} color="#008752" />
               <Text style={styles.infoHintText}>
                 Supports NGK Stock Numbers, Order Numbers, and OE Cross-Reference Part Numbers.
               </Text>
@@ -884,7 +896,7 @@ const PartsFinderScreen = () => {
 
             {/* Filter Search Input */}
             <View style={styles.modalSearchBox}>
-              <Search size={16} color="#D0142C" />
+              <Search size={16} color="#008752" />
               <TextInput
                 style={styles.modalSearchInput}
                 placeholder={
@@ -912,7 +924,7 @@ const PartsFinderScreen = () => {
             {/* List */}
             {loadingDropdown || (modalType === 'model' && loadingVehicles) ? (
               <View style={styles.modalLoading}>
-                <ActivityIndicator color="#D0142C" size="small" />
+                <ActivityIndicator color="#008752" size="small" />
                 <Text style={styles.modalLoadingText}>Loading automotive catalog...</Text>
               </View>
             ) : (
@@ -978,7 +990,7 @@ const PartsFinderScreen = () => {
                           </View>
                         </View>
                         {isSelected ? (
-                          <Check size={18} color="#D0142C" />
+                          <Check size={18} color="#008752" />
                         ) : (
                           <ChevronRight size={16} color="#9CA3AF" />
                         )}
@@ -1013,7 +1025,7 @@ const PartsFinderScreen = () => {
                           )}
                         </View>
                         {isSelected ? (
-                          <Check size={18} color="#D0142C" />
+                          <Check size={18} color="#008752" />
                         ) : (
                           <ChevronRight size={16} color="#9CA3AF" />
                         )}
@@ -1043,7 +1055,7 @@ const PartsFinderScreen = () => {
                         </Text>
                       </View>
                       {isSelected ? (
-                        <Check size={18} color="#D0142C" />
+                        <Check size={18} color="#008752" />
                       ) : (
                         <ChevronRight size={16} color="#9CA3AF" />
                       )}
@@ -1163,7 +1175,7 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   brandsGrid: {
     flexDirection: 'row',
@@ -1184,8 +1196,8 @@ const styles = StyleSheet.create({
     borderColor: '#E5E7EB',
   },
   appTypePillSelected: {
-    backgroundColor: '#D0142C',
-    borderColor: '#D0142C',
+    backgroundColor: '#008752',
+    borderColor: '#008752',
   },
   appTypePillText: {
     fontSize: 12,
@@ -1284,7 +1296,7 @@ const styles = StyleSheet.create({
     padding: 14,
     marginTop: 14,
     borderLeftWidth: 3,
-    borderLeftColor: '#D0142C',
+    borderLeftColor: '#008752',
     borderWidth: 1,
     borderColor: '#E5E7EB',
     gap: 10,
@@ -1399,7 +1411,7 @@ const styles = StyleSheet.create({
     color: '#1F2937',
   },
   modalItemTitleSelected: {
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: '700',
   },
   modalItemSubtitle: {
@@ -1434,7 +1446,7 @@ const styles = StyleSheet.create({
   specPillEngineText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#D0142C',
+    color: '#008752',
   },
   modalEmptyState: {
     paddingVertical: 48,

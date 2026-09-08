@@ -173,7 +173,7 @@ export default function DealerFilterModal({
                     >
                       <Sparkles
                         size={16}
-                        color={draft.role === 'all' ? '#D0142C' : '#64748B'}
+                        color={draft.role === 'all' ? '#008752' : '#64748B'}
                       />
                       <Text
                         style={[
@@ -184,7 +184,7 @@ export default function DealerFilterModal({
                         All Tiers
                       </Text>
                       {draft.role === 'all' && (
-                        <Check size={14} color="#D0142C" strokeWidth={3} />
+                        <Check size={14} color="#008752" strokeWidth={3} />
                       )}
                     </TouchableOpacity>
 
@@ -217,7 +217,7 @@ export default function DealerFilterModal({
                         <Text style={styles.tierSubtext}>Distributors</Text>
                       </View>
                       {draft.role === 'distributor' && (
-                        <Check size={14} color="#D0142C" strokeWidth={3} />
+                        <Check size={14} color="#008752" strokeWidth={3} />
                       )}
                     </TouchableOpacity>
 
@@ -250,7 +250,7 @@ export default function DealerFilterModal({
                         <Text style={styles.tierSubtext}>Workshops & Trade Shops</Text>
                       </View>
                       {draft.role === 'reseller' && (
-                        <Check size={14} color="#D0142C" strokeWidth={3} />
+                        <Check size={14} color="#008752" strokeWidth={3} />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -273,7 +273,7 @@ export default function DealerFilterModal({
                       <Compass
                         size={15}
                         color={
-                          draft.sortBy === 'nearest' ? '#D0142C' : '#64748B'
+                          draft.sortBy === 'nearest' ? '#008752' : '#64748B'
                         }
                       />
                       <Text
@@ -299,7 +299,7 @@ export default function DealerFilterModal({
                     >
                       <ArrowDownAZ
                         size={15}
-                        color={draft.sortBy === 'alpha' ? '#D0142C' : '#64748B'}
+                        color={draft.sortBy === 'alpha' ? '#008752' : '#64748B'}
                       />
                       <Text
                         style={[
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   activePillBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D0142C',
+    color: '#008752',
   },
   modalSubtitle: {
     fontSize: 12,
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   tierButtonActive: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     backgroundColor: '#FFF5F5',
   },
   tierButtonText: {
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     color: '#1E293B',
   },
   tierButtonTextActive: {
-    color: '#D0142C',
+    color: '#008752',
   },
   tierSubtext: {
     fontSize: 11,
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   sortOptionActive: {
-    borderColor: '#D0142C',
+    borderColor: '#008752',
     backgroundColor: '#FFF5F5',
   },
   sortOptionText: {
@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   sortOptionTextActive: {
-    color: '#D0142C',
+    color: '#008752',
     fontWeight: '700',
   },
   bottomBar: {
@@ -523,12 +523,12 @@ const styles = StyleSheet.create({
   },
   applyBtn: {
     flex: 1,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingVertical: 13,
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#D0142C',
+    shadowColor: '#008752',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.28,
     shadowRadius: 6,

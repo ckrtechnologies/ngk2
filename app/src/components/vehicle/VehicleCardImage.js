@@ -60,7 +60,7 @@ function VehicleCardImage({
     <View style={[styles.container, { height }, style]}>
       {loading && (
         <View style={[styles.loadingContainer, compact && { backgroundColor: 'rgba(15, 23, 42, 0.4)' }]}>
-          <ActivityIndicator size="small" color="#D0142C" />
+          <ActivityIndicator size="small" color="#008752" />
         </View>
       )}
 

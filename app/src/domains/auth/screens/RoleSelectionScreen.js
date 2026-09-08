@@ -47,10 +47,10 @@ const RoleSelectionScreen = ({ navigation }) => {
       IconComponent: OwnerRole3DIcon,
       badge: 'Individual',
       badgeBg: '#FEE2E2',
-      badgeColor: '#D0142C',
+      badgeColor: '#008752',
       boxBg: '#FEF2F2',
       boxBorder: '#FECDD3',
-      ctaColor: '#D0142C',
+      ctaColor: '#008752',
     },
     {
       id: 'reseller',
@@ -84,7 +84,7 @@ const RoleSelectionScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#D0142C" />
+      <StatusBar barStyle="light-content" backgroundColor="#008752" />
 
       {/* SOLID CRIMSON BRAND HERO HEADER */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 20 }]}>
@@ -199,10 +199,10 @@ const RoleSelectionScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   solidHeader: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 22,

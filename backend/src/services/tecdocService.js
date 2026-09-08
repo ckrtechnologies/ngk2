@@ -71,7 +71,19 @@ const FALLBACK_ARTICLES = [
     partNumber: 'ILKAR7C10',
     articleName: 'Laser Iridium Spark Plug',
     dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
     brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
     specs: [
       { label: 'Thread Size', value: 'M12 x 1.25' },
       { label: 'Spanner Size', value: '14 mm' },
@@ -85,7 +97,19 @@ const FALLBACK_ARTICLES = [
     partNumber: 'BKR6E-11',
     articleName: 'Yellow Line Standard Spark Plug',
     dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
     brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
     specs: [
       { label: 'Thread Size', value: 'M14 x 1.25' },
       { label: 'Spanner Size', value: '16 mm' },
@@ -99,7 +123,19 @@ const FALLBACK_ARTICLES = [
     partNumber: 'OZA659-EE4',
     articleName: 'NTK Lambda Oxygen Sensor',
     dataSupplierName: 'NTK VEHICLE ELECTRONICS',
+    dataSupplierId: 5414,
     brand: 'NTK VEHICLE ELECTRONICS',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
     specs: [
       { label: 'Sensor Type', value: 'Zirconia Lambda Sensor' },
       { label: 'Number of Poles', value: '4' },
@@ -112,11 +148,97 @@ const FALLBACK_ARTICLES = [
     partNumber: 'Y-534J',
     articleName: 'D-Power Diesel Glow Plug',
     dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
     brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
     specs: [
       { label: 'Voltage', value: '11.0 V' },
       { label: 'Current', value: '4.5 A' },
       { label: 'Cone Pitch', value: '93°' },
+    ],
+  },
+  {
+    articleId: 133002,
+    articleNo: '133002',
+    partNumber: '133002',
+    articleName: 'KYB Premium Shock Absorber',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Rear Axle both sides' },
+      { label: 'Fitting Position', value: 'Front Axle both sides' },
+      { label: 'Shock Absorber Type', value: 'Oil Pressure Twin-Tube' },
+    ],
+  },
+  {
+    articleId: 333729,
+    articleNo: '333729',
+    partNumber: '333729',
+    articleName: 'KYB Excel-G Gas Shock Absorber',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Front Axle Right' },
+      { label: 'Shock Absorber Type', value: 'Gas Pressure Strut' },
+      { label: 'Shock Absorber System', value: 'Twin-Tube' },
+    ],
+  },
+  {
+    articleId: 341368,
+    articleNo: '341368',
+    partNumber: '341368',
+    articleName: 'KYB Gas-A-Just Monotube Damper',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Rear Axle' },
+      { label: 'Shock Absorber Type', value: 'High-Pressure Monotube' },
     ],
   },
 ];
@@ -195,15 +317,26 @@ class TecDocService {
 
     if (payload.getArticles || payload.getArticles2) {
       const query = (payload.getArticles?.searchQuery || '').toUpperCase();
-      let matches = FALLBACK_ARTICLES;
+      const suppliers = payload.getArticles?.dataSupplierIds || [];
+      let pool = FALLBACK_ARTICLES;
+
+      if (suppliers.includes(7729)) {
+        pool = FALLBACK_ARTICLES.filter((a) => (a.brand || '').toUpperCase().includes('KYB'));
+      } else if (suppliers.includes(15) || suppliers.includes(5414)) {
+        pool = FALLBACK_ARTICLES.filter((a) => !(a.brand || '').toUpperCase().includes('KYB'));
+      }
+
+      let matches = pool;
       if (query) {
-        matches = FALLBACK_ARTICLES.filter(
+        matches = pool.filter(
           (a) => a.articleNo.includes(query) || a.articleName.toUpperCase().includes(query)
         );
+      } else {
+        matches = pool;
       }
       return {
-        data: { array: matches.length > 0 ? matches : FALLBACK_ARTICLES },
-        articles: matches.length > 0 ? matches : FALLBACK_ARTICLES,
+        data: { array: matches },
+        articles: matches,
         status: 200,
       };
     }
@@ -212,8 +345,9 @@ class TecDocService {
       return {
         data: {
           array: [
-            { brandId: 5567, brandName: 'NGK SPARK PLUG', dataSupplierName: 'NGK SPARK PLUG' },
-            { brandId: 7729, brandName: 'NTK VEHICLE ELECTRONICS', dataSupplierName: 'NTK VEHICLE ELECTRONICS' },
+            { brandId: 15, dataSupplierId: 15, brandName: 'NGK', dataSupplierName: 'NGK SPARK PLUG' },
+            { brandId: 5414, dataSupplierId: 5414, brandName: 'NTK', dataSupplierName: 'NTK VEHICLE ELECTRONICS' },
+            { brandId: 7729, dataSupplierId: 7729, brandName: '-KYB', dataSupplierName: 'KYB' },
           ],
         },
         status: 200,
@@ -441,7 +575,8 @@ class TecDocService {
   /**
    * 4. Get Verified Parts / Articles for a Vehicle
    */
-  async getArticlesByVehicle(vehicleId, type = 'P', country = this.defaultCountry, lang = this.defaultLang) {
+  async getArticlesByVehicle(vehicleId, type = 'P', country = this.defaultCountry, lang = this.defaultLang, brand = null) {
+    const normBrand = (brand || '').toLowerCase().trim();
     // In TecDoc supplier catalog for ZA (NGK/NTK/KYB), articles are linked to linkage targets
     // as type 'P' (and 'V'). Type 'O' queries return 0 articles from TecDoc.
     const primaryType = (type === 'O' || type === 'C') ? 'P' : (type || 'P');
@@ -459,12 +594,18 @@ class TecDocService {
       },
     };
 
+    if (normBrand === 'kyb') {
+      payload.getArticles.dataSupplierIds = [7729];
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      payload.getArticles.dataSupplierIds = [15, 5414];
+    }
+
     let data = await this.execute(payload);
     let articles = data?.articles || data?.data?.array;
 
-    // If initial query returned empty, try fallback target types ('P', 'V', or original type)
+    // If initial query returned empty, try fallback target types ('L', 'P', 'V', 'O', 'C', or original type)
     if (!articles || articles.length === 0) {
-      for (const altType of ['P', 'V', type]) {
+      for (const altType of ['L', 'P', 'V', 'O', 'C', type]) {
         if (altType === primaryType) continue;
         payload.getArticles.linkageTargetType = altType;
         const altData = await this.execute(payload);
@@ -475,19 +616,66 @@ class TecDocService {
       }
     }
 
-    const finalArticles = articles || FALLBACK_ARTICLES;
+    // Special handling for KYB: since KYB supplier in ZA has OE cross references without direct vehicle linkage targets,
+    // if brand is KYB and 0 articles returned, fetch verified KYB suspension items
+    if (normBrand === 'kyb' && (!articles || articles.length === 0)) {
+      const kybPayload = {
+        getArticles: {
+          provider: this.providerId,
+          articleCountry: country,
+          lang: lang,
+          dataSupplierIds: [7729],
+          perPage: 12,
+          page: 1,
+          includeAll: true,
+        },
+      };
+      const kybData = await this.execute(kybPayload);
+      if (kybData?.articles?.length > 0) {
+        articles = kybData.articles;
+      }
+    }
+
+    let finalArticles = articles || FALLBACK_ARTICLES;
+
+    // Strict brand isolation filter
+    if (normBrand === 'kyb') {
+      finalArticles = finalArticles.filter((a) => {
+        const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+        return b.includes('KYB') || Number(a.dataSupplierId) === 7729;
+      });
+      if (finalArticles.length === 0) {
+        finalArticles = FALLBACK_ARTICLES.filter((a) => (a.brand || '').toUpperCase().includes('KYB'));
+      }
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      finalArticles = finalArticles.filter((a) => {
+        const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+        return (b.includes('NGK') || b.includes('NTK') || Number(a.dataSupplierId) === 15 || Number(a.dataSupplierId) === 5414) && !b.includes('KYB');
+      });
+    }
+
     return this.sanitizeArticles(finalArticles);
   }
 
   /**
    * 5. Get Articles by Part Number Query
    */
-  async getArticlesByPartNumber(searchQuery, country = this.defaultCountry, lang = this.defaultLang) {
+  async getArticlesByPartNumber(searchQuery, country = this.defaultCountry, lang = this.defaultLang, brand = null) {
+    let resolvedCountry = country;
+    let resolvedLang = lang;
+    let resolvedBrand = brand;
+
+    if (['ngk', 'kyb', 'ntk'].includes((country || '').toLowerCase())) {
+      resolvedBrand = country;
+      resolvedCountry = this.defaultCountry;
+    }
+
+    const normBrand = (resolvedBrand || '').toLowerCase().trim();
     const payload = {
       getArticles: {
         provider: this.providerId,
-        articleCountry: country,
-        lang: lang,
+        articleCountry: resolvedCountry,
+        lang: resolvedLang,
         searchQuery: searchQuery,
         searchType: 10,
         includeAll: true,
@@ -496,36 +684,97 @@ class TecDocService {
       },
     };
 
+    if (normBrand === 'kyb') {
+      payload.getArticles.dataSupplierIds = [7729];
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      payload.getArticles.dataSupplierIds = [15, 5414];
+    }
+
     const data = await this.execute(payload);
-    const articles = data?.articles || data?.data?.array || FALLBACK_ARTICLES;
+    let articles = data?.articles || data?.data?.array;
+
+    if (!articles || articles.length === 0) {
+      const q = (searchQuery || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      articles = FALLBACK_ARTICLES.filter((a) => {
+        const no = (a.articleNo || a.partNumber || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return no.includes(q) || (q.length > 2 && no.startsWith(q));
+      });
+      if (articles.length === 0) {
+        if (normBrand === 'kyb') {
+          articles = FALLBACK_ARTICLES.filter((a) => (a.brand || a.brandName || '').toUpperCase().includes('KYB') || Number(a.dataSupplierId) === 7729);
+        } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+          articles = FALLBACK_ARTICLES.filter((a) => !(a.brand || a.brandName || '').toUpperCase().includes('KYB'));
+        }
+      }
+    }
+
+    // Strict brand isolation filter
+    if (normBrand === 'kyb') {
+      articles = articles.filter((a) => {
+        const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+        return b.includes('KYB') || Number(a.dataSupplierId) === 7729;
+      });
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      articles = articles.filter((a) => {
+        const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+        return (b.includes('NGK') || b.includes('NTK') || Number(a.dataSupplierId) === 15 || Number(a.dataSupplierId) === 5414) && !b.includes('KYB');
+      });
+    }
+
     return this.sanitizeArticles(articles);
   }
 
   /**
    * 6. Get Product / Supplier Brands & Logos (getBrands)
    */
-  async getBrands(country = this.defaultCountry, lang = this.defaultLang) {
-    const cacheKey = `brands_${country}_${lang}`;
-    const cached = memoryCache.get(cacheKey);
-    if (cached) return cached;
+  async getBrands(country = this.defaultCountry, lang = this.defaultLang, brand = null) {
+    let resolvedCountry = country;
+    let resolvedLang = lang;
+    let resolvedBrand = brand;
 
-    const payload = {
-      getBrands: {
-        provider: this.providerId,
-        articleCountry: country,
-        lang: lang,
-        includeAll: true,
-        includeDataSupplierLogo: true,
-        includeAddressDetails: true,
-      },
-    };
+    if (['ngk', 'kyb', 'ntk'].includes((country || '').toLowerCase())) {
+      resolvedBrand = country;
+      resolvedCountry = this.defaultCountry;
+    }
 
-    const data = await this.execute(payload);
-    const brands = data?.data?.array || data?.brands || [
-      { brandId: 5567, brandName: 'NGK SPARK PLUG', dataSupplierName: 'NGK SPARK PLUG' },
-      { brandId: 7729, brandName: 'NTK VEHICLE ELECTRONICS', dataSupplierName: 'NTK VEHICLE ELECTRONICS' },
-    ];
-    memoryCache.set(cacheKey, brands, 86400);
+    const normBrand = (resolvedBrand || '').toLowerCase().trim();
+    const cacheKey = `brands_${resolvedCountry}_${resolvedLang}`;
+    let brands = memoryCache.get(cacheKey);
+
+    if (!brands) {
+      const payload = {
+        getBrands: {
+          provider: this.providerId,
+          articleCountry: resolvedCountry,
+          lang: resolvedLang,
+          includeAll: true,
+          includeDataSupplierLogo: true,
+          includeAddressDetails: true,
+        },
+      };
+
+      const data = await this.execute(payload);
+      brands = data?.data?.array || data?.brands || [
+        { brandId: 15, dataSupplierId: 15, brandName: 'NGK SPARK PLUG', dataSupplierName: 'NGK SPARK PLUG' },
+        { brandId: 5414, dataSupplierId: 5414, brandName: 'NTK VEHICLE ELECTRONICS', dataSupplierName: 'NTK VEHICLE ELECTRONICS' },
+        { brandId: 7729, dataSupplierId: 7729, brandName: '-KYB', dataSupplierName: 'KYB' },
+      ];
+      memoryCache.set(cacheKey, brands, 86400);
+    }
+
+    if (normBrand === 'kyb') {
+      return brands.filter(
+        (b) =>
+          (b.mfrName || b.brandName || b.dataSupplierName || '').toUpperCase().includes('KYB') ||
+          b.dataSupplierId === 7729
+      );
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      return brands.filter((b) => {
+        const n = (b.mfrName || b.brandName || b.dataSupplierName || '').toUpperCase();
+        return (n.includes('NGK') || n.includes('NTK') || b.dataSupplierId === 15 || b.dataSupplierId === 5414) && !n.includes('KYB');
+      });
+    }
+
     return brands;
   }
 
@@ -637,6 +886,75 @@ class TecDocService {
         }
       }
 
+      let images = a.images || [];
+      let imageUrl =
+        a.imageUrl ||
+        a.imageURL800 ||
+        a.imageURL400 ||
+        a.imageURL200 ||
+        images?.[0]?.imageURL800 ||
+        images?.[0]?.imageURL400 ||
+        images?.[0]?.imageURL200 ||
+        null;
+
+      if (!imageUrl || images.length === 0) {
+        const lowerDesc = (
+          title +
+          ' ' +
+          (a.articleName || '') +
+          ' ' +
+          (a.brand || '') +
+          ' ' +
+          (a.brandName || '') +
+          ' ' +
+          (a.mfrName || '')
+        ).toLowerCase();
+        let fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg';
+        let imgTypeDesc = 'OEM Product Photo';
+
+        if (lowerDesc.includes('kyb') || lowerDesc.includes('shock') || lowerDesc.includes('damper') || lowerDesc.includes('strut')) {
+          if (lowerDesc.includes('strut')) {
+            fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg';
+            imgTypeDesc = 'KYB Suspension Strut';
+          } else if (lowerDesc.includes('gas') || lowerDesc.includes('just') || lowerDesc.includes('monotube')) {
+            fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/3b0eeeac6b019c38addf282a75335a4a040abe10.jpg';
+            imgTypeDesc = 'KYB Gas-A-Just Monotube Damper';
+          } else {
+            fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg';
+            imgTypeDesc = 'KYB Excel-G Twin-Tube Shock Absorber';
+          }
+        } else if (lowerDesc.includes('glow')) {
+          fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg';
+          imgTypeDesc = 'NGK D-Power Diesel Glow Plug';
+        } else if (lowerDesc.includes('coil') || lowerDesc.includes('lead') || lowerDesc.includes('cable')) {
+          fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/04607d6d30b012c7e1397cb27758371f3229ecaa.jpg';
+          imgTypeDesc = 'NGK Ignition Coil';
+        } else if (lowerDesc.includes('sensor') || lowerDesc.includes('lambda') || lowerDesc.includes('oxygen') || lowerDesc.includes('o2')) {
+          fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg';
+          imgTypeDesc = 'NTK Zirconia Oxygen Sensor';
+        } else {
+          fallbackImgUrl = 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg';
+          imgTypeDesc = 'NGK Laser Iridium Spark Plug';
+        }
+
+        imageUrl = fallbackImgUrl;
+        if (images.length === 0) {
+          images = [
+            {
+              imageURL50: fallbackImgUrl.replace('/400/', '/50/'),
+              imageURL100: fallbackImgUrl.replace('/400/', '/100/'),
+              imageURL200: fallbackImgUrl.replace('/400/', '/200/'),
+              imageURL400: fallbackImgUrl,
+              imageURL800: fallbackImgUrl.replace('/400/', '/800/'),
+              imageURL1600: fallbackImgUrl.replace('/400/', '/1600/'),
+              typeDescription: imgTypeDesc,
+              headerDescription: 'Product Photo',
+              assetSource: 'catalog',
+            },
+          ];
+        }
+      }
+
       return {
         id: a.articleId || a.directArticle?.articleId || partNumber,
         articleId: a.articleId || a.directArticle?.articleId || partNumber,
@@ -644,26 +962,22 @@ class TecDocService {
         partNumber: partNumber,
         title: title,
         articleName: title,
-        brandName: a.brand || a.mfrName || a.dataSupplierName || 'NGK SPARK PLUG',
-        mfrName: a.mfrName || a.brand || a.dataSupplierName || 'NGK SPARK PLUG',
-        dataSupplierName: a.dataSupplierName || a.mfrName || a.brand || 'NGK SPARK PLUG',
+        brandName: a.brand || a.mfrName || a.dataSupplierName || (String(a.dataSupplierId) === '7729' ? '-KYB' : 'NGK SPARK PLUG'),
+        mfrName: a.mfrName || a.brand || a.dataSupplierName || (String(a.dataSupplierId) === '7729' ? '-KYB' : 'NGK SPARK PLUG'),
+        dataSupplierName: a.dataSupplierName || a.mfrName || a.brand || (String(a.dataSupplierId) === '7729' ? '-KYB' : 'NGK SPARK PLUG'),
+        dataSupplierId: a.dataSupplierId || (a.brandName?.toUpperCase()?.includes('KYB') ? 7729 : 15),
         tradeNumbers: a.tradeNumbers || [partNumber],
         genericArticles: a.genericArticles || [{ genericArticleDescription: title }],
         specs: specs,
         articleCriteria: a.articleCriteria || [],
-        images: a.images || [],
-        images360: (a.images || []).filter(
+        images: images,
+        images360: (images || []).filter(
           (img) =>
             img.fileName?.toLowerCase()?.includes('360') ||
             img.headerDescription?.toLowerCase()?.includes('360')
         ),
         oenNumbers: a.oenNumbers || [],
-        imageUrl:
-          a.imageUrl ||
-          a.images?.[0]?.imageURL800 ||
-          a.images?.[0]?.imageURL400 ||
-          a.images?.[0]?.imageURL200 ||
-          null,
+        imageUrl: imageUrl,
         raw: a,
       };
     });
@@ -759,7 +1073,8 @@ class TecDocService {
   /**
    * Group an array of articles into categorized buckets with counts and metadata
    */
-  groupArticlesByCategory(articles = []) {
+  groupArticlesByCategory(articles = [], brand = null) {
+    const normBrand = (brand || '').toLowerCase().trim();
     const categoryMap = {
       ignition: { id: 'ignition', name: 'Ignition & Glow', icon: 'Zap', count: 0, articles: [] },
       sensors: { id: 'sensors', name: 'Sensors & Electronics', icon: 'Activity', count: 0, articles: [] },
@@ -774,7 +1089,13 @@ class TecDocService {
       return { ...article, category };
     });
 
-    const categories = Object.values(categoryMap).filter((cat) => cat.count > 0);
+    let categories = Object.values(categoryMap).filter((cat) => cat.count > 0);
+
+    if (normBrand === 'kyb') {
+      categories = categories.filter((c) => c.id === 'suspension' || c.id === 'general');
+    } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+      categories = categories.filter((c) => c.id === 'ignition' || c.id === 'sensors' || c.id === 'general');
+    }
 
     return {
       articles: enrichedArticles,

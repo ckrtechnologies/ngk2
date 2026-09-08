@@ -220,8 +220,8 @@ const Notification = () => {
       return {
         badgeText: enquiryId ? `TICKET #${enquiryId}` : 'NEW MESSAGE',
         badgeBg: '#FEF2F2',
-        badgeColor: '#D0142C',
-        icon: <MessageSquare size={16} color="#D0142C" strokeWidth={2.2} />,
+        badgeColor: '#008752',
+        icon: <MessageSquare size={16} color="#008752" strokeWidth={2.2} />,
         iconBg: '#FEE2E2',
       };
     }
@@ -355,7 +355,7 @@ const Notification = () => {
               )}
               {item.metadata?.partNumber && (
                 <View style={styles.metaChip}>
-                  <Tag size={10} color="#D0142C" />
+                  <Tag size={10} color="#008752" />
                   <Text style={styles.metaChipText} numberOfLines={1}>
                     #{item.metadata.partNumber}
                   </Text>
@@ -475,8 +475,8 @@ const Notification = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#D0142C']}
-            tintColor="#D0142C"
+            colors={['#008752']}
+            tintColor="#008752"
           />
         }
       >
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   countBadgeUnread: {
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     paddingHorizontal: 6,
     paddingVertical: 1.5,
     borderRadius: 8,
@@ -700,7 +700,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: 3.5,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
   },
   iconStage: {
     width: 38,
@@ -743,7 +743,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#D0142C',
+    backgroundColor: '#008752',
     marginLeft: 3,
   },
   messageText: {
