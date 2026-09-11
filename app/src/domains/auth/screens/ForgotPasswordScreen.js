@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -18,7 +19,7 @@ import AppButton from '../../../components/common/AppButton';
 
 const ForgotPasswordScreen = ({ route, navigation }) => {
   const role = route?.params?.role || 'owner';
-  const buttonColor = role === 'distributor' ? '#111827' : '#008752';
+  const buttonColor = role === 'distributor' ? COLORS.textPrimary : COLORS.primary;
 
   const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
   const [email, setEmail] = useState('');
@@ -145,8 +146,8 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
       : 'Vehicle Owner';
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" translucent={false} />
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} translucent={false} />
       <AppHeader
         title={step === 1 ? 'Reset Password' : step === 2 ? 'Verify Code' : 'Set New Password'}
         subtitle={portalSubtitle}
@@ -166,7 +167,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
               onPress={() => navigation.navigate('Login', { role })}
             >
               <Text style={styles.backToLoginText}>
-                Remember your password? <Text style={{ color: buttonColor, fontWeight: '700' }}>Sign In</Text>
+                Remember your password? <Text style={{ color: buttonColor, fontWeight: FONTS.weight.bold }}>Sign In</Text>
               </Text>
             </TouchableOpacity>
           </View>
@@ -176,7 +177,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
       <View style={styles.content}>
         {/* Step Indicator / Icon */}
         <View style={styles.iconContainer}>
-          <View style={[styles.iconCircle, { backgroundColor: role === 'distributor' ? '#F3F4F6' : '#FEF2F2' }]}>
+          <View style={[styles.iconCircle, { backgroundColor: role === 'distributor' ? COLORS.surfaceSecondary : COLORS.errorLight }]}>
             {step === 1 ? (
               <Mail size={28} color={buttonColor} />
             ) : step === 2 ? (
@@ -322,25 +323,25 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   stepTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xxl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.4,
     marginBottom: 4,
   },
   stepSubtitle: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     paddingHorizontal: 20,
     lineHeight: 18,
   },
   formCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: COLORS.surfaceSecondary,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -358,8 +359,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backToLoginText: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
   },
 });
 

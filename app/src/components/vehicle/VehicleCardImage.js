@@ -1,4 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import { View, Image, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import {
   getVehicleImageUrl,
@@ -60,7 +61,7 @@ function VehicleCardImage({
     <View style={[styles.container, { height }, style]}>
       {loading && (
         <View style={[styles.loadingContainer, compact && { backgroundColor: 'rgba(15, 23, 42, 0.4)' }]}>
-          <ActivityIndicator size="small" color="#008752" />
+          <ActivityIndicator size="small" color={COLORS.primary} />
         </View>
       )}
 
@@ -111,7 +112,7 @@ export default memo(VehicleCardImage, (prevProps, nextProps) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     borderRadius: 14,
     overflow: 'hidden',
     position: 'relative',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     zIndex: 2,
   },
   bottomShadowOverlay: {

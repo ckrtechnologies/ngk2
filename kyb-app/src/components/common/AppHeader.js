@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   Text,
@@ -9,7 +10,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from 'lucide-react-native';
-import { THEME } from '../../utils/theme';
 
 const AppHeader = ({
   title,
@@ -19,7 +19,7 @@ const AppHeader = ({
   rightElement,
   centerElement,
   style,
-  variant = 'solid', // 'solid' (official #E31837) or 'light' / 'transparent'
+  variant = 'solid', // 'solid' (brand primary) or 'light' / 'transparent'
   backgroundColor,
   titleColor,
   subtitleColor,
@@ -31,13 +31,13 @@ const AppHeader = ({
   const isSolid = variant === 'solid';
 
   const resolvedBgColor =
-    backgroundColor || (isSolid ? THEME.primary : 'transparent');
+    backgroundColor || (isSolid ? COLORS.primary : 'transparent');
   const resolvedTitleColor =
-    titleColor || (isSolid ? THEME.textOnPrimary : '#111827');
+    titleColor || (isSolid ? COLORS.textOnPrimary : COLORS.textPrimary);
   const resolvedSubtitleColor =
-    subtitleColor || (isSolid ? THEME.textOnPrimaryMuted : '#6B7280');
+    subtitleColor || (isSolid ? COLORS.textOnPrimaryMuted : COLORS.textTertiary);
   const resolvedIconColor =
-    backIconColor || (isSolid ? '#FFFFFF' : '#111827');
+    backIconColor || (isSolid ? COLORS.white : COLORS.textPrimary);
 
   const containerPaddingTop = includeTopInset
     ? insets.top + (Platform.OS === 'android' ? 6 : 4)
@@ -48,7 +48,7 @@ const AppHeader = ({
       {showStatusBar && (
         <StatusBar
           barStyle={isSolid ? 'light-content' : 'dark-content'}
-          backgroundColor={isSolid ? THEME.primary : '#FFFFFF'}
+          backgroundColor={isSolid ? COLORS.primary : COLORS.white}
           translucent={false}
         />
       )}
@@ -122,17 +122,13 @@ const AppHeader = ({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
+    paddingHorizontal: SPACING.base,
+    paddingBottom: SPACING.md,
   },
   solidHeader: {
     borderBottomWidth: 1,
-    borderBottomColor: THEME.primaryDark,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
+    borderBottomColor: COLORS.primaryDark,
+    ...SHADOWS.lg,
   },
   headerContent: {
     flexDirection: 'row',
@@ -146,17 +142,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   solidBackButton: {
-    backgroundColor: THEME.glassBg,
+    backgroundColor: COLORS.glassBg,
     borderWidth: 1,
-    borderColor: THEME.glassBorder,
+    borderColor: COLORS.glassBorder,
   },
   lightBackButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
   },
   backButton: {
     width: 38,
     height: 38,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -167,19 +163,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: SPACING.sm,
   },
   title: {
-    fontSize: 16,
-    fontWeight: '800',
-    letterSpacing: -0.2,
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    letterSpacing: FONTS.letterSpacing.tight,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontFamily: FONTS.family.semiBold,
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
     marginTop: 1,
-    letterSpacing: 0.2,
+    letterSpacing: FONTS.letterSpacing.wide,
     textAlign: 'center',
   },
   rightContainer: {
@@ -190,3 +188,4 @@ const styles = StyleSheet.create({
 });
 
 export default AppHeader;
+

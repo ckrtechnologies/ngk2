@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   Text,
@@ -173,7 +174,7 @@ export default function DealerFilterModal({
                     >
                       <Sparkles
                         size={16}
-                        color={draft.role === 'all' ? '#008752' : '#64748B'}
+                        color={draft.role === 'all' ? COLORS.primary : COLORS.textTertiary}
                       />
                       <Text
                         style={[
@@ -184,7 +185,7 @@ export default function DealerFilterModal({
                         All Tiers
                       </Text>
                       {draft.role === 'all' && (
-                        <Check size={14} color="#008752" strokeWidth={3} />
+                        <Check size={14} color={COLORS.primary} strokeWidth={3} />
                       )}
                     </TouchableOpacity>
 
@@ -201,7 +202,7 @@ export default function DealerFilterModal({
                       <Building2
                         size={16}
                         color={
-                          draft.role === 'distributor' ? '#1D4ED8' : '#64748B'
+                          draft.role === 'distributor' ? '#1D4ED8' : COLORS.textTertiary
                         }
                       />
                       <View style={{ flex: 1 }}>
@@ -217,7 +218,7 @@ export default function DealerFilterModal({
                         <Text style={styles.tierSubtext}>Distributors</Text>
                       </View>
                       {draft.role === 'distributor' && (
-                        <Check size={14} color="#008752" strokeWidth={3} />
+                        <Check size={14} color={COLORS.primary} strokeWidth={3} />
                       )}
                     </TouchableOpacity>
 
@@ -234,7 +235,7 @@ export default function DealerFilterModal({
                       <Store
                         size={16}
                         color={
-                          draft.role === 'reseller' ? '#047857' : '#64748B'
+                          draft.role === 'reseller' ? COLORS.primary : COLORS.textTertiary
                         }
                       />
                       <View style={{ flex: 1 }}>
@@ -250,7 +251,7 @@ export default function DealerFilterModal({
                         <Text style={styles.tierSubtext}>Workshops & Trade Shops</Text>
                       </View>
                       {draft.role === 'reseller' && (
-                        <Check size={14} color="#008752" strokeWidth={3} />
+                        <Check size={14} color={COLORS.primary} strokeWidth={3} />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -273,7 +274,7 @@ export default function DealerFilterModal({
                       <Compass
                         size={15}
                         color={
-                          draft.sortBy === 'nearest' ? '#008752' : '#64748B'
+                          draft.sortBy === 'nearest' ? COLORS.primary : COLORS.textTertiary
                         }
                       />
                       <Text
@@ -299,7 +300,7 @@ export default function DealerFilterModal({
                     >
                       <ArrowDownAZ
                         size={15}
-                        color={draft.sortBy === 'alpha' ? '#008752' : '#64748B'}
+                        color={draft.sortBy === 'alpha' ? COLORS.primary : COLORS.textTertiary}
                       />
                       <Text
                         style={[
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheetContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -368,7 +369,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#CBD5E1',
+    backgroundColor: COLORS.borderDark,
     alignSelf: 'center',
     marginTop: 10,
     marginBottom: 4,
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
   },
   headerTitleRow: {
     flexDirection: 'row',
@@ -389,9 +390,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   activePillBadge: {
     backgroundColor: '#FEE2E2',
@@ -400,21 +401,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   activePillBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#008752',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   modalSubtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   closeBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.slate100,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -425,17 +426,17 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   sectionCard: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.lg,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   sectionLabel: {
-    fontSize: 11,
-    fontWeight: '800',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.6,
-    color: '#64748B',
+    color: COLORS.textTertiary,
     marginBottom: 10,
   },
   tierOptionGrid: {
@@ -447,27 +448,27 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.white,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   tierButtonActive: {
-    borderColor: '#008752',
-    backgroundColor: '#FFF5F5',
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.primaryLight,
   },
   tierButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   tierButtonTextActive: {
-    color: '#008752',
+    color: COLORS.primary,
   },
   tierSubtext: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.slate400,
   },
   sortRow: {
     flexDirection: 'row',
@@ -480,23 +481,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 10,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.white,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   sortOptionActive: {
-    borderColor: '#008752',
-    backgroundColor: '#FFF5F5',
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.primaryLight,
   },
   sortOptionText: {
     fontSize: 12.5,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   sortOptionTextActive: {
-    color: '#008752',
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
   bottomBar: {
     flexDirection: 'row',
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: COLORS.slate100,
   },
   resetBtn: {
     flexDirection: 'row',
@@ -514,30 +515,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 14,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
   },
   resetBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   applyBtn: {
     flex: 1,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingVertical: 13,
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#008752',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.28,
     shadowRadius: 6,
     elevation: 3,
   },
   applyBtnText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 13.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.2,
   },
 });

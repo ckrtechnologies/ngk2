@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -31,7 +32,7 @@ const RegisterScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const buttonColor = role === 'distributor' ? '#111827' : '#E31837';
+  const buttonColor = role === 'distributor' ? COLORS.textPrimary : COLORS.primary;
 
   const validate = () => {
     const errs = {};
@@ -163,7 +164,7 @@ const RegisterScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <AppHeader
         title="Create Account"
         subtitle={`Register as ${role === 'owner' ? 'Vehicle Owner' : role}`}
@@ -281,12 +282,12 @@ const RegisterScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   formCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     padding: 16,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: COLORS.surfaceSecondary,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -307,13 +308,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   loginPrompt: {
-    fontSize: 13,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   loginLink: {
-    fontSize: 13,
-    fontWeight: '700',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
   },
 });
 

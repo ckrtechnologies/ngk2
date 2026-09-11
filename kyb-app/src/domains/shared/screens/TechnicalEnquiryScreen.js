@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -845,7 +846,7 @@ const TechnicalEnquiryScreen = () => {
       {isReseller && (
         <View style={styles.resellerNoticeCard}>
           <View style={styles.resellerNoticeIconBox}>
-            <ShieldCheck size={18} color="#E31837" />
+            <ShieldCheck size={18} color={COLORS.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.resellerNoticeTitle}>
@@ -876,7 +877,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.garageSelectorContainer}>
           <View style={styles.sectionHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <SolidGarageBayIcon size={16} color="#E31837" />
+              <SolidGarageBayIcon size={16} color={COLORS.primary} />
               <Text style={styles.sectionTitle}>SELECT FROM MY GARAGE</Text>
             </View>
             <Text style={styles.garageCountBadge}>
@@ -903,7 +904,7 @@ const TechnicalEnquiryScreen = () => {
                 >
                   <SolidCarSilhouetteIcon
                     size={15}
-                    color={isSelected ? '#FFFFFF' : '#64748B'}
+                    color={isSelected ? COLORS.white : COLORS.textTertiary}
                   />
                   <Text
                     style={[
@@ -914,7 +915,7 @@ const TechnicalEnquiryScreen = () => {
                   >
                     {car.make} {car.model} {car.year ? `(${car.year})` : ''}
                   </Text>
-                  {isSelected && <Check size={13} color="#FFFFFF" strokeWidth={2.6} />}
+                  {isSelected && <Check size={13} color={COLORS.white} strokeWidth={2.6} />}
                 </TouchableOpacity>
               );
             })}
@@ -925,7 +926,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Part Identification Fields */}
       <View style={styles.formCard}>
         <View style={styles.cardHeaderRow}>
-          <SolidPartTagIcon size={17} color="#E31837" />
+          <SolidPartTagIcon size={17} color={COLORS.primary} />
           <Text style={styles.cardTitle}>PART IDENTIFICATION</Text>
         </View>
         <Text style={styles.cardSubtitle}>
@@ -944,7 +945,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.inputSpacing}>
           <AppInput
             label="Part Name / Component"
-            placeholder="e.g. Laser Iridium Spark Plug, Oxygen Sensor"
+            placeholder="e.g. Excel-G Shock Absorber, Strut Assembly"
             value={partName}
             onChangeText={setPartName}
           />
@@ -999,7 +1000,7 @@ const TechnicalEnquiryScreen = () => {
           activeOpacity={0.85}
         >
           <Text style={styles.nextStepBtnText}>Continue to Select Dealer</Text>
-          <ChevronRight size={18} color="#FFFFFF" strokeWidth={2.5} />
+          <ChevronRight size={18} color={COLORS.white} strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
     </View>
@@ -1010,8 +1011,8 @@ const TechnicalEnquiryScreen = () => {
     <View>
       {/* Step 2 Banner */}
       <View style={styles.stepBannerCard}>
-        <View style={[styles.stepBannerIconBox, { backgroundColor: '#FEF2F2' }]}>
-          <SolidStoreIcon size={18} color="#E31837" />
+        <View style={[styles.stepBannerIconBox, { backgroundColor: COLORS.errorLight }]}>
+          <SolidStoreIcon size={18} color={COLORS.primary} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.stepBannerTitle}>
@@ -1031,7 +1032,7 @@ const TechnicalEnquiryScreen = () => {
         onPress={handleAutoSelectNearest}
         activeOpacity={0.8}
       >
-        <SolidLocationPinIcon size={16} color="#FFFFFF" />
+        <SolidLocationPinIcon size={16} color={COLORS.white} />
         <Text style={styles.autoSelectNearestBtnText}>
           Auto-Select Nearest Authorized Reseller
         </Text>
@@ -1067,7 +1068,7 @@ const TechnicalEnquiryScreen = () => {
         >
           <SlidersHorizontal
             size={18}
-            color={activeFilterCount > 0 ? '#FFFFFF' : '#1E293B'}
+            color={activeFilterCount > 0 ? COLORS.white : COLORS.slate800}
           />
           {activeFilterCount > 0 && (
             <View style={styles.filterBadgeCircle}>
@@ -1095,7 +1096,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, radius: 50 }))}
                 >
-                  <X size={11} color="#E31837" strokeWidth={2.4} />
+                  <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1108,7 +1109,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, role: 'all' }))}
                 >
-                  <X size={11} color="#E31837" strokeWidth={2.4} />
+                  <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1119,7 +1120,7 @@ const TechnicalEnquiryScreen = () => {
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, sortBy: 'nearest' }))}
                 >
-                  <X size={11} color="#E31837" strokeWidth={2.4} />
+                  <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                 </TouchableOpacity>
               </View>
             )}
@@ -1236,7 +1237,7 @@ const TechnicalEnquiryScreen = () => {
                   <View style={styles.modalDealerIconBox}>
                     <SolidStoreIcon
                       size={18}
-                      color={isDist ? '#E31837' : '#059669'}
+                      color={isDist ? COLORS.primary : COLORS.success}
                     />
                   </View>
                   <View style={{ flex: 1, marginRight: 8 }}>
@@ -1273,7 +1274,7 @@ const TechnicalEnquiryScreen = () => {
 
                   {isSelected ? (
                     <View style={styles.selectedCheckCircle}>
-                      <Check size={14} color="#FFFFFF" strokeWidth={3} />
+                      <Check size={14} color={COLORS.white} strokeWidth={3} />
                     </View>
                   ) : (
                     <View style={styles.unselectedCircle} />
@@ -1283,7 +1284,7 @@ const TechnicalEnquiryScreen = () => {
                 {d.distance && (
                   <View style={styles.modalDealerFooter}>
                     <View style={styles.modalDistanceChip}>
-                      <SolidLocationPinIcon size={11} color="#047857" />
+                      <SolidLocationPinIcon size={11} color={COLORS.primary} />
                       <Text style={styles.modalDistanceChipText}>
                         {d.distance} from your location
                       </Text>
@@ -1291,7 +1292,7 @@ const TechnicalEnquiryScreen = () => {
                     <Text
                       style={[
                         styles.selectPrompt,
-                        isSelected && { color: '#E31837', fontWeight: '800' },
+                        isSelected && { color: COLORS.primary, fontWeight: FONTS.weight.heavy },
                       ]}
                     >
                       {isSelected ? '✓ Selected Reseller' : 'Tap to Select'}
@@ -1319,7 +1320,7 @@ const TechnicalEnquiryScreen = () => {
           activeOpacity={0.85}
         >
           <Text style={styles.nextStepBtnText}>Continue to Query</Text>
-          <ChevronRight size={18} color="#FFFFFF" strokeWidth={2.5} />
+          <ChevronRight size={18} color={COLORS.white} strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
     </View>
@@ -1330,7 +1331,7 @@ const TechnicalEnquiryScreen = () => {
     <View>
       {/* Step 3 Banner */}
       <View style={styles.stepBannerCard}>
-        <View style={[styles.stepBannerIconBox, { backgroundColor: '#EFF6FF' }]}>
+        <View style={[styles.stepBannerIconBox, { backgroundColor: COLORS.infoLight }]}>
           <Sparkles size={18} color="#2563EB" />
         </View>
         <View style={{ flex: 1 }}>
@@ -1352,8 +1353,8 @@ const TechnicalEnquiryScreen = () => {
 
         {/* Part Item */}
         <View style={styles.summaryItemRow}>
-          <View style={[styles.summaryItemIconBox, { backgroundColor: '#FEF2F2' }]}>
-            <SolidPartTagIcon size={14} color="#E31837" />
+          <View style={[styles.summaryItemIconBox, { backgroundColor: COLORS.errorLight }]}>
+            <SolidPartTagIcon size={14} color={COLORS.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.summaryItemLabel}>Selected Part</Text>
@@ -1365,7 +1366,7 @@ const TechnicalEnquiryScreen = () => {
 
         {/* Vehicle Item */}
         <View style={styles.summaryItemRow}>
-          <View style={[styles.summaryItemIconBox, { backgroundColor: '#EFF6FF' }]}>
+          <View style={[styles.summaryItemIconBox, { backgroundColor: COLORS.infoLight }]}>
             <SolidCarSilhouetteIcon size={14} color="#2563EB" />
           </View>
           <View style={{ flex: 1 }}>
@@ -1379,7 +1380,7 @@ const TechnicalEnquiryScreen = () => {
         {/* Assigned Dealer Item */}
         <View style={styles.summaryItemRow}>
           <View style={[styles.summaryItemIconBox, { backgroundColor: '#F0FDF4' }]}>
-            <SolidStoreIcon size={14} color="#059669" />
+            <SolidStoreIcon size={14} color={COLORS.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1412,7 +1413,7 @@ const TechnicalEnquiryScreen = () => {
             onPress={() => setQuantity((q) => Math.max(1, q - 1))}
             activeOpacity={0.7}
           >
-            <SolidStepperMinusIcon size={13} color="#111827" />
+            <SolidStepperMinusIcon size={13} color={COLORS.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.stepperValue}>{quantity}</Text>
           <TouchableOpacity
@@ -1420,7 +1421,7 @@ const TechnicalEnquiryScreen = () => {
             onPress={() => setQuantity((q) => q + 1)}
             activeOpacity={0.7}
           >
-            <SolidStepperPlusIcon size={13} color="#111827" />
+            <SolidStepperPlusIcon size={13} color={COLORS.textPrimary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -1453,11 +1454,11 @@ const TechnicalEnquiryScreen = () => {
           activeOpacity={0.85}
         >
           {loading ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : (
             <>
               <Text style={styles.nextStepBtnText}>Submit Ticket</Text>
-              <Send size={16} color="#FFFFFF" />
+              <Send size={16} color={COLORS.white} />
             </>
           )}
         </TouchableOpacity>
@@ -1466,7 +1467,7 @@ const TechnicalEnquiryScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <AppHeader
         title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
         subtitle={
@@ -1498,8 +1499,8 @@ const TechnicalEnquiryScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#E31837"
-            colors={['#E31837']}
+            tintColor={COLORS.primary}
+            colors={[COLORS.primary]}
           />
         }
       >
@@ -1530,10 +1531,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 10,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
-    borderRadius: 8,
+    borderColor: COLORS.errorBorder,
+    borderRadius: RADIUS.sm,
     padding: 12,
     marginBottom: 14,
   },
@@ -1541,14 +1542,14 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   resellerNoticeTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     letterSpacing: 0.5,
     marginBottom: 2,
   },
   resellerNoticeBody: {
-    fontSize: 11,
+    fontSize: FONTS.size.caption,
     color: '#991B1B',
     lineHeight: 16,
   },
@@ -1558,30 +1559,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 12,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   stepBannerIconBox: {
     width: 34,
     height: 34,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     backgroundColor: '#F0FDF4',
     justifyContent: 'center',
     alignItems: 'center',
   },
   stepBannerTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: 0.5,
   },
   stepBannerSubtitle: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
 
@@ -1594,9 +1595,9 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   sectionTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textSecondary,
     letterSpacing: 0.5,
   },
 
@@ -1605,9 +1606,9 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   garageCountBadge: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   garageChipsScroll: {
     gap: 8,
@@ -1619,33 +1620,33 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 7,
     paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.xl,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
   },
   garageChipSelected: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
+    borderColor: COLORS.slate900,
   },
   garageChipText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   garageChipTextSelected: {
-    color: '#FFFFFF',
-    fontWeight: '700',
+    color: COLORS.white,
+    fontWeight: FONTS.weight.bold,
   },
 
   // Form Cards
   formCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   cardHeaderRow: {
     flexDirection: 'row',
@@ -1654,14 +1655,14 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardTitle: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: 0.5,
   },
   cardSubtitle: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginBottom: 12,
   },
   inputSpacing: {
@@ -1681,21 +1682,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   quantityLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
   },
   quantitySub: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   stepperBox: {
@@ -1706,17 +1707,17 @@ const styles = StyleSheet.create({
   stepperBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.slate100,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   stepperValue: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     minWidth: 20,
     textAlign: 'center',
   },
@@ -1732,13 +1733,13 @@ const styles = StyleSheet.create({
   fullNextStepBtn: {
     width: '100%',
     height: 48,
-    borderRadius: 8,
-    backgroundColor: '#E31837',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     gap: 6,
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -1747,37 +1748,37 @@ const styles = StyleSheet.create({
   prevStepBtn: {
     flex: 1,
     height: 48,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1.5,
-    borderColor: '#CBD5E1',
-    backgroundColor: '#FFFFFF',
+    borderColor: COLORS.borderDark,
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
   },
   prevStepBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   nextStepBtn: {
     flex: 2,
     height: 48,
-    borderRadius: 8,
-    backgroundColor: '#E31837',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     gap: 6,
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 3,
   },
   nextStepBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 
   // Step 2 Dealer Selection UI & Filter Panel Controls
@@ -1786,20 +1787,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#059669',
-    borderRadius: 8,
+    backgroundColor: COLORS.success,
+    borderRadius: RADIUS.sm,
     paddingVertical: 12,
     marginBottom: 12,
-    shadowColor: '#059669',
+    shadowColor: COLORS.success,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 2,
   },
   autoSelectNearestBtnText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '700',
+    color: COLORS.white,
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
   },
   searchBarRow: {
     flexDirection: 'row',
@@ -1812,51 +1813,51 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 8,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.sm,
     paddingHorizontal: 12,
     paddingVertical: Platform.OS === 'ios' ? 10 : 6,
   },
   modalSearchInput: {
     flex: 1,
-    fontSize: 13,
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    color: COLORS.slate900,
     padding: 0,
   },
   filterTriggerBtn: {
     width: 44,
     height: 44,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
   filterTriggerBtnActive: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   filterBadgeCircle: {
     position: 'absolute',
     top: -4,
     right: -4,
-    backgroundColor: '#E31837',
-    borderRadius: 8,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.sm,
     width: 16,
     height: 16,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: COLORS.white,
   },
   filterBadgeCircleText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
   },
 
   // Active Chips Bar
@@ -1869,35 +1870,35 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   activeChipsLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     marginRight: 2,
   },
   activeChipPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
     borderRadius: 14,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   activeChipText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   clearAllBtn: {
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   clearAllBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate400,
   },
 
   // Quick Category Filter Tabs
@@ -1909,35 +1910,35 @@ const styles = StyleSheet.create({
   modalFilterTab: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.xl,
+    backgroundColor: COLORS.slate100,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   modalFilterTabActive: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   modalFilterTabText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   modalFilterTabTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
 
   // Dealer Cards in Step 2
   modalDealerCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   modalDealerCardSelected: {
-    borderColor: '#E31837',
+    borderColor: COLORS.primary,
     backgroundColor: '#FFFBFB',
     borderWidth: 1.5,
   },
@@ -1948,8 +1949,8 @@ const styles = StyleSheet.create({
   modalDealerIconBox: {
     width: 36,
     height: 36,
-    borderRadius: 8,
-    backgroundColor: '#F8FAFC',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -1961,31 +1962,31 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   modalDealerName: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     flexShrink: 1,
   },
   roleTag: {
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   roleTagDistributor: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
   },
   roleTagStockist: {
     backgroundColor: '#F0FDF4',
   },
   roleTagText: {
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
   },
   roleTagTextDistributor: {
-    color: '#E31837',
+    color: COLORS.primary,
   },
   roleTagTextStockist: {
-    color: '#059669',
+    color: COLORS.success,
   },
   dealerLocationRow: {
     flexDirection: 'row',
@@ -1993,14 +1994,14 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   modalDealerAddress: {
-    fontSize: 12,
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
   },
   selectedCheckCircle: {
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -2009,7 +2010,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
   },
   modalDealerFooter: {
     flexDirection: 'row',
@@ -2018,7 +2019,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: COLORS.slate100,
   },
   modalDistanceChip: {
     flexDirection: 'row',
@@ -2026,28 +2027,28 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   modalDistanceChipText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#047857',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   selectPrompt: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   emptyDealersBox: {
     alignItems: 'center',
     paddingVertical: 36,
   },
   emptyDealersTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
     marginTop: 10,
   },
   emptyDealersSub: {
-    fontSize: 12,
-    color: '#94A3B8',
+    fontSize: FONTS.size.xs,
+    color: COLORS.slate400,
     marginTop: 2,
     textAlign: 'center',
     paddingHorizontal: 20,
@@ -2056,23 +2057,23 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#E31837',
+    borderRadius: RADIUS.xl,
+    backgroundColor: COLORS.primary,
   },
   emptyResetBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 
   // Step 3 Summary Card
   summaryCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -2085,19 +2086,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
     marginBottom: 10,
   },
   summaryHeaderTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: 0.5,
   },
   summaryEditLink: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   summaryItemRow: {
     flexDirection: 'row',
@@ -2115,19 +2116,19 @@ const styles = StyleSheet.create({
   },
   summaryItemLabel: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#94A3B8',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate400,
     textTransform: 'uppercase',
     marginBottom: 1,
   },
   summaryItemValue: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   summaryItemSub: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
 });

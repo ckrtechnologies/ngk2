@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -201,7 +202,7 @@ export default function OwnerProfileScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Crimson Header */}
       <View style={[styles.headerBar, { paddingTop: insets.top + 8 }]}>
@@ -210,7 +211,7 @@ export default function OwnerProfileScreen({ navigation }) {
           onPress={() => navigation.goBack()}
           activeOpacity={0.75}
         >
-          <ArrowLeft size={22} color="#FFFFFF" />
+          <ArrowLeft size={22} color={COLORS.white} />
         </TouchableOpacity>
 
         <View style={styles.headerTitleContainer}>
@@ -223,7 +224,7 @@ export default function OwnerProfileScreen({ navigation }) {
           onPress={openEditModal}
           activeOpacity={0.75}
         >
-          <Pencil size={18} color="#FFFFFF" />
+          <Pencil size={18} color={COLORS.white} />
         </TouchableOpacity>
       </View>
 
@@ -263,7 +264,7 @@ export default function OwnerProfileScreen({ navigation }) {
             onPress={openEditModal}
             activeOpacity={0.75}
           >
-            <Pencil size={14} color="#008752" />
+            <Pencil size={14} color={COLORS.primary} />
             <Text style={styles.editPillText}>Edit Personal Details</Text>
           </TouchableOpacity>
         </View>
@@ -405,7 +406,7 @@ export default function OwnerProfileScreen({ navigation }) {
             activeOpacity={0.7}
           >
             <View style={styles.navIconBadgeRed}>
-              <Wrench size={16} color="#008752" />
+              <Wrench size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
               <Text style={styles.navTitle}>TecDoc Parts & Catalog</Text>
@@ -559,10 +560,10 @@ export default function OwnerProfileScreen({ navigation }) {
                 activeOpacity={0.8}
               >
                 {isSaving ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={COLORS.white} />
                 ) : (
                   <>
-                    <Check size={18} color="#FFFFFF" style={styles.saveIcon} />
+                    <Check size={18} color={COLORS.white} style={styles.saveIcon} />
                     <Text style={styles.modalSaveText}>Save Changes</Text>
                   </>
                 )}
@@ -578,10 +579,10 @@ export default function OwnerProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   headerBar: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingBottom: 16,
     flexDirection: 'row',
@@ -591,7 +592,7 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.16)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -601,13 +602,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 17,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: -0.2,
   },
   headerSubtitle: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: 'rgba(255, 255, 255, 0.75)',
     letterSpacing: 0.8,
     marginTop: 2,
@@ -615,7 +616,7 @@ const styles = StyleSheet.create({
   headerEditBtn: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.16)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -625,12 +626,12 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   profileCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.xl,
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: COLORS.slate100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -646,22 +647,22 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 18,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     borderWidth: 2,
     borderColor: '#FACC15',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
-    shadowColor: '#008752',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
     elevation: 3,
   },
   monogramText: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   profileInfoCol: {
@@ -669,8 +670,8 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 19,
-    fontWeight: '800',
-    color: '#111827',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.3,
     marginBottom: 4,
   },
@@ -687,8 +688,8 @@ const styles = StyleSheet.create({
   },
   rolePillText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#008752',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     letterSpacing: 0.4,
   },
   verifiedRow: {
@@ -697,8 +698,8 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   verifiedLabel: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
     color: '#10B981',
   },
   editPillBtn: {
@@ -706,16 +707,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
-    borderRadius: 12,
+    borderColor: COLORS.errorBorder,
+    borderRadius: RADIUS.md,
     paddingVertical: 10,
   },
   editPillText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#008752',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -724,12 +725,12 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     padding: 16,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: COLORS.slate100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -739,8 +740,8 @@ const styles = StyleSheet.create({
   statIconBadgeBlue: {
     width: 40,
     height: 40,
-    borderRadius: 12,
-    backgroundColor: '#EFF6FF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.infoLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -748,30 +749,30 @@ const styles = StyleSheet.create({
   statIconBadgeGreen: {
     width: 40,
     height: 40,
-    borderRadius: 12,
-    backgroundColor: '#ECFDF5',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.successLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
   statNumber: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xxl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     marginBottom: 2,
   },
   statLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   sectionCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.xl,
     padding: 18,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: COLORS.slate100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -785,15 +786,15 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   sectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textTertiary,
     letterSpacing: 0.6,
   },
   sectionEditLink: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#008752',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   detailRow: {
     flexDirection: 'row',
@@ -803,8 +804,8 @@ const styles = StyleSheet.create({
   detailIconWrapper: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -813,19 +814,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detailLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#9CA3AF',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textMuted,
     marginBottom: 2,
   },
   detailValue: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#1F2937',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   divider: {
     height: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     marginVertical: 4,
   },
   navRow: {
@@ -837,7 +838,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -846,7 +847,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -855,7 +856,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -865,32 +866,32 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   navTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
     marginBottom: 2,
   },
   navSubtitle: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
   },
   signOutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
     borderColor: '#FEE2E2',
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     paddingVertical: 14,
     marginBottom: 12,
   },
   signOutText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#DC2626',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.error,
   },
   deleteAccountBtn: {
     flexDirection: 'row',
@@ -901,14 +902,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   deleteAccountText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#9CA3AF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textMuted,
   },
   footerNote: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#9CA3AF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textMuted,
     textAlign: 'center',
     letterSpacing: 0.5,
   },
@@ -923,7 +924,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -936,25 +937,25 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.3,
   },
   modalSubtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   modalCloseBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -969,9 +970,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginBottom: 6,
   },
   inputWrapper: {
@@ -979,8 +980,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F9FAFB',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 12,
   },
   inputIcon: {
@@ -989,9 +990,9 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     height: 48,
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textPrimary,
   },
   modalFooter: {
     flexDirection: 'row',
@@ -1000,31 +1001,31 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: COLORS.surfaceSecondary,
+    backgroundColor: COLORS.white,
   },
   modalCancelBtn: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    backgroundColor: COLORS.surfaceSecondary,
+    borderRadius: RADIUS.md,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalCancelText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   modalSaveBtn: {
     flex: 2,
     flexDirection: 'row',
-    backgroundColor: '#008752',
-    borderRadius: 12,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.md,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#008752',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -1037,8 +1038,8 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   modalSaveText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 });

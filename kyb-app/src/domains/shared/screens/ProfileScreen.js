@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -229,7 +230,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#E31837" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Crimson Header */}
       <View style={[styles.headerBar, { paddingTop: insets.top + 8 }]}>
@@ -238,7 +239,7 @@ export default function ProfileScreen({ navigation }) {
           onPress={() => navigation.goBack()}
           activeOpacity={0.75}
         >
-          <ArrowLeft size={22} color="#FFFFFF" />
+          <ArrowLeft size={22} color={COLORS.white} />
         </TouchableOpacity>
 
         <View style={styles.headerTitleContainer}>
@@ -251,7 +252,7 @@ export default function ProfileScreen({ navigation }) {
           onPress={openEditModal}
           activeOpacity={0.75}
         >
-          <Pencil size={18} color="#FFFFFF" />
+          <Pencil size={18} color={COLORS.white} />
         </TouchableOpacity>
       </View>
 
@@ -294,7 +295,7 @@ export default function ProfileScreen({ navigation }) {
             onPress={openEditModal}
             activeOpacity={0.75}
           >
-            <Pencil size={14} color="#E31837" />
+            <Pencil size={14} color={COLORS.primary} />
             <Text style={styles.editPillText}>Edit Profile Details</Text>
           </TouchableOpacity>
         </View>
@@ -319,7 +320,7 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={0.75}
           >
             <View style={styles.statIconBadgeGreen}>
-              <MessageSquare size={20} color="#059669" />
+              <MessageSquare size={20} color={COLORS.primary} />
             </View>
             <Text style={styles.statNumber}>{enquiriesCount}</Text>
             <Text style={styles.statLabel}>Tech Enquiries</Text>
@@ -428,7 +429,7 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={0.7}
           >
             <View style={styles.navIconBadgeGreen}>
-              <MessageSquare size={16} color="#059669" />
+              <MessageSquare size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
               <Text style={styles.navTitle}>Technical Enquiries & Support</Text>
@@ -447,7 +448,7 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={0.7}
           >
             <View style={styles.navIconBadgeRed}>
-              <Wrench size={16} color="#E31837" />
+              <Wrench size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
               <Text style={styles.navTitle}>TecDoc Parts & Catalog</Text>
@@ -622,10 +623,10 @@ export default function ProfileScreen({ navigation }) {
                 activeOpacity={0.8}
               >
                 {isSaving ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={COLORS.white} />
                 ) : (
                   <>
-                    <Check size={18} color="#FFFFFF" style={styles.saveIcon} />
+                    <Check size={18} color={COLORS.white} style={styles.saveIcon} />
                     <Text style={styles.modalSaveText}>Save Changes</Text>
                   </>
                 )}
@@ -641,10 +642,10 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   headerBar: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingBottom: 16,
     flexDirection: 'row',
@@ -654,7 +655,7 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -663,14 +664,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: -0.3,
   },
   headerSubtitle: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: 'rgba(255, 255, 255, 0.75)',
     letterSpacing: 1.1,
     marginTop: 2,
@@ -678,7 +679,7 @@ const styles = StyleSheet.create({
   headerEditBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -687,11 +688,11 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   profileCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.xl,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -707,31 +708,31 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 18,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderWidth: 2.5,
     borderColor: '#FDE047',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 4,
   },
   monogramText: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: -0.5,
   },
   profileInfoCol: {
     flex: 1,
   },
   profileName: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xxl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.4,
     marginBottom: 6,
   },
@@ -748,8 +749,8 @@ const styles = StyleSheet.create({
   },
   rolePillText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#DC2626',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.error,
     letterSpacing: 0.5,
   },
   verifiedRow: {
@@ -758,9 +759,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   verifiedLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#059669',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.success,
   },
   editPillBtn: {
     flexDirection: 'row',
@@ -776,9 +777,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   editPillText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -787,11 +788,11 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -802,10 +803,10 @@ const styles = StyleSheet.create({
   statIconBadgeBlue: {
     width: 42,
     height: 42,
-    borderRadius: 12,
-    backgroundColor: '#EFF6FF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.infoLight,
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: COLORS.infoLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -813,32 +814,32 @@ const styles = StyleSheet.create({
   statIconBadgeGreen: {
     width: 42,
     height: 42,
-    borderRadius: 12,
-    backgroundColor: '#ECFDF5',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.successLight,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
   statNumber: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.3,
   },
   statLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   sectionCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 18,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -853,15 +854,15 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   sectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textTertiary,
     letterSpacing: 0.8,
   },
   sectionEditLink: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   detailRow: {
     flexDirection: 'row',
@@ -872,7 +873,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -881,19 +882,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detailLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
     marginBottom: 2,
   },
   detailValue: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   divider: {
     height: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
   },
   navRow: {
     flexDirection: 'row',
@@ -904,7 +905,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -913,7 +914,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -922,7 +923,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -931,21 +932,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   navTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   navSubtitle: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   signOutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1.5,
     borderColor: '#FECDD3',
     borderRadius: 14,
@@ -954,9 +955,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   signOutText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#DC2626',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.error,
   },
   deleteAccountBtn: {
     flexDirection: 'row',
@@ -967,14 +968,14 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   deleteAccountText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#9CA3AF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textMuted,
   },
   footerNote: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#9CA3AF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textMuted,
     textAlign: 'center',
     letterSpacing: 0.5,
   },
@@ -989,7 +990,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -1002,25 +1003,25 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.3,
   },
   modalSubtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   modalCloseBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1035,9 +1036,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginBottom: 6,
   },
   inputWrapper: {
@@ -1045,8 +1046,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F9FAFB',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 12,
   },
   inputIcon: {
@@ -1055,9 +1056,9 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     height: 48,
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textPrimary,
   },
   textAreaWrapper: {
     alignItems: 'flex-start',
@@ -1077,31 +1078,31 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: COLORS.surfaceSecondary,
+    backgroundColor: COLORS.white,
   },
   modalCancelBtn: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    backgroundColor: COLORS.surfaceSecondary,
+    borderRadius: RADIUS.md,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalCancelText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   modalSaveBtn: {
     flex: 2,
     flexDirection: 'row',
-    backgroundColor: '#E31837',
-    borderRadius: 12,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.md,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -1114,8 +1115,8 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   modalSaveText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 });

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -116,7 +117,7 @@ export default function AccountPendingScreen() {
             onPress={signOut}
             activeOpacity={0.8}
           >
-            <LogOut size={16} color="#FFFFFF" />
+            <LogOut size={16} color={COLORS.white} />
             <Text style={styles.logoutBtnText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
@@ -129,8 +130,8 @@ export default function AccountPendingScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#008752']}
-            tintColor="#008752"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
@@ -261,10 +262,10 @@ export default function AccountPendingScreen() {
             activeOpacity={0.8}
           >
             {checkingStatus ? (
-              <ActivityIndicator color="#FFFFFF" size="small" />
+              <ActivityIndicator color={COLORS.white} size="small" />
             ) : (
               <>
-                <RefreshCw size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
+                <RefreshCw size={18} color={COLORS.white} style={{ marginRight: 8 }} />
                 <Text style={styles.primaryBtnText}>Check Approval Status</Text>
               </>
             )}
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#1F2937',
+    borderBottomColor: COLORS.slate800,
   },
   headerContent: {
     flexDirection: 'row',
@@ -315,32 +316,32 @@ const styles = StyleSheet.create({
     height: 38,
   },
   brandTitle: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.8,
   },
   brandSubtitle: {
-    color: '#008752',
+    color: COLORS.primary,
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     letterSpacing: 1,
   },
   logoutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1F2937',
+    backgroundColor: COLORS.slate800,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     gap: 6,
     borderWidth: 1,
-    borderColor: '#374151',
+    borderColor: COLORS.slate700,
   },
   logoutBtnText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
+    color: COLORS.white,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -353,13 +354,13 @@ const styles = StyleSheet.create({
   iconCircleOuter: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    borderRadius: RADIUS.xs0,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
   },
   iconCirclePending: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: COLORS.warningLight,
   },
   iconCircleRejected: {
     backgroundColor: '#FEE2E2',
@@ -372,19 +373,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   innerPending: {
-    backgroundColor: '#FDE68A',
+    backgroundColor: COLORS.warningBorder,
   },
   innerRejected: {
-    backgroundColor: '#FECACA',
+    backgroundColor: COLORS.errorBorder,
   },
   statusPill: {
     paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     marginBottom: 12,
   },
   statusPillPending: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: COLORS.warningLight,
     borderWidth: 1,
     borderColor: '#FCD34D',
   },
@@ -394,8 +395,8 @@ const styles = StyleSheet.create({
     borderColor: '#FCA5A5',
   },
   statusPillText: {
-    fontSize: 11,
-    fontWeight: '800',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.8,
   },
   statusTextPending: {
@@ -405,26 +406,26 @@ const styles = StyleSheet.create({
     color: '#B91C1C',
   },
   heroTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     textAlign: 'center',
     marginBottom: 8,
   },
   heroDescription: {
-    fontSize: 13,
+    fontSize: FONTS.size.sm,
     lineHeight: 20,
-    color: '#4B5563',
+    color: COLORS.textSecondary,
     textAlign: 'center',
     paddingHorizontal: 12,
   },
   detailsCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -432,15 +433,15 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardHeaderTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   detailRow: {
     flexDirection: 'row',
@@ -452,8 +453,8 @@ const styles = StyleSheet.create({
   detailIconBox: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceSecondary,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -462,31 +463,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detailLabel: {
-    fontSize: 11,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   detailValue: {
-    fontSize: 13,
-    color: '#111827',
-    fontWeight: '700',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textPrimary,
+    fontWeight: FONTS.weight.bold,
     marginTop: 1,
   },
   noticeBox: {
     flexDirection: 'row',
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    backgroundColor: COLORS.surfaceSecondary,
+    borderRadius: RADIUS.md,
     padding: 14,
     marginBottom: 24,
     gap: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   noticeText: {
     flex: 1,
-    fontSize: 12,
+    fontSize: FONTS.size.xs,
     lineHeight: 18,
-    color: '#4B5563',
+    color: COLORS.textSecondary,
   },
   actionContainer: {
     gap: 12,
@@ -496,10 +497,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingVertical: 14,
-    borderRadius: 12,
-    shadowColor: '#008752',
+    borderRadius: RADIUS.md,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
@@ -509,29 +510,29 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   primaryBtnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
+    color: COLORS.white,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
   },
   secondaryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingVertical: 13,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: COLORS.borderDark,
   },
   secondaryBtnText: {
-    color: '#374151',
-    fontSize: 13,
-    fontWeight: '600',
+    color: COLORS.slate700,
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.semiBold,
   },
   pullToRefreshHint: {
     textAlign: 'center',
-    fontSize: 11,
-    color: '#9CA3AF',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textMuted,
     marginTop: 8,
   },
 });

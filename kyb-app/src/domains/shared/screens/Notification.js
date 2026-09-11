@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -219,19 +220,19 @@ const Notification = () => {
     if (type === 'new_message') {
       return {
         badgeText: enquiryId ? `TICKET #${enquiryId}` : 'NEW MESSAGE',
-        badgeBg: '#FEF2F2',
-        badgeColor: '#E31837',
-        icon: <MessageSquare size={16} color="#E31837" strokeWidth={2.2} />,
+        badgeBg: COLORS.errorLight,
+        badgeColor: COLORS.primary,
+        icon: <MessageSquare size={16} color={COLORS.primary} strokeWidth={2.2} />,
         iconBg: '#FEE2E2',
       };
     }
     if (type === 'status_change') {
       return {
         badgeText: enquiryId ? `TICKET #${enquiryId} • STATUS` : 'STATUS UPDATE',
-        badgeBg: '#EFF6FF',
-        badgeColor: '#2563EB',
+        badgeBg: COLORS.infoLight,
+        badgeColor: COLORS.info,
         icon: <RefreshCw size={16} color="#2563EB" strokeWidth={2.2} />,
-        iconBg: '#DBEAFE',
+        iconBg: COLORS.infoLight,
       };
     }
     if (type === 'new_enquiry') {
@@ -246,19 +247,19 @@ const Notification = () => {
     if (type === 'account_approved') {
       return {
         badgeText: 'VERIFIED DEALER',
-        badgeBg: '#ECFDF5',
-        badgeColor: '#059669',
+        badgeBg: COLORS.successLight,
+        badgeColor: COLORS.success,
         icon: <ShieldCheck size={16} color="#059669" strokeWidth={2.2} />,
-        iconBg: '#D1FAE5',
+        iconBg: COLORS.successLight,
       };
     }
 
     return {
       badgeText: 'ALERT',
-      badgeBg: '#F1F5F9',
-      badgeColor: '#475569',
+      badgeBg: COLORS.slate100,
+      badgeColor: COLORS.textSecondary,
       icon: <FileText size={16} color="#475569" strokeWidth={2.2} />,
-      iconBg: '#E2E8F0',
+      iconBg: COLORS.border,
     };
   };
 
@@ -329,7 +330,7 @@ const Notification = () => {
             </View>
 
             <View style={styles.cardTimeWrap}>
-              <Clock size={11} color="#94A3B8" />
+              <Clock size={11} color={COLORS.slate400} />
               <Text style={styles.cardTimeText}>{timeStr}</Text>
               {unread && <View style={styles.unreadPillDot} />}
             </View>
@@ -355,7 +356,7 @@ const Notification = () => {
               )}
               {item.metadata?.partNumber && (
                 <View style={styles.metaChip}>
-                  <Tag size={10} color="#E31837" />
+                  <Tag size={10} color={COLORS.primary} />
                   <Text style={styles.metaChipText} numberOfLines={1}>
                     #{item.metadata.partNumber}
                   </Text>
@@ -368,7 +369,7 @@ const Notification = () => {
         {/* Right Action Indicator */}
         {hasLink && (
           <View style={styles.chevronBox}>
-            <ChevronRight size={16} color={unread ? '#94A3B8' : '#CBD5E1'} strokeWidth={2.2} />
+            <ChevronRight size={16} color={unread ? COLORS.slate400 : COLORS.borderDark} strokeWidth={2.2} />
           </View>
         )}
       </TouchableOpacity>
@@ -395,10 +396,10 @@ const Notification = () => {
                 activeOpacity={0.8}
               >
                 {loading ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={COLORS.white} />
                 ) : (
                   <View style={styles.readAllRow}>
-                    <CheckCheck size={13} color="#FFFFFF" strokeWidth={2.4} />
+                    <CheckCheck size={13} color={COLORS.white} strokeWidth={2.4} />
                     <Text style={styles.readAllText}>Read All</Text>
                   </View>
                 )}
@@ -409,7 +410,7 @@ const Notification = () => {
               style={styles.headerHomeBtn}
               activeOpacity={0.8}
             >
-              <Home color="#FFFFFF" size={17} />
+              <Home color={COLORS.white} size={17} />
             </TouchableOpacity>
           </View>
         }
@@ -475,8 +476,8 @@ const Notification = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#E31837']}
-            tintColor="#E31837"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
@@ -529,7 +530,7 @@ const Notification = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   headerRightBox: {
     flexDirection: 'row',
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.35)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
   },
   readAllRow: {
     flexDirection: 'row',
@@ -550,14 +551,14 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   readAllText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '700',
+    color: COLORS.white,
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
   },
   headerHomeBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.28)',
@@ -567,15 +568,15 @@ const styles = StyleSheet.create({
 
   // Segmented Control
   filterBarContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
   },
   segmentedControl: {
     flexDirection: 'row',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     borderRadius: 10,
     padding: 3,
   },
@@ -586,10 +587,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 7,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   segmentBtnActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -597,41 +598,41 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   segmentText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   segmentTextActive: {
-    color: '#0F172A',
-    fontWeight: '700',
+    color: COLORS.slate900,
+    fontWeight: FONTS.weight.bold,
   },
   countBadge: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
     paddingHorizontal: 6,
     paddingVertical: 1.5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   countBadgeActive: {
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
   },
   countBadgeText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#475569',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   countBadgeTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   countBadgeUnread: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 6,
     paddingVertical: 1.5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   countBadgeUnreadText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 
   // Main scroll content
@@ -653,20 +654,20 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   sectionTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate400,
     letterSpacing: 0.8,
   },
   sectionLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
   },
   sectionCount: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate400,
   },
 
   // Notification Cards
@@ -680,19 +681,19 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cardUnread: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#0F172A',
+    borderColor: COLORS.border,
+    shadowColor: COLORS.slate900,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 5,
     elevation: 2,
   },
   cardRead: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: COLORS.slate100,
   },
   unreadRail: {
     position: 'absolute',
@@ -700,7 +701,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: 3.5,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   iconStage: {
     width: 38,
@@ -722,11 +723,11 @@ const styles = StyleSheet.create({
   categoryBadge: {
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   categoryBadgeText: {
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.3,
   },
   cardTimeWrap: {
@@ -736,27 +737,27 @@ const styles = StyleSheet.create({
   },
   cardTimeText: {
     fontSize: 10.5,
-    color: '#94A3B8',
-    fontWeight: '500',
+    color: COLORS.slate400,
+    fontWeight: FONTS.weight.medium,
   },
   unreadPillDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     marginLeft: 3,
   },
   messageText: {
-    fontSize: 13,
+    fontSize: FONTS.size.sm,
     lineHeight: 18,
   },
   messageTextUnread: {
-    fontWeight: '600',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate900,
   },
   messageTextRead: {
-    fontWeight: '400',
-    color: '#64748B',
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textTertiary,
   },
   metaRow: {
     flexDirection: 'row',
@@ -768,15 +769,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   metaChipText: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   chevronBox: {
     marginLeft: 8,
@@ -795,21 +796,21 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
   },
   emptyTitle: {
     fontSize: 17,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
-    fontSize: 13,
-    color: '#64748B',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     lineHeight: 20,
   },

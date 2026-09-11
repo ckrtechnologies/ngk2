@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -46,7 +47,7 @@ const TICKER_ITEMS = [
   {
     id: 'oem_fit',
     IconComponent: TickerLiveRadarIcon,
-    themeColor: '#008752',
+    themeColor: COLORS.primary,
     badgeBg: '#FEE2E2',
     countHighlight: '100% Genuine',
     text: 'OEM spark plugs & coils',
@@ -56,8 +57,8 @@ const TICKER_ITEMS = [
   {
     id: 'tecdoc_catalog',
     IconComponent: TickerCatalogIcon,
-    themeColor: '#2563EB',
-    badgeBg: '#DBEAFE',
+    themeColor: COLORS.info,
+    badgeBg: COLORS.infoLight,
     countHighlight: '50,000+ Parts',
     text: 'TecDoc Pegasus catalog',
     highlight: 'Catalog',
@@ -76,8 +77,8 @@ const TICKER_ITEMS = [
   {
     id: 'dealers_nearby',
     IconComponent: TickerDealerIcon,
-    themeColor: '#D97706',
-    badgeBg: '#FEF3C7',
+    themeColor: COLORS.warning,
+    badgeBg: COLORS.warningLight,
     countHighlight: 'Resellers Nearby',
     text: 'Verified NGK dealers',
     highlight: 'Dealers',
@@ -86,8 +87,8 @@ const TICKER_ITEMS = [
   {
     id: 'tech_quote',
     IconComponent: TickerQuoteIcon,
-    themeColor: '#059669',
-    badgeBg: '#D1FAE5',
+    themeColor: COLORS.success,
+    badgeBg: COLORS.successLight,
     countHighlight: 'Direct Support',
     text: 'Instant technical quotes',
     highlight: 'Quotes',
@@ -117,7 +118,7 @@ const VehicleCarouselCard = memo(function VehicleCarouselCard({
         >
           {isActive ? (
             <>
-              <CheckCircle2 size={13} color="#008752" strokeWidth={2.4} />
+              <CheckCircle2 size={13} color={COLORS.primary} strokeWidth={2.4} />
               <Text style={styles.vehicleStatusActiveText}>ACTIVE VEHICLE</Text>
             </>
           ) : (
@@ -161,7 +162,7 @@ const VehicleCarouselCard = memo(function VehicleCarouselCard({
           onPress={() => onLookupParts(car)}
           activeOpacity={0.8}
         >
-          <Search size={13} color="#FFFFFF" strokeWidth={2.2} />
+          <Search size={13} color={COLORS.white} strokeWidth={2.2} />
           <Text style={styles.activePartsCtaText}>View Compatible Parts</Text>
         </TouchableOpacity>
       ) : (
@@ -224,7 +225,7 @@ const PickerVehicleItem = memo(function PickerVehicleItem({
         </View>
       </View>
       <View style={styles.pickerItemArrow}>
-        <ChevronRight size={18} color={isCurrentActive ? '#008752' : '#94A3B8'} strokeWidth={2.2} />
+        <ChevronRight size={18} color={isCurrentActive ? COLORS.primary : COLORS.slate400} strokeWidth={2.2} />
       </View>
     </TouchableOpacity>
   );
@@ -384,8 +385,8 @@ const OwnerHomeScreen = () => {
       title: 'Find Parts',
       subtitle: 'Spark plugs, sensors & ignition coils',
       IconComponent: FindParts3DIcon,
-      bg: '#FEF2F2',
-      accentColor: '#008752',
+      bg: COLORS.errorLight,
+      accentColor: COLORS.primary,
       tag: '50k+ Parts',
       route: 'PartsFinder',
     },
@@ -394,8 +395,8 @@ const OwnerHomeScreen = () => {
       title: 'My Garage',
       subtitle: 'Saved cars & fitment guarantee',
       IconComponent: MyGarage3DIcon,
-      bg: '#EFF6FF',
-      accentColor: '#2563EB',
+      bg: COLORS.infoLight,
+      accentColor: COLORS.info,
       tag: garageVehicles.length > 0 ? `${garageVehicles.length} Saved` : 'Add Car',
       route: 'MyGarage',
     },
@@ -404,8 +405,8 @@ const OwnerHomeScreen = () => {
       title: 'Tech Enquiry',
       subtitle: 'Track tickets & expert advice',
       IconComponent: TechEnquiry3DIcon,
-      bg: '#ECFDF5',
-      accentColor: '#059669',
+      bg: COLORS.successLight,
+      accentColor: COLORS.success,
       tag: 'Tickets',
       route: 'MyEnquiries',
     },
@@ -415,7 +416,7 @@ const OwnerHomeScreen = () => {
       subtitle: 'Find authorized resellers nearby',
       IconComponent: DealerLocator3DIcon,
       bg: '#FFFBEB',
-      accentColor: '#D97706',
+      accentColor: COLORS.warning,
       tag: 'Resellers',
       route: 'DealerLocator',
     },
@@ -423,7 +424,7 @@ const OwnerHomeScreen = () => {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.rootContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Branded NGK Crimson Header: Spacious, Elegant, Non-Sticky */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 8 }]}>
@@ -434,7 +435,7 @@ const OwnerHomeScreen = () => {
             onPress={() => navigation.navigate('CustomDrawer')}
             activeOpacity={0.75}
           >
-            <Menu size={22} color="#FFFFFF" strokeWidth={2.4} />
+            <Menu size={22} color={COLORS.white} strokeWidth={2.4} />
           </TouchableOpacity>
 
           <View style={styles.headerGreetingBlock}>
@@ -460,7 +461,7 @@ const OwnerHomeScreen = () => {
             onPress={() => navigation.navigate('Notifications')}
             activeOpacity={0.75}
           >
-            <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
+            <Bell size={20} color={COLORS.white} strokeWidth={2.4} />
             {hasUnreadNotifications && <View style={styles.badgeDot} />}
           </TouchableOpacity>
         </View>
@@ -473,8 +474,8 @@ const OwnerHomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#008752']}
-            tintColor="#008752"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
@@ -528,7 +529,7 @@ const OwnerHomeScreen = () => {
               activeOpacity={0.75}
             >
               <View style={styles.addVehicleCircle}>
-                <Plus size={22} color="#008752" strokeWidth={2.4} />
+                <Plus size={22} color={COLORS.primary} strokeWidth={2.4} />
               </View>
               <Text style={styles.addVehicleTitle}>Add Vehicle</Text>
               <Text style={styles.addVehicleSub}>Expand garage</Text>
@@ -542,7 +543,7 @@ const OwnerHomeScreen = () => {
               activeOpacity={0.7}
             >
               <View style={styles.addCarCircle}>
-                <Plus size={20} color="#008752" strokeWidth={2.4} />
+                <Plus size={20} color={COLORS.primary} strokeWidth={2.4} />
               </View>
               <View style={styles.emptyGarageTextContainer}>
                 <Text style={styles.emptyGarageTitle}>Add your vehicle to garage</Text>
@@ -692,13 +693,13 @@ const OwnerHomeScreen = () => {
                 activeOpacity={0.75}
               >
                 <View style={styles.pickerManualSearchIconBox}>
-                  <Search size={18} color="#008752" strokeWidth={2.2} />
+                  <Search size={18} color={COLORS.primary} strokeWidth={2.2} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pickerManualSearchTitle}>Select Another Vehicle</Text>
                   <Text style={styles.pickerManualSearchSub}>Browse full catalog by Make & Model</Text>
                 </View>
-                <ChevronRight size={16} color="#94A3B8" strokeWidth={2} />
+                <ChevronRight size={16} color={COLORS.slate400} strokeWidth={2} />
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -711,10 +712,10 @@ const OwnerHomeScreen = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   solidHeader: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -752,14 +753,14 @@ const styles = StyleSheet.create({
   },
   headerGreetingHello: {
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     color: 'rgba(255, 255, 255, 0.82)',
     letterSpacing: 0.8,
   },
   headerUserName: {
-    fontSize: 15,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: -0.3,
   },
   headerRightCluster: {
@@ -768,10 +769,10 @@ const styles = StyleSheet.create({
     gap: 9,
   },
   headerLogoPill: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 9,
     paddingVertical: 5,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000000',
@@ -790,10 +791,10 @@ const styles = StyleSheet.create({
     right: 5,
     width: 7,
     height: 7,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     backgroundColor: '#FBBF24',
     borderWidth: 1.5,
-    borderColor: '#008752',
+    borderColor: COLORS.primary,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -807,21 +808,21 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: -0.3,
   },
   sectionSubtitle: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
     marginTop: 1,
   },
   manageGarageLink: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#008752',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   vehicleScrollContainer: {
     paddingRight: 16,
@@ -830,11 +831,11 @@ const styles = StyleSheet.create({
   },
   vehicleCarouselCard: {
     width: 270,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 18,
     padding: 12,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.05,
@@ -842,9 +843,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   vehicleCarouselCardActive: {
-    borderColor: '#008752',
+    borderColor: COLORS.primary,
     borderWidth: 2,
-    shadowColor: '#008752',
+    shadowColor: COLORS.primary,
     shadowOpacity: 0.12,
     shadowRadius: 10,
     elevation: 3,
@@ -857,9 +858,9 @@ const styles = StyleSheet.create({
   },
   vehicleCardImageWrapper: {
     marginVertical: 4,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     overflow: 'hidden',
   },
   vehicleStatusBadge: {
@@ -871,44 +872,44 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   vehicleStatusActiveBg: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
   },
   vehicleStatusInactiveBg: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
   },
   vehicleStatusActiveText: {
     fontSize: 9.5,
-    fontWeight: '900',
-    color: '#008752',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.primary,
     letterSpacing: 0.3,
   },
   vehicleStatusInactiveText: {
     fontSize: 9.5,
-    fontWeight: '800',
-    color: '#475569',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textSecondary,
     letterSpacing: 0.2,
   },
   switchActivePill: {
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 7,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
   },
   switchActivePillText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#008752',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   vehicleCardTitle: {
     fontSize: 14.5,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     marginBottom: 2,
   },
   vehicleCardDetails: {
     fontSize: 11.5,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
     marginBottom: 8,
   },
   activePartsCtaBtn: {
@@ -916,36 +917,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     height: 35,
     borderRadius: 10,
   },
   activePartsCtaText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
   },
   inactiveSetBtn: {
     height: 35,
     borderRadius: 10,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inactiveSetBtnText: {
-    color: '#0F172A',
-    fontSize: 12,
-    fontWeight: '700',
+    color: COLORS.slate900,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
   },
   addAnotherVehicleCard: {
     width: 120,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 18,
     padding: 12,
     borderWidth: 1.5,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
@@ -953,29 +954,29 @@ const styles = StyleSheet.create({
   addVehicleCircle: {
     width: 40,
     height: 40,
-    borderRadius: 12,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 6,
   },
   addVehicleTitle: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   addVehicleSub: {
     fontSize: 10.5,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   emptyGarageCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 18,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -991,7 +992,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 11,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -1001,13 +1002,13 @@ const styles = StyleSheet.create({
   },
   emptyGarageTitle: {
     fontSize: 13.5,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   emptyGarageSub: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   iphoneGridContainer: {
@@ -1019,14 +1020,14 @@ const styles = StyleSheet.create({
   },
   iphoneCard: {
     width: '48.5%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     paddingVertical: 9,
     paddingHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -1047,15 +1048,15 @@ const styles = StyleSheet.create({
   },
   iphoneCardTitle: {
     fontSize: 12.5,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     textAlign: 'center',
     letterSpacing: -0.2,
   },
   iphoneCardSub: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#64748B',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     marginTop: 1,
   },
@@ -1063,30 +1064,30 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -3,
     right: -3,
-    backgroundColor: '#2563EB',
+    backgroundColor: COLORS.info,
     minWidth: 16,
     height: 16,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 3,
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: COLORS.white,
   },
   iphoneCardMiniBadgeText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 9,
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
   },
   tipBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderLeftWidth: 3.5,
-    borderLeftColor: '#008752',
+    borderLeftColor: COLORS.primary,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     shadowColor: '#000000',
@@ -1108,23 +1109,23 @@ const styles = StyleSheet.create({
   },
   tipTitle: {
     fontSize: 12.5,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   tipBadge: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: 5,
   },
   tipBadgeText: {
     fontSize: 9,
-    fontWeight: '900',
-    color: '#008752',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.primary,
   },
   tipText: {
     fontSize: 10.5,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
     color: '#334155',
     lineHeight: 14,
   },
@@ -1139,7 +1140,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pickerModalSheet: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
     paddingHorizontal: 20,
@@ -1156,7 +1157,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#CBD5E1',
+    backgroundColor: COLORS.borderDark,
     alignSelf: 'center',
     marginBottom: 16,
   },
@@ -1167,22 +1168,22 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   pickerModalTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: -0.3,
   },
   pickerModalSub: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: '#64748B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   pickerModalCloseBtn: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 12,
@@ -1196,10 +1197,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     marginBottom: 10,
   },
   pickerVehicleItemActive: {
@@ -1217,15 +1218,15 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 10,
     overflow: 'hidden',
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   pickerVehicleThumbContainerActive: {
-    borderColor: '#008752',
+    borderColor: COLORS.primary,
     borderWidth: 1.5,
   },
   pickerVehicleThumb: {
@@ -1235,28 +1236,28 @@ const styles = StyleSheet.create({
   },
   pickerItemTitle: {
     fontSize: 14.5,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
     flexShrink: 1,
   },
   pickerActiveTag: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 6,
     paddingVertical: 1.5,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     flexShrink: 0,
   },
   pickerActiveTagText: {
     fontSize: 9,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   pickerItemSub: {
-    fontSize: 12,
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 2,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   pickerItemArrow: {
     paddingLeft: 4,
@@ -1266,10 +1267,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     borderStyle: 'dashed',
     marginTop: 4,
   },
@@ -1285,13 +1286,13 @@ const styles = StyleSheet.create({
     borderColor: '#FEE2E2',
   },
   pickerManualSearchTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
   },
   pickerManualSearchSub: {
     fontSize: 11.5,
-    color: '#64748B',
+    color: COLORS.textTertiary,
     marginTop: 1,
   },
 });

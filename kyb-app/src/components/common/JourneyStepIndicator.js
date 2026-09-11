@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Check, Car, Gauge, Tag } from 'lucide-react-native';
-import { THEME } from '../../utils/theme';
+import { COLORS, FONTS, SPACING, RADIUS } from '../../utils/theme';
 
 const STEPS = [
   { id: 1, label: 'Make & Model', shortLabel: 'Vehicle', icon: Car },
@@ -47,7 +47,7 @@ const JourneyStepIndicator = ({ currentStep = 1, onStepPress }) => {
                   ]}
                 >
                   {isCompleted ? (
-                    <Check size={14} color="#FFFFFF" strokeWidth={3} />
+                    <Check size={14} color={COLORS.white} strokeWidth={3} />
                   ) : (
                     <Text
                       style={[
@@ -83,11 +83,11 @@ const JourneyStepIndicator = ({ currentStep = 1, onStepPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surface,
     paddingVertical: 6,
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.base,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   stepsRow: {
     flexDirection: 'row',
@@ -104,61 +104,63 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 2,
+    marginBottom: SPACING.xxs,
   },
   circleCompleted: {
-    backgroundColor: '#059669', // Emerald Green
+    backgroundColor: COLORS.success,
   },
   circleActive: {
-    backgroundColor: THEME.primary, // KYB Red
-    shadowColor: THEME.primary,
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 2,
   },
   circlePending: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   stepNumber: {
+    fontFamily: FONTS.family.bold,
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
   },
   stepNumberActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   stepNumberPending: {
-    color: '#9CA3AF',
+    color: COLORS.textMuted,
   },
   label: {
+    fontFamily: FONTS.family.semiBold,
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     textAlign: 'center',
   },
   labelActive: {
-    color: THEME.primary,
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
   labelCompleted: {
-    color: '#059669',
+    color: COLORS.success,
   },
   labelPending: {
-    color: '#9CA3AF',
+    color: COLORS.textMuted,
   },
   connector: {
     flex: 1,
     height: 2,
     marginTop: -14,
-    marginHorizontal: 2,
+    marginHorizontal: SPACING.xxs,
     borderRadius: 1,
   },
   connectorActive: {
-    backgroundColor: '#059669',
+    backgroundColor: COLORS.success,
   },
   connectorPending: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: COLORS.border,
   },
 });
 

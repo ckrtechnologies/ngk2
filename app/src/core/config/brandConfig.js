@@ -1,12 +1,14 @@
+import { COLORS } from '../../utils/theme';
+
 export const BRAND_CONFIG = {
   brand: 'ngk',
   brandName: 'NGK SPARK PLUG & NTK',
   shortName: 'NGK',
   companyName: 'Niterra EMEA GmbH',
-  primaryColor: '#008752', // Official NGK Green
-  secondaryColor: '#007580', // Niterra teal
-  darkColor: '#090D16',
-  accentColor: '#EEB500', // NGK gold
+  primaryColor: COLORS.primary,
+  secondaryColor: COLORS.ntkGreen,
+  darkColor: COLORS.dark,
+  accentColor: COLORS.accent,
   allowedSuppliers: [15, 5414],
   catalogSubtitle: 'Official Niterra TecDoc Verified Catalog',
   categories: [
@@ -17,3 +19,4 @@ export const BRAND_CONFIG = {
 };
 
 export default BRAND_CONFIG;
+

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -654,7 +655,7 @@ const MyGarageScreen = () => {
             onPress={handleOpenModal}
             activeOpacity={0.7}
           >
-            <Plus size={20} color="#FFFFFF" />
+            <Plus size={20} color={COLORS.white} />
           </TouchableOpacity>
         }
       />
@@ -666,8 +667,8 @@ const MyGarageScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#008752']}
-            tintColor="#008752"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
@@ -680,7 +681,7 @@ const MyGarageScreen = () => {
             </Text>
             <AppButton
               title="Add Your First Vehicle"
-              leftIcon={<Plus size={18} color="#FFFFFF" />}
+              leftIcon={<Plus size={18} color={COLORS.white} />}
               onPress={handleOpenModal}
               style={{ marginTop: 18 }}
             />
@@ -712,7 +713,7 @@ const MyGarageScreen = () => {
                 <View key={car.id || idx} style={styles.carCard}>
                   <View style={styles.carCardTop}>
                     <View style={styles.carIconBox}>
-                      <Car size={20} color="#008752" />
+                      <Car size={20} color={COLORS.primary} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
@@ -763,7 +764,7 @@ const MyGarageScreen = () => {
                     car={car}
                     height={165}
                     resizeMode="cover"
-                    style={{ marginVertical: 10, borderRadius: 14, borderWidth: 1, borderColor: '#E2E8F0', overflow: 'hidden' }}
+                    style={{ marginVertical: 10, borderRadius: 14, borderWidth: 1, borderColor: COLORS.border, overflow: 'hidden' }}
                   />
 
                   {/* Card Action Bar */}
@@ -774,7 +775,7 @@ const MyGarageScreen = () => {
                         onPress={() => handleSetActive(car)}
                         activeOpacity={0.75}
                       >
-                        <CheckCircle2 size={13} color="#FFFFFF" strokeWidth={2.4} />
+                        <CheckCircle2 size={13} color={COLORS.white} strokeWidth={2.4} />
                         <Text style={styles.setActiveBtnText}>Set Active</Text>
                       </TouchableOpacity>
                     )}
@@ -783,7 +784,7 @@ const MyGarageScreen = () => {
                       onPress={() => handleLookupParts(car)}
                       activeOpacity={0.75}
                     >
-                      <Search size={14} color="#FFFFFF" strokeWidth={2.4} />
+                      <Search size={14} color={COLORS.white} strokeWidth={2.4} />
                       <Text style={styles.findPartsText}>
                         {hasCatalogLink ? 'View 100% Compatible Parts' : 'Lookup Compatible Parts'}
                       </Text>
@@ -840,7 +841,7 @@ const MyGarageScreen = () => {
               >
                 <BookOpen
                   size={15}
-                  color={entryMode === 'catalog' ? '#008752' : '#6B7280'}
+                  color={entryMode === 'catalog' ? COLORS.primary : COLORS.textTertiary}
                 />
                 <Text
                   style={[
@@ -862,7 +863,7 @@ const MyGarageScreen = () => {
               >
                 <Edit3
                   size={15}
-                  color={entryMode === 'manual' ? '#008752' : '#6B7280'}
+                  color={entryMode === 'manual' ? COLORS.primary : COLORS.textTertiary}
                 />
                 <Text
                   style={[
@@ -902,7 +903,7 @@ const MyGarageScreen = () => {
                               }}
                               style={styles.stepResetLink}
                             >
-                              <RotateCcw size={12} color="#008752" />
+                              <RotateCcw size={12} color={COLORS.primary} />
                               <Text style={styles.stepResetText}>Change</Text>
                             </TouchableOpacity>
                           )}
@@ -964,7 +965,7 @@ const MyGarageScreen = () => {
                                 }}
                                 style={styles.stepResetLink}
                               >
-                                <RotateCcw size={12} color="#008752" />
+                                <RotateCcw size={12} color={COLORS.primary} />
                                 <Text style={styles.stepResetText}>Change</Text>
                               </TouchableOpacity>
                             )}
@@ -972,7 +973,7 @@ const MyGarageScreen = () => {
 
                           {loadingSeries ? (
                             <View style={styles.inlineLoading}>
-                              <ActivityIndicator size="small" color="#008752" />
+                              <ActivityIndicator size="small" color={COLORS.primary} />
                               <Text style={styles.inlineLoadingText}>
                                 Loading series for {selectedManu.manuName || selectedManu.name}...
                               </Text>
@@ -1013,7 +1014,7 @@ const MyGarageScreen = () => {
 
                           {loadingVehicles ? (
                             <View style={styles.inlineLoading}>
-                              <ActivityIndicator size="small" color="#008752" />
+                              <ActivityIndicator size="small" color={COLORS.primary} />
                               <Text style={styles.inlineLoadingText}>
                                 Loading engines & trims from TecDoc...
                               </Text>
@@ -1043,7 +1044,7 @@ const MyGarageScreen = () => {
                                 onPress={() => openPickerModal('trim')}
                                 activeOpacity={0.75}
                               >
-                                <Zap size={16} color="#008752" />
+                                <Zap size={16} color={COLORS.primary} />
                                 <Text style={styles.selectorDropdownText}>
                                   Choose Engine / Trim ({vehiclesList.length} options)...
                                 </Text>
@@ -1079,7 +1080,7 @@ const MyGarageScreen = () => {
                                           {[powerStr, yearRange, v.fuelType].filter(Boolean).join(' • ')}
                                         </Text>
                                       </View>
-                                      <ChevronRight size={16} color="#008752" />
+                                      <ChevronRight size={16} color={COLORS.primary} />
                                     </TouchableOpacity>
                                   );
                                 })}
@@ -1170,7 +1171,7 @@ const MyGarageScreen = () => {
 
                       <AppButton
                         title="Save Vehicle to Garage"
-                        leftIcon={<Check size={18} color="#FFFFFF" strokeWidth={2.5} />}
+                        leftIcon={<Check size={18} color={COLORS.white} strokeWidth={2.5} />}
                         onPress={handleSaveVehicle}
                         loading={submitting}
                         style={{ marginTop: 12 }}
@@ -1240,7 +1241,7 @@ const MyGarageScreen = () => {
 
                   <AppButton
                     title="Save Vehicle to Garage"
-                    leftIcon={<Check size={18} color="#FFFFFF" strokeWidth={2.5} />}
+                    leftIcon={<Check size={18} color={COLORS.white} strokeWidth={2.5} />}
                     onPress={handleSaveVehicle}
                     loading={submitting}
                     style={{ marginTop: 12 }}
@@ -1313,7 +1314,7 @@ const MyGarageScreen = () => {
 
           {loadingManu && pickerType === 'manu' ? (
             <View style={styles.pickerCenterLoading}>
-              <ActivityIndicator size="large" color="#008752" />
+              <ActivityIndicator size="large" color={COLORS.primary} />
               <Text style={styles.pickerLoadingText}>Loading manufacturers...</Text>
             </View>
           ) : (
@@ -1342,7 +1343,7 @@ const MyGarageScreen = () => {
                       activeOpacity={0.7}
                     >
                       <View style={styles.pickerListIconBox}>
-                        <Car size={18} color="#008752" />
+                        <Car size={18} color={COLORS.primary} />
                       </View>
                       <Text style={styles.pickerListItemText}>{name}</Text>
                       <ChevronRight size={16} color="#D1D5DB" />
@@ -1359,7 +1360,7 @@ const MyGarageScreen = () => {
                       activeOpacity={0.7}
                     >
                       <View style={styles.pickerListIconBox}>
-                        <Layers size={18} color="#008752" />
+                        <Layers size={18} color={COLORS.primary} />
                       </View>
                       <Text style={styles.pickerListItemText}>{name}</Text>
                       <ChevronRight size={16} color="#D1D5DB" />
@@ -1388,7 +1389,7 @@ const MyGarageScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.pickerListIconBox}>
-                      <Zap size={18} color="#008752" />
+                      <Zap size={18} color={COLORS.primary} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.pickerTrimTitle}>{title}</Text>
@@ -1487,7 +1488,7 @@ const MyGarageScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={[styles.checkboxBox, editIsPrimary && styles.checkboxBoxChecked]}>
-                      {editIsPrimary && <Check size={14} color="#FFFFFF" strokeWidth={3} />}
+                      {editIsPrimary && <Check size={14} color={COLORS.white} strokeWidth={3} />}
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.primaryToggleTitle}>Set as Primary Vehicle</Text>
@@ -1510,7 +1511,7 @@ const MyGarageScreen = () => {
 
                     <AppButton
                       title="Save Changes"
-                      leftIcon={<Check size={18} color="#FFFFFF" strokeWidth={2.5} />}
+                      leftIcon={<Check size={18} color={COLORS.white} strokeWidth={2.5} />}
                       onPress={handleSaveVehicleEdit}
                       loading={editSubmitting}
                       style={{ flex: 1.6 }}
@@ -1534,7 +1535,7 @@ const styles = StyleSheet.create({
   addIconBtn: {
     width: 38,
     height: 38,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.28)',
@@ -1554,20 +1555,20 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
   emptyTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     marginBottom: 6,
   },
   emptySubtitle: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     lineHeight: 18,
   },
@@ -1575,11 +1576,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   carCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.03,
@@ -1595,72 +1596,72 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   carMakeModel: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   activePill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   activePillText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#059669',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   verifiedBadgeText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#059669',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
   carSpecs: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   editBtn: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.slate100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   trashBtn: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cardActions: {
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: COLORS.surfaceSecondary,
     paddingTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1672,14 +1673,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#2563EB',
+    backgroundColor: COLORS.info,
     paddingVertical: 9,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   setActiveBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   findPartsBtn: {
     flex: 1,
@@ -1687,14 +1688,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingVertical: 9,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   findPartsText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
 
   /* Modal Bottom Sheet */
@@ -1704,7 +1705,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalSheet: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -1720,24 +1721,24 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 17,
-    fontWeight: '800',
-    color: '#111827',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   modalSubtitle: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   closeBtn: {
     padding: 6,
-    borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceSecondary,
   },
 
   /* Segmented Toggle */
   modeSegment: {
     flexDirection: 'row',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderRadius: 10,
     padding: 3,
     marginBottom: 14,
@@ -1749,10 +1750,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   modeSegmentBtnActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -1760,13 +1761,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   modeSegmentText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   modeSegmentTextActive: {
-    color: '#008752',
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
 
   /* Catalog Steps */
@@ -1775,10 +1776,10 @@ const styles = StyleSheet.create({
   },
   stepSection: {
     backgroundColor: '#FAFAFA',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   stepHeaderRow: {
     flexDirection: 'row',
@@ -1789,21 +1790,21 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
   stepNumberText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
   },
   stepTitle: {
     flex: 1,
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1F2937',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   stepResetLink: {
     flexDirection: 'row',
@@ -1815,29 +1816,29 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   stepResetText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#008752',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   selectedPillCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     gap: 6,
   },
   selectedPillLabel: {
-    fontSize: 12,
+    fontSize: FONTS.size.xs,
     color: '#065F46',
   },
   selectedPillValue: {
     flex: 1,
-    fontSize: 13,
-    fontWeight: '800',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
     color: '#065F46',
   },
   popularBrandsGrid: {
@@ -1851,35 +1852,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 8,
+    borderColor: COLORS.borderDark,
+    borderRadius: RADIUS.sm,
     paddingVertical: 9,
     marginTop: 8,
   },
   moreBrandsText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate700,
   },
   selectorDropdownBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 8,
+    borderColor: COLORS.borderDark,
+    borderRadius: RADIUS.sm,
     paddingHorizontal: 12,
     paddingVertical: 10,
     gap: 8,
   },
   selectorDropdownText: {
     flex: 1,
-    fontSize: 13,
-    color: '#374151',
-    fontWeight: '500',
+    fontSize: FONTS.size.sm,
+    color: COLORS.slate700,
+    fontWeight: FONTS.weight.medium,
   },
   inlineLoading: {
     flexDirection: 'row',
@@ -1889,52 +1890,52 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   inlineLoadingText: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   emptyTrimsBox: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     padding: 12,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   emptyTrimsText: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     lineHeight: 16,
   },
   quickManualBtn: {
     marginTop: 8,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingVertical: 8,
     borderRadius: 6,
     alignItems: 'center',
   },
   quickManualBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#008752',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   quickTrimCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 8,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.sm,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   quickTrimTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   quickTrimSubtitle: {
-    fontSize: 11,
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
 
@@ -1943,11 +1944,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   matchBanner: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   matchBannerTop: {
     flexDirection: 'row',
@@ -1957,25 +1958,25 @@ const styles = StyleSheet.create({
   verifiedIconWrap: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#D1FAE5',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.successLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   matchBannerBadge: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#059669',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.success,
     textTransform: 'uppercase',
   },
   matchCarTitle: {
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
     color: '#065F46',
     marginTop: 2,
   },
   matchCarSubtitle: {
-    fontSize: 12,
+    fontSize: FONTS.size.xs,
     color: '#047857',
     marginTop: 1,
   },
@@ -1983,16 +1984,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   reselectBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
   },
   matchSpecsPillRow: {
@@ -2000,7 +2001,7 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#A7F3D0',
+    borderTopColor: COLORS.successBorder,
     paddingTop: 8,
   },
   matchPill: {
@@ -2009,18 +2010,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   matchPillLabel: {
-    fontSize: 11,
+    fontSize: FONTS.size.caption,
     color: '#047857',
   },
   matchPillVal: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
   },
   reviewSectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginTop: 4,
   },
 
@@ -2029,8 +2030,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   manualNoticeText: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginBottom: 8,
     lineHeight: 16,
   },
@@ -2038,7 +2039,7 @@ const styles = StyleSheet.create({
   /* Secondary Picker Modal Styles */
   pickerSafeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   pickerHeader: {
     flexDirection: 'row',
@@ -2047,27 +2048,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   pickerHeaderTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   pickerHeaderSub: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   pickerCloseBtn: {
     padding: 6,
-    borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceSecondary,
   },
   pickerSearchRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderRadius: 10,
     marginHorizontal: 16,
     marginVertical: 10,
@@ -2077,8 +2078,8 @@ const styles = StyleSheet.create({
   },
   pickerSearchInput: {
     flex: 1,
-    fontSize: 14,
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    color: COLORS.textPrimary,
     padding: 0,
   },
   pickerCenterLoading: {
@@ -2088,57 +2089,57 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   pickerLoadingText: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
   },
   pickerListItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
     gap: 12,
   },
   pickerListIconBox: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   pickerListItemText: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1F2937',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate800,
   },
   pickerTrimItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
     gap: 12,
   },
   pickerTrimTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   pickerTrimSub: {
-    fontSize: 11,
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   primaryToggleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderRadius: 10,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     gap: 12,
     marginTop: 4,
   },
@@ -2147,37 +2148,37 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#CBD5E1',
-    backgroundColor: '#FFFFFF',
+    borderColor: COLORS.borderDark,
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxBoxChecked: {
-    backgroundColor: '#008752',
-    borderColor: '#008752',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   primaryToggleTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   primaryToggleDesc: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   cancelEditBtn: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 10,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelEditBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
 });
 

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -188,7 +189,7 @@ const VehiclesListScreen = () => {
 
         {loading ? (
           <View style={styles.centerLoading}>
-            <ActivityIndicator size="large" color="#E31837" />
+            <ActivityIndicator size="large" color={COLORS.primary} />
             <Text style={styles.loadingText}>Fetching matching engines & trims...</Text>
             <Text style={styles.loadingSub}>TecDoc Pegasus 3.0 Catalog</Text>
           </View>
@@ -204,8 +205,8 @@ const VehiclesListScreen = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={['#E31837']}
-                tintColor="#E31837"
+                colors={[COLORS.primary]}
+                tintColor={COLORS.primary}
               />
             }
             renderItem={({ item }) => {
@@ -239,7 +240,7 @@ const VehiclesListScreen = () => {
                   activeOpacity={0.75}
                 >
                   <View style={styles.iconCircle}>
-                    <Car size={20} color="#E31837" />
+                    <Car size={20} color={COLORS.primary} />
                   </View>
 
                   <View style={styles.infoCol}>
@@ -290,7 +291,7 @@ const VehiclesListScreen = () => {
                   We could not find engine trims for {seriesName}. Try refreshing or choosing another model.
                 </Text>
                 <TouchableOpacity style={styles.retryBtn} onPress={fetchVehicles}>
-                  <RotateCcw size={14} color="#E31837" />
+                  <RotateCcw size={14} color={COLORS.primary} />
                   <Text style={styles.retryText}>Retry Fetching</Text>
                 </TouchableOpacity>
               </View>
@@ -316,19 +317,19 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 12,
     height: 44,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     gap: 8,
   },
   searchInput: {
     flex: 1,
-    fontSize: 14,
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    color: COLORS.textPrimary,
     padding: 0,
   },
   listContent: {
@@ -338,12 +339,12 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingVertical: 14,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -353,8 +354,8 @@ const styles = StyleSheet.create({
   iconCircle: {
     width: 42,
     height: 42,
-    borderRadius: 12,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -370,15 +371,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   fuelBadge: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#047857',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
@@ -397,18 +398,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   specText: {
-    fontSize: 12,
-    color: '#4B5563',
-    fontWeight: '500',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textSecondary,
+    fontWeight: FONTS.weight.medium,
   },
   engineCodeText: {
-    fontSize: 11,
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     marginTop: 4,
   },
   engineCodeVal: {
-    fontWeight: '700',
-    color: '#374151',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   centerLoading: {
     flex: 1,
@@ -417,14 +418,14 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   loadingText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
     marginTop: 14,
   },
   loadingSub: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 4,
   },
   emptyBox: {
@@ -433,14 +434,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   emptyTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginTop: 12,
   },
   emptyText: {
-    fontSize: 13,
-    color: '#9CA3AF',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textMuted,
     textAlign: 'center',
     marginTop: 6,
     lineHeight: 18,
@@ -452,15 +453,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 8,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   retryText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
 });
 

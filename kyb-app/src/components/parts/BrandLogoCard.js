@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Car, Check } from 'lucide-react-native';
 
@@ -42,7 +43,7 @@ const BrandLogoCard = ({ item, isSelected, onPress }) => {
     >
       {isSelected && (
         <View style={styles.selectedBadge}>
-          <Check size={10} color="#FFFFFF" strokeWidth={3} />
+          <Check size={10} color={COLORS.white} strokeWidth={3} />
         </View>
       )}
 
@@ -56,7 +57,7 @@ const BrandLogoCard = ({ item, isSelected, onPress }) => {
           />
         ) : (
           <View style={styles.fallbackCircle}>
-            <Car size={18} color={isSelected ? '#E31837' : '#6B7280'} />
+            <Car size={18} color={isSelected ? COLORS.primary : COLORS.textTertiary} />
           </View>
         )}
       </View>
@@ -80,14 +81,14 @@ const styles = StyleSheet.create({
     minWidth: '29%',
     maxWidth: '32%',
     height: 68,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     paddingVertical: 6,
     paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -96,9 +97,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   cardSelected: {
-    borderColor: '#E31837',
-    backgroundColor: '#FEF2F2',
-    shadowColor: '#E31837',
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.errorLight,
+    shadowColor: COLORS.primary,
     shadowOpacity: 0.18,
     shadowRadius: 5,
     elevation: 2,
@@ -109,8 +110,8 @@ const styles = StyleSheet.create({
     right: 4,
     width: 16,
     height: 16,
-    borderRadius: 8,
-    backgroundColor: '#E31837',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -129,19 +130,19 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   brandName: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     textAlign: 'center',
     letterSpacing: 0.2,
   },
   brandNameSelected: {
-    color: '#E31837',
+    color: COLORS.primary,
   },
 });
 

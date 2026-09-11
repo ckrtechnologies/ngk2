@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, {
   Path,
@@ -43,9 +44,9 @@ export default function PartSchematicFallback({
 
             {/* Ceramic Insulator Ribs */}
             <Rect x="20" y="9" width="10" height="15" rx="2" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="0.8" />
-            <Line x1="19" y1="13" x2="31" y2="13" stroke="#94A3B8" strokeWidth="1" />
-            <Line x1="19" y1="17" x2="31" y2="17" stroke="#94A3B8" strokeWidth="1" />
-            <Line x1="19" y1="21" x2="31" y2="21" stroke="#94A3B8" strokeWidth="1" />
+            <Line x1="19" y1="13" x2="31" y2="13" stroke={COLORS.slate400} strokeWidth="1" />
+            <Line x1="19" y1="17" x2="31" y2="17" stroke={COLORS.slate400} strokeWidth="1" />
+            <Line x1="19" y1="21" x2="31" y2="21" stroke={COLORS.slate400} strokeWidth="1" />
 
             {/* Hex Nut / Metal Shell */}
             <Path d="M17 24h16l2 8H15l2-8z" fill="#334155" stroke="#0F172A" strokeWidth="0.8" />
@@ -57,7 +58,7 @@ export default function PartSchematicFallback({
             <Line x1="18" y1="43" x2="32" y2="43" stroke="#64748B" strokeWidth="1" />
 
             {/* Ground Electrode & Center Spark Point */}
-            <Path d="M22 47v6h6" stroke="#E31837" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            <Path d="M22 47v6h6" stroke={COLORS.primary} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             <Circle cx="25" cy="50" r="1" fill="#FEF08A" />
           </G>
         </Svg>
@@ -96,20 +97,20 @@ export default function PartSchematicFallback({
         </G>
 
         {/* Center Crosshairs */}
-        <Line x1="140" y1="15" x2="140" y2="165" stroke="#E31837" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
-        <Line x1="20" y1="90" x2="260" y2="90" stroke="#E31837" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        <Line x1="140" y1="15" x2="140" y2="165" stroke={COLORS.primary} strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        <Line x1="20" y1="90" x2="260" y2="90" stroke={COLORS.primary} strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
 
         {/* Horizontal Technical Spark Plug Blueprint */}
         <G transform="translate(45, 62)">
           {/* Terminal Stud */}
-          <Rect x="10" y="23" width="10" height="10" rx="1.5" fill="#E2E8F0" stroke="#94A3B8" strokeWidth="1" />
+          <Rect x="10" y="23" width="10" height="10" rx="1.5" fill="#E2E8F0" stroke={COLORS.slate400} strokeWidth="1" />
 
           {/* Ceramic Insulator Ribs */}
           <Rect x="20" y="19" width="45" height="18" rx="3" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1.2" />
-          <Line x1="28" y1="16" x2="28" y2="40" stroke="#94A3B8" strokeWidth="1.5" />
-          <Line x1="36" y1="16" x2="36" y2="40" stroke="#94A3B8" strokeWidth="1.5" />
-          <Line x1="44" y1="16" x2="44" y2="40" stroke="#94A3B8" strokeWidth="1.5" />
-          <Line x1="52" y1="16" x2="52" y2="40" stroke="#94A3B8" strokeWidth="1.5" />
+          <Line x1="28" y1="16" x2="28" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
+          <Line x1="36" y1="16" x2="36" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
+          <Line x1="44" y1="16" x2="44" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
+          <Line x1="52" y1="16" x2="52" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
 
           {/* Hex Nut Collar */}
           <Path d="M65 14l6 4v20l-6 4H65V14z" fill="#475569" stroke="#0F172A" strokeWidth="1.2" />
@@ -129,7 +130,7 @@ export default function PartSchematicFallback({
 
           {/* Center Electrode & Ground Electrode Tip */}
           <Rect x="143" y="26" width="10" height="4" fill="#E2E8F0" />
-          <Path d="M145 35h12v-12" stroke="#E31837" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M145 35h12v-12" stroke={COLORS.primary} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
 
           {/* Spark Glow Point */}
           <Circle cx="155" cy="28" r="2.5" fill="#FEF08A" />
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#0B1329',
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     overflow: 'hidden',
     position: 'relative',
     justifyContent: 'center',
@@ -178,16 +179,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   thumbBrandText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 8,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.5,
   },
   largeContainer: {
     width: '100%',
     height: 180,
     backgroundColor: '#0B1329',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     overflow: 'hidden',
     position: 'relative',
     justifyContent: 'center',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   largeTopTagText: {
     color: '#BAE6FD',
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.6,
   },
   largeBottomTag: {
@@ -232,15 +233,15 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   largePartNoText: {
-    color: '#F8FAFC',
-    fontSize: 11,
-    fontWeight: '800',
+    color: COLORS.background,
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.5,
   },
   largePartNameText: {
-    color: '#94A3B8',
+    color: COLORS.slate400,
     fontSize: 9,
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     marginTop: 1,
   },
 });

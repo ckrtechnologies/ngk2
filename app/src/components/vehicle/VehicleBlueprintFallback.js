@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, {
   Path,
@@ -45,7 +46,7 @@ export default function VehicleBlueprintFallback({
           {/* Precision Vehicle Silhouette */}
           <G transform="translate(10, 8)">
             {/* Ground Line */}
-            <Line x1="5" y1="44" x2="135" y2="44" stroke="#008752" strokeWidth="1.2" strokeOpacity="0.7" />
+            <Line x1="5" y1="44" x2="135" y2="44" stroke={COLORS.primary} strokeWidth="1.2" strokeOpacity="0.7" />
 
             {/* Aerodynamic Coupe Body */}
             <Path
@@ -65,9 +66,9 @@ export default function VehicleBlueprintFallback({
 
             {/* Wheels */}
             <Circle cx="38" cy="44" r="7" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-            <Circle cx="38" cy="44" r="3" fill="#008752" />
+            <Circle cx="38" cy="44" r="3" fill={COLORS.primary} />
             <Circle cx="102" cy="44" r="7" fill="#0F172A" stroke="#E2E8F0" strokeWidth="1.2" />
-            <Circle cx="102" cy="44" r="3" fill="#008752" />
+            <Circle cx="102" cy="44" r="3" fill={COLORS.primary} />
           </G>
         </Svg>
 
@@ -116,13 +117,13 @@ export default function VehicleBlueprintFallback({
         </G>
 
         {/* Center Target Crosshairs */}
-        <Line x1="170" y1="15" x2="170" y2="25" stroke="#008752" strokeWidth="1.5" />
-        <Line x1="165" y1="20" x2="175" y2="20" stroke="#008752" strokeWidth="1.5" />
+        <Line x1="170" y1="15" x2="170" y2="25" stroke={COLORS.primary} strokeWidth="1.5" />
+        <Line x1="165" y1="20" x2="175" y2="20" stroke={COLORS.primary} strokeWidth="1.5" />
 
         {/* Dynamic Datum / Ground Reference Line with Tech Markers */}
-        <Line x1="20" y1="126" x2="320" y2="126" stroke="#008752" strokeWidth="1.5" strokeOpacity="0.8" />
-        <Circle cx="20" cy="126" r="2.5" fill="#008752" />
-        <Circle cx="320" cy="126" r="2.5" fill="#008752" />
+        <Line x1="20" y1="126" x2="320" y2="126" stroke={COLORS.primary} strokeWidth="1.5" strokeOpacity="0.8" />
+        <Circle cx="20" cy="126" r="2.5" fill={COLORS.primary} />
+        <Circle cx="320" cy="126" r="2.5" fill={COLORS.primary} />
 
         {/* Vehicle Blueprint Silhouette */}
         <G transform="translate(20, 26)">
@@ -139,7 +140,7 @@ export default function VehicleBlueprintFallback({
           <Path
             d="M116 60 L164 40 L212 40 C224 40, 236 50, 244 60 Z"
             fill="#0B1329"
-            stroke="#94A3B8"
+            stroke={COLORS.slate400}
             strokeWidth="1"
           />
           {/* B-Pillar */}
@@ -152,14 +153,14 @@ export default function VehicleBlueprintFallback({
           <Path d="M10 80 L18 80 L14 84 Z" fill="#EF4444" opacity="0.9" />
 
           {/* Front Alloy Wheel & Ceramic Brake Disc */}
-          <Circle cx="76" cy="94" r="14" fill="#0A0F1D" stroke="#94A3B8" strokeWidth="1.8" />
+          <Circle cx="76" cy="94" r="14" fill="#0A0F1D" stroke={COLORS.slate400} strokeWidth="1.8" />
           <Circle cx="76" cy="94" r="8" fill="#1E293B" stroke="#475569" strokeWidth="1" />
-          <Circle cx="76" cy="94" r="3.5" fill="#008752" />
+          <Circle cx="76" cy="94" r="3.5" fill={COLORS.primary} />
 
           {/* Rear Alloy Wheel & Ceramic Brake Disc */}
-          <Circle cx="204" cy="94" r="14" fill="#0A0F1D" stroke="#94A3B8" strokeWidth="1.8" />
+          <Circle cx="204" cy="94" r="14" fill="#0A0F1D" stroke={COLORS.slate400} strokeWidth="1.8" />
           <Circle cx="204" cy="94" r="8" fill="#1E293B" stroke="#475569" strokeWidth="1" />
-          <Circle cx="204" cy="94" r="3.5" fill="#008752" />
+          <Circle cx="204" cy="94" r="3.5" fill={COLORS.primary} />
 
           {/* Aerodynamic Air Flow Vector Lines */}
           <Path d="M22 62 C50 60, 80 50, 110 50" stroke="#38BDF8" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.5" />
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
   compactContainer: {
     width: '100%',
     backgroundColor: '#0B1329',
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   cadPillText: {
     color: '#BAE6FD',
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.8,
   },
   yearPill: {
@@ -256,9 +257,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   yearPillText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 10,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.5,
   },
   bottomOverlay: {
@@ -271,19 +272,19 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.08)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     zIndex: 2,
   },
   vehicleTitleText: {
-    color: '#F8FAFC',
-    fontSize: 12,
-    fontWeight: '800',
+    color: COLORS.background,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.6,
   },
   specSubText: {
-    color: '#94A3B8',
+    color: COLORS.slate400,
     fontSize: 9,
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     letterSpacing: 0.4,
     marginTop: 1,
   },
@@ -295,15 +296,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(11, 19, 41, 0.88)',
     paddingHorizontal: 5,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     borderWidth: 1,
     borderColor: 'rgba(56, 189, 248, 0.2)',
     alignItems: 'center',
   },
   compactVehicleTitleText: {
-    color: '#F8FAFC',
+    color: COLORS.background,
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.4,
   },
 });

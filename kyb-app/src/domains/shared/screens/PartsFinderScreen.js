@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -592,7 +593,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
           >
             <Car
               size={16}
-              color={searchMode === 'vehicle' ? '#E31837' : '#6B7280'}
+              color={searchMode === 'vehicle' ? COLORS.primary : COLORS.textTertiary}
             />
             <Text
               style={[
@@ -614,7 +615,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
           >
             <Search
               size={16}
-              color={searchMode === 'part' ? '#E31837' : '#6B7280'}
+              color={searchMode === 'part' ? COLORS.primary : COLORS.textTertiary}
             />
             <Text
               style={[
@@ -654,7 +655,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                     >
                       <IconComponent
                         size={16}
-                        color={isSelected ? '#FFFFFF' : '#4B5563'}
+                        color={isSelected ? COLORS.white : COLORS.textSecondary}
                       />
                       <Text
                         style={[
@@ -783,7 +784,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                   </Text>
                 </View>
                 {loadingVehicles ? (
-                  <ActivityIndicator size="small" color="#E31837" />
+                  <ActivityIndicator size="small" color={COLORS.primary} />
                 ) : (
                   <ChevronDown size={14} color="#9CA3AF" />
                 )}
@@ -794,7 +795,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
             <View style={styles.vehicleBottomSection}>
               <AppButton
                 title={selectedVehicle ? "Search Parts for this Vehicle" : "View Matching Engines & Trims"}
-                rightIcon={<ArrowRight size={16} color="#FFFFFF" />}
+                rightIcon={<ArrowRight size={16} color={COLORS.white} />}
                 onPress={handleProceedToVehicles}
                 disabled={!selectedManufacturer || !selectedSeries}
                 loading={loadingVehicles}
@@ -841,7 +842,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
             />
 
             <View style={styles.infoHintCard}>
-              <Sparkles size={18} color="#E31837" />
+              <Sparkles size={18} color={COLORS.primary} />
               <Text style={styles.infoHintText}>
                 Supports KYB Shock Absorbers (Excel-G, Gas-A-Just), Struts, and OE Cross-Reference Part Numbers.
               </Text>
@@ -896,7 +897,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
 
             {/* Filter Search Input */}
             <View style={styles.modalSearchBox}>
-              <Search size={16} color="#E31837" />
+              <Search size={16} color={COLORS.primary} />
               <TextInput
                 style={styles.modalSearchInput}
                 placeholder={
@@ -924,7 +925,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
             {/* List */}
             {loadingDropdown || (modalType === 'model' && loadingVehicles) ? (
               <View style={styles.modalLoading}>
-                <ActivityIndicator color="#E31837" size="small" />
+                <ActivityIndicator color={COLORS.primary} size="small" />
                 <Text style={styles.modalLoadingText}>Loading automotive catalog...</Text>
               </View>
             ) : (
@@ -990,7 +991,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                           </View>
                         </View>
                         {isSelected ? (
-                          <Check size={18} color="#E31837" />
+                          <Check size={18} color={COLORS.primary} />
                         ) : (
                           <ChevronRight size={16} color="#9CA3AF" />
                         )}
@@ -1025,7 +1026,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                           )}
                         </View>
                         {isSelected ? (
-                          <Check size={18} color="#E31837" />
+                          <Check size={18} color={COLORS.primary} />
                         ) : (
                           <ChevronRight size={16} color="#9CA3AF" />
                         )}
@@ -1055,7 +1056,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                         </Text>
                       </View>
                       {isSelected ? (
-                        <Check size={18} color="#E31837" />
+                        <Check size={18} color={COLORS.primary} />
                       ) : (
                         <ChevronRight size={16} color="#9CA3AF" />
                       )}
@@ -1100,7 +1101,7 @@ const styles = StyleSheet.create({
   },
   segmentContainer: {
     flexDirection: 'row',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: COLORS.border,
     borderRadius: 10,
     padding: 2,
     marginBottom: 8,
@@ -1112,10 +1113,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     height: 34,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   segmentBtnActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -1123,13 +1124,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   segmentText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   segmentTextActive: {
-    color: '#111827',
-    fontWeight: '700',
+    color: COLORS.textPrimary,
+    fontWeight: FONTS.weight.bold,
   },
   scrollBody: {
     paddingBottom: 16,
@@ -1146,9 +1147,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   inputSectionLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textTertiary,
     letterSpacing: 0.5,
     marginBottom: 6,
   },
@@ -1169,13 +1170,13 @@ const styles = StyleSheet.create({
   },
   popularHint: {
     fontSize: 10,
-    color: '#9CA3AF',
-    fontWeight: '500',
+    color: COLORS.textMuted,
+    fontWeight: FONTS.weight.medium,
   },
   toggleText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   brandsGrid: {
     flexDirection: 'row',
@@ -1191,21 +1192,21 @@ const styles = StyleSheet.create({
     gap: 6,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   appTypePillSelected: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   appTypePillText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   appTypePillTextSelected: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   specsRow: {
     flexDirection: 'row',
@@ -1223,12 +1224,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     marginBottom: 8,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
@@ -1237,24 +1238,24 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   pickerFieldDisabled: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     opacity: 0.7,
   },
   pickerFieldLabel: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#9CA3AF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textMuted,
     textTransform: 'uppercase',
     marginBottom: 2,
   },
   pickerFieldValue: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   pickerFieldPlaceholder: {
-    color: '#9CA3AF',
-    fontWeight: '500',
+    color: COLORS.textMuted,
+    fontWeight: FONTS.weight.medium,
   },
   proceedBtn: {
     marginTop: 4,
@@ -1270,41 +1271,41 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   quickSearchLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     marginRight: 2,
   },
   quickSearchChip: {
-    backgroundColor: '#F3F4F6',
-    borderRadius: 8,
+    backgroundColor: COLORS.surfaceSecondary,
+    borderRadius: RADIUS.sm,
     paddingVertical: 5,
     paddingHorizontal: 9,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   quickSearchChipText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   infoHintCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     padding: 14,
     marginTop: 14,
     borderLeftWidth: 3,
-    borderLeftColor: '#E31837',
+    borderLeftColor: COLORS.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     gap: 10,
   },
   infoHintText: {
     flex: 1,
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     lineHeight: 16,
   },
   modalOverlay: {
@@ -1313,7 +1314,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalSheet: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '82%',
@@ -1330,7 +1331,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: COLORS.borderDark,
     alignSelf: 'center',
     marginBottom: 14,
   },
@@ -1341,21 +1342,21 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   modalSubtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 1,
   },
   modalCloseCircle: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.surfaceSecondary,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
@@ -1364,9 +1365,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F9FAFB',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     paddingHorizontal: 12,
     height: 44,
     marginBottom: 12,
@@ -1374,8 +1375,8 @@ const styles = StyleSheet.create({
   },
   modalSearchInput: {
     flex: 1,
-    fontSize: 13,
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textPrimary,
     padding: 0,
   },
   modalSearchClear: {
@@ -1387,9 +1388,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   modalLoadingText: {
-    fontSize: 13,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   modalRowItem: {
     flexDirection: 'row',
@@ -1398,27 +1399,27 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 14,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   modalRowItemSelected: {
     backgroundColor: '#FFF5F5',
   },
   modalItemTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1F2937',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate800,
   },
   modalItemTitleSelected: {
-    color: '#E31837',
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
   modalItemSubtitle: {
-    fontSize: 11,
-    color: '#9CA3AF',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textMuted,
     marginTop: 2,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   modalSpecsRow: {
     flexDirection: 'row',
@@ -1427,15 +1428,15 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   specPill: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderRadius: 6,
     paddingHorizontal: 7,
     paddingVertical: 3,
   },
   specPillText: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textSecondary,
   },
   specPillEngine: {
     backgroundColor: '#FEE2E2',
@@ -1444,9 +1445,9 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   specPillEngineText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.primary,
   },
   modalEmptyState: {
     paddingVertical: 48,
@@ -1455,14 +1456,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalEmptyTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginBottom: 6,
   },
   modalEmptySubtitle: {
-    fontSize: 13,
-    color: '#9CA3AF',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textMuted,
     textAlign: 'center',
     lineHeight: 18,
   },

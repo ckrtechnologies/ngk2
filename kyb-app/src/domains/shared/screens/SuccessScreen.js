@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -16,11 +17,11 @@ const SuccessScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
 
       <View style={styles.content}>
         <View style={styles.successCircle}>
-          <Check color="#FFFFFF" size={wp('15%')} strokeWidth={3} />
+          <Check color={COLORS.white} size={wp('15%')} strokeWidth={3} />
         </View>
 
         <Text style={styles.successTitle}>Enquiry Submitted Successfully!</Text>
@@ -42,7 +43,7 @@ const SuccessScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   content: {
     flex: 1,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   },
   successTitle: {
     fontSize: wp('6%'),
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
     color: '#000000',
     textAlign: 'center',
     marginBottom: hp('2%'),
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   homeBtnText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('4%'),
     fontWeight: 'bold',
   },

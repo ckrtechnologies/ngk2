@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -81,7 +82,7 @@ const ResellerHomeScreen = () => {
       id: 'lookup',
       title: 'Parts Lookup',
       subtitle: 'Fast OE & cross-reference',
-      icon: <Search size={22} color="#008752" />,
+      icon: <Search size={22} color={COLORS.primary} />,
       bg: '#FEE2E2',
       route: 'PartsFinder',
     },
@@ -90,7 +91,7 @@ const ResellerHomeScreen = () => {
       title: 'Active Tickets',
       subtitle: `${pendingCount} pending customer requests`,
       icon: <MessageSquare size={22} color="#2563EB" />,
-      bg: '#DBEAFE',
+      bg: COLORS.infoLight,
       route: 'MyEnquiries',
     },
     {
@@ -98,7 +99,7 @@ const ResellerHomeScreen = () => {
       title: 'Trade Supply',
       subtitle: 'Distributor order requests',
       icon: <Package size={22} color="#059669" />,
-      bg: '#D1FAE5',
+      bg: COLORS.successLight,
       route: 'PartsFinder',
     },
     {
@@ -106,14 +107,14 @@ const ResellerHomeScreen = () => {
       title: 'Distributors',
       subtitle: 'Regional supplier network',
       icon: <MapPin size={22} color="#D97706" />,
-      bg: '#FEF3C7',
+      bg: COLORS.warningLight,
       route: 'DealerLocator',
     },
   ];
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Crimson NGK Header */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
@@ -122,7 +123,7 @@ const ResellerHomeScreen = () => {
           onPress={() => navigation.navigate('CustomDrawer')}
           activeOpacity={0.75}
         >
-          <Menu size={22} color="#FFFFFF" strokeWidth={2.4} />
+          <Menu size={22} color={COLORS.white} strokeWidth={2.4} />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
@@ -147,7 +148,7 @@ const ResellerHomeScreen = () => {
           onPress={() => navigation.navigate('Notifications')}
           activeOpacity={0.75}
         >
-          <Bell size={20} color="#FFFFFF" strokeWidth={2.4} />
+          <Bell size={20} color={COLORS.white} strokeWidth={2.4} />
           {hasUnreadNotifications && <View style={styles.badgeDot} />}
         </TouchableOpacity>
       </View>
@@ -159,8 +160,8 @@ const ResellerHomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#008752']}
-            tintColor="#008752"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
@@ -208,7 +209,7 @@ const ResellerHomeScreen = () => {
             onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'inprogress' })}
             activeOpacity={0.75}
           >
-            <View style={[styles.kpiIconWrapper, { backgroundColor: '#DBEAFE' }]}>
+            <View style={[styles.kpiIconWrapper, { backgroundColor: COLORS.infoLight }]}>
               <TrendingUp size={16} color="#2563EB" />
             </View>
             <Text style={styles.kpiValue}>{inProgressCount}</Text>
@@ -220,7 +221,7 @@ const ResellerHomeScreen = () => {
             onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'all' })}
             activeOpacity={0.75}
           >
-            <View style={[styles.kpiIconWrapper, { backgroundColor: '#D1FAE5' }]}>
+            <View style={[styles.kpiIconWrapper, { backgroundColor: COLORS.successLight }]}>
               <CheckCircle2 size={16} color="#059669" />
             </View>
             <Text style={styles.kpiValue}>
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   solidHeader: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   headerBtn: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.28)',
@@ -297,12 +298,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   logoBadgeContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.16,
@@ -312,12 +313,12 @@ const styles = StyleSheet.create({
   headerLogoImg: {
     width: 22,
     height: 22,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   headerBrandText: {
-    fontSize: 12,
-    fontWeight: '900',
-    color: '#008752',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.primary,
     letterSpacing: 0.8,
     marginLeft: 5,
   },
@@ -327,14 +328,14 @@ const styles = StyleSheet.create({
   },
   headerGreetingHello: {
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     color: 'rgba(255, 255, 255, 0.82)',
     letterSpacing: 0.8,
   },
   headerUserName: {
     fontSize: 14.5,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: -0.2,
   },
   badgeDot: {
@@ -343,10 +344,10 @@ const styles = StyleSheet.create({
     right: 6,
     width: 7.5,
     height: 7.5,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     backgroundColor: '#FBBF24',
     borderWidth: 1.5,
-    borderColor: '#008752',
+    borderColor: COLORS.primary,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
   },
   resellerBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: COLORS.warningLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -366,13 +367,13 @@ const styles = StyleSheet.create({
   },
   resellerBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#D97706',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.warning,
   },
   greetingName: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.4,
   },
   kpiRow: {
@@ -382,11 +383,11 @@ const styles = StyleSheet.create({
   },
   kpiCard: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     alignItems: 'center',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
@@ -397,21 +398,21 @@ const styles = StyleSheet.create({
   kpiIconWrapper: {
     width: 30,
     height: 30,
-    borderRadius: 8,
-    backgroundColor: '#FEF3C7',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.warningLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 6,
   },
   kpiValue: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   kpiLabel: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
     marginTop: 2,
     textAlign: 'center',
   },
@@ -419,9 +420,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   gridContainer: {
     flexDirection: 'row',
@@ -430,11 +431,11 @@ const styles = StyleSheet.create({
   },
   gridTile: {
     width: '48%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.03,
@@ -444,27 +445,27 @@ const styles = StyleSheet.create({
   tileIconCircle: {
     width: 42,
     height: 42,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
   },
   tileTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
     marginBottom: 2,
   },
   tileSubtitle: {
-    fontSize: 11,
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     lineHeight: 15,
   },
   reviewBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 10,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: COLORS.warningLight,
     borderWidth: 1,
     borderColor: '#FCD34D',
     borderRadius: 10,
@@ -475,18 +476,18 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 6,
-    backgroundColor: '#FDE68A',
+    backgroundColor: COLORS.warningBorder,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 2,
   },
   reviewBannerTitle: {
-    fontSize: 12,
-    fontWeight: '800',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
     color: '#92400E',
   },
   reviewBannerDesc: {
-    fontSize: 11,
+    fontSize: FONTS.size.caption,
     color: '#B45309',
     marginTop: 2,
     lineHeight: 15,

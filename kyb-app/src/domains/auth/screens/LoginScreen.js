@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -60,10 +61,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Distributor Portal',
           subtitle: 'Enterprise Tier-1 Logistics Access',
           emailPlaceholder: 'admin@distributor.com',
-          buttonColor: '#0F172A',
+          buttonColor: COLORS.slate900,
           badgeText: 'Distributor',
           badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: '#F8FAFC',
+          badgeColor: COLORS.background,
           showRegister: true,
         };
       case 'reseller':
@@ -71,10 +72,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Reseller Portal',
           subtitle: 'Workshop & Trade Inquiries Access',
           emailPlaceholder: 'workshop@reseller.com',
-          buttonColor: '#16A34A',
+          buttonColor: COLORS.primary,
           badgeText: 'Reseller / Workshop',
           badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: '#F8FAFC',
+          badgeColor: COLORS.background,
           showRegister: true,
         };
       case 'owner':
@@ -83,10 +84,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Welcome Back',
           subtitle: 'Sign in to your garage & catalog portal',
           emailPlaceholder: 'owner@example.com',
-          buttonColor: '#E31837',
+          buttonColor: COLORS.primary,
           badgeText: 'Vehicle Owner',
           badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: '#F8FAFC',
+          badgeColor: COLORS.background,
           showRegister: true,
         };
     }
@@ -201,7 +202,7 @@ const LoginScreen = ({ route, navigation }) => {
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
             >
-              <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.4} />
+              <ChevronLeft size={22} color={COLORS.white} strokeWidth={2.4} />
             </TouchableOpacity>
 
             <View style={styles.headerBadgeContainer}>
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.14)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.22)',
@@ -362,13 +363,13 @@ const styles = StyleSheet.create({
   badgePill: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.12)',
   },
   badgePillText: {
     fontSize: 10,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   logoCapsule: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 22,
@@ -397,22 +398,22 @@ const styles = StyleSheet.create({
     height: 88,
   },
   heroTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.h3,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: -0.4,
     marginBottom: 4,
     textAlign: 'center',
   },
   heroSubtitle: {
-    fontSize: 13,
+    fontSize: FONTS.size.sm,
     color: 'rgba(255, 255, 255, 0.75)',
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
     textAlign: 'center',
   },
   formSection: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     marginTop: -20,
@@ -444,24 +445,24 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
   },
   dividerText: {
     marginHorizontal: 12,
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate400,
     letterSpacing: 0.8,
   },
   registerBtn: {
     borderWidth: 1.5,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
   },
   copyrightText: {
-    fontSize: 11,
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    color: COLORS.slate400,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
   },
   darkHeaderSectionCompact: {
     minHeight: 110,
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   heroTitleCompact: {
-    fontSize: 18,
+    fontSize: FONTS.size.xl,
     marginBottom: 0,
   },
   formSectionCompact: {

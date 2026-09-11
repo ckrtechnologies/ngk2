@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import Svg, {
   Path,
   Circle,
@@ -15,7 +16,7 @@ import Svg, {
  */
 
 // 1. SOLID STORE / DEALERSHIP ICON
-export function SolidStoreIcon({ size = 22, color = '#E31837', ...props }) {
+export function SolidStoreIcon({ size = 22, color = COLORS.primary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Defs>
@@ -27,7 +28,7 @@ export function SolidStoreIcon({ size = 22, color = '#E31837', ...props }) {
       {/* Store Roof Awning */}
       <Path
         d="M2.5 9L4.2 3.8A1.5 1.5 0 0 1 5.6 2.8h12.8a1.5 1.5 0 0 1 1.4 1l1.7 5.2a1 1 0 0 1-.3 1 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 2.2 2.2 0 0 1-3.2 0 1 1 0 0 1-.3-1z"
-        fill={color === '#E31837' ? 'url(#dealerRoofGrad)' : color}
+        fill={color === COLORS.primary ? 'url(#dealerRoofGrad)' : color}
       />
       {/* Building Body */}
       <Path
@@ -36,15 +37,15 @@ export function SolidStoreIcon({ size = 22, color = '#E31837', ...props }) {
         opacity={0.88}
       />
       {/* Entrance Doorway & Showcase Window */}
-      <Rect x="10" y="14" width="4" height="7" rx="0.8" fill="#FFFFFF" />
-      <Rect x="6" y="14" width="2.5" height="3.5" rx="0.5" fill="#FFFFFF" opacity={0.7} />
-      <Rect x="15.5" y="14" width="2.5" height="3.5" rx="0.5" fill="#FFFFFF" opacity={0.7} />
+      <Rect x="10" y="14" width="4" height="7" rx="0.8" fill={COLORS.white} />
+      <Rect x="6" y="14" width="2.5" height="3.5" rx="0.5" fill={COLORS.white} opacity={0.7} />
+      <Rect x="15.5" y="14" width="2.5" height="3.5" rx="0.5" fill={COLORS.white} opacity={0.7} />
     </Svg>
   );
 }
 
 // 2. SOLID PART / SPARK PLUG COMPONENT ICON
-export function SolidPartTagIcon({ size = 18, color = '#E31837', ...props }) {
+export function SolidPartTagIcon({ size = 18, color = COLORS.primary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Defs>
@@ -57,20 +58,20 @@ export function SolidPartTagIcon({ size = 18, color = '#E31837', ...props }) {
       {/* Solid Tag Body with Beveled Notch */}
       <Path
         d="M2.5 3.5A1.5 1.5 0 0 1 4 2h7.2a2 2 0 0 1 1.4.6l9.8 9.8a2 2 0 0 1 0 2.8l-7.2 7.2a2 2 0 0 1-2.8 0L2.6 12.6A2 2 0 0 1 2 11.2V3.5h.5z"
-        fill={color === '#E31837' ? 'url(#tagSolidGrad)' : color}
+        fill={color === COLORS.primary ? 'url(#tagSolidGrad)' : color}
       />
       {/* Precision Aperture Center */}
-      <Circle cx="7.5" cy="7.5" r="2.2" fill="#FFFFFF" />
-      <Circle cx="7.5" cy="7.5" r="1.1" fill={color === '#E31837' ? '#B91C1C' : '#FFFFFF'} />
+      <Circle cx="7.5" cy="7.5" r="2.2" fill={COLORS.white} />
+      <Circle cx="7.5" cy="7.5" r="1.1" fill={color === COLORS.primary ? '#B91C1C' : COLORS.white} />
       {/* Spark Plug Electrode Accents */}
-      <Rect x="13.5" y="12.5" width="4" height="1.5" rx="0.5" transform="rotate(45 13.5 12.5)" fill="#FFFFFF" opacity={0.8} />
-      <Rect x="15.5" y="14.5" width="3" height="1.5" rx="0.5" transform="rotate(45 15.5 14.5)" fill="#FFFFFF" opacity={0.6} />
+      <Rect x="13.5" y="12.5" width="4" height="1.5" rx="0.5" transform="rotate(45 13.5 12.5)" fill={COLORS.white} opacity={0.8} />
+      <Rect x="15.5" y="14.5" width="3" height="1.5" rx="0.5" transform="rotate(45 15.5 14.5)" fill={COLORS.white} opacity={0.6} />
     </Svg>
   );
 }
 
 // 3. SOLID CAR SILHOUETTE ICON
-export function SolidCarSilhouetteIcon({ size = 18, color = '#2563EB', ...props }) {
+export function SolidCarSilhouetteIcon({ size = 18, color = COLORS.info, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Defs>
@@ -82,12 +83,12 @@ export function SolidCarSilhouetteIcon({ size = 18, color = '#2563EB', ...props 
       {/* Aerodynamic Body Contour */}
       <Path
         d="M3 14.5l1.2-4.2a2.5 2.5 0 0 1 2.4-1.8h9.8a2.5 2.5 0 0 1 2.4 1.8l1.2 4.2h1a1.5 1.5 0 0 1 1.5 1.5v2a1 1 0 0 1-1 1h-1.6a2.8 2.8 0 0 1-5.4 0H9.5a2.8 2.8 0 0 1-5.4 0H2.5a1 1 0 0 1-1-1v-2a1.5 1.5 0 0 1 1.5-1.5H3z"
-        fill={color === '#2563EB' ? 'url(#carBodyBlue)' : color}
+        fill={color === COLORS.info ? 'url(#carBodyBlue)' : color}
       />
       {/* Front & Rear Windows */}
       <Path
         d="M6.6 10l.9-1.8a1 1 0 0 1 .9-.6h3.6V10H6.6zM13 10V7.6h2.6a1 1 0 0 1 .9.6l.9 1.8H13z"
-        fill="#FFFFFF"
+        fill={COLORS.white}
         opacity={0.9}
       />
       {/* Front Wheel */}
@@ -103,7 +104,7 @@ export function SolidCarSilhouetteIcon({ size = 18, color = '#2563EB', ...props 
 }
 
 // 4. SOLID GARAGE WORKSHOP BAY ICON
-export function SolidGarageBayIcon({ size = 16, color = '#4B5563', ...props }) {
+export function SolidGarageBayIcon({ size = 16, color = COLORS.textSecondary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       {/* Garage Gable Roof & Walls */}
@@ -112,7 +113,7 @@ export function SolidGarageBayIcon({ size = 16, color = '#4B5563', ...props }) {
         fill={color}
       />
       {/* Workshop Shutter / Vehicle Bay Open Entrance */}
-      <Rect x="6" y="9.5" width="12" height="12" rx="1" fill="#FFFFFF" />
+      <Rect x="6" y="9.5" width="12" height="12" rx="1" fill={COLORS.white} />
       {/* Shutter Slats */}
       <Rect x="7" y="11" width="10" height="1.6" rx="0.5" fill={color} opacity={0.4} />
       <Rect x="7" y="13.5" width="10" height="1.6" rx="0.5" fill={color} opacity={0.4} />
@@ -127,7 +128,7 @@ export function SolidGarageBayIcon({ size = 16, color = '#4B5563', ...props }) {
 }
 
 // 5. SOLID VERIFIED SHIELD BADGE
-export function SolidShieldVerifiedIcon({ size = 14, color = '#059669', ...props }) {
+export function SolidShieldVerifiedIcon({ size = 14, color = COLORS.success, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       {/* Solid Shield Body */}
@@ -138,7 +139,7 @@ export function SolidShieldVerifiedIcon({ size = 14, color = '#059669', ...props
       {/* Solid White Checkmark */}
       <Path
         d="M9.5 12l2 2 4.5-4.5"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -148,7 +149,7 @@ export function SolidShieldVerifiedIcon({ size = 14, color = '#059669', ...props
 }
 
 // 6. SOLID LOCATION PIN ICON
-export function SolidLocationPinIcon({ size = 14, color = '#059669', ...props }) {
+export function SolidLocationPinIcon({ size = 14, color = COLORS.success, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       {/* Solid Teardrop Pin */}
@@ -157,13 +158,13 @@ export function SolidLocationPinIcon({ size = 14, color = '#059669', ...props })
         fill={color}
       />
       {/* Focal Aperture Circle */}
-      <Circle cx="12" cy="9" r="2.8" fill="#FFFFFF" />
+      <Circle cx="12" cy="9" r="2.8" fill={COLORS.white} />
     </Svg>
   );
 }
 
 // 7. SOLID STEPPER MINUS ICON
-export function SolidStepperMinusIcon({ size = 14, color = '#111827' }) {
+export function SolidStepperMinusIcon({ size = 14, color = COLORS.textPrimary }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Rect x="4" y="10" width="16" height="4" rx="2" fill={color} />
@@ -172,7 +173,7 @@ export function SolidStepperMinusIcon({ size = 14, color = '#111827' }) {
 }
 
 // 8. SOLID STEPPER PLUS ICON
-export function SolidStepperPlusIcon({ size = 14, color = '#111827' }) {
+export function SolidStepperPlusIcon({ size = 14, color = COLORS.textPrimary }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Rect x="4" y="10" width="16" height="4" rx="2" fill={color} />

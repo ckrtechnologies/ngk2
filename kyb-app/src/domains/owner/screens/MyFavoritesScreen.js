@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -104,7 +105,7 @@ const MyFavoritesScreen = () => {
             style={styles.headerHomeBtn}
             activeOpacity={0.8}
           >
-            <Home color="#FFFFFF" size={18} />
+            <Home color={COLORS.white} size={18} />
           </TouchableOpacity>
         }
       />
@@ -127,8 +128,8 @@ const MyFavoritesScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={['#E31837']}
-              tintColor="#E31837"
+              colors={[COLORS.primary]}
+              tintColor={COLORS.primary}
             />
           }
         >
@@ -157,7 +158,7 @@ const MyFavoritesScreen = () => {
                   style={styles.viewDetailsButton}
                   onPress={() => handleOpenDetails(item)}
                 >
-                  <Search size={wp('4.5%')} color="#FFFFFF" style={styles.searchIcon} />
+                  <Search size={wp('4.5%')} color={COLORS.white} style={styles.searchIcon} />
                   <Text style={styles.viewDetailsText}>VIEW DETAILS</Text>
                 </TouchableOpacity>
               </View>
@@ -260,7 +261,7 @@ const MyFavoritesScreen = () => {
                   });
                 }}
               >
-                <Settings color="#FFFFFF" size={wp('5%')} />
+                <Settings color={COLORS.white} size={wp('5%')} />
                 <Text style={styles.footerBtnTextEnquiry}>ENQUIRY</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -271,7 +272,7 @@ const MyFavoritesScreen = () => {
                   navigation.navigate('DealerLocator');
                 }}
               >
-                <ShoppingCart color="#FFFFFF" size={wp('5%')} />
+                <ShoppingCart color={COLORS.white} size={wp('5%')} />
                 <Text style={styles.footerBtnTextDealers}>DEALERS</Text>
               </TouchableOpacity>
             </View>
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     height: hp('9%'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -309,13 +310,13 @@ const styles = StyleSheet.create({
     padding: wp('1%'),
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('4.5%'),
     fontWeight: 'bold',
     letterSpacing: 0.5,
   },
   homeIconButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     width: wp('9%'),
     height: wp('9%'),
     borderRadius: wp('4.5%'),
@@ -341,13 +342,13 @@ const styles = StyleSheet.create({
   editListText: {
     fontSize: wp('3.2%'),
     fontWeight: 'bold',
-    color: '#E31837',
+    color: COLORS.primary,
   },
   scrollContent: {
     paddingBottom: hp('5%'),
   },
   favoriteCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('6%'),
     padding: wp('5%'),
     marginBottom: hp('2.5%'),
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: wp('1.5%'),
   },
   categoryText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('2.8%'),
     fontWeight: 'bold',
   },
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   partNumber: {
     fontSize: wp('3.5%'),
     fontWeight: 'bold',
-    color: '#E31837',
+    color: COLORS.primary,
   },
   viewDetailsButton: {
     backgroundColor: '#000000',
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     marginRight: wp('2%'),
   },
   viewDetailsText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3.5%'),
     fontWeight: 'bold',
     letterSpacing: 0.5,
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: wp('10%'),
     borderTopRightRadius: wp('10%'),
     height: hp('95%'),
@@ -449,7 +450,7 @@ const styles = StyleSheet.create({
   },
   modalTitleText: {
     fontSize: wp('4.2%'),
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
     color: '#000000',
     letterSpacing: 0.5,
   },
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
   dotActive: {
     width: wp('8%'),
     height: hp('0.6%'),
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderRadius: 3,
     marginRight: wp('1.5%'),
   },
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     borderRadius: wp('0.75%'),
   },
   productImageCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     marginHorizontal: wp('6%'),
     borderRadius: wp('12%'),
     height: hp('38%'),
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: wp('6%'),
     left: wp('6%'),
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: wp('4%'),
     paddingVertical: hp('1%'),
     borderRadius: wp('3%'),
@@ -508,12 +509,12 @@ const styles = StyleSheet.create({
   magnifyDot: {
     width: wp('1.5%'),
     height: wp('1.5%'),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('0.75%'),
     marginRight: wp('2%'),
   },
   magnifyText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('2.5%'),
     fontWeight: 'bold',
   },
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
     marginRight: wp('3%'),
   },
   verifiedFitBadgeText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('2.4%'),
     fontWeight: 'bold',
   },
@@ -549,13 +550,13 @@ const styles = StyleSheet.create({
   },
   modalPartTitle: {
     fontSize: wp('6%'),
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
     color: '#000000',
     letterSpacing: 0.2,
   },
   modalPartSubtitle: {
     fontSize: wp('4.5%'),
-    color: '#E31837',
+    color: COLORS.primary,
     fontWeight: 'bold',
     marginTop: hp('0.5%'),
     marginBottom: hp('3%'),
@@ -573,7 +574,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   availabilityCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('8%'),
     paddingVertical: hp('3.5%'),
     alignItems: 'center',
@@ -596,11 +597,11 @@ const styles = StyleSheet.create({
   availabilityValue: {
     fontSize: wp('6.5%'),
     color: '#2E8B57',
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
     letterSpacing: 0.5,
   },
   specsTable: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('8%'),
     borderWidth: 1,
     borderColor: '#F0F0F0',
@@ -623,7 +624,7 @@ const styles = StyleSheet.create({
   specValue: {
     fontSize: wp('3.5%'),
     color: '#000000',
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
   },
   modalFooter: {
     position: 'absolute',
@@ -635,7 +636,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('4%'),
     paddingTop: hp('2%'),
     paddingBottom: hp('4%'),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopWidth: 1,
     borderTopColor: '#F0F0F0',
   },
@@ -643,7 +644,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     height: hp('7.5%'),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('3%'),
     borderWidth: 1,
     borderColor: '#D1D1D1',
@@ -669,7 +670,7 @@ const styles = StyleSheet.create({
     marginRight: wp('2%'),
   },
   footerBtnTextEnquiry: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3%'),
     fontWeight: 'bold',
     marginLeft: wp('2%'),
@@ -679,13 +680,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     height: hp('7.5%'),
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderRadius: wp('3%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
   footerBtnTextDealers: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3%'),
     fontWeight: 'bold',
     marginLeft: wp('2%'),

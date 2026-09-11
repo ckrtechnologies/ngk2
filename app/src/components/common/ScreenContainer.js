@@ -10,23 +10,23 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { COLORS, SPACING } from '../../utils/theme';
 
 const ScreenContainer = ({
   children,
   scrollable = false,
-  backgroundColor = '#FFFFFF',
+  backgroundColor = COLORS.surface,
   statusBarStyle = 'dark-content',
   contentContainerStyle,
   style,
   keyboardVerticalOffset = 0,
   footer,
-  paddingHorizontal = 20,
+  paddingHorizontal = SPACING.lg,
   includeTopInset = true,
   showStatusBar = true,
   refreshControl,
 }) => {
   const insets = useSafeAreaInsets();
-  const Container = scrollable ? ScrollView : View;
 
   return (
     <View
@@ -35,7 +35,7 @@ const ScreenContainer = ({
         {
           backgroundColor,
           paddingTop: includeTopInset ? insets.top : 0,
-          paddingBottom: Math.max(insets.bottom, 12),
+          paddingBottom: Math.max(insets.bottom, SPACING.md),
           paddingLeft: insets.left,
           paddingRight: insets.right,
         },
@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 24,
+    paddingBottom: SPACING.xl,
   },
   footerContainer: {
-    paddingTop: 8,
+    paddingTop: SPACING.sm,
   },
 });
 

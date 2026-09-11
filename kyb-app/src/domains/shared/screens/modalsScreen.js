@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
     View,
     Text,
@@ -143,7 +144,7 @@ const ModalsScreen = () => {
                     {imageUrl ? (
                         <Image source={{ uri: imageUrl }} style={styles.modelImage} resizeMode="cover" />
                     ) : (
-                        <Car color="#E31837" size={wp('8%')} />
+                        <Car color={COLORS.primary} size={wp('8%')} />
                     )}
                 </View>
                 <View style={styles.textContainer}>
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F6FA',
     },
     header: {
-        backgroundColor: '#E31837',
+        backgroundColor: COLORS.primary,
         height: hp('8%'),
         flexDirection: 'row',
         alignItems: 'center',
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerTitle: {
-        color: '#FFFFFF',
+        color: COLORS.white,
         fontSize: wp('5%'),
         fontWeight: 'bold',
         marginLeft: wp('4%'),
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp('6%'),
         paddingBottom: hp('2%'),
         paddingTop: hp('2%'),
-        backgroundColor: '#E31837',
+        backgroundColor: COLORS.primary,
         borderBottomLeftRadius: wp('6%'),
         borderBottomRightRadius: wp('6%'),
         marginBottom: hp('1%'),
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     searchBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.white,
         borderRadius: wp('4%'),
         paddingLeft: wp('4%'),
         paddingRight: wp('2%'),
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
         paddingBottom: hp('5%'),
     },
     card: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.white,
         borderRadius: wp('5%'),
         padding: wp('4%'),
         flexDirection: 'row',

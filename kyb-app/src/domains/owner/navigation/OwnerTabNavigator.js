@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -41,7 +42,7 @@ export default function OwnerTabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: '#FFFFFF',
+        tabBarActiveTintColor: COLORS.white,
         tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.6)',
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarIcon: ({ size, focused }) => renderTabBarIcon(route.name, focused, size),
@@ -84,7 +85,7 @@ export default function OwnerTabNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     height: hp('10%'),
     borderTopLeftRadius: wp('8%'),
     borderTopRightRadius: wp('8%'),
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   },
   tabBarLabel: {
     fontSize: wp('3%'),
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     marginBottom: hp('0.5%'),
   },
 });

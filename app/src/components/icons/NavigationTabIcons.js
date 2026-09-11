@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import Svg, {
   Path,
   Circle,
@@ -20,22 +21,22 @@ export function PortalTabIcon({ focused = false, size = 24 }) {
         {/* Solid House Structure */}
         <Path
           d="M16 2.5l12 9.6V26a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V12.1L16 2.5z"
-          fill="#FFFFFF"
+          fill={COLORS.white}
         />
         {/* Crimson Gable Crest */}
         <Path
           d="M16 3.5l10 8H22.5L16 6.5 9.5 11.5H6l10-8z"
-          fill="#008752"
+          fill={COLORS.primary}
         />
         {/* Central Tachometer Bay */}
         <Path
           d="M12.5 28v-9a3.5 3.5 0 0 1 7 0v9"
-          fill="#008752"
+          fill={COLORS.primary}
         />
         {/* Speedometer Arc */}
         <Path
           d="M14 19.5a2 2 0 0 1 4 0"
-          stroke="#008752"
+          stroke={COLORS.primary}
           strokeWidth="1.4"
           strokeLinecap="round"
         />
@@ -50,7 +51,7 @@ export function PortalTabIcon({ focused = false, size = 24 }) {
     <Svg width={size} height={size} viewBox="0 0 32 32" fill="none">
       <Path
         d="M16 3.5l11.5 9.2V26a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 26V12.7L16 3.5z"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -58,7 +59,7 @@ export function PortalTabIcon({ focused = false, size = 24 }) {
       />
       <Path
         d="M12.5 27.5v-8a3.5 3.5 0 0 1 7 0v8"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -74,18 +75,18 @@ export function SearchTabIcon({ focused = false, size = 24 }) {
     return (
       <Svg width={size} height={size} viewBox="0 0 32 32" fill="none">
         {/* Outer Lens Ring */}
-        <Circle cx="13" cy="13" r="9.5" fill="#FFFFFF" />
+        <Circle cx="13" cy="13" r="9.5" fill={COLORS.white} />
         {/* Inner NGK Crimson Core */}
-        <Circle cx="13" cy="13" r="6" fill="#008752" />
+        <Circle cx="13" cy="13" r="6" fill={COLORS.primary} />
         {/* Reticle Crosshairs */}
-        <Line x1="13" y1="8.5" x2="13" y2="10.5" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
-        <Line x1="13" y1="15.5" x2="13" y2="17.5" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
-        <Line x1="8.5" y1="13" x2="10.5" y2="13" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
-        <Line x1="15.5" y1="13" x2="17.5" y2="13" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
+        <Line x1="13" y1="8.5" x2="13" y2="10.5" stroke={COLORS.white} strokeWidth="1.4" strokeLinecap="round" />
+        <Line x1="13" y1="15.5" x2="13" y2="17.5" stroke={COLORS.white} strokeWidth="1.4" strokeLinecap="round" />
+        <Line x1="8.5" y1="13" x2="10.5" y2="13" stroke={COLORS.white} strokeWidth="1.4" strokeLinecap="round" />
+        <Line x1="15.5" y1="13" x2="17.5" y2="13" stroke={COLORS.white} strokeWidth="1.4" strokeLinecap="round" />
         {/* Search Handle */}
-        <Line x1="20" y1="20" x2="28" y2="28" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+        <Line x1="20" y1="20" x2="28" y2="28" stroke={COLORS.white} strokeWidth="3.5" strokeLinecap="round" />
         {/* Handle Collar */}
-        <Line x1="18.5" y1="18.5" x2="20.5" y2="20.5" stroke="#008752" strokeWidth="3.5" strokeLinecap="round" />
+        <Line x1="18.5" y1="18.5" x2="20.5" y2="20.5" stroke={COLORS.primary} strokeWidth="3.5" strokeLinecap="round" />
       </Svg>
     );
   }
@@ -96,13 +97,13 @@ export function SearchTabIcon({ focused = false, size = 24 }) {
         cx="13"
         cy="13"
         r="9"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2.2"
         opacity={0.6}
       />
       <Path
         d="M19.8 19.8l7.2 7.2"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2.5"
         strokeLinecap="round"
         opacity={0.6}
@@ -119,12 +120,12 @@ export function EnquiriesTabIcon({ focused = false, size = 24 }) {
         {/* Solid Speech Bubble Body */}
         <Path
           d="M5 6a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H12l-6 5v-5a4 4 0 0 1-1-2.5V6z"
-          fill="#FFFFFF"
+          fill={COLORS.white}
         />
         {/* Oscilloscope Waveform */}
         <Path
           d="M9 12h2.5l2-3 3 6 2-3h3.5"
-          stroke="#008752"
+          stroke={COLORS.primary}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -139,7 +140,7 @@ export function EnquiriesTabIcon({ focused = false, size = 24 }) {
     <Svg width={size} height={size} viewBox="0 0 32 32" fill="none">
       <Path
         d="M5.5 6.5A3 3 0 0 1 8.5 3.5h15a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H12l-5.5 4.5v-4.5a3 3 0 0 1-1-2V6.5z"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -147,7 +148,7 @@ export function EnquiriesTabIcon({ focused = false, size = 24 }) {
       />
       <Path
         d="M10 11.5h12M10 15.5h7"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="1.8"
         strokeLinecap="round"
         opacity={0.6}
@@ -164,19 +165,19 @@ export function DealersTabIcon({ focused = false, size = 24 }) {
         {/* Solid White Pin Body */}
         <Path
           d="M16 2C10.5 2 6 6.5 6 12c0 7.5 10 17 10 17s10-9.5 10-17c0-5.5-4.5-10-10-10z"
-          fill="#FFFFFF"
+          fill={COLORS.white}
         />
         {/* Inner Circle Stage */}
-        <Circle cx="16" cy="11.5" r="5.5" fill="#008752" />
+        <Circle cx="16" cy="11.5" r="5.5" fill={COLORS.primary} />
         {/* Dealership Awning */}
         <Path
           d="M13 10h6l.5 2H12.5L13 10z"
-          fill="#FFFFFF"
+          fill={COLORS.white}
         />
         {/* Store Pillars */}
-        <Rect x="13.5" y="12" width="1" height="2.5" fill="#FFFFFF" />
-        <Rect x="15.5" y="12" width="1" height="2.5" fill="#FFFFFF" />
-        <Rect x="17.5" y="12" width="1" height="2.5" fill="#FFFFFF" />
+        <Rect x="13.5" y="12" width="1" height="2.5" fill={COLORS.white} />
+        <Rect x="15.5" y="12" width="1" height="2.5" fill={COLORS.white} />
+        <Rect x="17.5" y="12" width="1" height="2.5" fill={COLORS.white} />
       </Svg>
     );
   }
@@ -185,7 +186,7 @@ export function DealersTabIcon({ focused = false, size = 24 }) {
     <Svg width={size} height={size} viewBox="0 0 32 32" fill="none">
       <Path
         d="M16 3c-5 0-9 4-9 9 0 7 9 16 9 16s9-9 9-16c0-5-4-9-9-9z"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -195,7 +196,7 @@ export function DealersTabIcon({ focused = false, size = 24 }) {
         cx="16"
         cy="12"
         r="3"
-        stroke="#FFFFFF"
+        stroke={COLORS.white}
         strokeWidth="1.8"
         opacity={0.6}
       />

@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   Text,
@@ -49,7 +50,7 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
               <Text
                 style={[
                   styles.countHighlight,
-                  { color: currentItem.themeColor || '#008752' },
+                  { color: currentItem.themeColor || COLORS.primary },
                 ]}
               >
                 {currentItem.countHighlight}{' '}
@@ -65,14 +66,14 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
                 styles.tickerHighlightBadge,
                 {
                   backgroundColor:
-                    (currentItem.themeColor || '#008752') + '15',
+                    (currentItem.themeColor || COLORS.primary) + '15',
                 },
               ]}
             >
               <Text
                 style={[
                   styles.tickerHighlightText,
-                  { color: currentItem.themeColor || '#008752' },
+                  { color: currentItem.themeColor || COLORS.primary },
                 ]}
               >
                 {currentItem.highlight}
@@ -84,7 +85,7 @@ const LiveFeatureTicker = memo(function LiveFeatureTicker({ items, onItemPress }
 
       <ChevronRight
         size={14}
-        color={currentItem.themeColor || '#008752'}
+        color={currentItem.themeColor || COLORS.primary}
         strokeWidth={2.4}
       />
     </TouchableOpacity>
@@ -96,18 +97,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
+    paddingHorizontal: SPACING.base,
     paddingVertical: 10,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-    marginBottom: 14,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
+    ...SHADOWS.sm,
+    marginBottom: SPACING.base,
   },
   tickerContent: {
     flex: 1,
@@ -122,22 +119,23 @@ const styles = StyleSheet.create({
   iconBadge: {
     width: 28,
     height: 28,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     justifyContent: 'center',
     alignItems: 'center',
   },
   textContainer: {
     flex: 1,
-    marginLeft: 8,
+    marginLeft: SPACING.sm,
     marginRight: 6,
   },
   tickerText: {
-    fontSize: 12.5,
-    fontWeight: '600',
-    color: '#1F2937',
+    fontFamily: FONTS.family.semiBold,
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate800,
   },
   countHighlight: {
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
   },
   tickerHighlightBadge: {
     paddingHorizontal: 7,
@@ -145,9 +143,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   tickerHighlightText: {
-    fontSize: 9.5,
-    fontWeight: '800',
-    letterSpacing: 0.4,
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.micro,
+    fontWeight: FONTS.weight.heavy,
+    letterSpacing: FONTS.letterSpacing.wider,
     textTransform: 'uppercase',
   },
 });

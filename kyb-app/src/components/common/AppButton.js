@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   TouchableOpacity,
   Text,
@@ -6,8 +7,6 @@ import {
   ActivityIndicator,
   View,
 } from 'react-native';
-
-import { THEME } from '../../utils/theme';
 
 const AppButton = ({
   title,
@@ -27,16 +26,16 @@ const AppButton = ({
     if (backgroundColor) return backgroundColor;
     switch (variant) {
       case 'primary':
-        return THEME.primary; // KYB Red
+        return COLORS.primary;
       case 'dark':
-        return THEME.dark || '#221F1F'; // KYB Carbon Black
+        return COLORS.slate900;
       case 'secondary':
-        return '#F3F4F6';
+        return COLORS.surfaceSecondary;
       case 'outline':
       case 'ghost':
         return 'transparent';
       default:
-        return THEME.primary;
+        return COLORS.primary;
     }
   };
 
@@ -45,15 +44,15 @@ const AppButton = ({
     switch (variant) {
       case 'primary':
       case 'dark':
-        return '#FFFFFF';
+        return COLORS.white;
       case 'secondary':
-        return '#1F2937';
+        return COLORS.slate800;
       case 'outline':
-        return THEME.primary;
+        return COLORS.primary;
       case 'ghost':
-        return '#4B5563';
+        return COLORS.textSecondary;
       default:
-        return '#FFFFFF';
+        return COLORS.white;
     }
   };
 
@@ -65,8 +64,8 @@ const AppButton = ({
         styles.button,
         {
           height,
-          backgroundColor: disabled ? '#E5E7EB' : getBackgroundColor(),
-          borderColor: isOutline ? (disabled ? '#D1D5DB' : '#E31837') : 'transparent',
+          backgroundColor: disabled ? COLORS.border : getBackgroundColor(),
+          borderColor: isOutline ? (disabled ? COLORS.borderDark : COLORS.primary) : 'transparent',
           borderWidth: isOutline ? 1.5 : 0,
         },
         variant === 'primary' && !disabled ? styles.primaryShadow : null,
@@ -79,7 +78,7 @@ const AppButton = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'outline' || variant === 'secondary' ? '#E31837' : '#FFFFFF'}
+          color={variant === 'outline' || variant === 'secondary' ? COLORS.primary : COLORS.white}
         />
       ) : (
         <View style={styles.contentRow}>
@@ -87,7 +86,7 @@ const AppButton = ({
           <Text
             style={[
               styles.text,
-              { color: disabled ? '#9CA3AF' : getTextColor() },
+              { color: disabled ? COLORS.textMuted : getTextColor() },
               textStyle,
             ]}
           >
@@ -103,17 +102,13 @@ const AppButton = ({
 const styles = StyleSheet.create({
   button: {
     width: '100%',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.base,
   },
   primaryShadow: {
-    shadowColor: '#E31837',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 3,
+    ...SHADOWS.brand,
   },
   contentRow: {
     flexDirection: 'row',
@@ -121,15 +116,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   leftIcon: {
-    marginRight: 8,
+    marginRight: SPACING.sm,
   },
   rightIcon: {
-    marginLeft: 8,
+    marginLeft: SPACING.sm,
   },
   text: {
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 0.3,
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    letterSpacing: FONTS.letterSpacing.wide,
   },
 });
 

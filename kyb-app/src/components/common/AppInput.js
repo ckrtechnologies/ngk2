@@ -6,13 +6,14 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { COLORS, FONTS, SPACING, RADIUS } from '../../utils/theme';
 
 const AppInput = ({
   label,
   value,
   onChangeText,
   placeholder,
-  placeholderTextColor = '#9CA3AF',
+  placeholderTextColor = COLORS.textMuted,
   secureTextEntry = false,
   keyboardType = 'default',
   autoCapitalize = 'none',
@@ -21,7 +22,7 @@ const AppInput = ({
   onRightIconPress,
   rightActionText,
   onRightActionPress,
-  rightActionColor = '#E31837',
+  rightActionColor = COLORS.primary,
   error,
   containerStyle,
   inputStyle,
@@ -98,7 +99,7 @@ const AppInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 14,
+    marginBottom: SPACING.base,
     width: '100%',
   },
   labelRow: {
@@ -108,25 +109,27 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   label: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#4B5563',
-    letterSpacing: 0.3,
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
+    letterSpacing: FONTS.letterSpacing.wide,
     textTransform: 'uppercase',
   },
   rightAction: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    backgroundColor: COLORS.surfaceSecondary,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     height: 48,
-    paddingHorizontal: 14,
+    paddingHorizontal: SPACING.base,
   },
   multilineContainer: {
     height: 90,
@@ -134,12 +137,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   inputDisabled: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: COLORS.border,
     opacity: 0.8,
   },
   inputError: {
-    borderColor: '#EF4444',
-    backgroundColor: '#FEF2F2',
+    borderColor: COLORS.error,
+    backgroundColor: COLORS.errorLight,
   },
   leftIconContainer: {
     marginRight: 10,
@@ -147,15 +150,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightIconContainer: {
-    marginLeft: 8,
+    marginLeft: SPACING.sm,
     justifyContent: 'center',
     alignItems: 'center',
   },
   input: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#111827',
+    fontFamily: FONTS.family.medium,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textPrimary,
     padding: 0,
     height: '100%',
   },
@@ -170,10 +174,11 @@ const styles = StyleSheet.create({
     paddingRight: 0,
   },
   errorText: {
-    fontSize: 11,
-    color: '#EF4444',
-    marginTop: 4,
-    fontWeight: '500',
+    fontFamily: FONTS.family.medium,
+    fontSize: FONTS.size.caption,
+    color: COLORS.error,
+    marginTop: SPACING.xs,
+    fontWeight: FONTS.weight.medium,
   },
 });
 

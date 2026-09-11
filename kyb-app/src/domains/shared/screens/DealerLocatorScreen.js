@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -420,7 +421,7 @@ const DealerLocatorScreen = () => {
           >
             <SlidersHorizontal
               size={18}
-              color={activeFilterCount > 0 ? '#FFFFFF' : '#1E293B'}
+              color={activeFilterCount > 0 ? COLORS.white : COLORS.slate800}
             />
             {activeFilterCount > 0 && (
               <View style={styles.filterBadgeCircle}>
@@ -446,10 +447,10 @@ const DealerLocatorScreen = () => {
               size={14}
               color={
                 locating
-                  ? '#9CA3AF'
+                  ? COLORS.textMuted
                   : userCoords
-                  ? '#059669'
-                  : '#9CA3AF'
+                  ? COLORS.success
+                  : COLORS.textMuted
               }
             />
             <Text style={styles.locationBarText} numberOfLines={1}>
@@ -497,7 +498,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, radius: 50 }))
                     }
                   >
-                    <X size={11} color="#E31837" strokeWidth={2.4} />
+                    <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -514,7 +515,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, role: 'all' }))
                     }
                   >
-                    <X size={11} color="#E31837" strokeWidth={2.4} />
+                    <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -527,7 +528,7 @@ const DealerLocatorScreen = () => {
                       setFilters((prev) => ({ ...prev, sortBy: 'nearest' }))
                     }
                   >
-                    <X size={11} color="#E31837" strokeWidth={2.4} />
+                    <X size={11} color={COLORS.primary} strokeWidth={2.4} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -575,7 +576,7 @@ const DealerLocatorScreen = () => {
           >
             <Building2
               size={12}
-              color={filters.role === 'distributor' ? '#FFFFFF' : '#4B5563'}
+              color={filters.role === 'distributor' ? COLORS.white : COLORS.textSecondary}
             />
             <Text
               style={[
@@ -599,7 +600,7 @@ const DealerLocatorScreen = () => {
           >
             <Store
               size={12}
-              color={filters.role === 'reseller' ? '#FFFFFF' : '#4B5563'}
+              color={filters.role === 'reseller' ? COLORS.white : COLORS.textSecondary}
             />
             <Text
               style={[
@@ -614,7 +615,7 @@ const DealerLocatorScreen = () => {
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#E31837" />
+            <ActivityIndicator size="large" color={COLORS.primary} />
             <Text style={styles.loadingText}>
               Loading authorized resellers...
             </Text>
@@ -631,8 +632,8 @@ const DealerLocatorScreen = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={['#E31837']}
-                tintColor="#E31837"
+                colors={[COLORS.primary]}
+                tintColor={COLORS.primary}
               />
             }
             renderItem={({ item }) => {
@@ -653,9 +654,9 @@ const DealerLocatorScreen = () => {
                   <View style={styles.cardHeader}>
                     <View style={styles.dealerIconBox}>
                       {isDistributor ? (
-                        <Building2 size={18} color="#E31837" />
+                        <Building2 size={18} color={COLORS.primary} />
                       ) : (
-                        <Store size={18} color="#E31837" />
+                        <Store size={18} color={COLORS.primary} />
                       )}
                     </View>
 
@@ -673,7 +674,7 @@ const DealerLocatorScreen = () => {
                         >
                           {item.distance && item.distance !== 'N/A' && (
                             <View style={styles.distanceBadge}>
-                              <NavigationIcon size={9} color="#E31837" />
+                              <NavigationIcon size={9} color={COLORS.primary} />
                               <Text style={styles.distanceBadgeText}>
                                 {item.distance}
                               </Text>
@@ -689,7 +690,7 @@ const DealerLocatorScreen = () => {
                           >
                             <ShieldCheck
                               size={10}
-                              color={isDistributor ? '#1D4ED8' : '#047857'}
+                              color={isDistributor ? COLORS.accent : COLORS.primary}
                             />
                             <Text
                               style={[
@@ -730,7 +731,7 @@ const DealerLocatorScreen = () => {
                         onPress={() => handleCall(item.phone)}
                         activeOpacity={0.7}
                       >
-                        <Phone size={13} color="#059669" />
+                        <Phone size={13} color={COLORS.primary} />
                         <Text style={styles.actionTextCall}>Call</Text>
                       </TouchableOpacity>
                     ) : null}
@@ -741,7 +742,7 @@ const DealerLocatorScreen = () => {
                         onPress={() => handleWhatsApp(item.phone)}
                         activeOpacity={0.7}
                       >
-                        <MessageSquare size={13} color="#047857" />
+                        <MessageSquare size={13} color={COLORS.primary} />
                         <Text style={styles.actionTextWhatsApp}>WhatsApp</Text>
                       </TouchableOpacity>
                     ) : null}
@@ -793,10 +794,10 @@ const DealerLocatorScreen = () => {
                   {dealers.length > 0 && filters.radius < 1500 && (
                     <TouchableOpacity
                       onPress={() => setFilters((prev) => ({ ...prev, radius: 1500 }))}
-                      style={[styles.emptyResetBtn, { backgroundColor: '#E31837' }]}
+                      style={[styles.emptyResetBtn, { backgroundColor: COLORS.primary }]}
                       activeOpacity={0.8}
                     >
-                      <Text style={[styles.emptyResetBtnText, { color: '#FFFFFF' }]}>
+                      <Text style={[styles.emptyResetBtnText, { color: COLORS.white }]}>
                         Show All South Africa
                       </Text>
                     </TouchableOpacity>
@@ -804,7 +805,7 @@ const DealerLocatorScreen = () => {
 
                   <TouchableOpacity
                     onPress={() => setModalVisible(true)}
-                    style={[styles.emptyResetBtn, { backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#CBD5E1' }]}
+                    style={[styles.emptyResetBtn, { backgroundColor: COLORS.slate100, borderWidth: 1, borderColor: COLORS.borderDark }]}
                     activeOpacity={0.8}
                   >
                     <Text style={[styles.emptyResetBtnText, { color: '#334155' }]}>
@@ -864,27 +865,27 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 12,
     height: 42,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     gap: 8,
   },
   searchInput: {
     flex: 1,
-    fontSize: 13,
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textPrimary,
     padding: 0,
   },
   filterTriggerBtn: {
     width: 42,
     height: 42,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.white,
     borderWidth: 1.2,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -895,8 +896,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   filterTriggerBtnActive: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   filterBadgeCircle: {
     position: 'absolute',
@@ -905,46 +906,46 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: '#1E293B',
+    backgroundColor: COLORS.slate800,
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
   },
   filterBadgeCircleText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
   },
   locationBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F9FAFB',
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     paddingHorizontal: 10,
     paddingVertical: 7,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   locationBarText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   locateBtn: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: COLORS.borderDark,
   },
   locateBtnText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#E31837',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   activeChipsContainer: {
     marginBottom: 8,
@@ -956,8 +957,8 @@ const styles = StyleSheet.create({
   },
   activeChipsLabel: {
     fontSize: 10.5,
-    fontWeight: '800',
-    color: '#64748B',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textTertiary,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
     marginRight: 2,
@@ -968,24 +969,24 @@ const styles = StyleSheet.create({
     gap: 5,
     backgroundColor: '#FEE2E2',
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
     paddingHorizontal: 8,
     paddingVertical: 3.5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   activeChipText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   clearAllBtn: {
     paddingHorizontal: 6,
     paddingVertical: 3.5,
   },
   clearAllBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     textDecorationLine: 'underline',
   },
   filterRow: {
@@ -999,22 +1000,22 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   filterPillActive: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   filterPillText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   filterPillTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   listContent: {
     paddingBottom: 24,
@@ -1026,9 +1027,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   loadingText: {
-    fontSize: 13,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   emptyContainer: {
     alignItems: 'center',
@@ -1037,50 +1038,50 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   emptySubtitle: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     lineHeight: 18,
   },
   emptyResetBtn: {
     marginTop: 10,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   emptyResetBtnText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
+    color: COLORS.white,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
   },
   distanceBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   distanceBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   dealerCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -1097,7 +1098,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1109,9 +1110,9 @@ const styles = StyleSheet.create({
   },
   dealerName: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   roleBadge: {
     flexDirection: 'row',
@@ -1122,29 +1123,29 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   distributorBadge: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: COLORS.infoBorder,
   },
   resellerBadge: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   roleBadgeText: {
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.3,
   },
   distributorBadgeText: {
     color: '#1D4ED8',
   },
   resellerBadgeText: {
-    color: '#047857',
+    color: COLORS.primary,
   },
   dealerCity: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   addressRow: {
@@ -1156,8 +1157,8 @@ const styles = StyleSheet.create({
   },
   addressText: {
     flex: 1,
-    fontSize: 12,
-    color: '#4B5563',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textSecondary,
     lineHeight: 16,
   },
   cardActions: {
@@ -1165,24 +1166,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: COLORS.surfaceSecondary,
     paddingTop: 10,
   },
   actionBtnCall: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingVertical: 6,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   actionTextCall: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#047857',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   actionBtnWhatsApp: {
     flexDirection: 'row',
@@ -1191,59 +1192,59 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0FDF4',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: '#BBF7D0',
   },
   actionTextWhatsApp: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#15803D',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   actionBtnMap: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
     paddingVertical: 6,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: COLORS.infoBorder,
   },
   actionTextMap: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#2563EB',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.info,
   },
   actionBtnEnquire: {
     marginLeft: 'auto',
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   actionTextEnquire: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   selfBadge: {
     marginLeft: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   selfBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#059669',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
 });
 

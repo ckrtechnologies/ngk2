@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -47,10 +48,10 @@ const RoleSelectionScreen = ({ navigation }) => {
       IconComponent: OwnerRole3DIcon,
       badge: 'Individual',
       badgeBg: '#FEE2E2',
-      badgeColor: '#008752',
-      boxBg: '#FEF2F2',
+      badgeColor: COLORS.primary,
+      boxBg: COLORS.errorLight,
       boxBorder: '#FECDD3',
-      ctaColor: '#008752',
+      ctaColor: COLORS.primary,
     },
     {
       id: 'reseller',
@@ -58,11 +59,11 @@ const RoleSelectionScreen = ({ navigation }) => {
       description: 'Workshop parts supply, quote requests & priority trade stock inquiry.',
       IconComponent: ResellerRole3DIcon,
       badge: 'Workshop & Trade',
-      badgeBg: '#FEF3C7',
-      badgeColor: '#D97706',
+      badgeBg: COLORS.warningLight,
+      badgeColor: COLORS.warning,
       boxBg: '#FFFBEB',
-      boxBorder: '#FDE68A',
-      ctaColor: '#D97706',
+      boxBorder: COLORS.warningBorder,
+      ctaColor: COLORS.warning,
     },
     {
       id: 'distributor',
@@ -70,11 +71,11 @@ const RoleSelectionScreen = ({ navigation }) => {
       description: 'National freight, bulk stock management & regional reseller oversight.',
       IconComponent: DistributorRole3DIcon,
       badge: 'Enterprise Tier-1',
-      badgeBg: '#E2E8F0',
+      badgeBg: COLORS.border,
       badgeColor: '#334155',
-      boxBg: '#F1F5F9',
-      boxBorder: '#CBD5E1',
-      ctaColor: '#0F172A',
+      boxBg: COLORS.slate100,
+      boxBorder: COLORS.borderDark,
+      ctaColor: COLORS.slate900,
     },
   ];
 
@@ -84,7 +85,7 @@ const RoleSelectionScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* SOLID CRIMSON BRAND HERO HEADER */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 20 }]}>
@@ -199,20 +200,20 @@ const RoleSelectionScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
   },
   solidHeader: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 22,
     paddingBottom: 28,
   },
   headerBrandingPill: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     paddingVertical: 9,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     marginBottom: 12,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 3 },
@@ -228,8 +229,8 @@ const styles = StyleSheet.create({
   },
   headline: {
     fontSize: 24,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: -0.4,
     textAlign: 'center',
     marginBottom: 6,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.92)',
     textAlign: 'center',
     lineHeight: 18,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
     maxWidth: 330,
     marginBottom: 14,
   },
@@ -253,12 +254,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
   },
   headerFeaturePillText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     letterSpacing: 0.2,
   },
   headerFeatureDot: {
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   },
   lowerContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
     paddingHorizontal: 18,
@@ -289,27 +290,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
   },
   sectionHeaderText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate400,
     letterSpacing: 1.1,
   },
   sectionSubText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#CBD5E1',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.borderDark,
   },
   cardsStack: {
     gap: 15,
   },
   roleCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 22,
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    shadowColor: '#0F172A',
+    borderColor: COLORS.border,
+    shadowColor: COLORS.slate900,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   cardIconBox: {
     width: 72,
     height: 72,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -342,9 +343,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: -0.3,
   },
   cardBadge: {
@@ -354,13 +355,13 @@ const styles = StyleSheet.create({
   },
   cardBadgeText: {
     fontSize: 8.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
   },
   cardDescription: {
-    fontSize: 12,
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     lineHeight: 17,
     marginBottom: 8,
   },
@@ -371,12 +372,12 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 10,
     paddingVertical: 4.5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
   },
   cardActionText: {
     fontSize: 11.5,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     letterSpacing: 0.1,
   },
   bottomSection: {
@@ -385,12 +386,12 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   trustBanner: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -399,8 +400,8 @@ const styles = StyleSheet.create({
   },
   trustBannerText: {
     fontSize: 10.5,
-    fontWeight: '700',
-    color: '#475569',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
     letterSpacing: 0.2,
   },
   footer: {
@@ -409,8 +410,8 @@ const styles = StyleSheet.create({
   },
   footerBrand: {
     fontSize: 9.5,
-    fontWeight: '800',
-    color: '#94A3B8',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate400,
     letterSpacing: 0.8,
   },
 });

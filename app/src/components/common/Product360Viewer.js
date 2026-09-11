@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   StyleSheet,
@@ -533,7 +534,7 @@ const Product360Viewer = ({
       {/* Non-blocking loading pill — top-right corner during fetch */}
       {isLoadingPhase && !isStatic && (
         <View style={styles.loadingOverlay} pointerEvents="none">
-          <ActivityIndicator size="small" color="#008752" />
+          <ActivityIndicator size="small" color={COLORS.primary} />
           <Text style={styles.loadingOverlayText}>Loading 360° Studio...</Text>
         </View>
       )}
@@ -557,8 +558,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 360,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.lg,
     // NO overflow:hidden here — it clips translated/panned images
     // The inner cropLayer handles the visual clipping
     position: 'relative',
@@ -568,7 +569,7 @@ const styles = StyleSheet.create({
   cropLayer: {
     // The actual visual clip boundary that trims the overflow without blocking transforms
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     overflow: 'hidden',
   },
   layerCenter: {
@@ -589,9 +590,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   loadingText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#94A3B8',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate400,
   },
   loadingOverlay: {
     position: 'absolute',
@@ -603,19 +604,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.96)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.12,
     shadowRadius: 4,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     zIndex: 10,
   },
   loadingOverlayText: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
     color: '#334155',
   },
   tapToExpandBadge: {
@@ -628,9 +629,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.92)',
     paddingHorizontal: 9,
     paddingVertical: 4.5,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -640,7 +641,7 @@ const styles = StyleSheet.create({
   },
   tapToExpandText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#334155',
   },
 });

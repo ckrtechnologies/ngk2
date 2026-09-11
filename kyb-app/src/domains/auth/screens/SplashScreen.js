@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -232,9 +233,9 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   title: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('6.5%'),
-    fontWeight: '900',
+    fontWeight: FONTS.weight.black,
     letterSpacing: 2,
     marginBottom: hp('1%'),
   },
@@ -247,10 +248,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.12)',
   },
   subtitle: {
-    color: '#E2E8F0',
+    color: COLORS.border,
     fontSize: wp('3.3%'),
     letterSpacing: 0.6,
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
   },
   footerContainer: {
     width: wp('70%'),
@@ -267,13 +268,13 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderRadius: 2,
   },
   footerText: {
-    color: '#64748B',
+    color: COLORS.textTertiary,
     fontSize: 10,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 1.5,
   },
 });

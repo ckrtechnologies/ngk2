@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -745,7 +746,7 @@ const VerifiedPartsScreen = () => {
               onPress={() => navigation.navigate('PartsFinder')}
               activeOpacity={0.8}
             >
-              <Car size={13} color="#FFFFFF" strokeWidth={2.2} />
+              <Car size={13} color={COLORS.white} strokeWidth={2.2} />
               <Text style={styles.switchVehicleHeaderBtnText}>Switch</Text>
             </TouchableOpacity>
           ) : null
@@ -789,14 +790,14 @@ const VerifiedPartsScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={reloadParts}
-            colors={['#E31837']}
-            tintColor="#E31837"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
         {/* Verification Guarantee Banner */}
         <View style={styles.verifiedBanner}>
-          <ShieldCheck size={18} color="#059669" />
+          <ShieldCheck size={18} color={COLORS.primary} />
           <Text style={styles.verifiedBannerText}>
             {selectedSeries
               ? `OEM Series Verified • Shared fitment across ${selectedSeries?.modelname || selectedSeries?.name || 'Platform'}`
@@ -806,7 +807,7 @@ const VerifiedPartsScreen = () => {
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#E31837" />
+            <ActivityIndicator size="large" color={COLORS.primary} />
             <Text style={styles.loadingText}>Fetching technical specifications...</Text>
           </View>
         ) : parts.length === 0 ? (
@@ -818,7 +819,7 @@ const VerifiedPartsScreen = () => {
                 ? `No standard retail KYB suspension parts are directly cataloged for ${vehicle.manuName || ''} ${vehicle.description || vehicle.typeName || vehicle.modelName} in South Africa.`
                 : 'No verified KYB components found for this vehicle in the catalog. You can request a manual part lookup or quote from an authorized distributor.'}
             </Text>
-            <Text style={[styles.emptySub, { marginTop: 6, fontSize: 12, color: '#6B7280' }]}>
+            <Text style={[styles.emptySub, { marginTop: 6, fontSize: FONTS.size.xs, color: COLORS.textTertiary }]}>
               {appType === 'O' && (vehicle?.manuName || '').toUpperCase().includes('VOLVO')
                 ? 'Tip: High-coverage Volvo Commercial models include FH (16 parts), FM (12 parts), FL (15 parts), B9 (13 parts), and B12 (8 parts).'
                 : 'Heavy commercial vehicles with specialized 24V industrial engines can be quoted via technical enquiry.'}
@@ -833,7 +834,7 @@ const VerifiedPartsScreen = () => {
                   }}
                   activeOpacity={0.8}
                 >
-                  <MessageSquare size={16} color="#FFFFFF" />
+                  <MessageSquare size={16} color={COLORS.white} />
                   <Text style={styles.enquireBtnText}>Request Support / Quote for this Vehicle</Text>
                 </TouchableOpacity>
 
@@ -842,16 +843,16 @@ const VerifiedPartsScreen = () => {
                     marginTop: 10,
                     width: '100%',
                     paddingVertical: 12,
-                    borderRadius: 8,
+                    borderRadius: RADIUS.sm,
                     borderWidth: 1,
-                    borderColor: '#E5E7EB',
+                    borderColor: COLORS.border,
                     alignItems: 'center',
                     backgroundColor: '#F9FAFB',
                   }}
                   onPress={() => navigation.navigate('PartsFinder')}
                   activeOpacity={0.7}
                 >
-                  <Text style={{ fontSize: 13, fontWeight: '600', color: '#374151' }}>
+                  <Text style={{ fontSize: FONTS.size.sm, fontWeight: FONTS.weight.semiBold, color: COLORS.slate700 }}>
                     Select Another Series / Trim
                   </Text>
                 </TouchableOpacity>
@@ -874,7 +875,7 @@ const VerifiedPartsScreen = () => {
                 </View>
                 <View style={styles.vehicleContextLeft}>
                   <View style={styles.vehicleContextBadge}>
-                    <Car size={13} color="#E31837" strokeWidth={2.2} />
+                    <Car size={13} color={COLORS.primary} strokeWidth={2.2} />
                     <Text style={styles.vehicleContextBadgeText}>
                       REGISTERED VEHICLE
                     </Text>
@@ -894,7 +895,7 @@ const VerifiedPartsScreen = () => {
                       </View>
                     ) : null}
                     <View style={styles.guaranteeTag}>
-                      <ShieldCheck size={11} color="#059669" strokeWidth={2.5} />
+                      <ShieldCheck size={11} color={COLORS.primary} strokeWidth={2.5} />
                       <Text style={styles.guaranteeTagText}>100% Fitment</Text>
                     </View>
                   </View>
@@ -931,35 +932,35 @@ const VerifiedPartsScreen = () => {
                       {cat.id === 'ignition' && (
                         <Zap
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#E31837'}
+                          color={isSelected ? COLORS.white : COLORS.primary}
                           strokeWidth={2.2}
                         />
                       )}
                       {cat.id === 'sensors' && (
                         <Activity
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#2563EB'}
+                          color={isSelected ? COLORS.white : COLORS.info}
                           strokeWidth={2.2}
                         />
                       )}
                       {cat.id === 'suspension' && (
                         <ShieldCheck
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#D97706'}
+                          color={isSelected ? COLORS.white : COLORS.warning}
                           strokeWidth={2.2}
                         />
                       )}
                       {cat.id === 'all' && (
                         <Layers
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#4B5563'}
+                          color={isSelected ? COLORS.white : COLORS.textSecondary}
                           strokeWidth={2.2}
                         />
                       )}
                       {cat.id === 'general' && (
                         <Layers
                           size={13}
-                          color={isSelected ? '#FFFFFF' : '#6B7280'}
+                          color={isSelected ? COLORS.white : COLORS.textTertiary}
                           strokeWidth={2.2}
                         />
                       )}
@@ -995,7 +996,7 @@ const VerifiedPartsScreen = () => {
             {/* Layout Mode Switcher & Counter */}
             <View style={styles.listToolbar}>
               <View style={styles.toolbarCountBox}>
-                <ShieldCheck size={14} color="#059669" />
+                <ShieldCheck size={14} color={COLORS.primary} />
                 <Text style={styles.toolbarCountText}>
                   {displayedParts.length} {displayedParts.length === 1 ? 'Component' : 'Components'}{' '}
                   {selectedCategory !== 'all' ? `(${selectedCategory})` : 'Verified'}
@@ -1012,7 +1013,7 @@ const VerifiedPartsScreen = () => {
                 >
                   <LayoutGrid
                     size={13}
-                    color={layoutMode === 'cards' ? '#E31837' : '#6B7280'}
+                    color={layoutMode === 'cards' ? COLORS.primary : COLORS.textTertiary}
                   />
                   <Text
                     style={[
@@ -1034,7 +1035,7 @@ const VerifiedPartsScreen = () => {
                 >
                   <List
                     size={13}
-                    color={layoutMode === 'compact' ? '#E31837' : '#6B7280'}
+                    color={layoutMode === 'compact' ? COLORS.primary : COLORS.textTertiary}
                   />
                   <Text
                     style={[
@@ -1111,7 +1112,7 @@ const VerifiedPartsScreen = () => {
                             <Text style={styles.catSubPillText}>{catInfo.subCategory}</Text>
                           </View>
                           <View style={styles.verifiedMicroPill}>
-                            <ShieldCheck size={11} color="#059669" />
+                            <ShieldCheck size={11} color={COLORS.primary} />
                             <Text style={styles.verifiedMicroText}>OEM Fit</Text>
                           </View>
                         </View>
@@ -1122,7 +1123,7 @@ const VerifiedPartsScreen = () => {
                         activeOpacity={0.7}
                         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
-                        <Eye size={13} color="#E31837" />
+                        <Eye size={13} color={COLORS.primary} />
                         <Text style={styles.peekHeaderBtnText}>Peek View</Text>
                       </TouchableOpacity>
                     </View>
@@ -1149,7 +1150,7 @@ const VerifiedPartsScreen = () => {
                           />
                         )}
                         <View style={styles.thumbPeekOverlay}>
-                          <Eye size={10} color="#FFFFFF" />
+                          <Eye size={10} color={COLORS.white} />
                           <Text style={styles.thumbPeekOverlayText}>Peek</Text>
                         </View>
                       </TouchableOpacity>
@@ -1191,7 +1192,7 @@ const VerifiedPartsScreen = () => {
                         onPress={() => handleEnquirePart(item)}
                         activeOpacity={0.8}
                       >
-                        <MessageSquare size={13} color="#FFFFFF" />
+                        <MessageSquare size={13} color={COLORS.white} />
                         <Text style={styles.cardEnquireBtnText}>Request Quote</Text>
                       </TouchableOpacity>
                     </View>
@@ -1224,8 +1225,8 @@ const VerifiedPartsScreen = () => {
                         onPress={() => handleOpenPeek(item)}
                         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
-                        <Eye size={13} color="#E31837" />
-                        <Text style={[styles.specsBtnText, { color: '#E31837' }]}>Peek</Text>
+                        <Eye size={13} color={COLORS.primary} />
+                        <Text style={[styles.specsBtnText, { color: COLORS.primary }]}>Peek</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.specsBtn}
@@ -1248,7 +1249,7 @@ const VerifiedPartsScreen = () => {
                       onPress={() => handleEnquirePart(item)}
                       activeOpacity={0.75}
                     >
-                      <MessageSquare size={14} color="#FFFFFF" />
+                      <MessageSquare size={14} color={COLORS.white} />
                       <Text style={styles.enquireBtnText}>Request Support / Quote</Text>
                     </TouchableOpacity>
                   </View>
@@ -1313,7 +1314,7 @@ const VerifiedPartsScreen = () => {
                   />
                 )}
                 <View style={styles.peekFitmentBadge}>
-                  <ShieldCheck size={12} color="#059669" />
+                  <ShieldCheck size={12} color={COLORS.primary} />
                   <Text style={styles.peekFitmentText}>OEM Verified Fitment</Text>
                 </View>
               </View>
@@ -1367,7 +1368,7 @@ const VerifiedPartsScreen = () => {
                 }}
                 activeOpacity={0.8}
               >
-                <RotateCw size={14} color="#E31837" />
+                <RotateCw size={14} color={COLORS.primary} />
                 <Text style={styles.peek360BtnText}>360° & Specs</Text>
               </TouchableOpacity>
 
@@ -1380,7 +1381,7 @@ const VerifiedPartsScreen = () => {
                 }}
                 activeOpacity={0.8}
               >
-                <MessageSquare size={14} color="#FFFFFF" />
+                <MessageSquare size={14} color={COLORS.white} />
                 <Text style={styles.peekEnquireBtnText}>Request Quote</Text>
               </TouchableOpacity>
             </View>
@@ -1402,7 +1403,7 @@ const VerifiedPartsScreen = () => {
         >
           <StatusBar
             barStyle={isStudioFullscreen ? 'dark-content' : 'light-content'}
-            backgroundColor={isStudioFullscreen ? '#FFFFFF' : '#E31837'}
+            backgroundColor={isStudioFullscreen ? COLORS.white : COLORS.primary}
             translucent={false}
           />
 
@@ -1438,7 +1439,7 @@ const VerifiedPartsScreen = () => {
                 onPress={() => { setIsStudioFullscreen(false); setSpecsModalVisible(false); }}
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
               >
-                <X size={20} color="#FFFFFF" />
+                <X size={20} color={COLORS.white} />
               </TouchableOpacity>
             </View>
           )}
@@ -1458,7 +1459,7 @@ const VerifiedPartsScreen = () => {
               >
                 <RotateCw
                   size={13}
-                  color={modalMainTab === 'studio' ? '#E31837' : '#64748B'}
+                  color={modalMainTab === 'studio' ? COLORS.primary : COLORS.textTertiary}
                 />
                 <Text
                   style={[
@@ -1480,7 +1481,7 @@ const VerifiedPartsScreen = () => {
               >
                 <FileText
                   size={13}
-                  color={modalMainTab === 'specs' ? '#E31837' : '#64748B'}
+                  color={modalMainTab === 'specs' ? COLORS.primary : COLORS.textTertiary}
                 />
                 <Text
                   style={[
@@ -1547,7 +1548,7 @@ const VerifiedPartsScreen = () => {
                         }}
                         activeOpacity={0.8}
                       >
-                        <RotateCw size={11} color={activeMediaTab === '3d' ? '#FFFFFF' : '#4B5563'} />
+                        <RotateCw size={11} color={activeMediaTab === '3d' ? COLORS.white : COLORS.textSecondary} />
                         <Text
                           style={[
                             styles.mediaToggleTextLight,
@@ -1572,7 +1573,7 @@ const VerifiedPartsScreen = () => {
                         }}
                         activeOpacity={0.8}
                       >
-                        <Eye size={11} color={activeMediaTab === 'photo' ? '#FFFFFF' : '#4B5563'} />
+                        <Eye size={11} color={activeMediaTab === 'photo' ? COLORS.white : COLORS.textSecondary} />
                         <Text
                           style={[
                             styles.mediaToggleTextLight,
@@ -1595,7 +1596,7 @@ const VerifiedPartsScreen = () => {
                     }}
                     activeOpacity={0.8}
                   >
-                    <Sliders size={12} color="#E31837" />
+                    <Sliders size={12} color={COLORS.primary} />
                     <Text style={styles.fullScreenSpecsBtnText}>Specs</Text>
                   </TouchableOpacity>
 
@@ -1624,7 +1625,7 @@ const VerifiedPartsScreen = () => {
                   }
                   staticImageUrl={verifiedStaticPhoto}
                   height={undefined}
-                  containerStyle={{ flex: 1, borderRadius: 0, backgroundColor: '#F8FAFC' }}
+                  containerStyle={{ flex: 1, borderRadius: 0, backgroundColor: COLORS.background }}
                   angle={activeMediaTab === '3d' ? rotationY : 0}
                   isAutoSpinning={activeMediaTab === '3d' && !!gif360 && isAutoSpinning}
                   zoomScale={zoomScale}
@@ -1665,7 +1666,7 @@ const VerifiedPartsScreen = () => {
                       onPress={() => setIsAutoSpinning((prev) => !prev)}
                       activeOpacity={0.7}
                     >
-                      <RotateCw size={13} color={isAutoSpinning ? '#FFFFFF' : '#374151'} />
+                      <RotateCw size={13} color={isAutoSpinning ? COLORS.white : COLORS.slate700} />
                       <Text style={[styles.toolBtnText, isAutoSpinning && styles.toolBtnTextActive]}>
                         {isAutoSpinning ? 'Pause' : 'Auto-Spin'}
                       </Text>
@@ -1706,7 +1707,7 @@ const VerifiedPartsScreen = () => {
                   {/* Degree indicator badge */}
                   {activeMediaTab === '3d' && gif360 && (
                     <View style={styles.active3DBadgeLight}>
-                      <RotateCw size={11} color="#059669" />
+                      <RotateCw size={11} color={COLORS.primary} />
                       <Text style={styles.active3DBadgeTextLight}>
                         {isAutoSpinning ? 'SPINNING' : `${((rotationY % 360) + 360) % 360}°`}
                       </Text>
@@ -1780,8 +1781,8 @@ const VerifiedPartsScreen = () => {
                     setSpecsModalVisible(false);
                     if (selectedPart) handleEnquirePart(selectedPart);
                   }}
-                  backgroundColor="#059669"
-                  rightIcon={<MessageSquare size={15} color="#FFFFFF" />}
+                  backgroundColor={COLORS.primary}
+                  rightIcon={<MessageSquare size={15} color={COLORS.white} />}
                   height={44}
                 />
               </View>
@@ -1808,7 +1809,7 @@ const VerifiedPartsScreen = () => {
                           >
                             <RotateCw
                               size={13}
-                              color={activeMediaTab === '3d' ? '#FFFFFF' : '#4B5563'}
+                              color={activeMediaTab === '3d' ? COLORS.white : COLORS.textSecondary}
                             />
                             <Text
                               style={[
@@ -1835,7 +1836,7 @@ const VerifiedPartsScreen = () => {
                         >
                           <Eye
                             size={13}
-                            color={activeMediaTab === 'photo' ? '#FFFFFF' : '#4B5563'}
+                            color={activeMediaTab === 'photo' ? COLORS.white : COLORS.textSecondary}
                           />
                           <Text
                             style={[
@@ -1860,7 +1861,7 @@ const VerifiedPartsScreen = () => {
 
                         {activeMediaTab === '3d' && gif360 && (
                           <View style={styles.active3DBadgeLight}>
-                            <RotateCw size={11} color="#059669" />
+                            <RotateCw size={11} color={COLORS.primary} />
                             <Text style={styles.active3DBadgeTextLight}>
                               {isAutoSpinning ? 'AUTO-SPIN' : `${((rotationY % 360) + 360) % 360}° ORBIT`}
                             </Text>
@@ -1924,7 +1925,7 @@ const VerifiedPartsScreen = () => {
                           >
                             <RotateCw
                               size={13}
-                              color={isAutoSpinning ? '#FFFFFF' : '#374151'}
+                              color={isAutoSpinning ? COLORS.white : COLORS.slate700}
                             />
                             <Text
                               style={[
@@ -2073,7 +2074,7 @@ const VerifiedPartsScreen = () => {
 
                     {/* Studio Fitment Guarantee Footer */}
                     <View style={styles.stageFooterRowLight}>
-                      <ShieldCheck size={14} color="#059669" />
+                      <ShieldCheck size={14} color={COLORS.primary} />
                       <Text style={styles.stageFooterTextLight}>
                         {`TecAlliance Pegasus 3.0 • Genuine ${selectedPart?.mfrName || selectedPart?.brandName || 'Automotive'} Component`}
                       </Text>
@@ -2099,7 +2100,7 @@ const VerifiedPartsScreen = () => {
                     activeOpacity={0.8}
                   >
                     <View style={styles.viewFullSpecsBannerContent}>
-                      <Sliders size={18} color="#E31837" />
+                      <Sliders size={18} color={COLORS.primary} />
                       <View>
                         <Text style={styles.viewFullSpecsBannerTitle}>Complete Technical Specifications</Text>
                         <Text style={styles.viewFullSpecsBannerSub}>Dimensions, electrical criteria & OEM part references</Text>
@@ -2114,7 +2115,7 @@ const VerifiedPartsScreen = () => {
                   {/* Complete Technical Specifications Table */}
                   <View style={styles.specsCardLight}>
                     <View style={styles.specsSectionHeader}>
-                      <Sliders size={15} color="#E31837" />
+                      <Sliders size={15} color={COLORS.primary} />
                       <Text style={styles.specsSectionTitleLight}>Technical Specifications</Text>
                     </View>
 
@@ -2189,13 +2190,13 @@ const VerifiedPartsScreen = () => {
                     activeOpacity={0.8}
                   >
                     <View style={styles.viewFullSpecsBannerContent}>
-                      <RotateCw size={18} color="#059669" />
+                      <RotateCw size={18} color={COLORS.primary} />
                       <View>
                         <Text style={styles.viewFullSpecsBannerTitle}>Return to 3D Interactive Studio</Text>
                         <Text style={styles.viewFullSpecsBannerSub}>360° rotation, full zoom & HD photography</Text>
                       </View>
                     </View>
-                    <Text style={[styles.viewFullSpecsBannerAction, { color: '#059669' }]}>Open Studio ↗</Text>
+                    <Text style={[styles.viewFullSpecsBannerAction, { color: COLORS.success }]}>Open Studio ↗</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -2212,8 +2213,8 @@ const VerifiedPartsScreen = () => {
                   setSpecsModalVisible(false);
                   if (selectedPart) handleEnquirePart(selectedPart);
                 }}
-                backgroundColor="#059669"
-                rightIcon={<MessageSquare size={16} color="#FFFFFF" />}
+                backgroundColor={COLORS.primary}
+                rightIcon={<MessageSquare size={16} color={COLORS.white} />}
                 height={48}
               />
             </View>
@@ -2244,15 +2245,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: COLORS.successLight,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 14,
   },
   verifiedBannerText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
     flex: 1,
   },
@@ -2262,8 +2263,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   loadingText: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
   },
   emptyBox: {
     paddingVertical: 50,
@@ -2271,13 +2272,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   emptySub: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     paddingHorizontal: 20,
   },
@@ -2285,11 +2286,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   partCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -2303,36 +2304,36 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   partBadge: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
   },
   partBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     letterSpacing: 0.4,
   },
   kybBadge: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
   },
   kybBadgeText: {
     color: '#1D4ED8',
   },
   fitPosPill: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     maxWidth: 160,
   },
   fitPosPillText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#374151',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   specsBtn: {
     flexDirection: 'row',
@@ -2342,25 +2343,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
   },
   specsBtnText: {
-    fontSize: 11,
-    color: '#6B7280',
-    fontWeight: '600',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.semiBold,
   },
   partNumberText: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.3,
   },
   partNameText: {
-    fontSize: 13,
-    color: '#4B5563',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textSecondary,
     marginTop: 2,
     marginBottom: 12,
   },
   cardActionsRow: {
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: COLORS.surfaceSecondary,
     paddingTop: 10,
   },
   listToolbar: {
@@ -2376,15 +2377,15 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   toolbarCountText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   layoutToggleGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E5E7EB',
-    borderRadius: 8,
+    backgroundColor: COLORS.border,
+    borderRadius: RADIUS.sm,
     padding: 2,
   },
   layoutToggleBtn: {
@@ -2396,7 +2397,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   layoutToggleBtnActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -2404,21 +2405,21 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   layoutToggleText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   layoutToggleTextActive: {
-    color: '#E31837',
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
   // Rich Visual Card Styles
   richCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -2439,31 +2440,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   brandBadge: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
   },
   brandBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     letterSpacing: 0.4,
   },
   verifiedMicroPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   verifiedMicroText: {
     fontSize: 9,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
   },
   peekHeaderBtn: {
@@ -2478,9 +2479,9 @@ const styles = StyleSheet.create({
     borderColor: '#FECDD3',
   },
   peekHeaderBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   cardMiddleRow: {
     flexDirection: 'row',
@@ -2491,10 +2492,10 @@ const styles = StyleSheet.create({
   productThumbContainer: {
     width: 90,
     height: 90,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: '#F9FAFB',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -2511,8 +2512,8 @@ const styles = StyleSheet.create({
   },
   thumbPlaceholderText: {
     fontSize: 9,
-    fontWeight: '800',
-    color: '#9CA3AF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textMuted,
     letterSpacing: 0.5,
   },
   thumbPeekOverlay: {
@@ -2529,8 +2530,8 @@ const styles = StyleSheet.create({
   },
   thumbPeekOverlayText: {
     fontSize: 8,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   cardDetailsCol: {
     flex: 1,
@@ -2538,21 +2539,21 @@ const styles = StyleSheet.create({
   },
   cardPartNumber: {
     fontSize: 19,
-    fontWeight: '800',
-    color: '#111827',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: -0.4,
   },
   cardPartName: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#4B5563',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   cardTradeNo: {
-    fontSize: 11,
-    color: '#9CA3AF',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textMuted,
     marginTop: 4,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   briefSpecsContainer: {
     flexDirection: 'row',
@@ -2564,7 +2565,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: COLORS.surfaceSecondary,
   },
   specChip: {
     flexDirection: 'row',
@@ -2572,21 +2573,21 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   specChipLabel: {
-    fontSize: 11,
-    color: '#6B7280',
-    fontWeight: '500',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.medium,
   },
   specChipValue: {
-    fontSize: 11,
-    color: '#111827',
-    fontWeight: '700',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textPrimary,
+    fontWeight: FONTS.weight.bold,
   },
   cardActionButtonsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: COLORS.surfaceSecondary,
     paddingTop: 10,
   },
   cardSpecsBtn: {
@@ -2597,14 +2598,14 @@ const styles = StyleSheet.create({
     gap: 5,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   cardSpecsBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   cardEnquireBtn: {
     flex: 1.2,
@@ -2614,12 +2615,12 @@ const styles = StyleSheet.create({
     gap: 6,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   cardEnquireBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   enquireBtn: {
     flexDirection: 'row',
@@ -2628,8 +2629,8 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 46,
     borderRadius: 10,
-    backgroundColor: '#E31837',
-    shadowColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -2637,8 +2638,8 @@ const styles = StyleSheet.create({
   },
   enquireBtnText: {
     fontSize: 13.5,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   // Quick Peek Modal Styles
   peekModalOverlay: {
@@ -2650,7 +2651,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   peekModalCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '85%',
@@ -2669,7 +2670,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   peekModalTitleWrap: {
     flexDirection: 'row',
@@ -2678,15 +2679,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   peekModalPartNo: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   peekModalCloseBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.surfaceSecondary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2697,9 +2698,9 @@ const styles = StyleSheet.create({
   peekPhotoStage: {
     height: 190,
     backgroundColor: '#F9FAFB',
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -2716,9 +2717,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   peekPlaceholderTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   peekFitmentBadge: {
     position: 'absolute',
@@ -2727,36 +2728,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   peekFitmentText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
   },
   peekCategoryTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
     marginBottom: 12,
   },
   peekSpecsCard: {
     backgroundColor: '#F9FAFB',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     marginBottom: 14,
   },
   peekSpecsHeading: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 8,
@@ -2770,25 +2771,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   peekSpecItemLabel: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     flex: 1,
   },
   peekSpecItemVal: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   peekOeBox: {
     marginBottom: 16,
   },
   peekOeHeading: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 8,
@@ -2802,22 +2803,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   peekOeMfr: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   peekOeVal: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#111827',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textPrimary,
   },
   peekFooter: {
     flexDirection: 'row',
@@ -2826,7 +2827,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: COLORS.surfaceSecondary,
   },
   peek360Btn: {
     flex: 1,
@@ -2841,9 +2842,9 @@ const styles = StyleSheet.create({
     borderColor: '#FECDD3',
   },
   peek360BtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   peekEnquireBtn: {
     flex: 1.4,
@@ -2853,12 +2854,12 @@ const styles = StyleSheet.create({
     gap: 6,
     height: 44,
     borderRadius: 10,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   peekEnquireBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   // Full-Screen 3D Showroom Modal Styles - Clean Light OEM Theme
   switchVehicleHeaderBtn: {
@@ -2874,12 +2875,12 @@ const styles = StyleSheet.create({
   },
   switchVehicleHeaderBtnText: {
     fontSize: 11.5,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
   },
   fullScreenModal: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   modalHeaderLight: {
     flexDirection: 'row',
@@ -2887,7 +2888,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 18,
     paddingVertical: 14,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
@@ -2904,26 +2905,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     marginBottom: 4,
   },
   modalBrandTextLight: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   modalPartNumberLight: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xxl,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   modalPartSubLight: {
-    fontSize: 12,
+    fontSize: FONTS.size.xs,
     color: 'rgba(255, 255, 255, 0.88)',
     marginTop: 2,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   modalCloseBtnLight: {
     width: 36,
@@ -2935,15 +2936,15 @@ const styles = StyleSheet.create({
   },
   modalBodyLight: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   showroomStageLight: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     margin: 16,
     borderRadius: 18,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -2960,11 +2961,11 @@ const styles = StyleSheet.create({
   },
   mediaToggleBoxLight: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.sm,
     padding: 3,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   mediaToggleBtnLight: {
     flexDirection: 'row',
@@ -2975,31 +2976,31 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   mediaToggleBtnActiveLight: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   mediaToggleTextLight: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   mediaToggleTextActiveLight: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   active3DBadgeLight: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   active3DBadgeTextLight: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#059669',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.success,
     letterSpacing: 0.4,
   },
   viewportCenterLight: {
@@ -3010,7 +3011,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 6,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   product3DImage: {
     width: '100%',
@@ -3022,24 +3023,24 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   noImageTextLight: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    fontWeight: '600',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textMuted,
+    fontWeight: FONTS.weight.semiBold,
   },
   interactive3DToolbar: {
     marginTop: 8,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
+    borderTopColor: COLORS.border,
   },
   dragHintBox: {
     alignItems: 'center',
     marginBottom: 8,
   },
   dragHintText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   toolActionButtonsRow: {
     flexDirection: 'row',
@@ -3052,34 +3053,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
   },
   toolBtnActive: {
-    backgroundColor: '#111827',
-    borderColor: '#111827',
+    backgroundColor: COLORS.textPrimary,
+    borderColor: COLORS.textPrimary,
   },
   toolBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#374151',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate700,
   },
   toolBtnTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   toolBtnIcon: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     width: 32,
     height: 32,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
   },
   anglePresetRow: {
     flexDirection: 'row',
@@ -3087,24 +3088,24 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   anglePresetChip: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   anglePresetChipActive: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderColor: '#FCA5A5',
   },
   anglePresetChipText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#64748B',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   anglePresetChipTextActive: {
-    color: '#E31837',
+    color: COLORS.primary,
   },
   thumbnailRowLight: {
     flexDirection: 'row',
@@ -3114,14 +3115,14 @@ const styles = StyleSheet.create({
   thumbBoxLight: {
     width: 52,
     height: 52,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     padding: 4,
   },
   thumbBoxActiveLight: {
-    borderColor: '#E31837',
+    borderColor: COLORS.primary,
     borderWidth: 2,
   },
   thumbImg: {
@@ -3136,12 +3137,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
+    borderTopColor: COLORS.border,
   },
   stageFooterTextLight: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   kpiGrid: {
     flexDirection: 'row',
@@ -3153,11 +3154,11 @@ const styles = StyleSheet.create({
   kpiCardLight: {
     flex: 1,
     minWidth: '45%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -3166,25 +3167,25 @@ const styles = StyleSheet.create({
   },
   kpiLabelLight: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 4,
   },
   kpiValueLight: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
   },
   specsCardLight: {
     marginHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -3198,9 +3199,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   specsSectionTitleLight: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#111827',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textPrimary,
     letterSpacing: 0.4,
     textTransform: 'uppercase',
   },
@@ -3208,41 +3209,41 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   specTableRowLight: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
     paddingVertical: 11,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: COLORS.surfaceSecondary,
   },
   specTableZebraLight: {
     backgroundColor: '#F9FAFB',
   },
   specTableKeyLight: {
-    fontSize: 12,
-    color: '#4B5563',
-    fontWeight: '500',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textSecondary,
+    fontWeight: FONTS.weight.medium,
     flex: 1,
   },
   specTableValLight: {
-    fontSize: 12,
-    color: '#111827',
-    fontWeight: '700',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textPrimary,
+    fontWeight: FONTS.weight.bold,
     textAlign: 'right',
     flex: 1,
   },
   oeCardLight: {
     marginHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -3250,9 +3251,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   oeTitleLight: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate700,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 10,
@@ -3266,22 +3267,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   oeMfrNameLight: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   oeArticleNoLight: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#2563EB',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.info,
   },
   modalBottomBarLight: {
     position: 'absolute',
@@ -3290,13 +3291,13 @@ const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   modalSubHeaderTabRow: {
     flexDirection: 'row',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     marginHorizontal: 16,
     marginBottom: 8,
     borderRadius: 10,
@@ -3310,10 +3311,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 7,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   modalSubHeaderTabActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -3321,33 +3322,33 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   modalSubHeaderTabText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
   },
   modalSubHeaderTabTextActive: {
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   fullScreenExpandBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   fullScreenExpandBtnText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#475569',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   fullScreenStudioContainer: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
   },
   fullScreenStudioTopBar: {
     flexDirection: 'row',
@@ -3355,9 +3356,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   fullScreenStudioTopLeft: {
     flexDirection: 'row',
@@ -3365,9 +3366,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   fullScreenStudioPartNo: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: '#0F172A',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.black,
+    color: COLORS.slate900,
   },
   fullScreenStudioTopActions: {
     flexDirection: 'row',
@@ -3378,33 +3379,33 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   fullScreenStudioViewport: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   fullScreenStudioBottomBar: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 20,
     borderTopWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     gap: 10,
   },
   viewFullSpecsBanner: {
     marginHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -3421,45 +3422,45 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   viewFullSpecsBannerTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   viewFullSpecsBannerSub: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 1,
   },
   viewFullSpecsBannerAction: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#E31837',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     marginLeft: 8,
   },
   fullScreenSpecsBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   fullScreenSpecsBtnText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   vehicleContextCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -3474,10 +3475,10 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 10,
     overflow: 'hidden',
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   vehicleContextThumb: {
     width: 76,
@@ -3496,14 +3497,14 @@ const styles = StyleSheet.create({
   },
   vehicleContextBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
     letterSpacing: 0.5,
   },
   vehicleContextTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   vehicleContextMetaRow: {
     flexDirection: 'row',
@@ -3513,51 +3514,51 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   vehicleContextEngine: {
-    fontSize: 12,
-    color: '#4B5563',
-    fontWeight: '500',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textSecondary,
+    fontWeight: FONTS.weight.medium,
   },
   plateTag: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: COLORS.warningLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: COLORS.warningBorder,
   },
   plateTagText: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
     color: '#92400E',
   },
   guaranteeTag: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.successBorder,
   },
   guaranteeTagText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#065F46',
   },
   switchVehicleBtn: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 12,
     paddingVertical: 7,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   switchVehicleText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate700,
   },
   categoryPillsWrapper: {
     marginBottom: 12,
@@ -3572,84 +3573,84 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.xl,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   categoryPillActive: {
-    backgroundColor: '#111827',
-    borderColor: '#111827',
+    backgroundColor: COLORS.textPrimary,
+    borderColor: COLORS.textPrimary,
   },
   categoryPillText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#374151',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate700,
   },
   categoryPillTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   categoryPillCount: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
   },
   categoryPillCountActive: {
-    backgroundColor: '#374151',
+    backgroundColor: COLORS.slate700,
   },
   categoryPillCountText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#4B5563',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
   },
   categoryPillCountTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   catSubPill: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   catSubPillText: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#4B5563',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   emptyCategoryBox: {
     paddingVertical: 40,
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
     paddingHorizontal: 20,
   },
   emptyCategoryTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
     marginTop: 4,
   },
   emptyCategorySub: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     lineHeight: 18,
   },
   resetCategoryBtn: {
     marginTop: 10,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   resetCategoryBtnText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.white,
   },
 });
 

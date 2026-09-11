@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   Text,
@@ -166,7 +167,7 @@ export default function DistanceSlider({
       {/* Header with Distance Badge */}
       <View style={styles.headerRow}>
         <View style={styles.titleRow}>
-          <MapPin size={16} color="#E31837" strokeWidth={2.4} />
+          <MapPin size={16} color={COLORS.primary} strokeWidth={2.4} />
           <Text style={styles.titleText}>Search Radius</Text>
         </View>
 
@@ -227,7 +228,7 @@ export default function DistanceSlider({
       {/* Manual KM Input Box */}
       <View style={styles.inputCard}>
         <View style={styles.inputLeft}>
-          <Navigation size={14} color="#E31837" />
+          <Navigation size={14} color={COLORS.primary} />
           <Text style={styles.inputLabel}>Enter distance in km:</Text>
         </View>
         <View style={styles.inputFieldBox}>
@@ -238,7 +239,7 @@ export default function DistanceSlider({
             onBlur={handleBlur}
             keyboardType="numeric"
             placeholder="50"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor={COLORS.slate400}
             maxLength={6}
             returnKeyType="done"
             selectTextOnFocus
@@ -298,22 +299,22 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   titleText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textPrimary,
   },
   radiusBadge: {
     backgroundColor: '#FEE2E2',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
     borderColor: '#FCA5A5',
   },
   radiusBadgeText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#E31837',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   touchArea: {
     height: 36,
@@ -321,25 +322,25 @@ const styles = StyleSheet.create({
   },
   trackBackground: {
     height: 8,
-    borderRadius: 4,
-    backgroundColor: '#E2E8F0',
+    borderRadius: RADIUS.xs,
+    backgroundColor: COLORS.border,
     overflow: 'hidden',
   },
   trackFill: {
     height: '100%',
-    backgroundColor: '#E31837',
-    borderRadius: 4,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.xs,
   },
   thumb: {
     position: 'absolute',
     top: 6,
     width: 24,
     height: 24,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.white,
     borderWidth: 3,
-    borderColor: '#E31837',
-    shadowColor: '#E31837',
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.35,
     shadowRadius: 5,
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   minMaxRow: {
     flexDirection: 'row',
@@ -362,20 +363,20 @@ const styles = StyleSheet.create({
   },
   minMaxText: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#94A3B8',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.slate400,
   },
   inputCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   inputLeft: {
     flexDirection: 'row',
@@ -384,25 +385,25 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 12.5,
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     color: '#334155',
   },
   inputFieldBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.sm,
     borderWidth: 1.5,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     paddingHorizontal: 8,
     paddingVertical: 2,
     minWidth: 105,
     justifyContent: 'flex-end',
   },
   textInput: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
     paddingVertical: 4,
     paddingHorizontal: 6,
     textAlign: 'right',
@@ -412,13 +413,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEE2E2',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
     marginLeft: 4,
   },
   kmBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   presetsRow: {
     flexDirection: 'row',
@@ -429,21 +430,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingVertical: 6,
     borderRadius: 10,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   presetChipActive: {
-    backgroundColor: '#E31837',
-    borderColor: '#E31837',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   presetChipText: {
     fontSize: 11.5,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   presetChipTextActive: {
-    color: '#FFFFFF',
-    fontWeight: '700',
+    color: COLORS.white,
+    fontWeight: FONTS.weight.bold,
   },
 });

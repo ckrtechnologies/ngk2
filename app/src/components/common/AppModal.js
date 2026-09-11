@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import {
   View,
   Text,
@@ -167,39 +168,39 @@ export const AppModal = () => {
     switch (type) {
       case 'success':
         return {
-          icon: <CheckCircle2 size={32} color="#059669" strokeWidth={2.4} />,
-          badgeBg: '#ECFDF5',
-          badgeBorder: '#A7F3D0',
-          btnBg: '#059669',
-          btnText: '#FFFFFF',
-          accent: '#059669',
+          icon: <CheckCircle2 size={32} color={COLORS.success} strokeWidth={2.4} />,
+          badgeBg: COLORS.successLight,
+          badgeBorder: COLORS.successBorder,
+          btnBg: COLORS.success,
+          btnText: COLORS.white,
+          accent: COLORS.success,
         };
       case 'error':
         return {
-          icon: <AlertCircle size={32} color="#DC2626" strokeWidth={2.4} />,
-          badgeBg: '#FEF2F2',
-          badgeBorder: '#FECACA',
-          btnBg: '#DC2626',
-          btnText: '#FFFFFF',
-          accent: '#DC2626',
+          icon: <AlertCircle size={32} color={COLORS.error} strokeWidth={2.4} />,
+          badgeBg: COLORS.errorLight,
+          badgeBorder: COLORS.errorBorder,
+          btnBg: COLORS.error,
+          btnText: COLORS.white,
+          accent: COLORS.error,
         };
       case 'warning':
         return {
-          icon: <AlertTriangle size={32} color="#D97706" strokeWidth={2.4} />,
-          badgeBg: '#FEF3C7',
-          badgeBorder: '#FDE68A',
-          btnBg: '#D97706',
-          btnText: '#FFFFFF',
-          accent: '#D97706',
+          icon: <AlertTriangle size={32} color={COLORS.warning} strokeWidth={2.4} />,
+          badgeBg: COLORS.warningLight,
+          badgeBorder: COLORS.warningBorder,
+          btnBg: COLORS.warning,
+          btnText: COLORS.white,
+          accent: COLORS.warning,
         };
       default:
         return {
-          icon: <Info size={32} color="#2563EB" strokeWidth={2.4} />,
-          badgeBg: '#EFF6FF',
-          badgeBorder: '#BFDBFE',
-          btnBg: '#0F172A',
-          btnText: '#FFFFFF',
-          accent: '#2563EB',
+          icon: <Info size={32} color={COLORS.info} strokeWidth={2.4} />,
+          badgeBg: COLORS.infoLight,
+          badgeBorder: COLORS.infoBorder,
+          btnBg: COLORS.slate900,
+          btnText: COLORS.white,
+          accent: COLORS.info,
         };
     }
   };
@@ -215,7 +216,7 @@ export const AppModal = () => {
       onRequestClose={() => handleClose(onCancel)}
     >
       <View style={styles.backdrop}>
-        <StatusBar backgroundColor="rgba(15, 23, 42, 0.65)" barStyle="light-content" />
+        <StatusBar backgroundColor={COLORS.overlay} barStyle="light-content" />
 
         <Animated.View
           style={[
@@ -233,7 +234,7 @@ export const AppModal = () => {
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
             activeOpacity={0.7}
           >
-            <X size={18} color="#94A3B8" />
+            <X size={18} color={COLORS.slate400} />
           </TouchableOpacity>
 
           {/* Centered Floating Status Icon Badge */}
@@ -290,25 +291,21 @@ export const AppModal = () => {
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    backgroundColor: COLORS.overlay,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: SPACING.xl,
   },
   card: {
     width: '100%',
     maxWidth: 340,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.xxl,
     paddingHorizontal: 22,
     paddingTop: 28,
     paddingBottom: 22,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.18,
-    shadowRadius: 18,
-    elevation: 10,
+    ...SHADOWS.lg,
     position: 'relative',
   },
   closeBtn: {
@@ -317,8 +314,8 @@ const styles = StyleSheet.create({
     right: 14,
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.slate100,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
@@ -330,63 +327,63 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: SPACING.base,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.xl,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     textAlign: 'center',
-    marginBottom: 8,
-    letterSpacing: -0.2,
+    marginBottom: SPACING.sm,
+    letterSpacing: FONTS.letterSpacing.tight,
   },
   message: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#64748B',
+    fontFamily: FONTS.family.medium,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 20,
+    lineHeight: FONTS.lineHeight.base,
+    marginBottom: SPACING.lg,
   },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     width: '100%',
-    marginTop: 4,
+    marginTop: SPACING.xs,
   },
   primaryBtn: {
     height: 46,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 18,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    paddingHorizontal: SPACING.xl,
+    ...SHADOWS.sm,
   },
   primaryBtnText: {
-    fontSize: 15,
-    fontWeight: '700',
-    letterSpacing: 0.2,
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.bold,
+    letterSpacing: FONTS.letterSpacing.wide,
   },
   secondaryBtn: {
     flex: 1,
     height: 46,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#F8FAFC',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.slate50,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.base,
   },
   secondaryBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#475569',
+    fontFamily: FONTS.family.semiBold,
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
 });
 

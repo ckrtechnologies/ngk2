@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -163,15 +164,15 @@ const MyEnquiriesScreen = () => {
       case 'resolved':
       case 'approved':
         return {
-          bg: '#D1FAE5',
-          color: '#059669',
+          bg: COLORS.successLight,
+          color: COLORS.success,
           label: 'Resolved',
         };
       case 'inprogress':
       case 'inprocess':
         return {
-          bg: '#DBEAFE',
-          color: '#2563EB',
+          bg: COLORS.infoLight,
+          color: COLORS.info,
           label: 'In Progress',
         };
       case 'quotesent':
@@ -191,8 +192,8 @@ const MyEnquiriesScreen = () => {
         };
       case 'closed':
         return {
-          bg: '#F1F5F9',
-          color: '#475569',
+          bg: COLORS.slate100,
+          color: COLORS.textSecondary,
           label: 'Closed',
         };
       case 'declined':
@@ -205,8 +206,8 @@ const MyEnquiriesScreen = () => {
         };
       default:
         return {
-          bg: '#FEF3C7',
-          color: '#D97706',
+          bg: COLORS.warningLight,
+          color: COLORS.warning,
           label: 'Pending',
         };
     }
@@ -442,11 +443,11 @@ const MyEnquiriesScreen = () => {
   const [pendingStatusChoice, setPendingStatusChoice] = useState('InProgress');
 
   const STATUS_OPTIONS = [
-    { id: 'InProgress', label: 'In Progress', desc: 'Reviewing inquiry & checking catalog', bg: '#DBEAFE', color: '#1D4ED8', border: '#BFDBFE' },
+    { id: 'InProgress', label: 'In Progress', desc: 'Reviewing inquiry & checking catalog', bg: COLORS.infoLight, color: '#1D4ED8', border: COLORS.infoBorder },
     { id: 'QuoteSent', label: 'Quote Sent', desc: 'Price & availability sent to customer', bg: '#EDE9FE', color: '#6D28D9', border: '#DDD6FE' },
     { id: 'AwaitingStock', label: 'Awaiting Stock', desc: 'Parts backordered from regional hub', bg: '#FFEDD5', color: '#C2410C', border: '#FED7AA' },
-    { id: 'Resolved', label: 'Mark Resolved', desc: 'Query answered / order ready for pickup', bg: '#D1FAE5', color: '#047857', border: '#A7F3D0' },
-    { id: 'Closed', label: 'Close Ticket', desc: 'Transaction completed & archived', bg: '#F1F5F9', color: '#334155', border: '#CBD5E1' },
+    { id: 'Resolved', label: 'Mark Resolved', desc: 'Query answered / order ready for pickup', bg: COLORS.successLight, color: '#047857', border: COLORS.successBorder },
+    { id: 'Closed', label: 'Close Ticket', desc: 'Transaction completed & archived', bg: COLORS.slate100, color: '#334155', border: COLORS.borderDark },
     { id: 'Declined', label: 'Decline / Cancel', desc: 'Out of stock / unable to supply', bg: '#FFE4E6', color: '#BE123C', border: '#FECDD3' },
   ];
 
@@ -523,7 +524,7 @@ const MyEnquiriesScreen = () => {
               onPress={() => navigation.navigate('TechnicalEnquiry')}
               activeOpacity={0.8}
             >
-              <Plus size={15} color="#FFFFFF" strokeWidth={2.4} />
+              <Plus size={15} color={COLORS.white} strokeWidth={2.4} />
               <Text style={styles.newTicketHeaderBtnText}>New</Text>
             </TouchableOpacity>
           )
@@ -533,7 +534,7 @@ const MyEnquiriesScreen = () => {
       {/* Role View Banner */}
       {isWholesalerOrDealer && (
         <View style={styles.roleBanner}>
-          <Building2 size={15} color="#E31837" />
+          <Building2 size={15} color={COLORS.primary} />
           <Text style={styles.roleBannerText}>
             Wholesaler & Reseller Portal: Customer inquiries appear as leads. Reply below to relay assistance.
           </Text>
@@ -573,15 +574,15 @@ const MyEnquiriesScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#E31837']}
-            tintColor="#E31837"
+            colors={[COLORS.primary]}
+            tintColor={COLORS.primary}
           />
         }
       >
         {filtered.length === 0 ? (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconCircle}>
-              <MessageSquare size={32} color="#E31837" />
+              <MessageSquare size={32} color={COLORS.primary} />
             </View>
             <Text style={styles.emptyTitle}>No Enquiries Found</Text>
             <Text style={styles.emptySubtitle}>
@@ -638,11 +639,11 @@ const MyEnquiriesScreen = () => {
                         onPress={() => navigateToProductScreen(item)}
                         activeOpacity={0.7}
                       >
-                        <Tag size={11} color="#E31837" strokeWidth={2.2} />
+                        <Tag size={11} color={COLORS.primary} strokeWidth={2.2} />
                         <Text style={styles.partBadgeText} numberOfLines={1}>
                           #{info.partNumber}
                         </Text>
-                        <ChevronRight size={10} color="#E31837" strokeWidth={2.4} />
+                        <ChevronRight size={10} color={COLORS.primary} strokeWidth={2.4} />
                       </TouchableOpacity>
                     )}
                     {info.carName && (
@@ -665,14 +666,14 @@ const MyEnquiriesScreen = () => {
 
                     {messagesCount > 0 && (
                       <View style={styles.messageCountChip}>
-                        <MessageSquare size={10} color="#E31837" strokeWidth={2.2} />
+                        <MessageSquare size={10} color={COLORS.primary} strokeWidth={2.2} />
                         <Text style={styles.messageCountChipText}>
                           {messagesCount} msg{messagesCount > 1 ? 's' : ''}
                         </Text>
                       </View>
                     )}
 
-                    <ChevronRight size={14} color="#94A3B8" strokeWidth={2} />
+                    <ChevronRight size={14} color={COLORS.slate400} strokeWidth={2} />
                   </View>
                 </TouchableOpacity>
               );
@@ -709,7 +710,7 @@ const MyEnquiriesScreen = () => {
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                 activeOpacity={0.7}
               >
-                <ChevronLeft size={22} color="#FFFFFF" strokeWidth={2.5} />
+                <ChevronLeft size={22} color={COLORS.white} strokeWidth={2.5} />
               </TouchableOpacity>
 
               <View style={styles.convHeaderCenter}>
@@ -768,7 +769,7 @@ const MyEnquiriesScreen = () => {
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                 activeOpacity={0.7}
               >
-                <Info size={19} color="#FFFFFF" strokeWidth={2.2} />
+                <Info size={19} color={COLORS.white} strokeWidth={2.2} />
               </TouchableOpacity>
             </View>
 
@@ -784,7 +785,7 @@ const MyEnquiriesScreen = () => {
                   >
                     <View style={styles.pinnedPartRow}>
                       <View style={styles.pinnedPartBadge}>
-                        <Tag size={10.5} color="#E31837" strokeWidth={2.4} />
+                        <Tag size={10.5} color={COLORS.primary} strokeWidth={2.4} />
                         <Text style={styles.pinnedPartBadgeText}>
                           #{info.partNumber || 'PART-SPEC'}
                         </Text>
@@ -803,7 +804,7 @@ const MyEnquiriesScreen = () => {
                       </View>
                       <View style={styles.pinnedDot} />
                       <View style={styles.pinnedMetaItem}>
-                        <Store size={11.5} color="#059669" strokeWidth={2.2} />
+                        <Store size={11.5} color={COLORS.primary} strokeWidth={2.2} />
                         <Text style={styles.pinnedMetaText} numberOfLines={1}>
                           {isWholesalerOrDealer
                             ? selectedTicket?.userName || 'Customer'
@@ -819,9 +820,9 @@ const MyEnquiriesScreen = () => {
                       onPress={() => navigateToProductScreen()}
                       activeOpacity={0.8}
                     >
-                      <Car size={11} color="#FFFFFF" strokeWidth={2.2} />
+                      <Car size={11} color={COLORS.white} strokeWidth={2.2} />
                       <Text style={styles.viewPartPillText}>Part</Text>
-                      <ChevronRight size={11} color="#FFFFFF" strokeWidth={2.4} />
+                      <ChevronRight size={11} color={COLORS.white} strokeWidth={2.4} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -829,9 +830,9 @@ const MyEnquiriesScreen = () => {
                       onPress={() => setSpecsModalVisible(true)}
                       activeOpacity={0.8}
                     >
-                      <Wrench size={11} color="#E31837" strokeWidth={2.2} />
+                      <Wrench size={11} color={COLORS.primary} strokeWidth={2.2} />
                       <Text style={styles.viewSpecsPillText}>Specs</Text>
-                      <ChevronRight size={11} color="#E31837" strokeWidth={2.4} />
+                      <ChevronRight size={11} color={COLORS.primary} strokeWidth={2.4} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -898,7 +899,7 @@ const MyEnquiriesScreen = () => {
                     {/* 3. Quick In Progress */}
                     {normalizedStatus !== 'inprogress' && (
                       <TouchableOpacity
-                        style={[styles.statusActionBtn, { backgroundColor: '#DBEAFE', borderColor: '#BFDBFE' }]}
+                        style={[styles.statusActionBtn, { backgroundColor: COLORS.infoLight, borderColor: COLORS.infoBorder }]}
                         onPress={() => handleUpdateStatus('InProgress')}
                         disabled={updatingStatus}
                         activeOpacity={0.8}
@@ -911,7 +912,7 @@ const MyEnquiriesScreen = () => {
                     {/* 4. Quick Resolve */}
                     {normalizedStatus !== 'resolved' && (
                       <TouchableOpacity
-                        style={[styles.statusActionBtn, { backgroundColor: '#D1FAE5', borderColor: '#A7F3D0' }]}
+                        style={[styles.statusActionBtn, { backgroundColor: COLORS.successLight, borderColor: COLORS.successBorder }]}
                         onPress={() => handleUpdateStatus('Resolved', 'Inquiry answered and parts ready for pickup.')}
                         disabled={updatingStatus}
                         activeOpacity={0.8}
@@ -924,7 +925,7 @@ const MyEnquiriesScreen = () => {
                     {/* 5. Quick Close */}
                     {normalizedStatus !== 'closed' && (
                       <TouchableOpacity
-                        style={[styles.statusActionBtn, { backgroundColor: '#F1F5F9', borderColor: '#CBD5E1' }]}
+                        style={[styles.statusActionBtn, { backgroundColor: COLORS.slate100, borderColor: COLORS.borderDark }]}
                         onPress={() => handleUpdateStatus('Closed', 'Ticket completed and archived.')}
                         disabled={updatingStatus}
                         activeOpacity={0.8}
@@ -952,7 +953,7 @@ const MyEnquiriesScreen = () => {
               <View style={styles.initialInquiryCard}>
                 <View style={styles.inquiryCardHeader}>
                   <View style={styles.inquiryBadge}>
-                    <FileText size={12} color="#E31837" />
+                    <FileText size={12} color={COLORS.primary} />
                     <Text style={styles.inquiryBadgeText}>
                       {isWholesalerOrDealer ? 'Customer Inquiry' : 'Your Initial Inquiry'}
                     </Text>
@@ -1076,11 +1077,11 @@ const MyEnquiriesScreen = () => {
                         <View style={styles.messageAvatarBox}>
                           {isFromDealerOrDist ? (
                             <View style={styles.avatarDealer}>
-                              <Store size={13} color="#FFFFFF" strokeWidth={2.4} />
+                              <Store size={13} color={COLORS.white} strokeWidth={2.4} />
                             </View>
                           ) : (
                             <View style={styles.avatarCustomer}>
-                              <User size={13} color="#FFFFFF" strokeWidth={2.4} />
+                              <User size={13} color={COLORS.white} strokeWidth={2.4} />
                             </View>
                           )}
                         </View>
@@ -1155,9 +1156,9 @@ const MyEnquiriesScreen = () => {
                             }
                           >
                             {isWholesalerOrDealer ? (
-                              <Store size={13} color="#FFFFFF" strokeWidth={2.4} />
+                              <Store size={13} color={COLORS.white} strokeWidth={2.4} />
                             ) : (
-                              <User size={13} color="#FFFFFF" strokeWidth={2.4} />
+                              <User size={13} color={COLORS.white} strokeWidth={2.4} />
                             )}
                           </View>
                         </View>
@@ -1178,7 +1179,7 @@ const MyEnquiriesScreen = () => {
                       ? 'Type part availability, price quote, or fitment answer...'
                       : 'Type message or question to dealer...'
                   }
-                  placeholderTextColor="#94A3B8"
+                  placeholderTextColor={COLORS.slate400}
                   value={replyMessage}
                   onChangeText={setReplyMessage}
                   multiline={false}
@@ -1196,9 +1197,9 @@ const MyEnquiriesScreen = () => {
                   activeOpacity={0.8}
                 >
                   {sendingReply ? (
-                    <ActivityIndicator size="small" color="#FFFFFF" />
+                    <ActivityIndicator size="small" color={COLORS.white} />
                   ) : (
-                    <Send size={16} color="#FFFFFF" />
+                    <Send size={16} color={COLORS.white} />
                   )}
                 </TouchableOpacity>
               </View>
@@ -1223,7 +1224,7 @@ const MyEnquiriesScreen = () => {
             {/* Modal Header */}
             <View style={styles.specsModalHeader}>
               <View style={styles.specsHeaderIconBox}>
-                <Wrench size={16} color="#E31837" strokeWidth={2.4} />
+                <Wrench size={16} color={COLORS.primary} strokeWidth={2.4} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.specsModalTitle}>Technical Specifications</Text>
@@ -1250,7 +1251,7 @@ const MyEnquiriesScreen = () => {
                   {/* Compact Header Pill Bar */}
                   <View style={styles.specsHeaderPillRow}>
                     <View style={styles.specsPartPill}>
-                      <Hash size={10.5} color="#E31837" strokeWidth={2.5} />
+                      <Hash size={10.5} color={COLORS.primary} strokeWidth={2.5} />
                       <Text style={styles.specsPartPillText}>
                         {info.partNumber || 'STANDARD-OE'}
                       </Text>
@@ -1319,17 +1320,17 @@ const MyEnquiriesScreen = () => {
                   {/* SECTION 2: COMPONENT & ORDER SPECIFICATIONS */}
                   <View style={styles.specsSection}>
                     <View style={styles.specsSectionHeader}>
-                      <Layers size={13} color="#E31837" strokeWidth={2.4} />
+                      <Layers size={13} color={COLORS.primary} strokeWidth={2.4} />
                       <Text style={styles.specsSectionTitle}>COMPONENT ATTRIBUTES</Text>
                     </View>
 
                     <View style={styles.specsGridCompact}>
                       <View style={styles.specsCell}>
                         <View style={styles.specsCellLabelRow}>
-                          <Hash size={9} color="#E31837" />
+                          <Hash size={9} color={COLORS.primary} />
                           <Text style={styles.specsCellLabel}>OEM PART #</Text>
                         </View>
-                        <Text style={[styles.specsCellVal, { color: '#E31837' }]} numberOfLines={1}>
+                        <Text style={[styles.specsCellVal, { color: COLORS.primary }]} numberOfLines={1}>
                           {info.partNumber || 'OE Standard'}
                         </Text>
                       </View>
@@ -1349,7 +1350,7 @@ const MyEnquiriesScreen = () => {
                       </View>
                       <View style={styles.specsCell}>
                         <View style={styles.specsCellLabelRow}>
-                          <Store size={9} color="#059669" />
+                          <Store size={9} color={COLORS.primary} />
                           <Text style={styles.specsCellLabel}>RESELLER / DEALER</Text>
                         </View>
                         <Text style={styles.specsCellVal} numberOfLines={1}>
@@ -1380,9 +1381,9 @@ const MyEnquiriesScreen = () => {
                     onPress={() => navigateToProductScreen()}
                     activeOpacity={0.85}
                   >
-                    <Car size={15} color="#FFFFFF" strokeWidth={2.4} />
+                    <Car size={15} color={COLORS.white} strokeWidth={2.4} />
                     <Text style={styles.specsNavigateBtnText}>View Verified Product & 3D Studio</Text>
-                    <ChevronRight size={16} color="#FFFFFF" strokeWidth={2.4} />
+                    <ChevronRight size={16} color={COLORS.white} strokeWidth={2.4} />
                   </TouchableOpacity>
 
                   {/* Return Button */}
@@ -1444,7 +1445,7 @@ const MyEnquiriesScreen = () => {
                       {isSelected && <View style={[styles.statusOptionRadioDot, { backgroundColor: opt.color }]} />}
                     </View>
                     <View style={{ flex: 1, marginLeft: 10 }}>
-                      <Text style={[styles.statusOptionLabel, isSelected && { color: opt.color, fontWeight: '800' }]}>
+                      <Text style={[styles.statusOptionLabel, isSelected && { color: opt.color, fontWeight: FONTS.weight.heavy }]}>
                         {opt.label}
                       </Text>
                       <Text style={styles.statusOptionDesc}>{opt.desc}</Text>
@@ -1460,7 +1461,7 @@ const MyEnquiriesScreen = () => {
               <TextInput
                 style={styles.statusNoteInput}
                 placeholder="e.g. Quotation emailed or stock arriving tomorrow..."
-                placeholderTextColor="#94A3B8"
+                placeholderTextColor={COLORS.slate400}
                 value={statusNoteText}
                 onChangeText={setStatusNoteText}
               />
@@ -1480,7 +1481,7 @@ const MyEnquiriesScreen = () => {
                 onPress={() => handleUpdateStatus(pendingStatusChoice, statusNoteText)}
               >
                 {updatingStatus ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={COLORS.white} />
                 ) : (
                   <Text style={styles.statusModalConfirmText}>Save Status</Text>
                 )}
@@ -1499,49 +1500,49 @@ const MyEnquiriesScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   roleBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: '#FECACA',
+    borderBottomColor: COLORS.errorBorder,
   },
   roleBannerText: {
     fontSize: 11.5,
     color: '#991B1B',
-    fontWeight: '600',
+    fontWeight: FONTS.weight.semiBold,
     flex: 1,
     lineHeight: 15,
   },
   tabBar: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
   },
   tabPill: {
     paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     marginRight: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
   },
   tabPillSelected: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   tabPillText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   tabPillTextSelected: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   scrollBody: {
     padding: 16,
@@ -1556,31 +1557,31 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 14,
   },
   emptyTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     marginBottom: 4,
   },
   emptySubtitle: {
-    fontSize: 13,
-    color: '#64748B',
+    fontSize: FONTS.size.sm,
+    color: COLORS.textTertiary,
     textAlign: 'center',
   },
   ticketList: {
     gap: 12,
   },
   ticketCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -1594,9 +1595,9 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   ticketId: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#94A3B8',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate400,
     letterSpacing: 0.5,
   },
   statusBadge: {
@@ -1606,13 +1607,13 @@ const styles = StyleSheet.create({
   },
   statusBadgeText: {
     fontSize: 10,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     textTransform: 'uppercase',
   },
   partTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     marginBottom: 6,
   },
   metaRow: {
@@ -1626,40 +1627,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   partBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   vehicleBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: COLORS.infoLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: COLORS.infoBorder,
   },
   vehicleBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#2563EB',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.info,
   },
   ticketFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: COLORS.slate100,
     marginTop: 6,
     paddingTop: 8,
   },
@@ -1670,9 +1671,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dealerName: {
-    fontSize: 12,
-    color: '#64748B',
-    fontWeight: '600',
+    fontSize: FONTS.size.xs,
+    color: COLORS.textTertiary,
+    fontWeight: FONTS.weight.semiBold,
   },
   messageCountChip: {
     flexDirection: 'row',
@@ -1681,13 +1682,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF1F2',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     marginRight: 6,
   },
   messageCountChipText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#E31837',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   newTicketHeaderBtn: {
     flexDirection: 'row',
@@ -1698,27 +1699,27 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.28)',
     paddingHorizontal: 12,
     paddingVertical: 7,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
   },
   newTicketHeaderBtnText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 12.5,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
   },
 
   // Full Screen Conversation Styles
   fullScreenConvSafeArea: {
     flex: 1,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
   },
   fullScreenConvContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
   },
   convHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 8 : 14,
     paddingBottom: 14,
@@ -1747,8 +1748,8 @@ const styles = StyleSheet.create({
   },
   convHeaderTitle: {
     fontSize: 16.5,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: 0.2,
   },
   convStatusBadge: {
@@ -1758,7 +1759,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   convStatusDot: {
     width: 5,
@@ -1767,14 +1768,14 @@ const styles = StyleSheet.create({
   },
   convStatusBadgeText: {
     fontSize: 9.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     textTransform: 'uppercase',
   },
   convHeaderSubtitle: {
-    fontSize: 11,
+    fontSize: FONTS.size.caption,
     color: 'rgba(255, 255, 255, 0.85)',
     marginTop: 2,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   convHeaderInfoBtn: {
     width: 38,
@@ -1788,14 +1789,14 @@ const styles = StyleSheet.create({
 
   // Sticky Pinned Context Bar
   pinnedContextCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -1816,22 +1817,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 5,
     borderWidth: 0.8,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   pinnedPartBadgeText: {
     fontSize: 10.5,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   pinnedPartNameText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
     flex: 1,
   },
   pinnedMetaRow: {
@@ -1846,16 +1847,16 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   pinnedMetaText: {
-    fontSize: 11,
-    color: '#475569',
-    fontWeight: '600',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textSecondary,
+    fontWeight: FONTS.weight.semiBold,
     maxWidth: 160,
   },
   pinnedDot: {
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#CBD5E1',
+    backgroundColor: COLORS.borderDark,
   },
   pinnedRightCol: {
     flexDirection: 'row',
@@ -1866,38 +1867,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 8,
     paddingVertical: 4.5,
     borderRadius: 14,
   },
   viewPartPillText: {
     fontSize: 10.5,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
   },
   viewSpecsPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
     paddingHorizontal: 8,
     paddingVertical: 4.5,
     borderRadius: 14,
   },
   viewSpecsPillText: {
     fontSize: 10.5,
-    fontWeight: '800',
-    color: '#E31837',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   partnerStatusBar: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: COLORS.border,
   },
   partnerStatusHeaderRow: {
     flexDirection: 'row',
@@ -1912,29 +1913,29 @@ const styles = StyleSheet.create({
   },
   partnerStatusLabel: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#64748B',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textTertiary,
     letterSpacing: 0.5,
   },
   statusBadgePill: {
     paddingHorizontal: 8,
     paddingVertical: 2.5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   statusBadgePillText: {
     fontSize: 10.5,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
   },
   openStatusModalBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -1943,7 +1944,7 @@ const styles = StyleSheet.create({
   },
   openStatusModalBtnText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
     color: '#334155',
   },
   partnerStatusButtonsScroll: {
@@ -1958,12 +1959,12 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 9,
     paddingVertical: 4.5,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
   },
   statusActionBtnText: {
     fontSize: 10.5,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
   },
 
   // SNO 14-C: Status Management Overlay Sheet Styles
@@ -1973,7 +1974,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   statusModalCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
     paddingHorizontal: 18,
@@ -1992,24 +1993,24 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
   },
   statusModalTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.lg,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
   },
   statusModalSubtitle: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textTertiary,
     marginTop: 2,
   },
   statusModalCloseBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.slate100,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -2018,10 +2019,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 9,
     paddingHorizontal: 12,
-    borderRadius: 12,
-    backgroundColor: '#F8FAFC',
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     marginBottom: 7,
   },
   statusOptionRadio: {
@@ -2029,24 +2030,24 @@ const styles = StyleSheet.create({
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: '#94A3B8',
+    borderColor: COLORS.slate400,
     justifyContent: 'center',
     alignItems: 'center',
   },
   statusOptionRadioDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   statusOptionLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
   },
   statusOptionDesc: {
     fontSize: 10.5,
-    fontWeight: '500',
-    color: '#64748B',
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 1,
   },
   statusNoteBox: {
@@ -2054,20 +2055,20 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   statusNoteLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textSecondary,
     marginBottom: 5,
   },
   statusNoteInput: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: COLORS.borderDark,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    fontSize: 12,
-    color: '#0F172A',
+    fontSize: FONTS.size.xs,
+    color: COLORS.slate900,
   },
   statusModalActions: {
     flexDirection: 'row',
@@ -2077,27 +2078,27 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 11,
     borderRadius: 10,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   statusModalCancelText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#64748B',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
   statusModalConfirmBtn: {
     flex: 2,
     paddingVertical: 11,
     borderRadius: 10,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   statusModalConfirmText: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
   },
 
   // Specifications Sheet Modal
@@ -2110,7 +2111,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   specsModalCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -2130,7 +2131,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#CBD5E1',
+    backgroundColor: COLORS.borderDark,
   },
   specsModalHeader: {
     flexDirection: 'row',
@@ -2139,36 +2140,36 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: COLORS.slate100,
     gap: 10,
   },
   specsHeaderIconBox: {
     width: 34,
     height: 34,
-    borderRadius: 8,
-    backgroundColor: '#FEF2F2',
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },
   specsModalTitle: {
     fontSize: 14.5,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     letterSpacing: -0.2,
   },
   specsModalSubtitle: {
     fontSize: 10.5,
-    color: '#64748B',
+    color: COLORS.textTertiary,
     marginTop: 1,
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   specsModalCloseBtn: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2187,33 +2188,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
   },
   specsPartPillText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#E31837',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.primary,
   },
   specsFitmentGuaranteePill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
+    borderColor: COLORS.successLight,
   },
   specsFitmentGuaranteeText: {
     fontSize: 10.5,
-    fontWeight: '700',
-    color: '#059669',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
   specsStatusTag: {
     paddingHorizontal: 7,
@@ -2222,21 +2223,21 @@ const styles = StyleSheet.create({
   },
   specsStatusTagText: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: FONTS.weight.bold,
   },
   specsProductName: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.slate900,
     marginBottom: 10,
     lineHeight: 20,
   },
   specsSection: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.sm,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     marginBottom: 9,
   },
   specsSectionHeader: {
@@ -2247,8 +2248,8 @@ const styles = StyleSheet.create({
   },
   specsSectionTitle: {
     fontSize: 10,
-    fontWeight: '800',
-    color: '#475569',
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textSecondary,
     letterSpacing: 0.5,
   },
   specsGridCompact: {
@@ -2258,12 +2259,12 @@ const styles = StyleSheet.create({
   },
   specsCell: {
     width: '48.5%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   specsCellLabelRow: {
     flexDirection: 'row',
@@ -2273,22 +2274,22 @@ const styles = StyleSheet.create({
   },
   specsCellLabel: {
     fontSize: 9,
-    color: '#94A3B8',
-    fontWeight: '700',
+    color: COLORS.slate400,
+    fontWeight: FONTS.weight.bold,
     letterSpacing: 0.3,
   },
   specsCellVal: {
     fontSize: 11.5,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
   },
   specsInquiryBox: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 6,
     paddingHorizontal: 9,
     paddingVertical: 7,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   specsInquiryNotesText: {
     fontSize: 11.5,
@@ -2297,7 +2298,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   specsNavigateBtn: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderRadius: 9,
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -2306,20 +2307,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     marginTop: 10,
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
   specsNavigateBtnText: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: 0.2,
   },
   specsDismissBtn: {
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.slate900,
     borderRadius: 9,
     paddingVertical: 11,
     alignItems: 'center',
@@ -2327,9 +2328,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   specsDismissBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.white,
     letterSpacing: 0.2,
   },
   modalScrollBody: {
@@ -2338,13 +2339,13 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   initialInquiryCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     borderLeftWidth: 4,
-    borderLeftColor: '#E31837',
+    borderLeftColor: COLORS.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -2362,38 +2363,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
   },
   inquiryBadgeText: {
     fontSize: 10.5,
-    fontWeight: '700',
-    color: '#E31837',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primary,
   },
   inquiryTimeText: {
     fontSize: 10,
-    color: '#94A3B8',
-    fontWeight: '600',
+    color: COLORS.slate400,
+    fontWeight: FONTS.weight.semiBold,
   },
   inquiryBodyText: {
     fontSize: 13.5,
-    color: '#1E293B',
+    color: COLORS.slate800,
     lineHeight: 19,
   },
   inquiryQtyTag: {
     marginTop: 8,
     alignSelf: 'flex-start',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
   },
   inquiryQtyTagText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#475569',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textSecondary,
   },
   attachedImage: {
     width: '100%',
@@ -2410,13 +2411,13 @@ const styles = StyleSheet.create({
   threadDividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
   },
   liveIndicatorPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 8,
     paddingVertical: 2.5,
     borderRadius: 10,
@@ -2429,8 +2430,8 @@ const styles = StyleSheet.create({
   },
   liveIndicatorText: {
     fontSize: 9.5,
-    fontWeight: '700',
-    color: '#059669',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
   waitingForReplyBox: {
     paddingVertical: 20,
@@ -2438,8 +2439,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   waitingForReplyText: {
-    fontSize: 12,
-    color: '#94A3B8',
+    fontSize: FONTS.size.xs,
+    color: COLORS.slate400,
     textAlign: 'center',
     fontStyle: 'italic',
   },
@@ -2467,7 +2468,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#059669',
+    backgroundColor: COLORS.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2475,7 +2476,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#64748B',
+    backgroundColor: COLORS.textTertiary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2483,7 +2484,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2494,13 +2495,13 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
   },
   bubbleLeft: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     borderBottomLeftRadius: 4,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
@@ -2508,12 +2509,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   bubbleRight: {
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 4,
-    shadowColor: '#E31837',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
@@ -2526,34 +2527,34 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   senderDisplayName: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate900,
   },
   verifiedTag: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: COLORS.successLight,
     paddingHorizontal: 4,
     paddingVertical: 1,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   verifiedTagText: {
     fontSize: 9,
-    fontWeight: '700',
-    color: '#059669',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.success,
   },
   messageBodyText: {
-    fontSize: 13,
+    fontSize: FONTS.size.sm,
     lineHeight: 18,
   },
   messageBodyTextLeft: {
-    color: '#1E293B',
+    color: COLORS.slate800,
   },
   messageBodyTextRight: {
-    color: '#FFFFFF',
-    fontWeight: '500',
+    color: COLORS.white,
+    fontWeight: FONTS.weight.medium,
   },
   bubbleFooterRow: {
     flexDirection: 'row',
@@ -2564,33 +2565,33 @@ const styles = StyleSheet.create({
   },
   messageTimeTextLeft: {
     fontSize: 9.5,
-    color: '#94A3B8',
-    fontWeight: '500',
+    color: COLORS.slate400,
+    fontWeight: FONTS.weight.medium,
   },
   messageTimeTextRight: {
     fontSize: 9.5,
     color: 'rgba(255, 255, 255, 0.78)',
-    fontWeight: '500',
+    fontWeight: FONTS.weight.medium,
   },
   systemMessageRow: {
     alignSelf: 'center',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.slate100,
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     marginVertical: 6,
   },
   systemMessageText: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: FONTS.size.caption,
+    color: COLORS.textTertiary,
     fontStyle: 'italic',
   },
   replyFooterBox: {
     paddingHorizontal: 16,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: COLORS.slate100,
+    backgroundColor: COLORS.white,
   },
   replyRow: {
     flexDirection: 'row',
@@ -2599,25 +2600,25 @@ const styles = StyleSheet.create({
   },
   replyInput: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.background,
     borderRadius: 22,
     paddingHorizontal: 16,
     height: 44,
-    fontSize: 13,
-    color: '#0F172A',
+    fontSize: FONTS.size.sm,
+    color: COLORS.slate900,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
   },
   sendBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#E31837',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   sendBtnDisabled: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
   },
 });
 

@@ -3,10 +3,10 @@ export const BRAND_CONFIG = {
   brandName: 'KYB Suspension & Damping',
   shortName: 'KYB',
   companyName: 'KYB Corporation',
-  primaryColor: '#E31837', // Official KYB Red (Pantone 186C / #CC0033 / #E31837)
-  secondaryColor: '#221F1F', // Official KYB Carbon Black
+  primaryColor: COLORS.primary, // Official KYB Red (Pantone 186C / #CC0033 / #E31837)
+  secondaryColor: COLORS.secondary, // Official KYB Carbon Black
   darkColor: '#18181B',
-  accentColor: '#D1D2D4', // KYB Cool Grey
+  accentColor: COLORS.coolGrey, // KYB Cool Grey
   allowedSuppliers: [7729],
   catalogSubtitle: 'Official KYB TecDoc Shock Absorber Catalog',
   categories: [

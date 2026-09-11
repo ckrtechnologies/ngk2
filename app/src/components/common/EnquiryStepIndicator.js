@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../utils/theme';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Check } from 'lucide-react-native';
 
@@ -46,7 +47,7 @@ const EnquiryStepIndicator = ({ currentStep = 1, onStepPress }) => {
                   ]}
                 >
                   {isCompleted ? (
-                    <Check size={13} color="#FFFFFF" strokeWidth={3} />
+                    <Check size={13} color={COLORS.white} strokeWidth={3} />
                   ) : (
                     <Text
                       style={[
@@ -82,16 +83,12 @@ const EnquiryStepIndicator = ({ currentStep = 1, onStepPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surface,
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.base,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    borderBottomColor: COLORS.surfaceSecondary,
+    ...SHADOWS.sm,
   },
   stepsRow: {
     flexDirection: 'row',
@@ -108,61 +105,63 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
   circleCompleted: {
-    backgroundColor: '#059669', // Emerald Green
+    backgroundColor: COLORS.success,
   },
   circleActive: {
-    backgroundColor: '#008752', // NGK Brand Green
-    shadowColor: '#008752',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.35,
     shadowRadius: 3,
     elevation: 3,
   },
   circlePending: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.border,
   },
   stepNumber: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: FONTS.family.bold,
+    fontSize: FONTS.size.xs,
+    fontWeight: FONTS.weight.bold,
   },
   stepNumberActive: {
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   stepNumberPending: {
-    color: '#9CA3AF',
+    color: COLORS.textMuted,
   },
   label: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontFamily: FONTS.family.semiBold,
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
     textAlign: 'center',
   },
   labelActive: {
-    color: '#008752',
-    fontWeight: '700',
+    color: COLORS.primary,
+    fontWeight: FONTS.weight.bold,
   },
   labelCompleted: {
-    color: '#059669',
+    color: COLORS.success,
   },
   labelPending: {
-    color: '#9CA3AF',
+    color: COLORS.textMuted,
   },
   connector: {
     flex: 1,
     height: 2,
     marginTop: -16,
-    marginHorizontal: 4,
+    marginHorizontal: SPACING.xs,
     borderRadius: 1,
   },
   connectorActive: {
-    backgroundColor: '#059669',
+    backgroundColor: COLORS.success,
   },
   connectorPending: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: COLORS.border,
   },
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -21,7 +22,7 @@ const NotificationsScreen = () => {
       description: 'Your enquiry ENQ-BB21 for part BKR6EIX-11 has been verified and approved.',
       time: '12M AGO',
       unread: true,
-      icon: <MessageSquare size={wp('5%')} color="#008752" fill="#008752" />,
+      icon: <MessageSquare size={wp('5%')} color={COLORS.primary} fill={COLORS.primary} />,
       iconBg: '#FFF1F3',
     },
     {
@@ -30,7 +31,7 @@ const NotificationsScreen = () => {
       description: '342 new part numbers for 2024 model year vehicles have been added to the database.',
       time: '2H AGO',
       unread: true,
-      icon: <Search size={wp('5%')} color="#008752" />,
+      icon: <Search size={wp('5%')} color={COLORS.primary} />,
       iconBg: '#FFF1F3',
     },
     {
@@ -65,12 +66,12 @@ const NotificationsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#008752" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIconButton}>
-          <ChevronLeft color="#FFFFFF" size={wp('7%')} />
+          <ChevronLeft color={COLORS.white} size={wp('7%')} />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>NOTIFICATIONS</Text>
@@ -84,7 +85,7 @@ const NotificationsScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('OwnerHome')} style={styles.homeIconButton}>
-            <Home color="#008752" size={wp('5%')} />
+            <Home color={COLORS.primary} size={wp('5%')} />
           </TouchableOpacity>
         </View>
       </View>
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F2F5',
   },
   header: {
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     height: hp('9%'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     padding: wp('1%'),
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('4.5%'),
     fontWeight: 'bold',
     letterSpacing: 0.5,
@@ -145,12 +146,12 @@ const styles = StyleSheet.create({
     marginRight: wp('4%'),
   },
   readAllText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3%'),
     fontWeight: 'bold',
   },
   homeIconButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     width: wp('9%'),
     height: wp('9%'),
     borderRadius: wp('4.5%'),
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   notificationCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: wp('6%'),
     padding: wp('4%'),
     flexDirection: 'row',
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     width: wp('2.5%'),
     height: wp('2.5%'),
     borderRadius: wp('1.25%'),
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
   },
   descriptionText: {
     fontSize: wp('3%'),

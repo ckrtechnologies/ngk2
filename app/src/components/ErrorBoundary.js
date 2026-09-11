@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../utils/theme';
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { navigateTo } from '../functions/navigationRefFunc';
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     backgroundColor: '#181C2A',
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     padding: wp('6%'),
     alignItems: 'center',
     borderWidth: 1,
@@ -133,13 +134,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: 'rgba(208, 20, 44, 0.15)',
     borderWidth: 1.5,
-    borderColor: '#008752',
+    borderColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp('1.8%'),
   },
   iconText: {
-    fontSize: 26,
+    fontSize: FONTS.size.h2,
   },
   categoryPill: {
     backgroundColor: 'rgba(208, 20, 44, 0.2)',
@@ -152,20 +153,20 @@ const styles = StyleSheet.create({
   },
   categoryPillText: {
     fontSize: 10,
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     color: '#F87171',
     letterSpacing: 0.6,
   },
   title: {
     fontSize: wp('5.2%'),
-    fontWeight: '900',
-    color: '#FFFFFF',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.white,
     marginBottom: hp('1.2%'),
     textAlign: 'center',
   },
   explanationText: {
     fontSize: wp('3.5%'),
-    color: '#94A3B8',
+    color: COLORS.slate400,
     textAlign: 'center',
     lineHeight: wp('5.2%'),
     marginBottom: hp('2.2%'),
@@ -176,19 +177,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(16, 185, 129, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(16, 185, 129, 0.25)',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: wp('3.5%'),
     marginBottom: hp('2.8%'),
   },
   safetyTitle: {
     fontSize: wp('3.4%'),
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     color: '#10B981',
     marginBottom: 3,
   },
   safetySub: {
     fontSize: wp('3.1%'),
-    color: '#A7F3D0',
+    color: COLORS.successBorder,
     lineHeight: wp('4.4%'),
   },
   buttonRow: {
@@ -198,16 +199,16 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     flex: 1,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     paddingVertical: hp('1.8%'),
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   retryText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3.6%'),
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.3,
   },
   homeButton: {
@@ -216,14 +217,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     paddingVertical: hp('1.8%'),
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   homeButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: wp('3.6%'),
-    fontWeight: '800',
+    fontWeight: FONTS.weight.heavy,
     letterSpacing: 0.3,
   },
 });

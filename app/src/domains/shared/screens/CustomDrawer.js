@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
   Text,
@@ -77,8 +78,8 @@ export default function CustomDrawer({ navigation }) {
       label: 'Parts & Catalog Lookup',
       subtitle: 'TecDoc verified database',
       Icon: FindParts3DIcon,
-      bgColor: '#FEF2F2',
-      borderColor: '#FECACA',
+      bgColor: COLORS.errorLight,
+      borderColor: COLORS.errorBorder,
       action: () => navigation.navigate('PartsFinder'),
     },
     {
@@ -86,8 +87,8 @@ export default function CustomDrawer({ navigation }) {
       label: 'My Garage Vehicles',
       subtitle: 'Saved fleet & compatibility',
       Icon: MyGarage3DIcon,
-      bgColor: '#EFF6FF',
-      borderColor: '#DBEAFE',
+      bgColor: COLORS.infoLight,
+      borderColor: COLORS.infoLight,
       action: () => navigation.navigate('MyGarage'),
     },
     {
@@ -95,8 +96,8 @@ export default function CustomDrawer({ navigation }) {
       label: 'Technical Enquiries',
       subtitle: 'Direct engineering support',
       Icon: TechEnquiry3DIcon,
-      bgColor: '#ECFDF5',
-      borderColor: '#A7F3D0',
+      bgColor: COLORS.successLight,
+      borderColor: COLORS.successBorder,
       action: () => navigation.navigate('MyEnquiries'),
     },
     {
@@ -105,7 +106,7 @@ export default function CustomDrawer({ navigation }) {
       subtitle: 'Official certified network',
       Icon: DealerLocator3DIcon,
       bgColor: '#FFFBEB',
-      borderColor: '#FDE68A',
+      borderColor: COLORS.warningBorder,
       action: () => navigation.navigate('DealerLocator'),
     },
   ];
@@ -119,7 +120,7 @@ export default function CustomDrawer({ navigation }) {
         },
       ]}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#008752" translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} translucent={false} />
 
       {/* Drawer Header (Solid NGK Crimson Theme matching rest of the app) */}
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
@@ -133,7 +134,7 @@ export default function CustomDrawer({ navigation }) {
               <Text style={styles.userName} numberOfLines={1}>
                 {myself?.name || 'Account User'}
               </Text>
-              <ChevronRight size={16} color="#FFFFFF" opacity={0.8} />
+              <ChevronRight size={16} color={COLORS.white} opacity={0.8} />
             </View>
             <View style={styles.badgeRow}>
               <View style={styles.roleBadge}>
@@ -152,7 +153,7 @@ export default function CustomDrawer({ navigation }) {
           onPress={() => navigation.goBack()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <X size={20} color="#FFFFFF" />
+          <X size={20} color={COLORS.white} />
         </TouchableOpacity>
       </View>
 
@@ -222,7 +223,7 @@ export default function CustomDrawer({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   header: {
     flexDirection: 'row',
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 20,
-    backgroundColor: '#008752',
+    backgroundColor: COLORS.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#B91024',
     shadowColor: '#000000',
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.25)',
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
@@ -261,9 +262,9 @@ const styles = StyleSheet.create({
   },
   userName: {
     flex: 1,
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontSize: FONTS.size.md,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.white,
     letterSpacing: -0.2,
     lineHeight: 20,
   },
@@ -274,15 +275,15 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   roleBadge: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 5,
   },
   roleBadgeText: {
     fontSize: 9.5,
-    fontWeight: '900',
-    color: '#008752',
+    fontWeight: FONTS.weight.black,
+    color: COLORS.primary,
     letterSpacing: 0.5,
   },
   verifiedDot: {
@@ -292,14 +293,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEE2E2',
   },
   verifiedText: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.semiBold,
     color: '#FEE2E2',
   },
   closeBtn: {
     width: 38,
     height: 38,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.25)',
@@ -312,9 +313,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   menuSectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#9CA3AF',
+    fontSize: FONTS.size.caption,
+    fontWeight: FONTS.weight.heavy,
+    color: COLORS.textMuted,
     letterSpacing: 0.8,
     marginBottom: 6,
     paddingHorizontal: 4,
@@ -327,12 +328,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: '#FAFAFA',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: COLORS.surfaceSecondary,
   },
   menuIconWrapper: {
     width: 44,
     height: 44,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -342,15 +343,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuItemText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#1F2937',
+    fontSize: FONTS.size.base,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.slate800,
     letterSpacing: -0.1,
   },
   menuItemSubtitle: {
     fontSize: 11.5,
-    fontWeight: '500',
-    color: '#6B7280',
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textTertiary,
     marginTop: 1.5,
   },
   chevronWrapper: {
@@ -360,25 +361,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: COLORS.surfaceSecondary,
+    backgroundColor: COLORS.white,
   },
   logoutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: COLORS.errorLight,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: COLORS.errorBorder,
     height: 46,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     marginBottom: 12,
   },
   logoutText: {
     fontSize: 13.5,
-    fontWeight: '700',
-    color: '#DC2626',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.error,
     letterSpacing: 0.1,
   },
   brandFooterRow: {
@@ -389,18 +390,18 @@ const styles = StyleSheet.create({
   },
   copyrightText: {
     fontSize: 10.5,
-    fontWeight: '600',
-    color: '#9CA3AF',
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.textMuted,
   },
   versionBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingHorizontal: 5,
     paddingVertical: 1.5,
-    borderRadius: 4,
+    borderRadius: RADIUS.xs,
   },
   versionBadgeText: {
     fontSize: 9.5,
-    fontWeight: '700',
-    color: '#6B7280',
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.textTertiary,
   },
 });
