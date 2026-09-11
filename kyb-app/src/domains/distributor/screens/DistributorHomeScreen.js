@@ -82,7 +82,7 @@ const DistributorHomeScreen = () => {
     {
       id: 'catalog',
       title: 'Bulk Catalog',
-      subtitle: 'TecDoc OE & application index',
+      subtitle: 'OE & application index',
       icon: <Search size={22} color={COLORS.textPrimary} />,
       bg: COLORS.surfaceSecondary,
       route: 'PartsFinder',
@@ -117,26 +117,19 @@ const DistributorHomeScreen = () => {
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
-      {/* Solid Crimson KYB Header */}
-      <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
-        <TouchableOpacity
-          style={styles.headerBtn}
-          onPress={() => navigation.navigate('CustomDrawer')}
-          activeOpacity={0.75}
-        >
-          <Menu size={22} color={COLORS.white} strokeWidth={2.4} />
-        </TouchableOpacity>
+      {/* Solid Crimson KYB Header: Left Greeting + Right Logo Pill & Bell */}
+      <View style={[styles.solidHeader, { paddingTop: insets.top + 8 }]}>
+        {/* Left: Navigation Menu Trigger + Dedicated Welcome Greeting */}
+        <View style={styles.headerLeftCluster}>
+          <TouchableOpacity
+            style={styles.headerBtn}
+            onPress={() => navigation.navigate('CustomDrawer')}
+            activeOpacity={0.75}
+          >
+            <Menu size={22} color={COLORS.white} strokeWidth={2.4} />
+          </TouchableOpacity>
 
-        <View style={styles.headerCenter}>
-          <View style={styles.logoBadgeContainer}>
-            <Image
-              source={require('../../../assets/images/branding/kyb_logo.png')}
-              style={styles.headerLogoImg}
-              resizeMode="contain"
-            />
-            <Text style={styles.headerBrandText}>KYB</Text>
-          </View>
-          <View style={styles.headerUserContainer}>
+          <View style={styles.headerGreetingBlock}>
             <Text style={styles.headerGreetingHello}>DISTRIBUTOR,</Text>
             <Text style={styles.headerUserName} numberOfLines={1}>
               {myself?.name ? myself.name : 'Partner'}
@@ -144,14 +137,25 @@ const DistributorHomeScreen = () => {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.headerBtn}
-          onPress={() => navigation.navigate('Notifications')}
-          activeOpacity={0.75}
-        >
-          <Bell size={20} color={COLORS.white} strokeWidth={2.4} />
-          {hasUnreadNotifications && <View style={styles.badgeDot} />}
-        </TouchableOpacity>
+        {/* Right: Iconic Crisp KYB Brand Seal & Notification Bell */}
+        <View style={styles.headerRightCluster}>
+          <View style={styles.headerLogoPill}>
+            <Image
+              source={require('../../../assets/images/branding/kyb_logo.png')}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.headerBtn}
+            onPress={() => navigation.navigate('Notifications')}
+            activeOpacity={0.75}
+          >
+            <Bell size={20} color={COLORS.white} strokeWidth={2.4} />
+            {hasUnreadNotifications && <View style={styles.badgeDot} />}
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -291,53 +295,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
-  headerCenter: {
+  headerLeftCluster: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    flexShrink: 1,
-    paddingHorizontal: 8,
+    flex: 1,
+    paddingRight: 8,
   },
-  logoBadgeContainer: {
-    backgroundColor: COLORS.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: RADIUS.lg,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.16,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  headerLogoImg: {
-    width: 22,
-    height: 22,
-    borderRadius: RADIUS.xs,
-  },
-  headerBrandText: {
-    fontSize: FONTS.size.xs,
-    fontWeight: FONTS.weight.black,
-    color: COLORS.primary,
-    letterSpacing: 0.8,
-    marginLeft: 5,
-  },
-  headerUserContainer: {
+  headerGreetingBlock: {
     justifyContent: 'center',
     flexShrink: 1,
   },
   headerGreetingHello: {
-    fontSize: 9.5,
+    fontSize: 13.5,
     fontWeight: FONTS.weight.heavy,
     color: 'rgba(255, 255, 255, 0.82)',
     letterSpacing: 0.8,
   },
   headerUserName: {
-    fontSize: 14.5,
+    fontSize: FONTS.size.md,
     fontWeight: FONTS.weight.black,
     color: COLORS.white,
-    letterSpacing: -0.2,
+    letterSpacing: -0.3,
+  },
+  headerRightCluster: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 9,
+  },
+  headerLogoPill: {
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+    borderRadius: RADIUS.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.14,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  headerLogo: {
+    width: 38,
+    height: 16,
   },
   badgeDot: {
     position: 'absolute',

@@ -10,8 +10,9 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
-KeyboardAvoidingView,
+  KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,6 +29,7 @@ import {
   Tag,
   ShieldCheck,
   User,
+  Phone,
   Clock,
   Sparkles,
   Building2,
@@ -65,6 +67,7 @@ const MyEnquiriesScreen = () => {
   const [sendingReply, setSendingReply] = useState(false);
   const [specsModalVisible, setSpecsModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingInitial, setLoadingInitial] = useState(!enquiry || enquiry.length === 0);
   const [currentUserRole, setCurrentUserRole] = useState(
     myself?.role?.toLowerCase() || 'owner'
   );
@@ -91,7 +94,15 @@ const MyEnquiriesScreen = () => {
 
   const refreshEnquiries = useCallback(async () => {
     const userId = await AsyncStorage.getItem('userId');
-    if (userId) dispatch(getEnquiryRedux(userId));
+    if (userId) {
+      try {
+        await dispatch(getEnquiryRedux(userId));
+      } finally {
+        setLoadingInitial(false);
+      }
+    } else {
+      setLoadingInitial(false);
+    }
   }, [dispatch]);
 
   const onRefresh = async () => {
@@ -310,13 +321,27 @@ const MyEnquiriesScreen = () => {
       carName = [make, model, year].filter(Boolean).join(' ').trim();
     }
 
-    // Dealer / Reseller Name
+    // Dealer / Reseller Details
     const dealerName =
       item.dealerName ||
       item.dealer?.name ||
+      item.dealer?.company_name ||
       pRef.dealerName ||
       vObj.dealerName ||
-      'Authorized Reseller';
+      'Authorized Partner';
+
+    const dealerPhone =
+      item.dealerPhone ||
+      item.dealer?.phone ||
+      pRef.dealerPhone ||
+      vObj.dealerPhone ||
+      null;
+
+    const dealerAddress =
+      item.dealerAddress ||
+      item.dealer?.street_address ||
+      item.dealer?.address ||
+      null;
 
     return {
       partNumber,
@@ -327,6 +352,8 @@ const MyEnquiriesScreen = () => {
       engine,
       carName: carName || 'Universal Fitment',
       dealerName,
+      dealerPhone,
+      dealerAddress,
     };
   }, []);
 
@@ -579,7 +606,14 @@ const MyEnquiriesScreen = () => {
           />
         }
       >
-        {filtered.length === 0 ? (
+        {loadingInitial ? (
+          <View style={{ paddingVertical: 48, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={{ fontSize: FONTS.size.sm, color: COLORS.textSecondary, fontWeight: FONTS.weight.medium }}>
+              Fetching technical enquiries...
+            </Text>
+          </View>
+        ) : filtered.length === 0 ? (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconCircle}>
               <MessageSquare size={32} color={COLORS.primary} />
@@ -1350,12 +1384,21 @@ const MyEnquiriesScreen = () => {
                       </View>
                       <View style={styles.specsCell}>
                         <View style={styles.specsCellLabelRow}>
-                          <Store size={9} color={COLORS.primary} />
-                          <Text style={styles.specsCellLabel}>RESELLER / DEALER</Text>
+                          <Store size={9} color="#D97706" />
+                          <Text style={styles.specsCellLabel}>ASSIGNED PARTNER</Text>
                         </View>
                         <Text style={styles.specsCellVal} numberOfLines={1}>
                           {info.dealerName}
                         </Text>
+                        {info.dealerPhone ? (
+                          <TouchableOpacity
+                            onPress={() => Linking.openURL(`tel:${info.dealerPhone}`)}
+                            style={{ flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 }}
+                          >
+                            <Phone size={9} color="#2563EB" />
+                            <Text style={{ fontSize: 10, color: '#2563EB', fontWeight: '700' }}>{info.dealerPhone}</Text>
+                          </TouchableOpacity>
+                        ) : null}
                       </View>
                     </View>
                   </View>
@@ -1408,7 +1451,10 @@ const MyEnquiriesScreen = () => {
         animationType="fade"
         onRequestClose={() => setShowStatusModal(false)}
       >
-        <View style={styles.statusModalBackdrop}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.statusModalBackdrop}
+        >
           <TouchableOpacity
             style={styles.specsModalOverlayTap}
             activeOpacity={1}
@@ -1488,7 +1534,7 @@ const MyEnquiriesScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
           </KeyboardAvoidingView>
         </SafeAreaView>

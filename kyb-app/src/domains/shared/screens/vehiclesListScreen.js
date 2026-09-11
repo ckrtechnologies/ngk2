@@ -69,8 +69,8 @@ const VehiclesListScreen = () => {
           linkageTargetCountry: 'ZA',
           lang: 'en',
           linkageTargetType: seriesType,
-          mfrIds: Number(mfrId),
-          vehicleModelSeriesIds: Number(seriesId),
+          mfrIds: [Number(mfrId)],
+          vehicleModelSeriesIds: [Number(seriesId)],
           perPage: 100,
           page: 1,
         },
@@ -91,10 +91,24 @@ const VehiclesListScreen = () => {
         list = restRes?.data?.array || restRes?.data || [];
       }
 
-      const formatted = (list || []).map((v) => ({
-        ...v,
-        linkageTargetType: v.linkageTargetType || seriesType,
-      }));
+      const formatted = (list || []).map((v) => {
+        const title =
+          v.description ||
+          v.typeName ||
+          v.vehicleSalesDescription ||
+          v.modelName ||
+          v.vehicleModelSeriesName ||
+          (v.engines?.[0]?.code ? `Model ${v.engines[0].code}` : 'Standard Trim');
+        return {
+          ...v,
+          id: v.linkageTargetId || v.carId || v.id,
+          linkageTargetId: v.linkageTargetId || v.carId || v.id,
+          linkageTargetType: v.linkageTargetType || seriesType,
+          description: title,
+          typeName: title,
+          modelName: title,
+        };
+      });
 
       setVehicles(formatted);
     } catch (err) {
@@ -191,7 +205,7 @@ const VehiclesListScreen = () => {
           <View style={styles.centerLoading}>
             <ActivityIndicator size="large" color={COLORS.primary} />
             <Text style={styles.loadingText}>Fetching matching engines & trims...</Text>
-            <Text style={styles.loadingSub}>TecDoc Pegasus 3.0 Catalog</Text>
+            <Text style={styles.loadingSub}>Official Parts Catalog</Text>
           </View>
         ) : (
           <FlatList
@@ -214,6 +228,8 @@ const VehiclesListScreen = () => {
                 item.description ||
                 item.typeName ||
                 item.vehicleSalesDescription ||
+                item.modelName ||
+                item.vehicleModelSeriesName ||
                 'Standard Trim';
 
               const kw = item.kiloWattsFrom || item.powerKwFrom || item.kw;

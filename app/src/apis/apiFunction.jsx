@@ -5,8 +5,6 @@ import { navigateTo } from "../functions/navigationRefFunc"
 export const apiFunction = async (api, params = [], data = {}, method = "GET", withAuth = false) => {
     let headers = {
         'Content-Type': 'application/json',
-        'x-catalog-brand': 'ngk',
-        'x-brand': 'ngk',
     }
     let response
 
@@ -22,6 +20,23 @@ export const apiFunction = async (api, params = [], data = {}, method = "GET", w
     }
     if (typeof method !== 'string') {
         method = 'GET';
+    }
+
+    // Generic vehicle catalog queries (Make, Model Series, Engine Trims) must NOT send brand headers
+    // because TecDoc vehicle catalog is universal and brand filtering headers strip out makes/series
+    const isVehicleCatalogCall =
+        Boolean(data?.getManufacturers2) ||
+        Boolean(data?.getModelSeries2) ||
+        Boolean(data?.getLinkageTargets) ||
+        (typeof api === 'string' && (
+            api.includes('/tecdoc/manufacturers') ||
+            api.includes('/tecdoc/series') ||
+            api.includes('/tecdoc/vehicles')
+        ));
+
+    if (!isVehicleCatalogCall) {
+        headers['x-catalog-brand'] = 'ngk';
+        headers['x-brand'] = 'ngk';
     }
 
     try {
@@ -49,13 +64,45 @@ export const apiFunction = async (api, params = [], data = {}, method = "GET", w
                 return null
         }
     } catch (error) {
-        console.error("API call error:", error?.response?.data || error.message);
-        if (error.response?.status === 401) {
+        const status = error?.response?.status;
+        const rawData = error?.response?.data;
+        const isHtml = typeof rawData === 'string' && (rawData.trim().startsWith('<') || rawData.includes('<html') || rawData.includes('<!DOCTYPE'));
+
+        let readableMessage = error?.message || "Network Error";
+        if (status === 502) {
+            readableMessage = "Backend server is unreachable (502 Bad Gateway). Please verify that the backend is running.";
+        } else if (status === 503) {
+            readableMessage = "Backend service is temporarily unavailable (503).";
+        } else if (status === 504) {
+            readableMessage = "Gateway Timeout (504). Server took too long to respond.";
+        } else if (status >= 500) {
+            readableMessage = `Server error (${status}). Please try again later.`;
+        } else if (!error.response) {
+            readableMessage = "Unable to connect to server. Please check your internet connection or server availability.";
+        } else if (!isHtml && typeof rawData === 'object' && rawData?.message) {
+            readableMessage = rawData.message;
+        } else if (!isHtml && typeof rawData === 'string' && rawData.length < 200) {
+            readableMessage = rawData;
+        }
+
+        console.warn(`[API Error] [${status || 'NETWORK'}] ${readableMessage}`);
+
+        if (status === 401) {
             await AsyncStorage.multiRemove(["token", "userId", "user"]);
             let role = await AsyncStorage.getItem("role");
             navigateTo('Login', { role });
         }
-        return error.response?.data || { success: false, message: error.message || "Network Error" };
+
+        return {
+            success: false,
+            status: status || 0,
+            isServerError: Boolean(status && status >= 500),
+            isNetworkError: !error.response,
+            isUnreachable: status === 502 || status === 503 || !error.response,
+            message: readableMessage,
+            error: readableMessage,
+            data: (!isHtml && typeof rawData === 'object') ? rawData : null
+        };
     }
 
     if (response) {

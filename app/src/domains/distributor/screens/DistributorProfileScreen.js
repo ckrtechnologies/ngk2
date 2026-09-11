@@ -359,9 +359,9 @@ export default function DistributorProfileScreen({ navigation }) {
               <Wrench size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
-              <Text style={styles.navTitle}>Pegasus Wholesale Catalog</Text>
+              <Text style={styles.navTitle}>Wholesale Parts Catalog</Text>
               <Text style={styles.navSubtitle}>
-                Full TecDoc parts verification & master references
+                Full OE parts verification & master references
               </Text>
             </View>
             <ChevronRight size={18} color="#9CA3AF" />

@@ -10,7 +10,7 @@ export const BRAND_CONFIG = {
   darkColor: COLORS.dark,
   accentColor: COLORS.accent,
   allowedSuppliers: [15, 5414],
-  catalogSubtitle: 'Official Niterra TecDoc Verified Catalog',
+  catalogSubtitle: 'Official Niterra Verified Parts Catalog',
   categories: [
     { id: 'all', label: 'All Verified' },
     { id: 'ignition', label: 'Ignition & Glow' },

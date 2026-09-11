@@ -12,11 +12,9 @@ import {
 import { ArrowRight } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  OwnerRole3DIcon,
-  ResellerRole3DIcon,
-  DistributorRole3DIcon,
-} from '../../../components/icons/HomeIcons';
+const ownerIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-VehicleOwner.png');
+const resellerIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-Reseller.png');
+const distributorIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-Distributor.png');
 
 const RoleSelectionScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -45,37 +43,37 @@ const RoleSelectionScreen = ({ navigation }) => {
       id: 'owner',
       title: 'Vehicle Owner',
       description: 'Search verified OE shock absorbers, struts, and coil springs with fitment guarantee.',
-      IconComponent: OwnerRole3DIcon,
+      iconSource: ownerIcon,
       badge: 'Individual',
       badgeBg: '#FEE2E2',
-      badgeColor: COLORS.primary,
-      boxBg: COLORS.errorLight,
+      badgeColor: '#E31837',
+      boxBg: '#FEF2F2',
       boxBorder: '#FECDD3',
-      ctaColor: COLORS.primary,
+      ctaColor: '#E31837',
     },
     {
       id: 'reseller',
       title: 'Professional Reseller',
       description: 'Workshop parts supply, quote requests & priority trade stock inquiry.',
-      IconComponent: ResellerRole3DIcon,
+      iconSource: resellerIcon,
       badge: 'Workshop & Trade',
-      badgeBg: COLORS.warningLight,
-      badgeColor: COLORS.warning,
+      badgeBg: '#FEF3C7',
+      badgeColor: '#B45309',
       boxBg: '#FFFBEB',
-      boxBorder: COLORS.warningBorder,
-      ctaColor: COLORS.warning,
+      boxBorder: '#FDE68A',
+      ctaColor: '#D97706',
     },
     {
       id: 'distributor',
       title: 'Authorized Distributor',
       description: 'National freight, bulk stock management & regional reseller oversight.',
-      IconComponent: DistributorRole3DIcon,
+      iconSource: distributorIcon,
       badge: 'Enterprise Tier-1',
-      badgeBg: COLORS.border,
-      badgeColor: '#334155',
-      boxBg: COLORS.slate100,
-      boxBorder: COLORS.borderDark,
-      ctaColor: COLORS.slate900,
+      badgeBg: '#F1F5F9',
+      badgeColor: '#1E293B',
+      boxBg: '#F8FAFC',
+      boxBorder: '#CBD5E1',
+      ctaColor: '#1E293B',
     },
   ];
 
@@ -98,7 +96,7 @@ const RoleSelectionScreen = ({ navigation }) => {
         </View>
         <Text style={styles.headline}>Select Your Portal</Text>
         <Text style={styles.subheadline}>
-          Choose your account persona to access verified automotive catalogs, trade pricing and technical services.
+          Choose your Account Type in order to view our digital catalogue
         </Text>
 
         {/* Feature Highlights Pills */}
@@ -127,7 +125,6 @@ const RoleSelectionScreen = ({ navigation }) => {
 
           <View style={styles.cardsStack}>
             {roles.map((role) => {
-              const Icon = role.IconComponent;
               return (
                 <TouchableOpacity
                   key={role.id}
@@ -135,22 +132,18 @@ const RoleSelectionScreen = ({ navigation }) => {
                   activeOpacity={0.84}
                   onPress={() => handleRoleSelect(role.id)}
                 >
-                  {/* Beautiful 3D Icon Box */}
-                  <View
-                    style={[
-                      styles.cardIconBox,
-                      {
-                        backgroundColor: role.boxBg,
-                        borderColor: role.boxBorder,
-                      },
-                    ]}
-                  >
-                    <Icon size={48} />
+                  {/* Clean White Icon Box */}
+                  <View style={styles.cardIconBox}>
+                    <Image
+                      source={role.iconSource}
+                      style={{ width: 44, height: 44 }}
+                      resizeMode="contain"
+                    />
                   </View>
 
                   {/* Right Content Column */}
                   <View style={styles.cardContentCol}>
-                    <View style={styles.cardTitleRow}>
+                    <View style={styles.cardHeaderStack}>
                       <Text style={styles.cardTitle}>{role.title}</Text>
                       <View style={[styles.cardBadge, { backgroundColor: role.badgeBg }]}>
                         <Text style={[styles.cardBadgeText, { color: role.badgeColor }]}>
@@ -170,7 +163,7 @@ const RoleSelectionScreen = ({ navigation }) => {
                       ]}
                     >
                       <Text style={[styles.cardActionText, { color: role.ctaColor }]}>
-                        Continue as {role.title}
+                        Continue
                       </Text>
                       <ArrowRight size={13} color={role.ctaColor} strokeWidth={2.5} />
                     </View>
@@ -322,7 +315,9 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: RADIUS.xl,
+    backgroundColor: COLORS.white,
     borderWidth: 1.5,
+    borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000000',
@@ -336,10 +331,8 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     justifyContent: 'center',
   },
-  cardTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  cardHeaderStack: {
+    alignItems: 'flex-start',
     marginBottom: 4,
   },
   cardTitle: {
@@ -349,9 +342,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   cardBadge: {
+    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 2.5,
     borderRadius: 6,
+    marginTop: 3,
+    marginBottom: 3,
   },
   cardBadgeText: {
     fontSize: 8.5,

@@ -72,7 +72,7 @@ export default function CustomDrawer({ navigation }) {
     {
       id: 'parts',
       label: 'Parts & Catalog Lookup',
-      subtitle: 'TecDoc verified database',
+      subtitle: 'Official parts database',
       Icon: FindParts3DIcon,
       bgColor: COLORS.errorLight,
       borderColor: COLORS.errorBorder,

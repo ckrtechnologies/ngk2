@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Image,
+  ImageBackground,
   TouchableOpacity,
   ScrollView,
   StatusBar,
@@ -21,6 +22,8 @@ import Toast from 'react-native-toast-message';
 import AppInput from '../../../components/common/AppInput';
 import AppButton from '../../../components/common/AppButton';
 import { useAuth } from '../../../core/auth/useAuth';
+
+const headerBg = require('../../../App_Logos_and_Icons_and_Backgrounds/background-Landing-black.jpg');
 
 const LoginScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
@@ -62,10 +65,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Distributor Portal',
           subtitle: 'Enterprise Tier-1 Logistics Access',
           emailPlaceholder: 'admin@distributor.com',
-          buttonColor: COLORS.slate900,
+          buttonColor: '#1E293B',
           badgeText: 'Distributor',
           badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: COLORS.background,
+          badgeColor: '#F1F5F9',
           showRegister: true,
         };
       case 'reseller':
@@ -73,10 +76,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Reseller Portal',
           subtitle: 'Workshop & Trade Inquiries Access',
           emailPlaceholder: 'workshop@reseller.com',
-          buttonColor: COLORS.primary,
+          buttonColor: '#D97706',
           badgeText: 'Reseller / Workshop',
-          badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: COLORS.background,
+          badgeBg: 'rgba(217, 119, 6, 0.25)',
+          badgeColor: '#FDE68A',
           showRegister: true,
         };
       case 'owner':
@@ -85,10 +88,10 @@ const LoginScreen = ({ route, navigation }) => {
           title: 'Welcome Back',
           subtitle: 'Sign in to your garage & catalog portal',
           emailPlaceholder: 'owner@example.com',
-          buttonColor: COLORS.primary,
+          buttonColor: '#E31837',
           badgeText: 'Vehicle Owner',
-          badgeBg: 'rgba(255, 255, 255, 0.16)',
-          badgeColor: COLORS.background,
+          badgeBg: 'rgba(227, 24, 55, 0.22)',
+          badgeColor: '#FECDD3',
           showRegister: true,
         };
     }
@@ -149,19 +152,32 @@ const LoginScreen = ({ route, navigation }) => {
           },
         });
       } else {
+        const isServerDown = response?.isUnreachable || response?.isServerError || (response?.status && response.status >= 500);
+        const title = isServerDown
+          ? (response?.status === 502 ? 'Backend Unreachable (502)' : 'Server Unavailable')
+          : 'Authentication Failed';
+        const msg = response?.message && !response.message.startsWith('<')
+          ? response.message
+          : isServerDown
+          ? 'Cannot connect to backend server. Please verify the backend is running.'
+          : 'Invalid email or password.';
+
         Toast.show({
           type: 'error',
-          text1: 'Authentication Failed',
-          text2: response?.message || 'Invalid email or password.',
+          text1: title,
+          text2: msg,
         });
       }
     } catch (error) {
       setLoading(false);
+      const is502 = error?.response?.status === 502;
       Toast.show({
         type: 'error',
-        text1: 'Connection Error',
+        text1: is502 ? 'Backend Unreachable (502)' : 'Connection Error',
         text2:
-          error?.response?.data?.message || 'Unable to connect to server.',
+          is502
+            ? 'Backend server is unreachable (502 Bad Gateway). Please verify that the backend is running.'
+            : (error?.response?.data?.message || error?.message || 'Unable to connect to server.'),
       });
     }
   };
@@ -193,12 +209,14 @@ const LoginScreen = ({ route, navigation }) => {
           bounces={false}
         >
         {/* TOP DARK HEADER SECTION */}
-        <View
+        <ImageBackground
+          source={headerBg}
           style={[
             styles.darkHeaderSection,
             { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
             isKeyboardVisible && styles.darkHeaderSectionCompact,
           ]}
+          resizeMode="cover"
         >
           {/* Navigation Bar Row */}
           <View style={styles.navRow}>
@@ -239,7 +257,7 @@ const LoginScreen = ({ route, navigation }) => {
               <Text style={styles.heroSubtitle}>{roleConfig.subtitle}</Text>
             )}
           </View>
-        </View>
+        </ImageBackground>
 
         {/* LOWER FORM SECTION WITH CURVED WHITE SHEET */}
         <View style={[styles.formSection, isKeyboardVisible && styles.formSectionCompact]}>

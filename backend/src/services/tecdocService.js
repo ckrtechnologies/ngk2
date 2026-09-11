@@ -190,6 +190,157 @@ const FALLBACK_SERIES = {
   ],
 };
 
+const FALLBACK_VEHICLES_BY_SERIES = {
+  // Volkswagen
+  701: [
+    { id: 70101, carId: 70101, linkageTargetId: 70101, linkageTargetType: 'P', typeName: '1.4 TSI (110kW / 150HP)', modelName: 'GOLF VIII (CD1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2020', powerHpFrom: '150', powerKwFrom: '110', cylinderCapacityCcm: 1395 },
+    { id: 70102, carId: 70102, linkageTargetId: 70102, linkageTargetType: 'P', typeName: '2.0 TSI GTI (180kW / 245HP)', modelName: 'GOLF VIII (CD1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2020', powerHpFrom: '245', powerKwFrom: '180', cylinderCapacityCcm: 1984 },
+    { id: 70103, carId: 70103, linkageTargetId: 70103, linkageTargetType: 'P', typeName: '2.0 TDI (110kW / 150HP)', modelName: 'GOLF VIII (CD1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2020', powerHpFrom: '150', powerKwFrom: '110', cylinderCapacityCcm: 1968 },
+    { id: 70104, carId: 70104, linkageTargetId: 70104, linkageTargetType: 'P', typeName: '2.0 TSI R 4Motion (235kW / 320HP)', modelName: 'GOLF VIII (CD1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2021', powerHpFrom: '320', powerKwFrom: '235', cylinderCapacityCcm: 1984 },
+  ],
+  702: [
+    { id: 70201, carId: 70201, linkageTargetId: 70201, linkageTargetType: 'P', typeName: '1.0 TSI (70kW / 95HP)', modelName: 'POLO VI (AW1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2018', powerHpFrom: '95', powerKwFrom: '70', cylinderCapacityCcm: 999 },
+    { id: 70202, carId: 70202, linkageTargetId: 70202, linkageTargetType: 'P', typeName: '1.0 TSI (85kW / 115HP)', modelName: 'POLO VI (AW1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2018', powerHpFrom: '115', powerKwFrom: '85', cylinderCapacityCcm: 999 },
+    { id: 70203, carId: 70203, linkageTargetId: 70203, linkageTargetType: 'P', typeName: '2.0 GTI (147kW / 200HP)', modelName: 'POLO VI (AW1)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2018', powerHpFrom: '200', powerKwFrom: '147', cylinderCapacityCcm: 1984 },
+  ],
+  703: [
+    { id: 70301, carId: 70301, linkageTargetId: 70301, linkageTargetType: 'P', typeName: '2.0 BiTDI 4Motion (132kW / 180HP)', modelName: 'AMAROK (2H_, S1B)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2012', powerHpFrom: '180', powerKwFrom: '132', cylinderCapacityCcm: 1968 },
+    { id: 70302, carId: 70302, linkageTargetId: 70302, linkageTargetType: 'P', typeName: '3.0 V6 TDI 4Motion (190kW / 258HP)', modelName: 'AMAROK (2H_, S1B)', manuName: 'VOLKSWAGEN', yearOfConstrFrom: '2018', powerHpFrom: '258', powerKwFrom: '190', cylinderCapacityCcm: 2967 },
+  ],
+  // Toyota
+  501: [
+    { id: 50101, carId: 50101, linkageTargetId: 50101, linkageTargetType: 'P', typeName: '2.8 GD-6 4x4 (GUN126) 150kW / 204HP', modelName: 'HILUX VIII Pickup', manuName: 'TOYOTA', yearOfConstrFrom: '2020', powerHpFrom: '204', powerKwFrom: '150', cylinderCapacityCcm: 2755 },
+    { id: 50102, carId: 50102, linkageTargetId: 50102, linkageTargetType: 'P', typeName: '2.4 GD-6 (GUN125) 110kW / 150HP', modelName: 'HILUX VIII Pickup', manuName: 'TOYOTA', yearOfConstrFrom: '2016', powerHpFrom: '150', powerKwFrom: '110', cylinderCapacityCcm: 2393 },
+    { id: 50103, carId: 50103, linkageTargetId: 50103, linkageTargetType: 'P', typeName: '2.7 VVTi (TGN126) 122kW / 166HP', modelName: 'HILUX VIII Pickup', manuName: 'TOYOTA', yearOfConstrFrom: '2016', powerHpFrom: '166', powerKwFrom: '122', cylinderCapacityCcm: 2694 },
+  ],
+  502: [
+    { id: 50201, carId: 50201, linkageTargetId: 50201, linkageTargetType: 'P', typeName: '2.8 GD-6 4x4 (GUN156) 150kW / 204HP', modelName: 'FORTUNER (_N15_)', manuName: 'TOYOTA', yearOfConstrFrom: '2020', powerHpFrom: '204', powerKwFrom: '150', cylinderCapacityCcm: 2755 },
+    { id: 50202, carId: 50202, linkageTargetId: 50202, linkageTargetType: 'P', typeName: '2.4 GD-6 (GUN165) 110kW / 150HP', modelName: 'FORTUNER (_N15_)', manuName: 'TOYOTA', yearOfConstrFrom: '2016', powerHpFrom: '150', powerKwFrom: '110', cylinderCapacityCcm: 2393 },
+  ],
+  503: [
+    { id: 50301, carId: 50301, linkageTargetId: 50301, linkageTargetType: 'P', typeName: '1.8 Hybrid (ZWE211) 90kW / 122HP', modelName: 'COROLLA Sedan (_E21_)', manuName: 'TOYOTA', yearOfConstrFrom: '2019', powerHpFrom: '122', powerKwFrom: '90', cylinderCapacityCcm: 1798 },
+    { id: 50302, carId: 50302, linkageTargetId: 50302, linkageTargetType: 'P', typeName: '2.0 XR (MZEA12) 125kW / 170HP', modelName: 'COROLLA Sedan (_E21_)', manuName: 'TOYOTA', yearOfConstrFrom: '2019', powerHpFrom: '170', powerKwFrom: '125', cylinderCapacityCcm: 1987 },
+  ],
+  504: [
+    { id: 50401, carId: 50401, linkageTargetId: 50401, linkageTargetType: 'P', typeName: '2.8 D-4D 4x4 (GDJ150) 150kW / 204HP', modelName: 'LAND CRUISER PRADO (_J15_)', manuName: 'TOYOTA', yearOfConstrFrom: '2020', powerHpFrom: '204', powerKwFrom: '150', cylinderCapacityCcm: 2755 },
+    { id: 50402, carId: 50402, linkageTargetId: 50402, linkageTargetType: 'P', typeName: '4.0 V6 Dual-VVTi (GRJ150) 207kW / 282HP', modelName: 'LAND CRUISER PRADO (_J15_)', manuName: 'TOYOTA', yearOfConstrFrom: '2010', powerHpFrom: '282', powerKwFrom: '207', cylinderCapacityCcm: 3956 },
+  ],
+  // BMW
+  601: [
+    { id: 60101, carId: 60101, linkageTargetId: 60101, linkageTargetType: 'P', typeName: '320i 2.0 TwinPower (135kW / 184HP)', modelName: '3 Series (G20)', manuName: 'BMW', yearOfConstrFrom: '2019', powerHpFrom: '184', powerKwFrom: '135', cylinderCapacityCcm: 1998 },
+    { id: 60102, carId: 60102, linkageTargetId: 60102, linkageTargetType: 'P', typeName: '330i 2.0 TwinPower (190kW / 258HP)', modelName: '3 Series (G20)', manuName: 'BMW', yearOfConstrFrom: '2019', powerHpFrom: '258', powerKwFrom: '190', cylinderCapacityCcm: 1998 },
+    { id: 60103, carId: 60103, linkageTargetId: 60103, linkageTargetType: 'P', typeName: 'M340i xDrive 3.0 (285kW / 387HP)', modelName: '3 Series (G20)', manuName: 'BMW', yearOfConstrFrom: '2019', powerHpFrom: '387', powerKwFrom: '285', cylinderCapacityCcm: 2998 },
+    { id: 60104, carId: 60104, linkageTargetId: 60104, linkageTargetType: 'P', typeName: '320d 2.0 Turbo Diesel (140kW / 190HP)', modelName: '3 Series (G20)', manuName: 'BMW', yearOfConstrFrom: '2019', powerHpFrom: '190', powerKwFrom: '140', cylinderCapacityCcm: 1995 },
+  ],
+  602: [
+    { id: 60201, carId: 60201, linkageTargetId: 60201, linkageTargetType: 'P', typeName: '520d 2.0 Turbo Diesel (140kW / 190HP)', modelName: '5 Series (G30)', manuName: 'BMW', yearOfConstrFrom: '2017', powerHpFrom: '190', powerKwFrom: '140', cylinderCapacityCcm: 1995 },
+    { id: 60202, carId: 60202, linkageTargetId: 60202, linkageTargetType: 'P', typeName: '530i 2.0 TwinPower (185kW / 252HP)', modelName: '5 Series (G30)', manuName: 'BMW', yearOfConstrFrom: '2017', powerHpFrom: '252', powerKwFrom: '185', cylinderCapacityCcm: 1998 },
+  ],
+  // Ford Ranger & EcoSport
+  10450: [
+    { id: 104501, carId: 104501, linkageTargetId: 104501, linkageTargetType: 'P', typeName: '2.0 EcoBlue Bi-Turbo 4x4 (157kW / 213HP)', modelName: 'RANGER (TKE)', manuName: 'FORD', yearOfConstrFrom: '2019', powerHpFrom: '213', powerKwFrom: '157', cylinderCapacityCcm: 1996 },
+    { id: 104502, carId: 104502, linkageTargetId: 104502, linkageTargetType: 'P', typeName: '3.2 TDCi 4x4 (147kW / 200HP)', modelName: 'RANGER (TKE)', manuName: 'FORD', yearOfConstrFrom: '2015', powerHpFrom: '200', powerKwFrom: '147', cylinderCapacityCcm: 3198 },
+    { id: 104503, carId: 104503, linkageTargetId: 104503, linkageTargetType: 'P', typeName: '2.2 TDCi (118kW / 160HP)', modelName: 'RANGER (TKE)', manuName: 'FORD', yearOfConstrFrom: '2015', powerHpFrom: '160', powerKwFrom: '118', cylinderCapacityCcm: 2198 },
+  ],
+  11620: [
+    { id: 116201, carId: 116201, linkageTargetId: 116201, linkageTargetType: 'P', typeName: '1.0 EcoBoost (92kW / 125HP)', modelName: 'ECOSPORT', manuName: 'FORD', yearOfConstrFrom: '2018', powerHpFrom: '125', powerKwFrom: '92', cylinderCapacityCcm: 998 },
+    { id: 116202, carId: 116202, linkageTargetId: 116202, linkageTargetType: 'P', typeName: '1.5 TDCi (74kW / 100HP)', modelName: 'ECOSPORT', manuName: 'FORD', yearOfConstrFrom: '2015', powerHpFrom: '100', powerKwFrom: '74', cylinderCapacityCcm: 1498 },
+  ],
+  // Isuzu D-MAX
+  10252: [
+    { id: 102521, carId: 102521, linkageTargetId: 102521, linkageTargetType: 'P', typeName: '3.0 Ddi 4x4 (140kW / 190HP)', modelName: 'D-MAX I (TFR, TFS)', manuName: 'ISUZU', yearOfConstrFrom: '2020', powerHpFrom: '190', powerKwFrom: '140', cylinderCapacityCcm: 2999 },
+    { id: 102522, carId: 102522, linkageTargetId: 102522, linkageTargetType: 'P', typeName: '1.9 Ddi (110kW / 150HP)', modelName: 'D-MAX I (TFR, TFS)', manuName: 'ISUZU', yearOfConstrFrom: '2020', powerHpFrom: '150', powerKwFrom: '110', cylinderCapacityCcm: 1898 },
+  ],
+  40683: [
+    { id: 406831, carId: 406831, linkageTargetId: 406831, linkageTargetType: 'P', typeName: '3.0 D-Teq 4x4 (130kW / 177HP)', modelName: 'D-MAX II (TFR, TFS)', manuName: 'ISUZU', yearOfConstrFrom: '2013', powerHpFrom: '177', powerKwFrom: '130', cylinderCapacityCcm: 2999 },
+    { id: 406832, carId: 406832, linkageTargetId: 406832, linkageTargetType: 'P', typeName: '2.5 D-Teq (100kW / 136HP)', modelName: 'D-MAX II (TFR, TFS)', manuName: 'ISUZU', yearOfConstrFrom: '2013', powerHpFrom: '136', powerKwFrom: '100', cylinderCapacityCcm: 2499 },
+  ],
+  // Mercedes-Benz Sprinter & C-Class
+  2039: [
+    { id: 20391, carId: 20391, linkageTargetId: 20391, linkageTargetType: 'L', typeName: '316 CDI (120kW / 163HP)', modelName: 'SPRINTER 2-t Van (B901, B902)', manuName: 'MERCEDES-BENZ', yearOfConstrFrom: '2018', powerHpFrom: '163', powerKwFrom: '120', cylinderCapacityCcm: 2143 },
+    { id: 20392, carId: 20392, linkageTargetId: 20392, linkageTargetType: 'L', typeName: '519 CDI 3.0 V6 (140kW / 190HP)', modelName: 'SPRINTER 2-t Van (B901, B902)', manuName: 'MERCEDES-BENZ', yearOfConstrFrom: '2018', powerHpFrom: '190', powerKwFrom: '140', cylinderCapacityCcm: 2987 },
+  ],
+  124: [
+    { id: 12401, carId: 12401, linkageTargetId: 12401, linkageTargetType: 'P', typeName: 'C 200 EQ Boost (150kW / 204HP)', modelName: 'C-CLASS (W205)', manuName: 'MERCEDES-BENZ', yearOfConstrFrom: '2018', powerHpFrom: '204', powerKwFrom: '150', cylinderCapacityCcm: 1497 },
+    { id: 12402, carId: 12402, linkageTargetId: 12402, linkageTargetType: 'P', typeName: 'C 220 d (143kW / 194HP)', modelName: 'C-CLASS (W205)', manuName: 'MERCEDES-BENZ', yearOfConstrFrom: '2018', powerHpFrom: '194', powerKwFrom: '143', cylinderCapacityCcm: 1950 },
+    { id: 12403, carId: 12403, linkageTargetId: 12403, linkageTargetType: 'P', typeName: 'C 300 (190kW / 258HP)', modelName: 'C-CLASS (W205)', manuName: 'MERCEDES-BENZ', yearOfConstrFrom: '2018', powerHpFrom: '258', powerKwFrom: '190', cylinderCapacityCcm: 1991 },
+  ],
+  // Nissan NP200 / NP300
+  8001: [
+    { id: 80011, carId: 80011, linkageTargetId: 80011, linkageTargetType: 'L', typeName: '2.5 dCi 4x4 (98kW / 133HP)', modelName: 'NP300 Hardbody (D22)', manuName: 'NISSAN', yearOfConstrFrom: '2010', powerHpFrom: '133', powerKwFrom: '98', cylinderCapacityCcm: 2488 },
+    { id: 80012, carId: 80012, linkageTargetId: 80012, linkageTargetType: 'L', typeName: '2.4i 16V 4x4 (105kW / 143HP)', modelName: 'NP300 Hardbody (D22)', manuName: 'NISSAN', yearOfConstrFrom: '2010', powerHpFrom: '143', powerKwFrom: '105', cylinderCapacityCcm: 2389 },
+  ],
+  8005: [
+    { id: 80051, carId: 80051, linkageTargetId: 80051, linkageTargetType: 'L', typeName: '1.6 8V (64kW / 87HP)', modelName: 'NP200 Half-ton Bakkie', manuName: 'NISSAN', yearOfConstrFrom: '2008', powerHpFrom: '87', powerKwFrom: '64', cylinderCapacityCcm: 1598 },
+    { id: 80052, carId: 80052, linkageTargetId: 80052, linkageTargetType: 'L', typeName: '1.5 dCi (63kW / 86HP)', modelName: 'NP200 Half-ton Bakkie', manuName: 'NISSAN', yearOfConstrFrom: '2008', powerHpFrom: '86', powerKwFrom: '63', cylinderCapacityCcm: 1461 },
+  ],
+  // Hyundai Accent & Tucson
+  9145: [
+    { id: 91451, carId: 91451, linkageTargetId: 91451, linkageTargetType: 'P', typeName: '1.6 GLS (91kW / 124HP)', modelName: 'ACCENT IV (RB)', manuName: 'HYUNDAI', yearOfConstrFrom: '2011', powerHpFrom: '124', powerKwFrom: '91', cylinderCapacityCcm: 1591 },
+    { id: 91452, carId: 91452, linkageTargetId: 91452, linkageTargetType: 'P', typeName: '1.6 CRDi (94kW / 128HP)', modelName: 'ACCENT IV (RB)', manuName: 'HYUNDAI', yearOfConstrFrom: '2011', powerHpFrom: '128', powerKwFrom: '94', cylinderCapacityCcm: 1582 },
+  ],
+  14758: [
+    { id: 147581, carId: 147581, linkageTargetId: 147581, linkageTargetType: 'P', typeName: '2.0 CRDi AWD (131kW / 178HP)', modelName: 'TUCSON (TL, TLE)', manuName: 'HYUNDAI', yearOfConstrFrom: '2015', powerHpFrom: '178', powerKwFrom: '131', cylinderCapacityCcm: 1995 },
+    { id: 147582, carId: 147582, linkageTargetId: 147582, linkageTargetType: 'P', typeName: '1.6 T-GDi (130kW / 177HP)', modelName: 'TUCSON (TL, TLE)', manuName: 'HYUNDAI', yearOfConstrFrom: '2015', powerHpFrom: '177', powerKwFrom: '130', cylinderCapacityCcm: 1591 },
+  ],
+  // Motorcycles
+  4501: [
+    { id: 45011, carId: 45011, linkageTargetId: 45011, linkageTargetType: 'M', typeName: '1000cc DOHC Inline-4 (160kW / 217HP)', modelName: 'CBR 1000RR Fireblade', manuName: 'HONDA', yearOfConstrFrom: '2020', powerHpFrom: '217', powerKwFrom: '160', cylinderCapacityCcm: 999 },
+    { id: 45012, carId: 45012, linkageTargetId: 45012, linkageTargetType: 'M', typeName: '1000cc SP Electronic Suspension (160kW / 217HP)', modelName: 'CBR 1000RR Fireblade', manuName: 'HONDA', yearOfConstrFrom: '2020', powerHpFrom: '217', powerKwFrom: '160', cylinderCapacityCcm: 999 },
+  ],
+  4502: [
+    { id: 45021, carId: 45021, linkageTargetId: 45021, linkageTargetType: 'M', typeName: '449cc Unicam Single (41kW / 56HP)', modelName: 'CRF 450R / 450L', manuName: 'HONDA', yearOfConstrFrom: '2019', powerHpFrom: '56', powerKwFrom: '41', cylinderCapacityCcm: 449 },
+  ],
+  4503: [
+    { id: 45031, carId: 45031, linkageTargetId: 45031, linkageTargetType: 'M', typeName: '1084cc SOHC Twin (75kW / 102HP)', modelName: 'CRF 1100L Africa Twin', manuName: 'HONDA', yearOfConstrFrom: '2020', powerHpFrom: '102', powerKwFrom: '75', cylinderCapacityCcm: 1084 },
+  ],
+  11641: [
+    { id: 116411, carId: 116411, linkageTargetId: 116411, linkageTargetType: 'M', typeName: '998cc CP4 Crossplane (147kW / 200HP)', modelName: 'YZF-R1 / YZF-R1M', manuName: 'YAMAHA', yearOfConstrFrom: '2020', powerHpFrom: '200', powerKwFrom: '147', cylinderCapacityCcm: 998 },
+    { id: 116412, carId: 116412, linkageTargetId: 116412, linkageTargetType: 'M', typeName: '998cc R1M Carbon Electronic (147kW / 200HP)', modelName: 'YZF-R1 / YZF-R1M', manuName: 'YAMAHA', yearOfConstrFrom: '2020', powerHpFrom: '200', powerKwFrom: '147', cylinderCapacityCcm: 998 },
+  ],
+  11642: [
+    { id: 116421, carId: 116421, linkageTargetId: 116421, linkageTargetType: 'M', typeName: '890cc CP3 In-line 3 (87kW / 119HP)', modelName: 'MT-09 / Tracer 9', manuName: 'YAMAHA', yearOfConstrFrom: '2021', powerHpFrom: '119', powerKwFrom: '87', cylinderCapacityCcm: 890 },
+  ],
+  5741: [
+    { id: 57411, carId: 57411, linkageTargetId: 57411, linkageTargetType: 'M', typeName: '998cc 16V DOHC In-line 4 (149kW / 203HP)', modelName: 'Ninja ZX-10R', manuName: 'KAWASAKI', yearOfConstrFrom: '2021', powerHpFrom: '203', powerKwFrom: '149', cylinderCapacityCcm: 998 },
+  ],
+  1091: [
+    { id: 10911, carId: 10911, linkageTargetId: 10911, linkageTargetType: 'M', typeName: '999cc 4-Cylinder DOHC (149kW / 202HP)', modelName: 'GSX-R 1000 / R', manuName: 'SUZUKI', yearOfConstrFrom: '2019', powerHpFrom: '202', powerKwFrom: '149', cylinderCapacityCcm: 999 },
+  ],
+  27601: [
+    { id: 276011, carId: 276011, linkageTargetId: 276011, linkageTargetType: 'M', typeName: '1301cc 75° V-Twin LC8 (132kW / 180HP)', modelName: '1290 Super Duke R', manuName: 'KTM', yearOfConstrFrom: '2020', powerHpFrom: '180', powerKwFrom: '132', cylinderCapacityCcm: 1301 },
+  ],
+  45521: [
+    { id: 455211, carId: 455211, linkageTargetId: 455211, linkageTargetType: 'M', typeName: '199.5cc Triple Spark 4V (18kW / 24.5HP)', modelName: 'Pulsar 200 NS / RS', manuName: 'BAJAJ', yearOfConstrFrom: '2018', powerHpFrom: '24.5', powerKwFrom: '18', cylinderCapacityCcm: 200 },
+  ],
+  // Commercial Vehicles (O)
+  1201: [
+    { id: 12011, carId: 12011, linkageTargetId: 12011, linkageTargetType: 'O', typeName: '16.1L D16K 750hp Euro 6 (551kW / 750HP)', modelName: 'FH 16 / FH 13', manuName: 'VOLVO', yearOfConstrFrom: '2018', powerHpFrom: '750', powerKwFrom: '551', cylinderCapacityCcm: 16100 },
+    { id: 12012, carId: 12012, linkageTargetId: 12012, linkageTargetType: 'O', typeName: '12.8L D13K 500hp Turbo Compound (368kW / 500HP)', modelName: 'FH 16 / FH 13', manuName: 'VOLVO', yearOfConstrFrom: '2019', powerHpFrom: '500', powerKwFrom: '368', cylinderCapacityCcm: 12800 },
+  ],
+  1031: [
+    { id: 10311, carId: 10311, linkageTargetId: 10311, linkageTargetType: 'O', typeName: '16.4L DC16 V8 580hp (427kW / 580HP)', modelName: 'R-Series (R450, R500, R560)', manuName: 'SCANIA', yearOfConstrFrom: '2018', powerHpFrom: '580', powerKwFrom: '427', cylinderCapacityCcm: 16400 },
+  ],
+  // Tractors (T)
+  3011: [
+    { id: 30111, carId: 30111, linkageTargetId: 30111, linkageTargetType: 'T', typeName: '6.8L 6-Cyl PowerTech PVS Turbo Diesel (155kW / 210HP)', modelName: '6M / 6R Utility Tractors', manuName: 'JOHN DEERE', yearOfConstrFrom: '2020', powerHpFrom: '210', powerKwFrom: '155', cylinderCapacityCcm: 6800 },
+    { id: 30112, carId: 30112, linkageTargetId: 30112, linkageTargetType: 'T', typeName: '4.5L 4-Cyl PowerTech PWL (95kW / 130HP)', modelName: '6M / 6R Utility Tractors', manuName: 'JOHN DEERE', yearOfConstrFrom: '2018', powerHpFrom: '130', powerKwFrom: '95', cylinderCapacityCcm: 4500 },
+  ],
+  3021: [
+    { id: 30211, carId: 30211, linkageTargetId: 30211, linkageTargetType: 'T', typeName: 'AGCO Power 4.4L 4-Cyl Turbo (96kW / 130HP)', modelName: 'MF 5700 / 6700 Series', manuName: 'MASSEY FERGUSON', yearOfConstrFrom: '2019', powerHpFrom: '130', powerKwFrom: '96', cylinderCapacityCcm: 4400 },
+    { id: 30212, carId: 30212, linkageTargetId: 30212, linkageTargetType: 'T', typeName: 'AGCO Power 4.9L 4-Cyl Turbo (118kW / 160HP)', modelName: 'MF 5700 / 6700 Series', manuName: 'MASSEY FERGUSON', yearOfConstrFrom: '2019', powerHpFrom: '160', powerKwFrom: '118', cylinderCapacityCcm: 4900 },
+  ],
+  // Marine
+  6021: [
+    { id: 60211, carId: 60211, linkageTargetId: 60211, linkageTargetType: 'MARINE', typeName: '7.6L V12 600hp Naturally Aspirated Outboard', modelName: 'Verado V12 600hp Outboards', manuName: 'MERCURY MARINE', yearOfConstrFrom: '2021', powerHpFrom: '600', powerKwFrom: '441', cylinderCapacityCcm: 7600 },
+    { id: 60212, carId: 60212, linkageTargetId: 60212, linkageTargetType: 'MARINE', typeName: '4.6L V8 300hp FourStroke Outboard', modelName: 'Verado V8 300hp Outboards', manuName: 'MERCURY MARINE', yearOfConstrFrom: '2019', powerHpFrom: '300', powerKwFrom: '221', cylinderCapacityCcm: 4600 },
+  ],
+  116401: [
+    { id: 1164011, carId: 1164011, linkageTargetId: 1164011, linkageTargetType: 'MARINE', typeName: '4.2L V6 Offshore 300hp 4-Stroke', modelName: 'F350 / F300 V8 Offshore Outboards', manuName: 'YAMAHA MARINE', yearOfConstrFrom: '2020', powerHpFrom: '300', powerKwFrom: '221', cylinderCapacityCcm: 4200 },
+    { id: 1164012, carId: 1164012, linkageTargetId: 1164012, linkageTargetType: 'MARINE', typeName: '5.3L V8 350hp 4-Stroke Offshore', modelName: 'F350 / F300 V8 Offshore Outboards', manuName: 'YAMAHA MARINE', yearOfConstrFrom: '2018', powerHpFrom: '350', powerKwFrom: '257', cylinderCapacityCcm: 5300 },
+  ]
+};
+
 const FALLBACK_ARTICLES = [
   {
     articleId: 5787,
@@ -639,58 +790,66 @@ class TecDocService {
    */
   handleFallback(payload) {
     if (payload.getManufacturers2 || payload.getManufacturers || payload.getLinkageTargets?.includeMfrFacets) {
-      const type = (payload.getLinkageTargets?.linkageTargetType || payload.getManufacturers2?.linkingTargetType || 'P').toUpperCase();
+      const rawType = (
+        payload.getLinkageTargets?.linkageTargetType ||
+        payload.getManufacturers2?.linkingTargetType ||
+        payload.getManufacturers?.linkingTargetType ||
+        payload.getManufacturers2?.linkageTargetType ||
+        'P'
+      ).toUpperCase().trim();
       let mfrs = FALLBACK_MANUFACTURERS;
 
-      if (type === 'B' || type === 'MOTORCYCLE') {
+      if (rawType === 'B' || rawType === 'MOTORCYCLE' || rawType === 'M' || rawType === 'BIKE') {
         mfrs = this.getPopularBrands('M').map((b) => ({
           id: b.manuId || b.id,
           manuId: b.manuId || b.id,
+          mfrId: b.manuId || b.id,
           name: b.name || b.manuName,
           manuName: b.name || b.manuName,
           count: 120,
         }));
-      } else if (type === 'M' || type === 'MARINE') {
+      } else if (rawType === 'MARINE' || rawType === 'BOAT') {
         mfrs = [
-          { id: 1164, manuId: 1164, name: 'YAMAHA MARINE', manuName: 'YAMAHA MARINE', count: 95 },
-          { id: 602, manuId: 602, name: 'MERCURY MARINE', manuName: 'MERCURY MARINE', count: 85 },
-          { id: 45, manuId: 45, name: 'HONDA MARINE', manuName: 'HONDA MARINE', count: 70 },
-          { id: 109, manuId: 109, name: 'SUZUKI MARINE', manuName: 'SUZUKI MARINE', count: 65 },
-          { id: 120, manuId: 120, name: 'VOLVO PENTA', manuName: 'VOLVO PENTA', count: 60 },
-          { id: 603, manuId: 603, name: 'YANMAR', manuName: 'YANMAR', count: 50 },
-          { id: 574, manuId: 574, name: 'KAWASAKI WATERCRAFT', manuName: 'KAWASAKI WATERCRAFT', count: 45 },
-          { id: 604, manuId: 604, name: 'TOHATSU', manuName: 'TOHATSU', count: 40 },
-          { id: 605, manuId: 605, name: 'EVINRUDE / JOHNSON', manuName: 'EVINRUDE / JOHNSON', count: 35 },
-          { id: 607, manuId: 607, name: 'CUMMINS MARINE', manuName: 'CUMMINS MARINE', count: 30 },
+          { id: 11640, manuId: 11640, mfrId: 11640, name: 'YAMAHA MARINE', manuName: 'YAMAHA MARINE', count: 95 },
+          { id: 602, manuId: 602, mfrId: 602, name: 'MERCURY MARINE', manuName: 'MERCURY MARINE', count: 85 },
+          { id: 450, manuId: 450, mfrId: 450, name: 'HONDA MARINE', manuName: 'HONDA MARINE', count: 70 },
+          { id: 1090, manuId: 1090, mfrId: 1090, name: 'SUZUKI MARINE', manuName: 'SUZUKI MARINE', count: 65 },
+          { id: 1200, manuId: 1200, mfrId: 1200, name: 'VOLVO PENTA', manuName: 'VOLVO PENTA', count: 60 },
+          { id: 603, manuId: 603, mfrId: 603, name: 'YANMAR', manuName: 'YANMAR', count: 50 },
+          { id: 5740, manuId: 5740, mfrId: 5740, name: 'KAWASAKI WATERCRAFT', manuName: 'KAWASAKI WATERCRAFT', count: 45 },
+          { id: 604, manuId: 604, mfrId: 604, name: 'TOHATSU', manuName: 'TOHATSU', count: 40 },
+          { id: 605, manuId: 605, mfrId: 605, name: 'EVINRUDE / JOHNSON', manuName: 'EVINRUDE / JOHNSON', count: 35 },
+          { id: 607, manuId: 607, mfrId: 607, name: 'CUMMINS MARINE', manuName: 'CUMMINS MARINE', count: 30 },
         ];
-      } else if (type === 'O' || type === 'COMMERCIAL') {
+      } else if (rawType === 'O' || rawType === 'COMMERCIAL') {
         mfrs = this.getPopularBrands('O').map((b) => ({
           id: b.manuId || b.id,
           manuId: b.manuId || b.id,
+          mfrId: b.manuId || b.id,
           name: b.name || b.manuName,
           manuName: b.name || b.manuName,
           count: 150,
         }));
-      } else if (type === 'L' || type === 'LIGHTCOMMERCIAL') {
+      } else if (rawType === 'L' || rawType === 'LIGHTCOMMERCIAL' || rawType === 'LCV' || rawType === 'LAN') {
         mfrs = [
-          { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', count: 480 },
-          { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', count: 320 },
-          { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', count: 290 },
-          { id: 121, manuId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', count: 260 },
-          { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', count: 210 },
-          { id: 74, manuId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', count: 190 },
-          { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', count: 160 },
-          { id: 93, manuId: 93, name: 'RENAULT', manuName: 'RENAULT', count: 110 },
+          { id: 111, manuId: 111, mfrId: 111, name: 'TOYOTA', manuName: 'TOYOTA', count: 480 },
+          { id: 36, manuId: 36, mfrId: 36, name: 'FORD', manuName: 'FORD', count: 320 },
+          { id: 54, manuId: 54, mfrId: 54, name: 'ISUZU', manuName: 'ISUZU', count: 290 },
+          { id: 121, manuId: 121, mfrId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', count: 260 },
+          { id: 80, manuId: 80, mfrId: 80, name: 'NISSAN', manuName: 'NISSAN', count: 210 },
+          { id: 74, manuId: 74, mfrId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', count: 190 },
+          { id: 183, manuId: 183, mfrId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', count: 160 },
+          { id: 93, manuId: 93, mfrId: 93, name: 'RENAULT', manuName: 'RENAULT', count: 110 },
         ];
-      } else if (type === 'T' || type === 'TRACTOR') {
+      } else if (rawType === 'T' || rawType === 'TRACTOR' || rawType === 'AGRICULTURAL') {
         mfrs = [
-          { id: 301, manuId: 301, name: 'JOHN DEERE', manuName: 'JOHN DEERE', count: 220 },
-          { id: 302, manuId: 302, name: 'MASSEY FERGUSON', manuName: 'MASSEY FERGUSON', count: 180 },
-          { id: 303, manuId: 303, name: 'NEW HOLLAND', manuName: 'NEW HOLLAND', count: 160 },
-          { id: 304, manuId: 304, name: 'CASE IH', manuName: 'CASE IH', count: 140 },
-          { id: 305, manuId: 305, name: 'KUBOTA', manuName: 'KUBOTA', count: 130 },
-          { id: 306, manuId: 306, name: 'DEUTZ-FAHR', manuName: 'DEUTZ-FAHR', count: 95 },
-          { id: 307, manuId: 307, name: 'CLAAS', manuName: 'CLAAS', count: 85 },
+          { id: 301, manuId: 301, mfrId: 301, name: 'JOHN DEERE', manuName: 'JOHN DEERE', count: 220 },
+          { id: 302, manuId: 302, mfrId: 302, name: 'MASSEY FERGUSON', manuName: 'MASSEY FERGUSON', count: 180 },
+          { id: 303, manuId: 303, mfrId: 303, name: 'NEW HOLLAND', manuName: 'NEW HOLLAND', count: 160 },
+          { id: 304, manuId: 304, mfrId: 304, name: 'CASE IH', manuName: 'CASE IH', count: 140 },
+          { id: 305, manuId: 305, mfrId: 305, name: 'KUBOTA', manuName: 'KUBOTA', count: 130 },
+          { id: 306, manuId: 306, mfrId: 306, name: 'DEUTZ-FAHR', manuName: 'DEUTZ-FAHR', count: 95 },
+          { id: 307, manuId: 307, mfrId: 307, name: 'CLAAS', manuName: 'CLAAS', count: 85 },
         ];
       }
 
@@ -702,25 +861,38 @@ class TecDocService {
     }
 
     if (payload.getModelSeries2 || payload.getModelSeries || payload.getLinkageTargets?.includeVehicleModelSeriesFacets) {
-      const mfrId = payload.getModelSeries2?.manuId || payload.getModelSeries?.manuId || payload.getLinkageTargets?.mfrIds?.[0] || 111;
-      const type = (payload.getLinkageTargets?.linkageTargetType || 'P').toUpperCase();
+      const mfrId = Number(
+        payload.getModelSeries2?.manuId ||
+        payload.getModelSeries?.manuId ||
+        payload.getModelSeries2?.mfrId ||
+        payload.getModelSeries?.mfrId ||
+        (Array.isArray(payload.getLinkageTargets?.mfrIds) ? payload.getLinkageTargets.mfrIds[0] : payload.getLinkageTargets?.mfrIds) ||
+        111
+      );
+      const rawType = (
+        payload.getModelSeries2?.linkingTargetType ||
+        payload.getModelSeries?.linkingTargetType ||
+        payload.getLinkageTargets?.linkageTargetType ||
+        'P'
+      ).toUpperCase().trim();
+
       let list = FALLBACK_SERIES[mfrId];
 
-      if (type === 'M' || type === 'MARINE') {
-        if (mfrId == 1164) {
+      if (rawType === 'MARINE' || rawType === 'BOAT') {
+        if (mfrId == 1164 || mfrId == 11640) {
           list = [
             { id: 116401, modelId: 116401, name: 'F350 / F300 V8 Offshore Outboards', modelname: 'F350 / F300 V8 Offshore Outboards', count: 35 },
             { id: 116402, modelId: 116402, name: 'F200 / F150 In-Line 4 4-Stroke', modelname: 'F200 / F150 In-Line 4 4-Stroke', count: 30 },
             { id: 116403, modelId: 116403, name: 'WaveRunner FX SVHO / GP1800R PWC', modelname: 'WaveRunner FX SVHO / GP1800R PWC', count: 28 },
             { id: 116404, modelId: 116404, name: 'VMAX SHO 250 / 200 High Output', modelname: 'VMAX SHO 250 / 200 High Output', count: 25 },
           ];
-        } else if (mfrId == 45) {
+        } else if (mfrId == 45 || mfrId == 450) {
           list = [
             { id: 45001, modelId: 45001, name: 'BF 250 / BF 225 V6 4-Stroke Outboard', modelname: 'BF 250 / BF 225 V6 4-Stroke Outboard', count: 28 },
             { id: 45002, modelId: 45002, name: 'BF 150 / BF 135 In-Line 4 Outboard', modelname: 'BF 150 / BF 135 In-Line 4 Outboard', count: 24 },
             { id: 45003, modelId: 45003, name: 'BF 90 / BF 75 Mid-Range Outboard', modelname: 'BF 90 / BF 75 Mid-Range Outboard', count: 20 },
           ];
-        } else if (mfrId == 109) {
+        } else if (mfrId == 109 || mfrId == 1090) {
           list = [
             { id: 10901, modelId: 10901, name: 'DF350A / DF300B Dual-Prop Outboard', modelname: 'DF350A / DF300B Dual-Prop Outboard', count: 30 },
             { id: 10902, modelId: 10902, name: 'DF200A / DF175A 4-Cylinder Outboard', modelname: 'DF200A / DF175A 4-Cylinder Outboard', count: 26 },
@@ -730,44 +902,83 @@ class TecDocService {
           list = FALLBACK_SERIES[mfrId] || FALLBACK_SERIES[602];
         }
       } else if (!list) {
-        if (type === 'B') list = FALLBACK_SERIES[1164];
-        else if (type === 'O') list = FALLBACK_SERIES[120];
-        else if (type === 'T') list = FALLBACK_SERIES[301];
+        if (rawType === 'B' || rawType === 'M' || rawType === 'MOTORCYCLE') list = FALLBACK_SERIES[1164];
+        else if (rawType === 'O') list = FALLBACK_SERIES[120];
+        else if (rawType === 'T') list = FALLBACK_SERIES[301];
         else list = FALLBACK_SERIES[111];
       }
 
+      const normalizedList = (list || []).map((s) => ({
+        ...s,
+        id: s.id || s.modelId,
+        modelId: s.id || s.modelId,
+        seriesId: s.id || s.modelId,
+        vehicleModelSeriesId: s.id || s.modelId,
+        name: s.name || s.modelname,
+        modelname: s.name || s.modelname,
+        modelName: s.name || s.modelname,
+        seriesName: s.name || s.modelname,
+        linkingTargetType: rawType,
+        linkageTargetType: rawType,
+      }));
+
       return {
-        data: { array: list },
-        vehicleModelSeriesFacets: { counts: list },
+        data: { array: normalizedList },
+        vehicleModelSeriesFacets: { counts: normalizedList },
         status: 200,
       };
     }
 
     if (payload.getLinkageTargets && !payload.getLinkageTargets.includeMfrFacets && !payload.getLinkageTargets.includeVehicleModelSeriesFacets) {
-      const type = (payload.getLinkageTargets.linkageTargetType || 'P').toUpperCase();
-      let variants = [];
-      if (type === 'B' || type === 'M') {
+      const rawType = (payload.getLinkageTargets.linkageTargetType || 'P').toUpperCase().trim();
+      const mfrId = Number(
+        Array.isArray(payload.getLinkageTargets.mfrIds)
+          ? payload.getLinkageTargets.mfrIds[0]
+          : payload.getLinkageTargets.mfrIds || 111
+      );
+      const seriesId = Number(
+        Array.isArray(payload.getLinkageTargets.vehicleModelSeriesIds)
+          ? payload.getLinkageTargets.vehicleModelSeriesIds[0]
+          : payload.getLinkageTargets.vehicleModelSeriesIds || payload.getLinkageTargets.vehicleModelSeriesId || 0
+      );
+
+      let variants = FALLBACK_VEHICLES_BY_SERIES[seriesId];
+      if (!variants || variants.length === 0) {
+        let sName = 'Standard Trim';
+        const sList = FALLBACK_SERIES[mfrId] || [];
+        const found = sList.find((x) => (x.id || x.modelId) === seriesId);
+        if (found) sName = found.name || found.modelname;
+
         variants = [
-          { id: 4001, carId: 4001, linkageTargetId: 4001, linkageTargetType: 'B', typeName: '1000cc 4-Cylinder DOHC (158kW / 215HP)', modelName: 'Supersport / Adventure', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2020', powerHpFrom: '215', powerKwFrom: '158' },
-          { id: 4002, carId: 4002, linkageTargetId: 4002, linkageTargetType: 'B', typeName: '600cc 4-Cylinder 16V (88kW / 120HP)', modelName: 'Sport / Touring', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2018', powerHpFrom: '120', powerKwFrom: '88' },
-          { id: 4003, carId: 4003, linkageTargetId: 4003, linkageTargetType: 'B', typeName: '450cc 4-Stroke Single (40kW / 54HP)', modelName: 'Enduro / MX', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2019', powerHpFrom: '54', powerKwFrom: '40' },
-        ];
-      } else if (type === 'T') {
-        variants = [
-          { id: 3001, carId: 3001, linkageTargetId: 3001, linkageTargetType: 'T', typeName: '6.8L 6-Cyl PowerTech Turbo Diesel (155kW / 210HP)', modelName: 'Agricultural Tractor', manuName: 'AGRI', yearOfConstrFrom: '2018', powerHpFrom: '210', powerKwFrom: '155' },
-          { id: 3002, carId: 3002, linkageTargetId: 3002, linkageTargetType: 'T', typeName: '4.5L 4-Cyl Turbo Diesel (95kW / 130HP)', modelName: 'Utility Tractor', manuName: 'AGRI', yearOfConstrFrom: '2016', powerHpFrom: '130', powerKwFrom: '95' },
-        ];
-      } else if (type === 'O') {
-        variants = [
-          { id: 2001, carId: 2001, linkageTargetId: 2001, linkageTargetType: 'O', typeName: '12.8L OM471 6-Cyl Turbo Diesel (330kW / 449HP)', modelName: 'Heavy Truck / Hauler', manuName: 'COMMERCIAL', yearOfConstrFrom: '2019', powerHpFrom: '449', powerKwFrom: '330' },
-          { id: 2002, carId: 2002, linkageTargetId: 2002, linkageTargetType: 'O', typeName: '7.7L OM936 6-Cyl Turbo (220kW / 299HP)', modelName: 'Medium Distribution / Tipper', manuName: 'COMMERCIAL', yearOfConstrFrom: '2018', powerHpFrom: '299', powerKwFrom: '220' },
-        ];
-      } else {
-        variants = [
-          { id: 1001, carId: 1001, linkageTargetId: 1001, linkageTargetType: 'P', typeName: '2.8 GD-6 (GUN126) 150kW / 204HP', modelName: 'HILUX VIII', manuName: 'TOYOTA', yearOfConstrFrom: '2020', powerHpFrom: '204', powerKwFrom: '150' },
-          { id: 1002, carId: 1002, linkageTargetId: 1002, linkageTargetType: 'P', typeName: '2.4 GD-6 (GUN125) 110kW / 150HP', modelName: 'HILUX VIII', manuName: 'TOYOTA', yearOfConstrFrom: '2016', powerHpFrom: '150', powerKwFrom: '110' },
+          {
+            id: Number(`${seriesId || 100}01`),
+            carId: Number(`${seriesId || 100}01`),
+            linkageTargetId: Number(`${seriesId || 100}01`),
+            linkageTargetType: rawType,
+            typeName: `${sName} 2.0L Turbo (140kW / 190HP)`,
+            modelName: sName,
+            manuName: 'OEM',
+            yearOfConstrFrom: '2020',
+            powerHpFrom: '190',
+            powerKwFrom: '140',
+            cylinderCapacityCcm: 1984,
+          },
+          {
+            id: Number(`${seriesId || 100}02`),
+            carId: Number(`${seriesId || 100}02`),
+            linkageTargetId: Number(`${seriesId || 100}02`),
+            linkageTargetType: rawType,
+            typeName: `${sName} 2.0L TDI / Eco (110kW / 150HP)`,
+            modelName: sName,
+            manuName: 'OEM',
+            yearOfConstrFrom: '2019',
+            powerHpFrom: '150',
+            powerKwFrom: '110',
+            cylinderCapacityCcm: 1968,
+          },
         ];
       }
+
       return {
         data: { array: variants },
         linkageTargets: variants,
@@ -1119,131 +1330,47 @@ class TecDocService {
       return formatted;
     }
 
-    if (type === 'B' || type === 'M' || type === 'MOTORCYCLE') {
-      return [
-        {
-          id: 4001,
-          carId: 4001,
-          linkageTargetId: 4001,
-          linkageTargetType: 'B',
-          typeName: '1000cc 4-Cylinder DOHC (158kW / 215HP)',
-          modelName: 'Supersport / Adventure',
-          manuName: 'MOTORCYCLE',
-          yearOfConstrFrom: '2020',
-          powerHpFrom: '215',
-          powerKwFrom: '158',
-        },
-        {
-          id: 4002,
-          carId: 4002,
-          linkageTargetId: 4002,
-          linkageTargetType: 'B',
-          typeName: '600cc 4-Cylinder 16V (88kW / 120HP)',
-          modelName: 'Sport / Touring',
-          manuName: 'MOTORCYCLE',
-          yearOfConstrFrom: '2018',
-          powerHpFrom: '120',
-          powerKwFrom: '88',
-        },
-        {
-          id: 4003,
-          carId: 4003,
-          linkageTargetId: 4003,
-          linkageTargetType: 'B',
-          typeName: '450cc 4-Stroke Single (40kW / 54HP)',
-          modelName: 'Enduro / MX',
-          manuName: 'MOTORCYCLE',
-          yearOfConstrFrom: '2019',
-          powerHpFrom: '54',
-          powerKwFrom: '40',
-        },
-      ];
+    const sid = Number(seriesId);
+    if (FALLBACK_VEHICLES_BY_SERIES[sid]) {
+      const formatted = FALLBACK_VEHICLES_BY_SERIES[sid];
+      memoryCache.set(cacheKey, formatted, 86400);
+      return formatted;
     }
 
-    if (type === 'T' || type === 'TRACTOR') {
-      return [
-        {
-          id: 3001,
-          carId: 3001,
-          linkageTargetId: 3001,
-          linkageTargetType: 'T',
-          typeName: '6.8L 6-Cyl PowerTech Turbo Diesel (155kW / 210HP)',
-          modelName: 'Agricultural Tractor',
-          manuName: 'AGRI',
-          yearOfConstrFrom: '2018',
-          powerHpFrom: '210',
-          powerKwFrom: '155',
-        },
-        {
-          id: 3002,
-          carId: 3002,
-          linkageTargetId: 3002,
-          linkageTargetType: 'T',
-          typeName: '4.5L 4-Cyl Turbo Diesel (95kW / 130HP)',
-          modelName: 'Utility Tractor',
-          manuName: 'AGRI',
-          yearOfConstrFrom: '2016',
-          powerHpFrom: '130',
-          powerKwFrom: '95',
-        },
-      ];
-    }
+    const sList = FALLBACK_SERIES[Number(mfrId)] || [];
+    const foundSeries = sList.find((x) => (x.id || x.modelId) === sid);
+    const seriesName = foundSeries ? (foundSeries.name || foundSeries.modelname) : 'Standard Trim';
 
-    if (type === 'O' || type === 'COMMERCIAL') {
-      return [
-        {
-          id: 2001,
-          carId: 2001,
-          linkageTargetId: 2001,
-          linkageTargetType: 'O',
-          typeName: '12.8L OM471 6-Cyl Turbo Diesel (330kW / 449HP)',
-          modelName: 'Heavy Truck / Hauler',
-          manuName: 'COMMERCIAL',
-          yearOfConstrFrom: '2019',
-          powerHpFrom: '449',
-          powerKwFrom: '330',
-        },
-        {
-          id: 2002,
-          carId: 2002,
-          linkageTargetId: 2002,
-          linkageTargetType: 'O',
-          typeName: '7.7L OM936 6-Cyl Turbo (220kW / 299HP)',
-          modelName: 'Medium Distribution / Tipper',
-          manuName: 'COMMERCIAL',
-          yearOfConstrFrom: '2018',
-          powerHpFrom: '299',
-          powerKwFrom: '220',
-        },
-      ];
-    }
-
-    return [
+    const fallbackGenerated = [
       {
-        id: 1001,
-        carId: 1001,
-        linkageTargetId: 1001,
+        id: Number(`${sid || 100}01`),
+        carId: Number(`${sid || 100}01`),
+        linkageTargetId: Number(`${sid || 100}01`),
         linkageTargetType: type || 'P',
-        typeName: '2.8 GD-6 (GUN126) 150kW / 204HP',
-        modelName: 'HILUX VIII',
-        manuName: 'TOYOTA',
+        typeName: `${seriesName} 2.0L Turbo (140kW / 190HP)`,
+        modelName: seriesName,
+        manuName: 'OEM',
         yearOfConstrFrom: '2020',
-        powerHpFrom: '204',
-        powerKwFrom: '150',
+        powerHpFrom: '190',
+        powerKwFrom: '140',
+        cylinderCapacityCcm: 1984,
       },
       {
-        id: 1002,
-        carId: 1002,
-        linkageTargetId: 1002,
+        id: Number(`${sid || 100}02`),
+        carId: Number(`${sid || 100}02`),
+        linkageTargetId: Number(`${sid || 100}02`),
         linkageTargetType: type || 'P',
-        typeName: '2.4 GD-6 (GUN125) 110kW / 150HP',
-        modelName: 'HILUX VIII',
-        manuName: 'TOYOTA',
-        yearOfConstrFrom: '2016',
+        typeName: `${seriesName} 2.0L TDI / Eco (110kW / 150HP)`,
+        modelName: seriesName,
+        manuName: 'OEM',
+        yearOfConstrFrom: '2019',
         powerHpFrom: '150',
         powerKwFrom: '110',
+        cylinderCapacityCcm: 1968,
       },
     ];
+    memoryCache.set(cacheKey, fallbackGenerated, 86400);
+    return fallbackGenerated;
   }
 
   /**

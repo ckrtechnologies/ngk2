@@ -28,13 +28,31 @@ class DealerService {
             ? parseFloat(radius)
             : null;
 
+        let normalizedRole = null;
+        if (role && role.toLowerCase() !== 'all') {
+          const r = role.toLowerCase().trim();
+          if (
+            r === 'reseller' ||
+            r === 'stockist' ||
+            r === 'dealer' ||
+            r === 'retailer' ||
+            r === 'shop_owner'
+          ) {
+            normalizedRole = 'reseller';
+          } else if (r === 'distributor' || r === 'wholesaler') {
+            normalizedRole = 'distributor';
+          } else {
+            normalizedRole = r;
+          }
+        }
+
         const { data: rpcDealers, error: rpcError } = await supabase.rpc(
           'get_nearby_approved_dealers',
           {
             user_lat: parseFloat(userLat),
             user_lon: parseFloat(userLon),
             radius_km: parsedRadius,
-            target_role: role || null,
+            target_role: normalizedRole,
           }
         );
 
@@ -211,20 +229,39 @@ class DealerService {
       );
     }
 
-    // Role filter
+    // Role filter with aliases and case-insensitivity
     if (role && role.toLowerCase() !== 'all') {
-      list = list.filter((d) => d.role.toLowerCase() === role.toLowerCase());
+      const normalizedTarget = role.toLowerCase().trim();
+      list = list.filter((d) => {
+        const dRole = (d.role || '').toLowerCase().trim();
+        if (normalizedTarget === 'distributor') {
+          return dRole === 'distributor' || dRole === 'wholesaler';
+        }
+        if (normalizedTarget === 'reseller') {
+          return (
+            dRole === 'reseller' ||
+            dRole === 'stockist' ||
+            dRole === 'retailer' ||
+            dRole === 'dealer' ||
+            dRole === 'shop_owner'
+          );
+        }
+        return dRole === normalizedTarget;
+      });
     }
 
     // Text search filter
     if (searchQuery && searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
+      const q = searchQuery.toLowerCase().trim();
       list = list.filter(
         (d) =>
           (d.name && d.name.toLowerCase().includes(q)) ||
+          (d.companyName && d.companyName.toLowerCase().includes(q)) ||
           (d.city && d.city.toLowerCase().includes(q)) ||
           (d.address && d.address.toLowerCase().includes(q)) ||
-          (d.email && d.email.toLowerCase().includes(q))
+          (d.streetAddress && d.streetAddress.toLowerCase().includes(q)) ||
+          (d.email && d.email.toLowerCase().includes(q)) ||
+          (d.phone && d.phone.toLowerCase().includes(q))
       );
     }
 

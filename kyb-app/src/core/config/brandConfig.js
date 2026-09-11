@@ -8,7 +8,7 @@ export const BRAND_CONFIG = {
   darkColor: '#18181B',
   accentColor: COLORS.coolGrey, // KYB Cool Grey
   allowedSuppliers: [7729],
-  catalogSubtitle: 'Official KYB TecDoc Shock Absorber Catalog',
+  catalogSubtitle: 'Official KYB Verified Shock Absorber Catalog',
   categories: [
     { id: 'all', label: 'All Suspension' },
     { id: 'shock_absorbers', label: 'Shock Absorbers' },

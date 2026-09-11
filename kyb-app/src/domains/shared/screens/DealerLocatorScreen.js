@@ -199,8 +199,8 @@ const DealerLocatorScreen = () => {
       if (filters.role === 'distributor' && d.role !== 'distributor') return false;
       if (filters.role === 'reseller' && d.role !== 'reseller') return false;
 
-      // 2. Distance radius filter
-      if (filters.radius !== undefined && filters.radius !== null) {
+      // 2. Distance radius filter (bypassed when searching by text so users can find dealers by city/name)
+      if (!searchQuery.trim() && filters.radius !== undefined && filters.radius !== null) {
         if (
           d.distanceKm === undefined ||
           d.distanceKm === null ||
@@ -681,7 +681,7 @@ const DealerLocatorScreen = () => {
                           >
                             <ShieldCheck
                               size={10}
-                              color={isDistributor ? COLORS.accent : COLORS.primary}
+                              color={isDistributor ? '#1E293B' : '#B45309'}
                             />
                             <Text
                               style={[
@@ -1114,14 +1114,14 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   distributorBadge: {
-    backgroundColor: COLORS.infoLight,
+    backgroundColor: '#F1F5F9',
     borderWidth: 1,
-    borderColor: COLORS.infoBorder,
+    borderColor: '#CBD5E1',
   },
   resellerBadge: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: COLORS.warningBorder,
+    borderColor: '#FDE68A',
   },
   roleBadgeText: {
     fontSize: 9,
@@ -1129,10 +1129,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   distributorBadgeText: {
-    color: '#1D4ED8',
+    color: '#1E293B',
   },
   resellerBadgeText: {
-    color: COLORS.warning,
+    color: '#B45309',
   },
   dealerCity: {
     fontSize: FONTS.size.xs,

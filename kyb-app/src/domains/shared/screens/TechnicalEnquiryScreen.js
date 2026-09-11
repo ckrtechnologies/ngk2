@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
@@ -12,6 +12,10 @@ import {
   PermissionsAndroid,
   KeyboardAvoidingView,
   RefreshControl,
+  BackHandler,
+  Keyboard,
+  Image,
+  Linking,
 } from 'react-native';
 import {
   CheckCircle2,
@@ -21,11 +25,18 @@ import {
   Check,
   Sparkles,
   ChevronRight,
+  ChevronLeft,
   Send,
   SlidersHorizontal,
   Building2,
   Store,
+  Home,
+  Phone,
+  Mail,
 } from 'lucide-react-native';
+
+const homeIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-Home.png');
+const locationIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-Location.png');
 import {
   SolidStoreIcon,
   SolidPartTagIcon,
@@ -46,10 +57,11 @@ import { apiFunction } from '../../../apis/apiFunction';
 import { addEnquiryApi, dealersApi } from '../../../apis/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsersRedux } from '../../../redux/getData';
+import Geolocation from '@react-native-community/geolocation';
 import ScreenContainer from '../../../components/common/ScreenContainer';
 import AppHeader from '../../../components/common/AppHeader';
 import AppInput from '../../../components/common/AppInput';
-import Geolocation from '@react-native-community/geolocation';
+
 // Helper: calculate spherical distance in km using Haversine formula
 const haversineDistanceKm = (lat1, lon1, lat2, lon2) => {
   if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) return null;
@@ -110,7 +122,8 @@ const TechnicalEnquiryScreen = () => {
     fetchRoleAndAuth();
   }, [myself?.role]);
 
-  // If logged in as reseller, default stockist role filter to distributor
+  // If logged in as reseller, default stockist role filter to distributor;
+  // If logged in as distributor, default stockist role filter to reseller
   useEffect(() => {
     if (
       currentUserRole === 'reseller' ||
@@ -118,8 +131,47 @@ const TechnicalEnquiryScreen = () => {
       currentUserRole === 'shop_owner'
     ) {
       setFilters((prev) => ({ ...prev, role: 'distributor' }));
+    } else if (
+      currentUserRole === 'distributor' ||
+      currentUserRole === 'wholesaler'
+    ) {
+      setFilters((prev) => ({ ...prev, role: 'reseller' }));
     }
   }, [currentUserRole]);
+
+  // Handle hardware back button inside multi-step enquiry
+  useEffect(() => {
+    const onBackPress = () => {
+      if (currentStep > 1) {
+        setCurrentStep((s) => s - 1);
+        return true;
+      }
+      return false;
+    };
+
+    const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => sub.remove();
+  }, [currentStep]);
+
+  const scrollViewRef = useRef(null);
+
+  // Smooth keyboard shift up for active inputs
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const showSub = Keyboard.addListener(showEvent, () => {
+      setTimeout(() => {
+        if (currentStep === 1) {
+          scrollViewRef.current?.scrollTo({ y: 120, animated: true });
+        } else if (currentStep === 3) {
+          scrollViewRef.current?.scrollTo({ y: 160, animated: true });
+        }
+      }, 70);
+    });
+
+    return () => {
+      showSub.remove();
+    };
+  }, [currentStep]);
 
   const isReseller =
     currentUserRole === 'reseller' ||
@@ -143,6 +195,7 @@ const TechnicalEnquiryScreen = () => {
 
   // Stockists & Geolocation State (Step 2)
   const [stockists, setStockists] = useState([]);
+  const [fetchingStockists, setFetchingStockists] = useState(false);
   const [userCoords, setUserCoords] = useState(null);
   const [locatingGps, setLocatingGps] = useState(false);
   const [selectedDealerId, setSelectedDealerId] = useState(
@@ -171,6 +224,7 @@ const TechnicalEnquiryScreen = () => {
 
   // Fetch Nearby Stockists (Always fresh real data from Supabase backend)
   const loadStockists = useCallback(async () => {
+    setFetchingStockists(true);
     const acquirePosition = async () => {
       if (Platform.OS === 'android') {
         try {
@@ -204,6 +258,8 @@ const TechnicalEnquiryScreen = () => {
           } catch (err) {
             console.warn('Geolocation dealer fetch failed:', err);
             fallbackFetch();
+          } finally {
+            setFetchingStockists(false);
           }
         },
         (err) => {
@@ -222,11 +278,13 @@ const TechnicalEnquiryScreen = () => {
       } catch (err) {
         console.warn('Fallback dealer fetch failed:', err);
         setStockists([]);
+      } finally {
+        setFetchingStockists(false);
       }
     };
 
     acquirePosition();
-  }, [selectedDealerId]);
+  }, [filters.radius]);
 
   // Pull-to-refresh handler to force re-fetch real data
   const handleRefresh = useCallback(async () => {
@@ -404,72 +462,116 @@ const TechnicalEnquiryScreen = () => {
 
   // Compute dynamic counts based on active search query & radius filter
   const counts = useMemo(() => {
-    const baseList = scopedCandidateDealers.filter((d) => {
-      // 1. Distance radius filter
-      if (filters.radius !== undefined && filters.radius !== null) {
-        if (
-          d.distanceKm === undefined ||
-          d.distanceKm === null ||
-          d.distanceKm > filters.radius
-        ) {
-          return false;
-        }
-      }
+    const hasSearch = Boolean(dealerSearchQuery && dealerSearchQuery.trim());
+    const q = (dealerSearchQuery || '').toLowerCase().trim();
 
-      // 2. Search query filter
-      if (dealerSearchQuery.trim()) {
-        const q = dealerSearchQuery.toLowerCase().trim();
-        const matchName = d.name && d.name.toLowerCase().includes(q);
-        const matchCity = d.city && d.city.toLowerCase().includes(q);
-        const matchAddress = d.address && d.address.toLowerCase().includes(q);
-        if (!matchName && !matchCity && !matchAddress) return false;
+    const baseList = scopedCandidateDealers.filter((d) => {
+      // 1. Search query filter (Search by Dealer, City or Area)
+      if (hasSearch) {
+        const name = (d.name || d.companyName || '').toLowerCase();
+        const city = (d.city || '').toLowerCase();
+        const address = (d.address || d.streetAddress || '').toLowerCase();
+        const email = (d.email || '').toLowerCase();
+        const phone = (d.phone || '').toLowerCase();
+        const matches =
+          name.includes(q) ||
+          city.includes(q) ||
+          address.includes(q) ||
+          email.includes(q) ||
+          phone.includes(q);
+        if (!matches) return false;
+      } else if (filters.radius !== undefined && filters.radius !== null) {
+        // Distance radius filter only when not searching by name
+        if (d.distanceKm !== undefined && d.distanceKm !== null && d.distanceKm < 999999) {
+          if (d.distanceKm > filters.radius) return false;
+        }
       }
 
       return true;
     });
 
+    const safeList = baseList.length > 0 ? baseList : scopedCandidateDealers;
+
     return {
-      all: baseList.length,
-      distributors: baseList.filter((d) => d.role === 'distributor').length,
-      stockists: baseList.filter((d) => d.role !== 'distributor').length,
+      all: safeList.length,
+      distributors: safeList.filter((d) => {
+        const r = (d.role || '').toLowerCase();
+        return r === 'distributor' || r === 'wholesaler';
+      }).length,
+      stockists: safeList.filter((d) => {
+        const r = (d.role || '').toLowerCase();
+        return r !== 'distributor' && r !== 'wholesaler';
+      }).length,
     };
   }, [scopedCandidateDealers, filters.radius, dealerSearchQuery]);
 
   // Complete filter & sort pipeline driven by DealerFilterModal state
   const filteredDealers = useMemo(() => {
-    let list = scopedCandidateDealers.filter((d) => {
-      // 1. Role filter (all | distributor | reseller)
-      if (filters.role === 'distributor' && d.role !== 'distributor') return false;
-      if (
-        filters.role === 'reseller' &&
-        d.role !== 'reseller' &&
-        d.role !== 'stockist' &&
-        d.role !== 'dealer'
-      )
-        return false;
+    const hasSearch = Boolean(dealerSearchQuery && dealerSearchQuery.trim());
+    const q = (dealerSearchQuery || '').toLowerCase().trim();
 
-      // 2. Distance radius filter
-      if (filters.radius !== undefined && filters.radius !== null) {
+    let list = scopedCandidateDealers.filter((d) => {
+      const dRole = (d.role || '').toLowerCase().trim();
+
+      // 1. Role filter (all | distributor | reseller)
+      if (filters.role === 'distributor') {
+        if (dRole !== 'distributor' && dRole !== 'wholesaler') return false;
+      }
+      if (filters.role === 'reseller') {
         if (
-          d.distanceKm === undefined ||
-          d.distanceKm === null ||
-          d.distanceKm > filters.radius
-        ) {
+          dRole !== 'reseller' &&
+          dRole !== 'stockist' &&
+          dRole !== 'retailer' &&
+          dRole !== 'dealer' &&
+          dRole !== 'shop_owner'
+        )
           return false;
-        }
       }
 
-      // 3. Search query filter
-      if (dealerSearchQuery.trim()) {
-        const q = dealerSearchQuery.toLowerCase().trim();
-        const matchName = d.name && d.name.toLowerCase().includes(q);
-        const matchCity = d.city && d.city.toLowerCase().includes(q);
-        const matchAddress = d.address && d.address.toLowerCase().includes(q);
-        if (!matchName && !matchCity && !matchAddress) return false;
+      // 2. Search query filter (Search by Dealer, City or Area)
+      if (hasSearch) {
+        const name = (d.name || d.companyName || '').toLowerCase();
+        const city = (d.city || '').toLowerCase();
+        const address = (d.address || d.streetAddress || '').toLowerCase();
+        const email = (d.email || '').toLowerCase();
+        const phone = (d.phone || '').toLowerCase();
+        const matches =
+          name.includes(q) ||
+          city.includes(q) ||
+          address.includes(q) ||
+          email.includes(q) ||
+          phone.includes(q);
+        if (!matches) return false;
+      } else if (filters.radius !== undefined && filters.radius !== null) {
+        // Distance radius filter only when not explicitly searching
+        if (d.distanceKm !== undefined && d.distanceKm !== null && d.distanceKm < 999999) {
+          if (d.distanceKm > filters.radius) return false;
+        }
       }
 
       return true;
     });
+
+    // Fallback: If local radius yielded 0 dealers, auto-expand to show all matching
+    // registered dealers nationwide rather than an empty blank screen
+    if (list.length === 0 && !hasSearch) {
+      list = scopedCandidateDealers.filter((d) => {
+        const dRole = (d.role || '').toLowerCase().trim();
+        if (filters.role === 'distributor') {
+          return dRole === 'distributor' || dRole === 'wholesaler';
+        }
+        if (filters.role === 'reseller') {
+          return (
+            dRole === 'reseller' ||
+            dRole === 'stockist' ||
+            dRole === 'retailer' ||
+            dRole === 'dealer' ||
+            dRole === 'shop_owner'
+          );
+        }
+        return true;
+      });
+    }
 
     // 4. Sort by nearest or alphabetical
     if (filters.sortBy === 'alpha') {
@@ -897,7 +999,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Step 1 Banner */}
       <View style={styles.stepBannerCard}>
         <View style={styles.stepBannerIconBox}>
-          <CheckCircle2 size={18} color={COLORS.primary} />
+          <CheckCircle2 size={16} color="#059669" />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.stepBannerTitle}>STEP 1: PART & VEHICLE IDENTIFICATION</Text>
@@ -912,7 +1014,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.garageSelectorContainer}>
           <View style={styles.sectionHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <SolidGarageBayIcon size={16} color={COLORS.primary} />
+              <SolidGarageBayIcon size={15} color={COLORS.primary} />
               <Text style={styles.sectionTitle}>SELECT FROM MY GARAGE</Text>
             </View>
             <Text style={styles.garageCountBadge}>
@@ -938,7 +1040,7 @@ const TechnicalEnquiryScreen = () => {
                   activeOpacity={0.7}
                 >
                   <SolidCarSilhouetteIcon
-                    size={15}
+                    size={14}
                     color={isSelected ? COLORS.white : COLORS.textTertiary}
                   />
                   <Text
@@ -950,7 +1052,7 @@ const TechnicalEnquiryScreen = () => {
                   >
                     {car.make} {car.model} {car.year ? `(${car.year})` : ''}
                   </Text>
-                  {isSelected && <Check size={13} color={COLORS.white} strokeWidth={2.6} />}
+                  {isSelected && <Check size={12} color={COLORS.white} strokeWidth={2.6} />}
                 </TouchableOpacity>
               );
             })}
@@ -971,7 +1073,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.inputSpacing}>
           <AppInput
             label="Part Number / Article No *"
-            placeholder="e.g. 333338, 341368, RA1234"
+            placeholder="e.g. BKR6E-11, ILFR6A, 90919-01192"
             value={partNumber}
             onChangeText={setPartNumber}
             containerStyle={styles.appInputCompact}
@@ -981,7 +1083,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.inputSpacing}>
           <AppInput
             label="Part Name / Component"
-            placeholder="e.g. Excel-G Shock Absorber, Strut Assembly"
+            placeholder="e.g. Laser Iridium Spark Plug, Oxygen Sensor"
             value={partName}
             onChangeText={setPartName}
             containerStyle={styles.appInputCompact}
@@ -1039,7 +1141,7 @@ const TechnicalEnquiryScreen = () => {
           onPress={handleNextFromStep1}
           activeOpacity={0.85}
         >
-          <Text style={styles.nextStepBtnText}>Continue to Select Dealer</Text>
+          <Text style={styles.nextStepBtnText}>CONTINUE</Text>
           <ChevronRight size={18} color={COLORS.white} strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
@@ -1051,7 +1153,7 @@ const TechnicalEnquiryScreen = () => {
     <View>
       {/* Step 2 Banner */}
       <View style={styles.stepBannerCard}>
-        <View style={[styles.stepBannerIconBox, { backgroundColor: COLORS.errorLight }]}>
+        <View style={styles.stepBannerIconBox}>
           <SolidStoreIcon size={18} color={COLORS.primary} />
         </View>
         <View style={{ flex: 1 }}>
@@ -1084,7 +1186,7 @@ const TechnicalEnquiryScreen = () => {
           <Search size={17} color="#9CA3AF" />
           <TextInput
             style={styles.modalSearchInput}
-            placeholder="Search by dealer name, city, or area..."
+            placeholder="Search by Dealer, City or Area"
             placeholderTextColor="#9CA3AF"
             value={dealerSearchQuery}
             onChangeText={setDealerSearchQuery}
@@ -1176,7 +1278,7 @@ const TechnicalEnquiryScreen = () => {
         </View>
       )}
 
-      {/* Quick Category Filter Pills */}
+      {/* Quick Category Filter Tabs */}
       <View style={styles.modalFilterTabsRow}>
         <TouchableOpacity
           style={[
@@ -1237,7 +1339,14 @@ const TechnicalEnquiryScreen = () => {
 
       {/* Dealers List */}
       <View style={{ marginTop: 4 }}>
-        {filteredDealers.length === 0 ? (
+        {fetchingStockists ? (
+          <View style={styles.loadingStockistsBox}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={styles.loadingStockistsText}>
+              Discovering authorized dealers & distributors...
+            </Text>
+          </View>
+        ) : filteredDealers.length === 0 ? (
           <View style={styles.emptyDealersBox}>
             <SolidStoreIcon size={36} color="#CBD5E1" />
             <Text style={styles.emptyDealersTitle}>No Dealers Found</Text>
@@ -1274,16 +1383,17 @@ const TechnicalEnquiryScreen = () => {
                 activeOpacity={0.75}
               >
                 <View style={styles.modalDealerCardTop}>
-                  <View style={styles.modalDealerIconBox}>
-                    <SolidStoreIcon
-                      size={18}
-                      color={COLORS.primary}
+                  <View style={[styles.modalDealerIconBox, { backgroundColor: isDist ? '#F1F5F9' : '#FEF3C7', borderColor: isDist ? '#CBD5E1' : '#FDE68A', borderWidth: 1 }]}>
+                    <Image
+                      source={locationIcon}
+                      style={{ width: 22, height: 22, tintColor: isDist ? '#1E293B' : '#D97706' }}
+                      resizeMode="contain"
                     />
                   </View>
                   <View style={{ flex: 1, marginRight: 8 }}>
                     <View style={styles.dealerNameBadgeRow}>
                       <Text style={styles.modalDealerName} numberOfLines={1}>
-                        {d.name}
+                        {d.name || d.companyName || 'Authorized Partner'}
                       </Text>
                       <View
                         style={[
@@ -1307,9 +1417,24 @@ const TechnicalEnquiryScreen = () => {
                     <View style={styles.dealerLocationRow}>
                       <SolidLocationPinIcon size={12} color="#6B7280" />
                       <Text style={styles.modalDealerAddress} numberOfLines={1}>
-                        {d.address || d.city}
+                        {[d.address || d.streetAddress, d.city, d.postalCode || d.postal_code].filter(Boolean).join(', ')}
                       </Text>
                     </View>
+
+                    {/* Contact Phone & Direct Call */}
+                    {d.phone ? (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                        <Phone size={11} color="#64748B" />
+                        <Text style={{ fontSize: 11, color: '#475569', fontWeight: '600' }}>{d.phone}</Text>
+                        <TouchableOpacity
+                          onPress={() => Linking.openURL(`tel:${d.phone}`)}
+                          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                          style={{ marginLeft: 4, paddingHorizontal: 6, paddingVertical: 1.5, backgroundColor: '#EFF6FF', borderRadius: 4, borderWidth: 0.5, borderColor: '#BFDBFE' }}
+                        >
+                          <Text style={{ fontSize: 9.5, color: '#2563EB', fontWeight: '700' }}>CALL</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
                   </View>
 
                   {isSelected ? (
@@ -1324,7 +1449,7 @@ const TechnicalEnquiryScreen = () => {
                 {d.distance && (
                   <View style={styles.modalDealerFooter}>
                     <View style={styles.modalDistanceChip}>
-                      <SolidLocationPinIcon size={11} color={COLORS.primary} />
+                      <SolidLocationPinIcon size={11} color="#047857" />
                       <Text style={styles.modalDistanceChipText}>
                         {d.distance} from your location
                       </Text>
@@ -1352,14 +1477,15 @@ const TechnicalEnquiryScreen = () => {
           onPress={() => setCurrentStep(1)}
           activeOpacity={0.7}
         >
-          <Text style={styles.prevStepBtnText}>← Back</Text>
+          <ChevronLeft size={18} color={COLORS.textSecondary} strokeWidth={2.5} />
+          <Text style={styles.prevStepBtnText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.nextStepBtn}
           onPress={handleNextFromStep2}
           activeOpacity={0.85}
         >
-          <Text style={styles.nextStepBtnText}>Continue to Query</Text>
+          <Text style={styles.nextStepBtnText}>CONTINUE</Text>
           <ChevronRight size={18} color={COLORS.white} strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
@@ -1419,24 +1545,42 @@ const TechnicalEnquiryScreen = () => {
 
         {/* Assigned Dealer Item */}
         <View style={styles.summaryItemRow}>
-          <View style={[styles.summaryItemIconBox, { backgroundColor: COLORS.primaryLight }]}>
-            <SolidStoreIcon size={14} color={COLORS.primary} />
+          <View style={[styles.summaryItemIconBox, { backgroundColor: selectedDealerObj?.role === 'distributor' ? '#F1F5F9' : '#FEF3C7' }]}>
+            <Image
+              source={locationIcon}
+              style={{ width: 18, height: 18, tintColor: selectedDealerObj?.role === 'distributor' ? '#1E293B' : '#D97706' }}
+              resizeMode="contain"
+            />
           </View>
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Text style={styles.summaryItemLabel}>Assigned Reseller</Text>
+              <Text style={styles.summaryItemLabel}>
+                {selectedDealerObj?.role === 'distributor' ? 'Assigned Distributor' : 'Assigned Reseller'}
+              </Text>
               <TouchableOpacity onPress={() => setCurrentStep(2)} activeOpacity={0.7}>
                 <Text style={styles.summaryEditLink}>Change</Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.summaryItemValue}>
-              {selectedDealerName || 'Nearest Authorized Reseller'}
+              {selectedDealerName || selectedDealerObj?.companyName || 'Nearest Authorized Partner'}
             </Text>
-            {selectedDealerObj?.distance && (
-              <Text style={styles.summaryItemSub}>
-                {selectedDealerObj.distance} away • {selectedDealerObj.city || selectedDealerObj.address}
-              </Text>
-            )}
+            {selectedDealerObj ? (
+              <View style={{ marginTop: 2 }}>
+                <Text style={styles.summaryItemSub}>
+                  {[selectedDealerObj.address || selectedDealerObj.streetAddress, selectedDealerObj.city].filter(Boolean).join(', ')}
+                  {selectedDealerObj.distance ? ` • ${selectedDealerObj.distance} away` : ''}
+                </Text>
+                {selectedDealerObj.phone ? (
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL(`tel:${selectedDealerObj.phone}`)}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}
+                  >
+                    <Phone size={10} color="#2563EB" />
+                    <Text style={{ fontSize: 11, color: '#2563EB', fontWeight: '600' }}>{selectedDealerObj.phone}</Text>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+            ) : null}
           </View>
         </View>
       </View>
@@ -1485,7 +1629,8 @@ const TechnicalEnquiryScreen = () => {
           onPress={() => setCurrentStep(2)}
           activeOpacity={0.7}
         >
-          <Text style={styles.prevStepBtnText}>← Change Dealer</Text>
+          <ChevronLeft size={18} color={COLORS.textSecondary} strokeWidth={2.5} />
+          <Text style={styles.prevStepBtnText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.nextStepBtn, loading && { opacity: 0.7 }]}
@@ -1522,6 +1667,37 @@ const TechnicalEnquiryScreen = () => {
             navigation.goBack();
           }
         }}
+        rightElement={
+          <TouchableOpacity
+            onPress={() => {
+              const homeRoute =
+                currentUserRole === 'reseller' || currentUserRole === 'retailer' || currentUserRole === 'shop_owner'
+                  ? 'ResellerHome'
+                  : currentUserRole === 'distributor' || currentUserRole === 'wholesaler'
+                  ? 'DistributorHome'
+                  : 'OwnerHome';
+              navigation.navigate(homeRoute);
+            }}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            activeOpacity={0.75}
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255,255,255,0.15)',
+              borderWidth: 1,
+              borderColor: 'rgba(255,255,255,0.2)',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              source={homeIcon}
+              style={{ width: 20, height: 20, tintColor: COLORS.white }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        }
       />
 
       {/* 3-Step Guided Journey Indicator */}
@@ -1530,24 +1706,33 @@ const TechnicalEnquiryScreen = () => {
         onStepPress={handleStepPress}
       />
 
-      <ScreenContainer
-        scrollable={true}
-        includeTopInset={false}
-        showStatusBar={false}
-        contentContainerStyle={styles.enquiryScrollContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
-          />
-        }
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
       >
-        {currentStep === 1 && renderStep1()}
-        {currentStep === 2 && renderStep2()}
-        {currentStep === 3 && renderStep3()}
-      </ScreenContainer>
+        <ScrollView
+          ref={scrollViewRef}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.enquiryScrollContent,
+            { paddingHorizontal: 16, paddingTop: 10 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={COLORS.primary}
+              colors={[COLORS.primary]}
+            />
+          }
+        >
+          {currentStep === 1 && renderStep1()}
+          {currentStep === 2 && renderStep2()}
+          {currentStep === 3 && renderStep3()}
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* Full Sophisticated Dealer Filter Panel */}
       <DealerFilterModal
@@ -1564,7 +1749,7 @@ const TechnicalEnquiryScreen = () => {
 
 const styles = StyleSheet.create({
   enquiryScrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 80,
   },
   appInputCompact: {
     marginBottom: 6,
@@ -1613,7 +1798,9 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: RADIUS.xs,
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1797,6 +1984,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: 4,
   },
   prevStepBtnText: {
     fontSize: FONTS.size.sm,
@@ -1830,11 +2019,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#1E293B',
     borderRadius: RADIUS.sm,
     paddingVertical: 12,
     marginBottom: 12,
-    shadowColor: COLORS.primary,
+    shadowColor: '#1E293B',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -1971,6 +2160,18 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
 
+  loadingStockistsBox: {
+    paddingVertical: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  loadingStockistsText: {
+    fontSize: FONTS.size.sm,
+    fontWeight: FONTS.weight.medium,
+    color: COLORS.textSecondary,
+  },
+
   // Dealer Cards in Step 2
   modalDealerCard: {
     backgroundColor: COLORS.white,
@@ -1993,7 +2194,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.background,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -2019,7 +2222,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.errorLight,
   },
   roleTagStockist: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: '#F1F5F9',
   },
   roleTagText: {
     fontSize: 9,
@@ -2029,7 +2232,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   roleTagTextStockist: {
-    color: COLORS.warning,
+    color: '#475569',
   },
   dealerLocationRow: {
     flexDirection: 'row',
@@ -2072,7 +2275,7 @@ const styles = StyleSheet.create({
   modalDistanceChipText: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.primary,
+    color: '#047857',
   },
   selectPrompt: {
     fontSize: FONTS.size.caption,

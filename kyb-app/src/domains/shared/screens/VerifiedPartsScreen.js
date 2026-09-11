@@ -1273,7 +1273,7 @@ const VerifiedPartsScreen = () => {
             activeOpacity={1}
             onPress={() => setPeekModalVisible(false)}
           />
-          <View style={styles.peekModalCard}>
+          <View style={[styles.peekModalCard, { paddingBottom: Math.max(insets.bottom, 16) + 12 }]}>
             {/* Header */}
             <View style={styles.peekModalHeader}>
               <View style={styles.peekModalTitleWrap}>
@@ -1411,7 +1411,7 @@ const VerifiedPartsScreen = () => {
             <View
               style={[
                 styles.modalHeaderLight,
-                { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
+                { paddingTop: Math.max(insets.top, 28) + (Platform.OS === 'android' ? 8 : 4) },
               ]}
             >
               <View style={styles.modalHeaderInfo}>
@@ -1500,7 +1500,7 @@ const VerifiedPartsScreen = () => {
               <View
                 style={[
                   styles.fullScreenStudioTopBar,
-                  { paddingTop: insets.top + (Platform.OS === 'android' ? 8 : 4) },
+                  { paddingTop: Math.max(insets.top, 28) + (Platform.OS === 'android' ? 8 : 4) },
                 ]}
               >
                 <View style={styles.fullScreenStudioTopLeft}>
@@ -1647,7 +1647,7 @@ const VerifiedPartsScreen = () => {
                 />
               </View>
 
-              <View style={styles.fullScreenStudioBottomBar}>
+              <View style={[styles.fullScreenStudioBottomBar, { paddingBottom: Math.max(insets.bottom, 16) + 12 }]}>
                 {/* Drag hint */}
                 <View style={[styles.dragHintBox, { paddingVertical: 3 }]}>
                   <Text style={[styles.dragHintText, { fontSize: 10 }]}>
@@ -2085,8 +2085,8 @@ const VerifiedPartsScreen = () => {
                     <View style={styles.kpiGrid}>
                       {highlightKpis.map((kpi, kIdx) => (
                         <View key={kIdx} style={styles.kpiCardLight}>
-                          <Text style={styles.kpiLabelLight} numberOfLines={1}>{kpi.label}</Text>
-                          <Text style={styles.kpiValueLight} numberOfLines={1}>{kpi.value}</Text>
+                          <Text style={styles.kpiLabelLight} numberOfLines={2}>{kpi.label}</Text>
+                          <Text style={styles.kpiValueLight} numberOfLines={2}>{kpi.value}</Text>
                         </View>
                       ))}
                     </View>
@@ -2199,13 +2199,13 @@ const VerifiedPartsScreen = () => {
                   </TouchableOpacity>
                 </View>
 
-              <View style={{ height: 95 }} />
+              <View style={{ height: 95 + Math.max(insets.bottom, 16) }} />
             </ScrollView>
           )}
 
           {/* Sticky Bottom Action Bar (Only in Specs / Standard view) */}
           {!isStudioFullscreen && (
-            <View style={styles.modalBottomBarLight}>
+            <View style={[styles.modalBottomBarLight, { paddingBottom: Math.max(insets.bottom, 16) + 12 }]}>
               <AppButton
                 title="Request Support / Quote from Dealer"
                 onPress={() => {

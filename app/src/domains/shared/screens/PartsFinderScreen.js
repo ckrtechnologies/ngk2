@@ -20,6 +20,8 @@ import {
   Truck,
   Bike,
   Wrench,
+  Tractor,
+  Anchor,
   Search,
   ChevronDown,
   Check,
@@ -77,6 +79,46 @@ const DEFAULT_POPULAR_BRANDS = {
     { id: 55, manuId: 55, name: 'IVECO', manuName: 'IVECO', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/iveco.png' },
     { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ford.png' },
   ],
+  lcv: [
+    { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/toyota.png' },
+    { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ford.png' },
+    { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/isuzu.png' },
+    { id: 121, manuId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/volkswagen.png' },
+    { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/nissan.png' },
+    { id: 74, manuId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mercedes-benz.png' },
+    { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/hyundai.png' },
+    { id: 93, manuId: 93, name: 'RENAULT', manuName: 'RENAULT', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/renault.png' },
+  ],
+  motorcycle: [
+    { id: 45, manuId: 45, name: 'HONDA', manuName: 'HONDA', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/honda.png' },
+    { id: 109, manuId: 109, name: 'SUZUKI', manuName: 'SUZUKI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/suzuki.png' },
+    { id: 16, manuId: 16, name: 'BMW', manuName: 'BMW', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/bmw.png' },
+    { id: 2760, manuId: 2760, name: 'KTM', manuName: 'KTM', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ktm.png' },
+    { id: 112, manuId: 112, name: 'TRIUMPH', manuName: 'TRIUMPH', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/triumph.png' },
+    { id: 1164, manuId: 1164, name: 'YAMAHA', manuName: 'YAMAHA', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/yamaha.png' },
+    { id: 574, manuId: 574, name: 'KAWASAKI', manuName: 'KAWASAKI', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/kawasaki.png' },
+    { id: 4552, manuId: 4552, name: 'BAJAJ', manuName: 'BAJAJ', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/bajaj.png' },
+    { id: 181, manuId: 181, name: 'PIAGGIO', manuName: 'PIAGGIO', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/piaggio.png' },
+  ],
+  tractor: [
+    { id: 301, manuId: 301, name: 'JOHN DEERE', manuName: 'JOHN DEERE', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/johndeere.png' },
+    { id: 302, manuId: 302, name: 'MASSEY FERGUSON', manuName: 'MASSEY FERGUSON', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/masseyferguson.png' },
+    { id: 303, manuId: 303, name: 'NEW HOLLAND', manuName: 'NEW HOLLAND', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/newholland.png' },
+    { id: 304, manuId: 304, name: 'CASE IH', manuName: 'CASE IH', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/caseih.png' },
+    { id: 305, manuId: 305, name: 'KUBOTA', manuName: 'KUBOTA', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/kubota.png' },
+    { id: 306, manuId: 306, name: 'DEUTZ-FAHR', manuName: 'DEUTZ-FAHR', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/deutzfahr.png' },
+    { id: 307, manuId: 307, name: 'CLAAS', manuName: 'CLAAS', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/claas.png' },
+  ],
+  marine: [
+    { id: 11640, manuId: 11640, name: 'YAMAHA MARINE', manuName: 'YAMAHA MARINE', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/yamaha.png' },
+    { id: 602, manuId: 602, name: 'MERCURY MARINE', manuName: 'MERCURY MARINE', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/mercury.png' },
+    { id: 450, manuId: 450, name: 'HONDA MARINE', manuName: 'HONDA MARINE', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/honda.png' },
+    { id: 1090, manuId: 1090, name: 'SUZUKI MARINE', manuName: 'SUZUKI MARINE', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/suzuki.png' },
+    { id: 1200, manuId: 1200, name: 'VOLVO PENTA', manuName: 'VOLVO PENTA', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/volvo.png' },
+    { id: 603, manuId: 603, name: 'YANMAR', manuName: 'YANMAR', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/yanmar.png' },
+    { id: 5740, manuId: 5740, name: 'KAWASAKI WATERCRAFT', manuName: 'KAWASAKI WATERCRAFT', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/kawasaki.png' },
+    { id: 604, manuId: 604, name: 'TOHATSU', manuName: 'TOHATSU', logoUrl: 'https://ngkapi.ckrtechnologies.in/uploads/logos/tohatsu.png' },
+  ],
 };
 
 const PartsFinderScreen = () => {
@@ -113,7 +155,9 @@ const PartsFinderScreen = () => {
     { id: 'Passenger', label: 'Vehicle', icon: Car, type: 'P' },
     { id: 'Commercial', label: 'Commercial', icon: Truck, type: 'O' },
     { id: 'LightCommercial', label: 'LCV / Van', icon: Wrench, type: 'L' },
-    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike, type: 'B' },
+    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike, type: 'M' },
+    { id: 'Tractor', label: 'Tractor', icon: Tractor, type: 'T' },
+    { id: 'Marine', label: 'Marine', icon: Anchor, type: 'MARINE' },
   ];
 
   useEffect(() => {
@@ -164,6 +208,10 @@ const PartsFinderScreen = () => {
   // Synchronous in-memory lookup: ZERO network calls on tab toggle!
   const popularBrands = useMemo(() => {
     if (selectedApp === 'Commercial') return brandsByCategory.commercial || [];
+    if (selectedApp === 'LightCommercial') return brandsByCategory.lcv || [];
+    if (selectedApp === 'Motorcycle') return brandsByCategory.motorcycle || [];
+    if (selectedApp === 'Tractor') return brandsByCategory.tractor || [];
+    if (selectedApp === 'Marine') return brandsByCategory.marine || [];
     return brandsByCategory.passenger || [];
   }, [selectedApp, brandsByCategory]);
 
@@ -189,7 +237,17 @@ const PartsFinderScreen = () => {
           res?.getManufacturers2?.array ||
           res?.data ||
           [];
-        setManufacturersData(list.map(sanitizeBrand));
+        const normalizedList = list.map((m) => {
+          const s = sanitizeBrand(m);
+          return {
+            ...s,
+            id: s.manuId || s.id,
+            manuId: s.manuId || s.id,
+            name: s.manuName || s.name || '',
+            manuName: s.manuName || s.name || '',
+          };
+        });
+        setManufacturersData(normalizedList);
       } catch (err) {
         console.warn('Failed to load manufacturers', err);
       } finally {
@@ -204,6 +262,16 @@ const PartsFinderScreen = () => {
     setSeriesData([]);
     setVehiclesData([]);
   }, [selectedApp]);
+
+  // Normalize series item helper
+  const normalizeSeriesItem = (s, targetType) => ({
+    ...s,
+    id: s.modelId || s.id,
+    modelId: s.modelId || s.id,
+    name: s.modelname || s.name || s.modelName || '',
+    modelname: s.modelname || s.name || s.modelName || '',
+    linkingTargetType: s.linkingTargetType || targetType,
+  });
 
   // Fetch series when manufacturer is selected
   const fetchSeriesForManufacturer = async (manu) => {
@@ -255,7 +323,7 @@ const PartsFinderScreen = () => {
           resO?.getModelSeries2?.array ||
           resO?.data ||
           []
-        ).map((s) => ({ ...s, linkingTargetType: 'O' }));
+        ).map((s) => normalizeSeriesItem(s, 'O'));
 
         const commRegex =
           /\b(SPRINTER|VITO|VIANO|CITAN|VARIO|HILUX|HIACE|QUANTUM|DYNA|PROBOX|D-MAX|KB|RANGER|TRANSIT|BANTAM|COURIER|AMAROK|CADDY|TRANSPORTER|CRAFTER|CARAVELLE|MULTIVAN|H-100|H-1|PORTER|STAREX|NAVARA|HARDBODY|NP200|NP300|1400 BAKKIE|NV200|NV350|CABSTAR)\b/i;
@@ -268,7 +336,7 @@ const PartsFinderScreen = () => {
 
         const listP = rawListP
           .filter((s) => commRegex.test(s.name || s.modelname || ''))
-          .map((s) => ({ ...s, linkingTargetType: 'P' }));
+          .map((s) => normalizeSeriesItem(s, 'P'));
 
         // Deduplicate series by ID
         const seen = new Set();
@@ -311,7 +379,7 @@ const PartsFinderScreen = () => {
           res?.getModelSeries2?.array ||
           res?.data ||
           []
-        ).map((s) => ({ ...s, linkingTargetType: appType }));
+        ).map((s) => normalizeSeriesItem(s, appType));
         setSeriesData(list);
       }
     } catch (err) {
@@ -339,8 +407,8 @@ const PartsFinderScreen = () => {
           linkageTargetCountry: 'ZA',
           lang: 'en',
           linkageTargetType: seriesType,
-          mfrIds: Number(mfrId),
-          vehicleModelSeriesIds: Number(seriesId),
+          mfrIds: [Number(mfrId)],
+          vehicleModelSeriesIds: [Number(seriesId)],
           perPage: 100,
           page: 1,
         },
@@ -360,10 +428,24 @@ const PartsFinderScreen = () => {
         list = restRes?.data?.array || restRes?.data || [];
       }
 
-      const formatted = (list || []).map((v) => ({
-        ...v,
-        linkageTargetType: v.linkageTargetType || seriesType,
-      }));
+      const formatted = (list || []).map((v) => {
+        const title =
+          v.description ||
+          v.typeName ||
+          v.vehicleSalesDescription ||
+          v.modelName ||
+          v.vehicleModelSeriesName ||
+          (v.engines?.[0]?.code ? `Model ${v.engines[0].code}` : 'Standard Trim');
+        return {
+          ...v,
+          id: v.linkageTargetId || v.carId || v.id,
+          linkageTargetId: v.linkageTargetId || v.carId || v.id,
+          linkageTargetType: v.linkageTargetType || seriesType,
+          description: title,
+          typeName: title,
+          modelName: title,
+        };
+      });
 
       setVehiclesData(formatted);
     } catch (err) {
@@ -569,7 +651,7 @@ const PartsFinderScreen = () => {
     >
       <AppHeader
         title="Parts Finder"
-        subtitle="TecDoc Pegasus 3.0 Catalog"
+        subtitle="Official Parts Catalog"
         onBack={() => navigation.goBack()}
       />
 
@@ -633,7 +715,12 @@ const PartsFinderScreen = () => {
             <View style={styles.vehicleTopSection}>
               {/* Step 1: Vehicle Application Type Pills */}
               <Text style={styles.inputSectionLabel}>APPLICATION TYPE</Text>
-              <View style={styles.appTypeRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.appTypeScrollContent}
+                style={styles.appTypeScrollView}
+              >
                 {applications.map((app) => {
                   const IconComponent = app.icon;
                   const isSelected = selectedApp === app.id;
@@ -662,20 +749,21 @@ const PartsFinderScreen = () => {
                           styles.appTypePillText,
                           isSelected && styles.appTypePillTextSelected,
                         ]}
+                        numberOfLines={1}
                       >
                         {app.label}
                       </Text>
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
 
               {/* Popular Vehicle Brands Quick Select (6-9 Cards) */}
               {popularBrands.length > 0 && (
                 <View style={styles.popularSection}>
                   <View style={styles.popularHeaderRow}>
                     <Text style={styles.inputSectionLabel}>
-                      TOP 9 {selectedApp === 'Passenger' ? 'VEHICLE' : 'COMMERCIAL'} BRANDS
+                      TOP 9 {selectedApp.toUpperCase()} BRANDS
                     </Text>
                   </View>
                   <View style={styles.brandsGrid}>
@@ -1153,6 +1241,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     marginBottom: 6,
   },
+  appTypeScrollView: {
+    marginBottom: 8,
+    flexGrow: 0,
+  },
+  appTypeScrollContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingRight: 12,
+  },
   appTypeRow: {
     flexDirection: 'row',
     gap: 8,
@@ -1185,11 +1283,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   appTypePill: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
+    paddingHorizontal: 14,
     height: 38,
     borderRadius: 10,
     backgroundColor: COLORS.white,
@@ -1201,7 +1299,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   appTypePillText: {
-    fontSize: FONTS.size.xs,
+    fontSize: 11.5,
     fontWeight: FONTS.weight.bold,
     color: COLORS.textSecondary,
   },

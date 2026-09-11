@@ -55,12 +55,12 @@ const TICKER_ITEMS = [
     route: 'PartsFinder',
   },
   {
-    id: 'tecdoc_catalog',
+    id: 'oe_catalog',
     IconComponent: TickerCatalogIcon,
     themeColor: COLORS.info,
     badgeBg: COLORS.infoLight,
     countHighlight: '50,000+ Parts',
-    text: 'TecDoc Pegasus catalog',
+    text: 'Official verified catalog',
     highlight: 'Catalog',
     route: 'PartsFinder',
   },
@@ -423,7 +423,7 @@ const OwnerHomeScreen = () => {
   ];
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.rootContainer}>
+    <SafeAreaView edges={['left', 'right']} style={styles.rootContainer}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Branded NGK Crimson Header: Spacious, Elegant, Non-Sticky */}
@@ -630,6 +630,9 @@ const OwnerHomeScreen = () => {
             </Text>
           </View>
         </View>
+
+        {/* Extra bottom clearance above bottom tab bar */}
+        <View style={{ height: 28 }} />
       </ScrollView>
 
       {/* Vehicle Selection Modal for Find Parts (Item 2) */}
@@ -799,7 +802,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 24,
+    paddingBottom: 40,
   },
   sectionHeader: {
     flexDirection: 'row',

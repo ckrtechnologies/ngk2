@@ -145,26 +145,36 @@ export const proxyServiceJson = async (req, res) => {
 
     let data = await tecdocService.execute(payload);
 
-    // Strict post-filtering to guarantee complete vendor isolation
-    if (brand === 'kyb') {
-      const filterKyb = (arr) =>
-        (arr || []).filter((a) => {
-          const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
-          return b.includes('KYB') || Number(a.dataSupplierId) === 7729;
-        });
-      if (Array.isArray(data?.articles)) data.articles = filterKyb(data.articles);
-      if (Array.isArray(data?.data?.array)) data.data.array = filterKyb(data.data.array);
-    } else if (brand === 'ngk' || brand === 'ntk') {
-      const filterNgk = (arr) =>
-        (arr || []).filter((a) => {
-          const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
-          return (
-            (b.includes('NGK') || b.includes('NTK') || Number(a.dataSupplierId) === 15 || Number(a.dataSupplierId) === 5414) &&
-            !b.includes('KYB')
-          );
-        });
-      if (Array.isArray(data?.articles)) data.articles = filterNgk(data.articles);
-      if (Array.isArray(data?.data?.array)) data.data.array = filterNgk(data.data.array);
+    // Only filter articles if this was an article/parts request (NEVER filter vehicle makes/series)
+    const isArticleRequest = Boolean(
+      payload?.getArticles ||
+      payload?.getArticles2 ||
+      payload?.articleDirectSearchAllNumbersWithState ||
+      payload?.getArticleLinkedAllLinkingTarget3
+    );
+
+    // Strict post-filtering to guarantee complete vendor isolation for articles
+    if (isArticleRequest) {
+      if (brand === 'kyb') {
+        const filterKyb = (arr) =>
+          (arr || []).filter((a) => {
+            const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+            return b.includes('KYB') || Number(a.dataSupplierId) === 7729;
+          });
+        if (Array.isArray(data?.articles)) data.articles = filterKyb(data.articles);
+        if (Array.isArray(data?.data?.array)) data.data.array = filterKyb(data.data.array);
+      } else if (brand === 'ngk' || brand === 'ntk') {
+        const filterNgk = (arr) =>
+          (arr || []).filter((a) => {
+            const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+            return (
+              (b.includes('NGK') || b.includes('NTK') || Number(a.dataSupplierId) === 15 || Number(a.dataSupplierId) === 5414) &&
+              !b.includes('KYB')
+            );
+          });
+        if (Array.isArray(data?.articles)) data.articles = filterNgk(data.articles);
+        if (Array.isArray(data?.data?.array)) data.data.array = filterNgk(data.data.array);
+      }
     }
 
     return res.status(200).json(data);

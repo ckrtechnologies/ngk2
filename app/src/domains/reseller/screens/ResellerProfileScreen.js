@@ -359,7 +359,7 @@ export default function ResellerProfileScreen({ navigation }) {
               <Wrench size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
-              <Text style={styles.navTitle}>TecDoc Parts & Catalog</Text>
+              <Text style={styles.navTitle}>Official Parts & Catalog</Text>
               <Text style={styles.navSubtitle}>
                 Batch lookup & OEM fitment verification
               </Text>

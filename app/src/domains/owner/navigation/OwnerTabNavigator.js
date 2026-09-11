@@ -42,8 +42,8 @@ export default function OwnerTabNavigator() {
   const insets = useSafeAreaInsets();
 
   // Dynamically compute comfortable tab bar height adapting to device navigation bar
-  const bottomPadding = insets.bottom > 0 ? insets.bottom : 8;
-  const barHeight = Platform.OS === 'ios' ? 56 + insets.bottom : 62 + (insets.bottom > 0 ? insets.bottom : 0);
+  const bottomPadding = insets.bottom > 0 ? insets.bottom : 6;
+  const barHeight = Platform.OS === 'ios' ? 56 + insets.bottom : 58 + (insets.bottom > 0 ? insets.bottom : 0);
 
   return (
     <Tab.Navigator
@@ -101,22 +101,19 @@ export default function OwnerTabNavigator() {
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.primary,
-    borderTopLeftRadius: wp('8%'),
-    borderTopRightRadius: wp('8%'),
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     borderTopWidth: 0,
-    // No hardcoded height — the tab bar auto-sizes to its icon + label content.
-    // paddingTop adds breathing room above the icons.
-    // paddingBottom adds breathing room below labels, above the system nav bar.
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 6,
+    paddingBottom: 6,
     elevation: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 8,
   },
   tabBarLabel: {
-    fontSize: 13.5,
+    fontSize: 12,
     fontWeight: FONTS.weight.bold,
     marginBottom: 2,
   },

@@ -15,6 +15,11 @@ import enquiryRouter from './modules/enquiry/enquiry.routes.js';
 import dealerRouter from './modules/dealer/dealer.routes.js';
 import uploadRouter from './modules/upload/upload.routes.js';
 
+// Dedicated Domain Boundaries
+import adminRouter from './domains/admin/admin.routes.js';
+import ngkRouter from './domains/ngk/ngk.routes.js';
+import kybRouter from './domains/kyb/kyb.routes.js';
+
 const app = express();
 
 // Request logging in development
@@ -40,6 +45,11 @@ app.get('/', (req, res) => {
     version: '2.0.0',
     status: 'online',
     architecture: 'Domain-Driven Design (DDD)',
+    domains: {
+      admin: '/api/admin',
+      ngk: '/api/ngk',
+      kyb: '/api/kyb',
+    },
     docs: '/api-docs',
   });
 });
@@ -48,25 +58,19 @@ app.get('/', (req, res) => {
 // DOMAIN-DRIVEN ROUTES
 // ==============================================================================
 
-// Auth Domain
+// Dedicated Domain Endpoints
+app.use('/api/admin', adminRouter);
+app.use('/api/ngk', ngkRouter);
+app.use('/api/kyb', kybRouter);
+
+// Core Modules & Shared Domains
 app.use('/api/auth', authRouter);
-
-// User Domain
+app.use('/api/users', adminRouter); // Admin & client user operations
 app.use('/api/users', userRouter);
-
-// Catalog / TecDoc Domain
 app.use('/api/tecdoc', catalogRouter);
-
-// Garage Domain
 app.use('/api/garage', garageRouter);
-
-// Enquiry Domain
 app.use('/api/enquiries', enquiryRouter);
-
-// Dealer Domain
 app.use('/api/dealers', dealerRouter);
-
-// Upload Domain
 app.use('/api/upload', uploadRouter);
 
 // ==============================================================================

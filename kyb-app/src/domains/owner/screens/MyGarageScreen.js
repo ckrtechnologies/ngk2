@@ -729,7 +729,7 @@ const MyGarageScreen = () => {
                         {hasCatalogLink && (
                           <View style={styles.verifiedBadge}>
                             <ShieldCheck size={11} color={COLORS.primary} strokeWidth={2.5} />
-                            <Text style={styles.verifiedBadgeText}>TecDoc Verified</Text>
+                            <Text style={styles.verifiedBadgeText}>OE Verified</Text>
                           </View>
                         )}
                       </View>
@@ -1016,7 +1016,7 @@ const MyGarageScreen = () => {
                             <View style={styles.inlineLoading}>
                               <ActivityIndicator size="small" color={COLORS.primary} />
                               <Text style={styles.inlineLoadingText}>
-                                Loading engines & trims from TecDoc...
+                                Loading verified engines & trims...
                               </Text>
                             </View>
                           ) : vehiclesList.length === 0 ? (
@@ -1093,7 +1093,7 @@ const MyGarageScreen = () => {
                   ) : (
                     /* Autofilled Review Card & Optional Customizations */
                     <View style={styles.autofillReviewContainer}>
-                      {/* Autofilled TecDoc Match Banner */}
+                      {/* Autofilled OE Match Banner */}
                       <View style={styles.matchBanner}>
                         <View style={styles.matchBannerTop}>
                           <View style={styles.verifiedIconWrap}>
@@ -1101,7 +1101,7 @@ const MyGarageScreen = () => {
                           </View>
                           <View style={{ flex: 1 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                              <Text style={styles.matchBannerBadge}>TecDoc Catalog Verified</Text>
+                              <Text style={styles.matchBannerBadge}>OE Catalog Verified</Text>
                               <Sparkles size={12} color="#D97706" />
                             </View>
                             <Text style={styles.matchCarTitle}>{make} {model}</Text>

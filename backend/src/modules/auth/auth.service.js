@@ -2,12 +2,29 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import supabase from '../../config/supabase.js';
 import ENV from '../../config/env.js';
+import mailService from '../../services/mail.service.js';
 
 class AuthService {
   /**
    * Register a new user and generate JWT
    */
-  async register({ name, email, password, role = 'owner', address = '', address_components = null, phone = '', latitude = null, longitude = null }) {
+  async register({
+    name,
+    email,
+    password,
+    role = 'owner',
+    address = '',
+    address_components = null,
+    phone = '',
+    latitude = null,
+    longitude = null,
+    company_name = '',
+    street_address = '',
+    city = '',
+    province = '',
+    postal_code = '',
+    country = 'ZA',
+  }) {
     if (!email || !password || !name) {
       throw new Error('Name, email, and password are required');
     }
@@ -15,6 +32,10 @@ class AuthService {
     const cleanEmail = email.toLowerCase().trim();
     const cleanRole = role.toLowerCase().trim();
     const isCommercial = cleanRole === 'reseller' || cleanRole === 'distributor';
+    const finalCompanyName = (company_name || name).trim();
+    const finalCity = (city || 'Johannesburg').trim();
+    const finalStreet = (street_address || address).trim();
+    const fullCombinedAddress = address.trim() || [street_address, city, province, postal_code, country].filter(Boolean).join(', ');
 
     // Check if user already exists
     const { data: existingUser } = await supabase
@@ -35,7 +56,7 @@ class AuthService {
       email: cleanEmail,
       password_hash: passwordHash,
       role: cleanRole,
-      address: address.trim(),
+      address: fullCombinedAddress,
       phone: phone.trim() || null,
       is_approved: !isCommercial,
       approval_status: isCommercial ? 'pending_approval' : 'approved',
@@ -86,10 +107,10 @@ class AuthService {
 
         await supabase.from('dealers').insert({
           user_id: newUser.id,
-          company_name: name.trim(),
-          street_address: address.trim() || 'Address on file',
-          city: 'Johannesburg',
-          country: 'ZA',
+          company_name: finalCompanyName,
+          street_address: finalStreet || 'Address on file',
+          city: finalCity,
+          country: country || 'ZA',
           latitude: dLat,
           longitude: dLon,
           location: `POINT(${dLon} ${dLat})`,
@@ -179,6 +200,17 @@ class AuthService {
     });
 
     console.log(`[OTP Verification] Generated OTP for ${cleanEmail}: ${otp}`);
+
+    // Dispatch OTP email via Nodemailer (Gmail SMTP)
+    try {
+      await mailService.sendOtpEmail({
+        to: cleanEmail,
+        otp,
+        appName: 'NGK Auto Parts',
+      });
+    } catch (mailErr) {
+      console.error(`[OTP Verification] Warning: Email dispatch failed for ${cleanEmail}:`, mailErr.message);
+    }
 
     return {
       email: cleanEmail,

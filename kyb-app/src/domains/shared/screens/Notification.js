@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const homeIcon = require('../../../App_Logos_and_Icons_and_Backgrounds/Icon-Home.png');
 import {
   Home,
   Clock,
@@ -95,13 +98,17 @@ const Notification = () => {
     [readOverrides]
   );
 
-  // Memoize all notifications, latest first
+  // Memoize all notifications, strict latest first
   const allNotifications = useMemo(() => {
     if (!myself?.notifications || !Array.isArray(myself.notifications)) return [];
     return [...myself.notifications].sort((a, b) => {
-      const timeA = new Date(a.created_at || a.createdAt || a.timestamp || a.date || 0).getTime();
-      const timeB = new Date(b.created_at || b.createdAt || b.timestamp || b.date || 0).getTime();
-      return timeB - timeA;
+      const getEpoch = (n) => {
+        const val = n?.created_at || n?.createdAt || n?.timestamp || n?.date;
+        if (!val) return 0;
+        const ms = new Date(val).getTime();
+        return isNaN(ms) ? 0 : ms;
+      };
+      return getEpoch(b) - getEpoch(a);
     });
   }, [myself]);
 
@@ -160,31 +167,18 @@ const Notification = () => {
     });
     setReadOverrides(nextOverrides);
 
-    setLoading(true);
     try {
-      const res = await apiFunction(readNotificationsApi, [myself?.id], {}, 'PUT', true);
-      setLoading(false);
-
-      if (res?.success) {
-        Toast.show({
-          type: 'success',
-          text1: 'Notifications Updated',
-          text2: 'All alerts marked as read',
-        });
-        getMyself();
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: res?.message || 'Failed to update notifications',
-        });
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId) {
+        await apiFunction(readNotificationsApi, [userId], {}, 'PUT', false);
       }
-    } catch (error) {
-      setLoading(false);
-      console.log('Error marking notifications as read:', error);
       Toast.show({
-        type: 'error',
-        text1: 'Failed to update notifications',
+        type: 'success',
+        text1: 'Marked as Read',
+        text2: 'All pending notifications marked as read',
       });
+    } catch (e) {
+      console.log('Error marking all read:', e);
     }
   };
 
@@ -192,24 +186,30 @@ const Notification = () => {
     if (!timestamp) return 'Just now';
     try {
       const date = new Date(timestamp);
-      const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (isNaN(date.getTime())) return 'Recent';
 
-      if (seconds < 60) return 'Just now';
+      const now = new Date();
+      const isToday = date.toDateString() === now.toDateString();
 
-      const minutes = Math.floor(seconds / 60);
-      if (minutes < 60) return `${minutes}m ago`;
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const isYesterday = date.toDateString() === yesterday.toDateString();
 
-      const hours = Math.floor(minutes / 60);
-      if (hours < 24) return `${hours}h ago`;
+      const hours = date.getHours();
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+      const timeStr = `${formattedHours}:${minutes} ${ampm}`;
 
-      const days = Math.floor(hours / 24);
-      if (days === 1) return 'Yesterday';
-      if (days < 7) return `${days}d ago`;
+      if (isToday) {
+        return `Today, ${timeStr}`;
+      }
+      if (isYesterday) {
+        return `Yesterday, ${timeStr}`;
+      }
 
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      });
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${date.getDate()} ${monthNames[date.getMonth()]}, ${timeStr}`;
     } catch (e) {
       return 'Recent';
     }
@@ -412,7 +412,11 @@ const Notification = () => {
               style={styles.headerHomeBtn}
               activeOpacity={0.8}
             >
-              <Home color={COLORS.white} size={17} />
+              <Image
+                source={homeIcon}
+                style={{ width: 18, height: 18, tintColor: COLORS.white }}
+                resizeMode="contain"
+              />
             </TouchableOpacity>
           </View>
         }

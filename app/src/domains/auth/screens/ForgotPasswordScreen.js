@@ -8,6 +8,7 @@ import {
   Image,
   StatusBar,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,7 +16,6 @@ import { Mail, KeyRound, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react-nat
 import { apiFunction } from '../../../apis/apiFunction';
 import { sendOtpApi, verifyOtpApi, updatePasswordApi } from '../../../apis/api';
 import Toast from 'react-native-toast-message';
-import ScreenContainer from '../../../components/common/ScreenContainer';
 import AppHeader from '../../../components/common/AppHeader';
 import AppInput from '../../../components/common/AppInput';
 import AppButton from '../../../components/common/AppButton';
@@ -164,25 +164,19 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ScreenContainer
-          scrollable={true}
-          includeTopInset={false}
-          showStatusBar={false}
-          footer={
-            <View style={[styles.footerContainer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
-              <TouchableOpacity
-                style={styles.backToLoginBtn}
-                onPress={() => navigation.replace('Login', { role })}
-              >
-                <Text style={styles.backToLoginText}>
-                  Remember your password? <Text style={{ color: buttonColor, fontWeight: FONTS.weight.bold }}>Sign In</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
-          }
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingHorizontal: 20,
+            paddingTop: 16,
+            paddingBottom: Math.max(insets.bottom, 24) + 80,
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
         >
-
-      <View style={styles.content}>
+          <View style={styles.content}>
         {/* Step Indicator / Icon */}
         <View style={styles.iconContainer}>
           <View style={[styles.iconCircle, { backgroundColor: role === 'distributor' ? COLORS.surfaceSecondary : COLORS.errorLight }]}>
@@ -307,10 +301,21 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
           )}
         </View>
       </View>
-      </ScreenContainer>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-  );
+
+      <View style={styles.footerContainer}>
+        <TouchableOpacity
+          style={styles.backToLoginBtn}
+          onPress={() => navigation.replace('Login', { role })}
+        >
+          <Text style={styles.backToLoginText}>
+            Remember your password? <Text style={{ color: buttonColor, fontWeight: FONTS.weight.bold }}>Sign In</Text>
+          </Text>
+        </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  </SafeAreaView>
+);
 };
 
 const styles = StyleSheet.create({

@@ -76,6 +76,16 @@ const DEFAULT_POPULAR_BRANDS = {
     { id: 55, manuId: 55, name: 'IVECO', manuName: 'IVECO', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/iveco.png' },
     { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ford.png' },
   ],
+  lcv: [
+    { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/toyota.png' },
+    { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ford.png' },
+    { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/isuzu.png' },
+    { id: 121, manuId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/volkswagen.png' },
+    { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/nissan.png' },
+    { id: 74, manuId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mercedes-benz.png' },
+    { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/hyundai.png' },
+    { id: 93, manuId: 93, name: 'RENAULT', manuName: 'RENAULT', logoUrl: 'https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/renault.png' },
+  ],
 };
 
 const PartsFinderScreen = () => {
@@ -108,11 +118,11 @@ const PartsFinderScreen = () => {
   const [modalType, setModalType] = useState(''); // 'manufacturer' | 'series' | 'model'
   const [filterQuery, setFilterQuery] = useState('');
 
+  // Strict KYB catalog scope: Passenger, Commercial, and Light Commercial
   const applications = [
     { id: 'Passenger', label: 'Vehicle', icon: Car, type: 'P' },
     { id: 'Commercial', label: 'Commercial', icon: Truck, type: 'O' },
     { id: 'LightCommercial', label: 'LCV / Van', icon: Wrench, type: 'L' },
-    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike, type: 'B' },
   ];
 
   useEffect(() => {
@@ -163,6 +173,7 @@ const PartsFinderScreen = () => {
   // Synchronous in-memory lookup: ZERO network calls on tab toggle!
   const popularBrands = useMemo(() => {
     if (selectedApp === 'Commercial') return brandsByCategory.commercial || [];
+    if (selectedApp === 'LightCommercial') return brandsByCategory.lcv || [];
     return brandsByCategory.passenger || [];
   }, [selectedApp, brandsByCategory]);
 
@@ -188,7 +199,17 @@ const PartsFinderScreen = () => {
           res?.getManufacturers2?.array ||
           res?.data ||
           [];
-        setManufacturersData(list.map(sanitizeBrand));
+        const normalizedList = list.map((m) => {
+          const s = sanitizeBrand(m);
+          return {
+            ...s,
+            id: s.manuId || s.id,
+            manuId: s.manuId || s.id,
+            name: s.manuName || s.name || '',
+            manuName: s.manuName || s.name || '',
+          };
+        });
+        setManufacturersData(normalizedList);
       } catch (err) {
         console.warn('Failed to load manufacturers', err);
       } finally {
@@ -203,6 +224,16 @@ const PartsFinderScreen = () => {
     setSeriesData([]);
     setVehiclesData([]);
   }, [selectedApp]);
+
+  // Normalize series item helper
+  const normalizeSeriesItem = (s, targetType) => ({
+    ...s,
+    id: s.modelId || s.id,
+    modelId: s.modelId || s.id,
+    name: s.modelname || s.name || s.modelName || '',
+    modelname: s.modelname || s.name || s.modelName || '',
+    linkingTargetType: s.linkingTargetType || targetType,
+  });
 
   // Fetch series when manufacturer is selected
   const fetchSeriesForManufacturer = async (manu) => {
@@ -254,7 +285,7 @@ const PartsFinderScreen = () => {
           resO?.getModelSeries2?.array ||
           resO?.data ||
           []
-        ).map((s) => ({ ...s, linkingTargetType: 'O' }));
+        ).map((s) => normalizeSeriesItem(s, 'O'));
 
         const commRegex =
           /\b(SPRINTER|VITO|VIANO|CITAN|VARIO|HILUX|HIACE|QUANTUM|DYNA|PROBOX|D-MAX|KB|RANGER|TRANSIT|BANTAM|COURIER|AMAROK|CADDY|TRANSPORTER|CRAFTER|CARAVELLE|MULTIVAN|H-100|H-1|PORTER|STAREX|NAVARA|HARDBODY|NP200|NP300|1400 BAKKIE|NV200|NV350|CABSTAR)\b/i;
@@ -267,7 +298,7 @@ const PartsFinderScreen = () => {
 
         const listP = rawListP
           .filter((s) => commRegex.test(s.name || s.modelname || ''))
-          .map((s) => ({ ...s, linkingTargetType: 'P' }));
+          .map((s) => normalizeSeriesItem(s, 'P'));
 
         // Deduplicate series by ID
         const seen = new Set();
@@ -310,7 +341,7 @@ const PartsFinderScreen = () => {
           res?.getModelSeries2?.array ||
           res?.data ||
           []
-        ).map((s) => ({ ...s, linkingTargetType: appType }));
+        ).map((s) => normalizeSeriesItem(s, appType));
         setSeriesData(list);
       }
     } catch (err) {
@@ -338,8 +369,8 @@ const PartsFinderScreen = () => {
           linkageTargetCountry: 'ZA',
           lang: 'en',
           linkageTargetType: seriesType,
-          mfrIds: Number(mfrId),
-          vehicleModelSeriesIds: Number(seriesId),
+          mfrIds: [Number(mfrId)],
+          vehicleModelSeriesIds: [Number(seriesId)],
           perPage: 100,
           page: 1,
         },
@@ -359,10 +390,24 @@ const PartsFinderScreen = () => {
         list = restRes?.data?.array || restRes?.data || [];
       }
 
-      const formatted = (list || []).map((v) => ({
-        ...v,
-        linkageTargetType: v.linkageTargetType || seriesType,
-      }));
+      const formatted = (list || []).map((v) => {
+        const title =
+          v.description ||
+          v.typeName ||
+          v.vehicleSalesDescription ||
+          v.modelName ||
+          v.vehicleModelSeriesName ||
+          (v.engines?.[0]?.code ? `Model ${v.engines[0].code}` : 'Standard Trim');
+        return {
+          ...v,
+          id: v.linkageTargetId || v.carId || v.id,
+          linkageTargetId: v.linkageTargetId || v.carId || v.id,
+          linkageTargetType: v.linkageTargetType || seriesType,
+          description: title,
+          typeName: title,
+          modelName: title,
+        };
+      });
 
       setVehiclesData(formatted);
     } catch (err) {
@@ -569,7 +614,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
     >
       <AppHeader
         title="Parts Finder"
-        subtitle="TecDoc Pegasus 3.0 Catalog"
+        subtitle="Official Parts Catalog"
         onBack={() => navigation.goBack()}
       />
 
@@ -662,6 +707,9 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                           styles.appTypePillText,
                           isSelected && styles.appTypePillTextSelected,
                         ]}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.8}
                       >
                         {app.label}
                       </Text>
@@ -675,7 +723,7 @@ const rawQuery = typeof overrideQuery === 'string' ? overrideQuery : partNumber;
                 <View style={styles.popularSection}>
                   <View style={styles.popularHeaderRow}>
                     <Text style={styles.inputSectionLabel}>
-                      TOP 9 {selectedApp === 'Passenger' ? 'VEHICLE' : 'COMMERCIAL'} BRANDS
+                      TOP 9 {selectedApp === 'LightCommercial' ? 'LCV' : selectedApp === 'Commercial' ? 'COMMERCIAL' : 'VEHICLE'} BRANDS
                     </Text>
                   </View>
                   <View style={styles.brandsGrid}>
@@ -1189,7 +1237,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 4,
+    paddingHorizontal: 2,
     height: 38,
     borderRadius: 10,
     backgroundColor: COLORS.white,
@@ -1201,7 +1250,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   appTypePillText: {
-    fontSize: FONTS.size.xs,
+    fontSize: 11.5,
     fontWeight: FONTS.weight.bold,
     color: COLORS.textSecondary,
   },
