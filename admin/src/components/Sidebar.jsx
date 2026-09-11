@@ -2,11 +2,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  UserGroupIcon,
+  BuildingStorefrontIcon,
   MagnifyingGlassIcon,
-  ChatBubbleBottomCenterTextIcon,
+  UserGroupIcon,
+  DocumentTextIcon,
   ArrowRightOnRectangleIcon,
-  Squares2X2Icon,
 } from '@heroicons/react/24/solid';
 import { logout } from '../redux/adminSlice';
 
@@ -21,152 +21,114 @@ const Sidebar = () => {
     dispatch(logout());
   };
 
-  const navigationSections = [
+  const navigationItems = [
     {
-      category: 'Brand & Catalog Portal',
-      items: [
-        {
-          name: 'Switch Brand Portal',
-          path: '/portal',
-          icon: Squares2X2Icon,
-          description: 'NGK & KYB Switcher',
-          colorClass: 'text-emerald-400 bg-emerald-500/10 group-hover:bg-emerald-500/20 group-hover:text-emerald-300',
-        },
-        {
-          name: selectedBrand === 'kyb' ? 'KYB Part Finder' : selectedBrand === 'ngk' ? 'NGK Part Finder' : 'TecDoc Part Finder',
-          path: '/parts',
-          icon: MagnifyingGlassIcon,
-          description: selectedBrand === 'kyb' ? 'KYB Suspension Catalog' : selectedBrand === 'ngk' ? 'NGK & NTK Catalog' : 'Pegasus 3.0 Database',
-          colorClass: selectedBrand === 'kyb' ? 'text-red-400 bg-red-500/10' : 'text-emerald-400 bg-emerald-500/10',
-        },
-      ],
+      name: 'Brand Portal',
+      path: '/portal',
+      icon: BuildingStorefrontIcon,
     },
     {
-      category: 'Network & Accounts',
-      items: [
-        {
-          name: 'User Management',
-          path: '/users',
-          icon: UserGroupIcon,
-          description: 'Accounts, Garages & Roles',
-          colorClass: 'text-blue-400 bg-blue-500/10 group-hover:bg-blue-500/20 group-hover:text-blue-300',
-        },
-      ],
+      name: 'Part Search',
+      path: '/parts',
+      icon: MagnifyingGlassIcon,
     },
     {
-      category: 'Market Intelligence & Logs',
-      items: [
-        {
-          name: 'Commercial Inquiries',
-          path: '/enquiries',
-          icon: ChatBubbleBottomCenterTextIcon,
-          badge: pendingEnquiriesCount > 0 ? pendingEnquiriesCount : null,
-          description: 'Buyer-to-Seller Audit Log',
-          colorClass: 'text-orange-400 bg-orange-500/10 group-hover:bg-orange-500/20 group-hover:text-orange-300',
-        },
-      ],
+      name: 'Users',
+      path: '/users',
+      icon: UserGroupIcon,
+    },
+    {
+      name: 'Inquiries',
+      path: '/enquiries',
+      icon: DocumentTextIcon,
+      badge: pendingEnquiriesCount > 0 ? pendingEnquiriesCount : null,
     },
   ];
 
   return (
     <aside className="w-64 bg-slate-900 text-slate-200 flex flex-col h-screen fixed left-0 top-0 z-30 shadow-xl border-r border-slate-800 select-none">
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-5 border-b border-slate-800 bg-slate-950/80 justify-between">
-        <div className="flex items-center gap-3">
+      <div className="h-16 flex items-center px-4 border-b border-slate-800 bg-slate-950/80">
+        <div className="flex items-center gap-3 min-w-0">
           <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center p-1.5 shadow-md ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center p-1.5 shadow-md shrink-0 ${
               selectedBrand === 'kyb'
                 ? 'bg-white shadow-red-600/30 ring-1 ring-red-500/30'
                 : 'bg-white shadow-emerald-600/30 ring-1 ring-emerald-500/30'
             }`}
           >
             <img
-              src={selectedBrand === 'kyb' ? '/images/branding/kyb_logo.png' : '/images/branding/ngk_logo.png'}
+              src={selectedBrand === 'kyb' ? '/images/branding/kyb_icon.png' : '/images/branding/ngk_logo.png'}
               alt={selectedBrand === 'kyb' ? 'KYB' : 'NGK'}
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-[13px] tracking-tight text-white leading-tight">
+          <div className="flex flex-col min-w-0">
+            <span className="font-extrabold text-[13px] tracking-tight text-white leading-tight truncate">
               {selectedBrand === 'kyb' ? 'KYB SUSPENSION' : 'NGK SPARK PLUG'}
             </span>
-            <span className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase leading-tight mt-0.5">
-              {selectedBrand === 'kyb' ? 'Damping Catalog' : 'Administration Portal'}
+            <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase leading-tight mt-0.5">
+              Admin Console
             </span>
           </div>
         </div>
       </div>
 
-      {/* Categorized Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto">
-        {navigationSections.map((section, sIdx) => (
-          <div key={sIdx} className="space-y-1.5">
-            <h3 className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              {section.category}
-            </h3>
+      {/* Clean, Streamlined Navigation */}
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div className="px-2 pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          Menu
+        </div>
 
-            <div className="space-y-1">
-              {section.items.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-xs tracking-normal transition-all duration-150 group ${
+        {navigationItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-[13px] tracking-normal transition-all duration-150 group ${
+                  isActive
+                    ? selectedBrand === 'kyb'
+                      ? 'bg-[#E31837] text-white shadow-md shadow-red-600/30 font-bold'
+                      : 'bg-[#008752] text-white shadow-md shadow-emerald-600/30 font-bold'
+                    : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                         isActive
-                          ? selectedBrand === 'kyb'
-                            ? 'bg-[#E31837] text-white shadow-md shadow-red-600/30'
-                            : 'bg-[#008752] text-white shadow-md shadow-emerald-600/30'
-                          : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
-                      }`
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div
-                            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
-                              isActive
-                                ? 'bg-white/20 text-white'
-                                : item.colorClass
-                            }`}
-                          >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div className="flex flex-col min-w-0">
-                            <span className="truncate text-[12px] font-semibold text-white leading-tight">
-                              {item.name}
-                            </span>
-                            <span
-                              className={`text-[10px] truncate leading-tight mt-0.5 ${
-                                isActive ? 'text-rose-100 font-medium' : 'text-slate-400 group-hover:text-slate-300 font-normal'
-                              }`}
-                            >
-                              {item.description}
-                            </span>
-                          </div>
-                        </div>
+                          ? 'bg-white/20 text-white'
+                          : 'bg-slate-800/80 text-slate-400 group-hover:text-white group-hover:bg-slate-700'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className="truncate leading-none">
+                      {item.name}
+                    </span>
+                  </div>
 
-                        {typeof item.badge === 'number' && item.badge > 0 ? (
-                          <span
-                            className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              isActive
-                                ? 'bg-white text-brand-red shadow-xs'
-                                : 'bg-brand-red text-white'
-                            }`}
-                          >
-                            {item.badge}
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </NavLink>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+                  {typeof item.badge === 'number' && item.badge > 0 ? (
+                    <span
+                      className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                        isActive
+                          ? 'bg-white text-slate-900 shadow-xs'
+                          : 'bg-[#E31837] text-white'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </>
+              )}
+            </NavLink>
+          );
+        })}
       </nav>
 
       {/* Footer / Exit Session */}

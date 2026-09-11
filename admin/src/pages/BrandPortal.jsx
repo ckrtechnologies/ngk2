@@ -2,7 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedBrand } from '../redux/adminSlice';
-import { Zap, ShieldCheck, ArrowRight, Layers, Database, Activity, CheckCircle2, ChevronRight, Sparkles } from 'lucide-react';
+import {
+  BoltIcon,
+  CheckCircleIcon,
+  ArrowRightIcon,
+  Squares2X2Icon,
+  CircleStackIcon,
+  ChartBarIcon,
+  SparklesIcon,
+} from '@heroicons/react/20/solid';
 
 const BrandPortal = () => {
   const navigate = useNavigate();
@@ -24,7 +32,7 @@ const BrandPortal = () => {
         {/* Welcome & Section Header */}
         <div className="text-center mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/80 mb-4 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <SparklesIcon className="w-3.5 h-3.5 text-amber-400" />
             <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
               TecDoc Pegasus 3.0 Enterprise Portal
             </span>
@@ -54,7 +62,7 @@ const BrandPortal = () => {
                   TecDoc Suppliers #15 & #5414
                 </span>
                 <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Premier Data Supplier
+                  <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-400" /> Premier Data Supplier
                 </span>
               </div>
 
@@ -85,7 +93,7 @@ const BrandPortal = () => {
               <div className="grid grid-cols-2 gap-3 mb-6">
                 <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3">
                   <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
-                    <Zap className="w-3.5 h-3.5" />
+                    <BoltIcon className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black uppercase">Ignition & Plugs</span>
                   </div>
                   <span className="text-lg font-black text-white">3,993+</span>
@@ -93,7 +101,7 @@ const BrandPortal = () => {
                 </div>
                 <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3">
                   <div className="flex items-center gap-1.5 text-teal-400 mb-1">
-                    <Activity className="w-3.5 h-3.5" />
+                    <ChartBarIcon className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black uppercase">NTK Sensors</span>
                   </div>
                   <span className="text-lg font-black text-white">3,334+</span>
@@ -108,7 +116,7 @@ const BrandPortal = () => {
                 Launch NGK Catalog
               </span>
               <div className="w-9 h-9 rounded-lg bg-[#008752] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform shadow-md shadow-emerald-600/30">
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRightIcon className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -128,13 +136,13 @@ const BrandPortal = () => {
                   TecDoc Supplier #7729
                 </span>
                 <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" /> Certified Data Supplier
+                  <CheckCircleIcon className="w-3.5 h-3.5 text-blue-400" /> Certified Data Supplier
                 </span>
               </div>
 
               {/* Brand Logo & Name */}
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-20 h-16 bg-white/95 rounded-xl p-2.5 flex items-center justify-center shadow-lg shadow-red-900/30 ring-2 ring-red-500/30">
+                <div className="w-24 h-16 bg-white/95 rounded-xl px-3 py-2.5 flex items-center justify-center shadow-lg shadow-red-900/30 ring-2 ring-red-500/30">
                   <img
                     src="/images/branding/kyb_logo.png"
                     alt="KYB SUSPENSION"
@@ -159,7 +167,7 @@ const BrandPortal = () => {
               <div className="grid grid-cols-2 gap-3 mb-6">
                 <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3">
                   <div className="flex items-center gap-1.5 text-red-400 mb-1">
-                    <Layers className="w-3.5 h-3.5" />
+                    <Squares2X2Icon className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black uppercase">Shock Absorbers</span>
                   </div>
                   <span className="text-lg font-black text-white">1,908+</span>
@@ -167,7 +175,7 @@ const BrandPortal = () => {
                 </div>
                 <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                    <Database className="w-3.5 h-3.5" />
+                    <CircleStackIcon className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black uppercase">OE References</span>
                   </div>
                   <span className="text-lg font-black text-white">100%</span>
@@ -182,7 +190,7 @@ const BrandPortal = () => {
                 Launch KYB Catalog
               </span>
               <div className="w-9 h-9 rounded-lg bg-[#E31837] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform shadow-md shadow-red-600/30">
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRightIcon className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -194,7 +202,7 @@ const BrandPortal = () => {
             onClick={() => handleSelectBrand(null)}
             className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider cursor-pointer"
           >
-            <Layers className="w-3.5 h-3.5" />
+            <Squares2X2Icon className="w-3.5 h-3.5" />
             <span>Enter Unified System (All Brands)</span>
           </button>
         </div>

@@ -62,13 +62,303 @@ const FALLBACK_SERIES = {
     { id: 124, modelId: 124, name: 'C-CLASS (W205)', modelname: 'C-CLASS (W205)', count: 45 },
     { id: 125, modelId: 125, name: 'E-CLASS (W213)', modelname: 'E-CLASS (W213)', count: 38 },
   ],
+  // Motorcycles & Quads (B / M)
+  45: [
+    { id: 4501, modelId: 4501, name: 'CBR 1000RR Fireblade', modelname: 'CBR 1000RR Fireblade', count: 32 },
+    { id: 4502, modelId: 4502, name: 'CRF 450R / 450L', modelname: 'CRF 450R / 450L', count: 28 },
+    { id: 4503, modelId: 4503, name: 'CRF 1100L Africa Twin', modelname: 'CRF 1100L Africa Twin', count: 24 },
+    { id: 4504, modelId: 4504, name: 'CB 500F / CB 500X', modelname: 'CB 500F / CB 500X', count: 30 },
+    { id: 4505, modelId: 4505, name: 'NC 750X / Integra', modelname: 'NC 750X / Integra', count: 22 },
+  ],
+  1164: [
+    { id: 11641, modelId: 11641, name: 'YZF-R1 / YZF-R1M', modelname: 'YZF-R1 / YZF-R1M', count: 35 },
+    { id: 11642, modelId: 11642, name: 'MT-09 / Tracer 9', modelname: 'MT-09 / Tracer 9', count: 30 },
+    { id: 11643, modelId: 11643, name: 'MT-07 / Tracer 7', modelname: 'MT-07 / Tracer 7', count: 28 },
+    { id: 11644, modelId: 11644, name: 'Tenere 700 (XTZ 700)', modelname: 'Tenere 700 (XTZ 700)', count: 26 },
+    { id: 11645, modelId: 11645, name: 'WR 450F / YZ 450F', modelname: 'WR 450F / YZ 450F', count: 24 },
+  ],
+  574: [
+    { id: 5741, modelId: 5741, name: 'Ninja ZX-10R', modelname: 'Ninja ZX-10R', count: 30 },
+    { id: 5742, modelId: 5742, name: 'Z900 / Z900RS', modelname: 'Z900 / Z900RS', count: 28 },
+    { id: 5743, modelId: 5743, name: 'Versys 650 (KLE650)', modelname: 'Versys 650 (KLE650)', count: 25 },
+    { id: 5744, modelId: 5744, name: 'KLR 650', modelname: 'KLR 650', count: 20 },
+  ],
+  109: [
+    { id: 1091, modelId: 1091, name: 'GSX-R 1000 / R', modelname: 'GSX-R 1000 / R', count: 32 },
+    { id: 1092, modelId: 1092, name: 'V-Strom 650 (DL650)', modelname: 'V-Strom 650 (DL650)', count: 28 },
+    { id: 1093, modelId: 1093, name: 'Hayabusa (GSX 1300R)', modelname: 'Hayabusa (GSX 1300R)', count: 24 },
+    { id: 1094, modelId: 1094, name: 'DR-Z 400S / SM', modelname: 'DR-Z 400S / SM', count: 18 },
+  ],
+  2760: [
+    { id: 27601, modelId: 27601, name: '1290 Super Duke R', modelname: '1290 Super Duke R', count: 28 },
+    { id: 27602, modelId: 27602, name: '890 Adventure / R', modelname: '890 Adventure / R', count: 26 },
+    { id: 27603, modelId: 27603, name: '390 Duke', modelname: '390 Duke', count: 34 },
+    { id: 27604, modelId: 27604, name: '450 EXC-F / 300 EXC', modelname: '450 EXC-F / 300 EXC', count: 22 },
+  ],
+  112: [
+    { id: 1121, modelId: 1121, name: 'Tiger 900 / 1200', modelname: 'Tiger 900 / 1200', count: 26 },
+    { id: 1122, modelId: 1122, name: 'Bonneville T120 / T100', modelname: 'Bonneville T120 / T100', count: 24 },
+    { id: 1123, modelId: 1123, name: 'Street Triple 765', modelname: 'Street Triple 765', count: 28 },
+  ],
+  181: [
+    { id: 1811, modelId: 1811, name: 'Vespa GTS 300 Super', modelname: 'Vespa GTS 300 Super', count: 22 },
+    { id: 1812, modelId: 1812, name: 'Beverly 300 / 400', modelname: 'Beverly 300 / 400', count: 18 },
+    { id: 1813, modelId: 1813, name: 'Medley 125 / 150', modelname: 'Medley 125 / 150', count: 16 },
+  ],
+  4552: [
+    { id: 45521, modelId: 45521, name: 'Pulsar 200 NS / RS', modelname: 'Pulsar 200 NS / RS', count: 36 },
+    { id: 45522, modelId: 45522, name: 'Dominar 400', modelname: 'Dominar 400', count: 25 },
+    { id: 45523, modelId: 45523, name: 'Boxer 150', modelname: 'Boxer 150', count: 30 },
+  ],
+  // Commercial & Trucks (O)
+  120: [
+    { id: 1201, modelId: 1201, name: 'FH 16 / FH 13', modelname: 'FH 16 / FH 13', count: 48 },
+    { id: 1202, modelId: 1202, name: 'FM / FMX Tipper & Rigids', modelname: 'FM / FMX Tipper & Rigids', count: 36 },
+    { id: 1203, modelId: 1203, name: 'FL / FE Distribution', modelname: 'FL / FE Distribution', count: 24 },
+  ],
+  103: [
+    { id: 1031, modelId: 1031, name: 'R-Series (R450, R500, R560)', modelname: 'R-Series (R450, R500, R560)', count: 52 },
+    { id: 1032, modelId: 1032, name: 'G-Series (G410, G460)', modelname: 'G-Series (G410, G460)', count: 38 },
+    { id: 1033, modelId: 1033, name: 'P-Series Construction', modelname: 'P-Series Construction', count: 30 },
+  ],
+  69: [
+    { id: 6901, modelId: 6901, name: 'TGX Long Haul', modelname: 'TGX Long Haul', count: 42 },
+    { id: 6902, modelId: 6902, name: 'TGS Heavy Duty / Offroad', modelname: 'TGS Heavy Duty / Offroad', count: 35 },
+    { id: 6903, modelId: 6903, name: 'TGM / TGL Medium Distribution', modelname: 'TGM / TGL Medium Distribution', count: 28 },
+  ],
+  151: [
+    { id: 1511, modelId: 1511, name: 'HINO 300 Series', modelname: 'HINO 300 Series', count: 38 },
+    { id: 1512, modelId: 1512, name: 'HINO 500 Series', modelname: 'HINO 500 Series', count: 34 },
+    { id: 1513, modelId: 1513, name: 'HINO 700 Series', modelname: 'HINO 700 Series', count: 26 },
+  ],
+  55: [
+    { id: 5501, modelId: 5501, name: 'Daily Van / Chassis Cab', modelname: 'Daily Van / Chassis Cab', count: 46 },
+    { id: 5502, modelId: 5502, name: 'Eurocargo Medium', modelname: 'Eurocargo Medium', count: 32 },
+    { id: 5503, modelId: 5503, name: 'Stralis / S-Way Heavy', modelname: 'Stralis / S-Way Heavy', count: 38 },
+  ],
+  // Tractors & Agricultural (T)
+  301: [
+    { id: 3011, modelId: 3011, name: '6M / 6R Utility Tractors', modelname: '6M / 6R Utility Tractors', count: 32 },
+    { id: 3012, modelId: 3012, name: '8R / 8RT Row-Crop Tractors', modelname: '8R / 8RT Row-Crop Tractors', count: 26 },
+    { id: 3013, modelId: 3013, name: '5E / 5M Specialty Tractors', modelname: '5E / 5M Specialty Tractors', count: 28 },
+  ],
+  302: [
+    { id: 3021, modelId: 3021, name: 'MF 5700 / 6700 Series', modelname: 'MF 5700 / 6700 Series', count: 30 },
+    { id: 3022, modelId: 3022, name: 'MF 7700 / 8700 High HP', modelname: 'MF 7700 / 8700 High HP', count: 24 },
+    { id: 3023, modelId: 3023, name: 'MF 200 Heritage Workhorse', modelname: 'MF 200 Heritage Workhorse', count: 20 },
+  ],
+  303: [
+    { id: 3031, modelId: 3031, name: 'T6 / T7 All-Purpose Series', modelname: 'T6 / T7 All-Purpose Series', count: 28 },
+    { id: 3032, modelId: 3032, name: 'TD5 Compact Series', modelname: 'TD5 Compact Series', count: 22 },
+  ],
+  // LCV / Vans (L)
+  80: [
+    { id: 8001, modelId: 8001, name: 'NP300 Hardbody (D22)', modelname: 'NP300 Hardbody (D22)', count: 42 },
+    { id: 8002, modelId: 8002, name: 'Navara Pick-up (D40 / D23)', modelname: 'Navara Pick-up (D40 / D23)', count: 38 },
+    { id: 8003, modelId: 8003, name: 'NV350 Impendulo Taxi / Van', modelname: 'NV350 Impendulo Taxi / Van', count: 32 },
+    { id: 8004, modelId: 8004, name: '1400 Bakkie (B140)', modelname: '1400 Bakkie (B140)', count: 28 },
+    { id: 8005, modelId: 8005, name: 'NP200 Half-ton Bakkie', modelname: 'NP200 Half-ton Bakkie', count: 36 },
+  ],
+  93: [
+    { id: 9301, modelId: 9301, name: 'Trafic II / III Van', modelname: 'Trafic II / III Van', count: 28 },
+    { id: 9302, modelId: 9302, name: 'Master III Commercial Van', modelname: 'Master III Commercial Van', count: 24 },
+    { id: 9303, modelId: 9303, name: 'Kangoo Express / Maxi', modelname: 'Kangoo Express / Maxi', count: 20 },
+  ],
+  // Marine & Outboard Engines (M)
+  602: [
+    { id: 6021, modelId: 6021, name: 'Verado V12 600hp / V8 300hp Outboards', modelname: 'Verado V12 600hp / V8 300hp Outboards', count: 32 },
+    { id: 6022, modelId: 6022, name: 'FourStroke 175 - 300hp Commercial', modelname: 'FourStroke 175 - 300hp Commercial', count: 30 },
+    { id: 6023, modelId: 6023, name: 'MerCruiser Inboard 4.5L / 6.2L V8', modelname: 'MerCruiser Inboard 4.5L / 6.2L V8', count: 26 },
+    { id: 6024, modelId: 6024, name: 'Pro XS 115 - 250hp High-Output', modelname: 'Pro XS 115 - 250hp High-Output', count: 24 },
+  ],
+  603: [
+    { id: 6031, modelId: 6031, name: '6LY / 4LV High Speed Diesel Inboard', modelname: '6LY / 4LV High Speed Diesel Inboard', count: 24 },
+    { id: 6032, modelId: 6032, name: '3YM / 2YM Auxiliary Sailboat Engines', modelname: '3YM / 2YM Auxiliary Sailboat Engines', count: 20 },
+    { id: 6033, modelId: 6033, name: '8LV V8 Twin-Turbo Marine Diesel', modelname: '8LV V8 Twin-Turbo Marine Diesel', count: 18 },
+  ],
+  604: [
+    { id: 6041, modelId: 6041, name: 'MFS 115A / 140A 4-Stroke Outboards', modelname: 'MFS 115A / 140A 4-Stroke Outboards', count: 22 },
+    { id: 6042, modelId: 6042, name: 'BFT 250 / 200 V6 Outboard Series', modelname: 'BFT 250 / 200 V6 Outboard Series', count: 18 },
+  ],
+  605: [
+    { id: 6051, modelId: 6051, name: 'E-TEC G2 150 - 300hp V6 2-Stroke DFI', modelname: 'E-TEC G2 150 - 300hp V6 2-Stroke DFI', count: 26 },
+    { id: 6052, modelId: 6052, name: 'OceanPro / Special V4 - V6', modelname: 'OceanPro / Special V4 - V6', count: 20 },
+  ],
+  607: [
+    { id: 6071, modelId: 6071, name: 'QSB 6.7 Quantum Marine Diesel', modelname: 'QSB 6.7 Quantum Marine Diesel', count: 24 },
+    { id: 6072, modelId: 6072, name: 'QSC 8.3 Heavy Commercial Inboard', modelname: 'QSC 8.3 Heavy Commercial Inboard', count: 20 },
+  ],
 };
 
 const FALLBACK_ARTICLES = [
   {
+    articleId: 5787,
+    articleNo: 'ILZKR7B-11',
+    partNumber: 'ILZKR7B-11',
+    tradeNumbers: ['5787', 'ILZKR7B11'],
+    articleName: 'Laser Iridium Spark Plug',
+    dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
+    brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/db43e6b81241ab09be6ba2395a6a5dc3be371693.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Thread Size', value: 'M12 x 1.25' },
+      { label: 'Spanner Size', value: '16 mm' },
+      { label: 'Thread Length', value: '26.5 mm' },
+      { label: 'Spark Position', value: '5.0 mm' },
+      { label: 'Electrode Gap', value: '1.1 mm' },
+    ],
+  },
+  {
+    articleId: 3672,
+    articleNo: 'LFR6A-11',
+    partNumber: 'LFR6A-11',
+    tradeNumbers: ['3672', 'LFR6A11'],
+    articleName: 'Yellow Line Standard Spark Plug',
+    dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
+    brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Thread Size', value: 'M14 x 1.25' },
+      { label: 'Spanner Size', value: '16 mm' },
+      { label: 'Thread Length', value: '26.5 mm' },
+      { label: 'Spark Position', value: '3.0 mm' },
+      { label: 'Electrode Gap', value: '1.1 mm' },
+    ],
+  },
+  {
+    articleId: 3932,
+    articleNo: 'DCPR7E',
+    partNumber: 'DCPR7E',
+    tradeNumbers: ['3932'],
+    articleName: 'Standard Nickel Spark Plug',
+    dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
+    brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/e3e8660767f8d225b469d6b8aa4300bcba419b40.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Thread Size', value: 'M12 x 1.25' },
+      { label: 'Spanner Size', value: '16 mm' },
+      { label: 'Thread Length', value: '19.0 mm' },
+      { label: 'Spark Position', value: '3.0 mm' },
+      { label: 'Electrode Gap', value: '0.9 mm' },
+    ],
+  },
+  {
+    articleId: 48043,
+    articleNo: 'U5014',
+    partNumber: 'U5014',
+    tradeNumbers: ['48043'],
+    articleName: 'NGK Ignition Coil Block',
+    dataSupplierName: 'NGK SPARK PLUG',
+    dataSupplierId: 15,
+    brand: 'NGK SPARK PLUG',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/956629741cb981435df21cfe4e8d6bee044bfc29.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Connector Type', value: 'SAE' },
+      { label: 'Number of Poles', value: '3' },
+      { label: 'Operating Voltage', value: '12 V' },
+      { label: 'Ignition Coil', value: 'Block Ignition Coil' },
+    ],
+  },
+  {
+    articleId: 333338,
+    articleNo: '333338',
+    partNumber: '333338',
+    tradeNumbers: ['333338'],
+    articleName: 'KYB Excel-G Gas Shock Absorber',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/a59c5579be1ff74702c8856275255ab592e38e7e.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Front Axle' },
+      { label: 'Shock Absorber Type', value: 'Gas Pressure Strut' },
+      { label: 'Shock Absorber System', value: 'Twin-Tube' },
+    ],
+  },
+  {
+    articleId: 182900,
+    articleNo: 'RA1829',
+    partNumber: 'RA1829',
+    tradeNumbers: ['RA1829'],
+    articleName: 'KYB K-Flex Suspension Coil Spring',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Front Axle' },
+      { label: 'Spring Design', value: 'Coil Spring' },
+      { label: 'Weight', value: '2.14 kg' },
+    ],
+  },
+  {
     articleId: 93501,
     articleNo: 'ILKAR7C10',
     partNumber: 'ILKAR7C10',
+    tradeNumbers: ['94998'],
     articleName: 'Laser Iridium Spark Plug',
     dataSupplierName: 'NGK SPARK PLUG',
     dataSupplierId: 15,
@@ -241,6 +531,57 @@ const FALLBACK_ARTICLES = [
       { label: 'Shock Absorber Type', value: 'High-Pressure Monotube' },
     ],
   },
+  {
+    articleId: 510100,
+    articleNo: 'SM5101',
+    partNumber: 'SM5101',
+    tradeNumbers: ['SM5101'],
+    articleName: 'KYB Suspension Strut Mount & Bearing Kit',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Front Axle' },
+      { label: 'Mounting Type', value: 'Rubber-Metal Strut Mount with Roller Bearing' },
+      { label: 'Component Type', value: 'Top Strut Mounting Kit' },
+    ],
+  },
+  {
+    articleId: 910002,
+    articleNo: '910002',
+    partNumber: '910002',
+    tradeNumbers: ['910002'],
+    articleName: 'KYB Strut Protection Kit (Dust Cover & Bump Stop)',
+    dataSupplierName: '-KYB',
+    dataSupplierId: 7729,
+    brand: '-KYB',
+    imageUrl: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+    images: [
+      {
+        imageURL400: 'https://digital-assets.tecalliance.services/images/400/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL800: 'https://digital-assets.tecalliance.services/images/800/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        imageURL200: 'https://digital-assets.tecalliance.services/images/200/286e31509df221742fdb95838b78ec226bfd8efc.jpg',
+        typeDescription: 'Article Picture',
+        headerDescription: 'Product Photo',
+      },
+    ],
+    specs: [
+      { label: 'Fitting Position', value: 'Front Axle both sides' },
+      { label: 'Scope of Delivery', value: '2x Dust Cover Bellows, 2x Compression Bump Stops' },
+    ],
+  },
 ];
 
 class TecDocService {
@@ -298,16 +639,103 @@ class TecDocService {
    */
   handleFallback(payload) {
     if (payload.getManufacturers2 || payload.getManufacturers || payload.getLinkageTargets?.includeMfrFacets) {
+      const type = (payload.getLinkageTargets?.linkageTargetType || payload.getManufacturers2?.linkingTargetType || 'P').toUpperCase();
+      let mfrs = FALLBACK_MANUFACTURERS;
+
+      if (type === 'B' || type === 'MOTORCYCLE') {
+        mfrs = this.getPopularBrands('M').map((b) => ({
+          id: b.manuId || b.id,
+          manuId: b.manuId || b.id,
+          name: b.name || b.manuName,
+          manuName: b.name || b.manuName,
+          count: 120,
+        }));
+      } else if (type === 'M' || type === 'MARINE') {
+        mfrs = [
+          { id: 1164, manuId: 1164, name: 'YAMAHA MARINE', manuName: 'YAMAHA MARINE', count: 95 },
+          { id: 602, manuId: 602, name: 'MERCURY MARINE', manuName: 'MERCURY MARINE', count: 85 },
+          { id: 45, manuId: 45, name: 'HONDA MARINE', manuName: 'HONDA MARINE', count: 70 },
+          { id: 109, manuId: 109, name: 'SUZUKI MARINE', manuName: 'SUZUKI MARINE', count: 65 },
+          { id: 120, manuId: 120, name: 'VOLVO PENTA', manuName: 'VOLVO PENTA', count: 60 },
+          { id: 603, manuId: 603, name: 'YANMAR', manuName: 'YANMAR', count: 50 },
+          { id: 574, manuId: 574, name: 'KAWASAKI WATERCRAFT', manuName: 'KAWASAKI WATERCRAFT', count: 45 },
+          { id: 604, manuId: 604, name: 'TOHATSU', manuName: 'TOHATSU', count: 40 },
+          { id: 605, manuId: 605, name: 'EVINRUDE / JOHNSON', manuName: 'EVINRUDE / JOHNSON', count: 35 },
+          { id: 607, manuId: 607, name: 'CUMMINS MARINE', manuName: 'CUMMINS MARINE', count: 30 },
+        ];
+      } else if (type === 'O' || type === 'COMMERCIAL') {
+        mfrs = this.getPopularBrands('O').map((b) => ({
+          id: b.manuId || b.id,
+          manuId: b.manuId || b.id,
+          name: b.name || b.manuName,
+          manuName: b.name || b.manuName,
+          count: 150,
+        }));
+      } else if (type === 'L' || type === 'LIGHTCOMMERCIAL') {
+        mfrs = [
+          { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', count: 480 },
+          { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', count: 320 },
+          { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', count: 290 },
+          { id: 121, manuId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', count: 260 },
+          { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', count: 210 },
+          { id: 74, manuId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', count: 190 },
+          { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', count: 160 },
+          { id: 93, manuId: 93, name: 'RENAULT', manuName: 'RENAULT', count: 110 },
+        ];
+      } else if (type === 'T' || type === 'TRACTOR') {
+        mfrs = [
+          { id: 301, manuId: 301, name: 'JOHN DEERE', manuName: 'JOHN DEERE', count: 220 },
+          { id: 302, manuId: 302, name: 'MASSEY FERGUSON', manuName: 'MASSEY FERGUSON', count: 180 },
+          { id: 303, manuId: 303, name: 'NEW HOLLAND', manuName: 'NEW HOLLAND', count: 160 },
+          { id: 304, manuId: 304, name: 'CASE IH', manuName: 'CASE IH', count: 140 },
+          { id: 305, manuId: 305, name: 'KUBOTA', manuName: 'KUBOTA', count: 130 },
+          { id: 306, manuId: 306, name: 'DEUTZ-FAHR', manuName: 'DEUTZ-FAHR', count: 95 },
+          { id: 307, manuId: 307, name: 'CLAAS', manuName: 'CLAAS', count: 85 },
+        ];
+      }
+
       return {
-        data: { array: FALLBACK_MANUFACTURERS },
-        mfrFacets: { counts: FALLBACK_MANUFACTURERS },
+        data: { array: mfrs },
+        mfrFacets: { counts: mfrs },
         status: 200,
       };
     }
 
     if (payload.getModelSeries2 || payload.getModelSeries || payload.getLinkageTargets?.includeVehicleModelSeriesFacets) {
       const mfrId = payload.getModelSeries2?.manuId || payload.getModelSeries?.manuId || payload.getLinkageTargets?.mfrIds?.[0] || 111;
-      const list = FALLBACK_SERIES[mfrId] || FALLBACK_SERIES[111];
+      const type = (payload.getLinkageTargets?.linkageTargetType || 'P').toUpperCase();
+      let list = FALLBACK_SERIES[mfrId];
+
+      if (type === 'M' || type === 'MARINE') {
+        if (mfrId == 1164) {
+          list = [
+            { id: 116401, modelId: 116401, name: 'F350 / F300 V8 Offshore Outboards', modelname: 'F350 / F300 V8 Offshore Outboards', count: 35 },
+            { id: 116402, modelId: 116402, name: 'F200 / F150 In-Line 4 4-Stroke', modelname: 'F200 / F150 In-Line 4 4-Stroke', count: 30 },
+            { id: 116403, modelId: 116403, name: 'WaveRunner FX SVHO / GP1800R PWC', modelname: 'WaveRunner FX SVHO / GP1800R PWC', count: 28 },
+            { id: 116404, modelId: 116404, name: 'VMAX SHO 250 / 200 High Output', modelname: 'VMAX SHO 250 / 200 High Output', count: 25 },
+          ];
+        } else if (mfrId == 45) {
+          list = [
+            { id: 45001, modelId: 45001, name: 'BF 250 / BF 225 V6 4-Stroke Outboard', modelname: 'BF 250 / BF 225 V6 4-Stroke Outboard', count: 28 },
+            { id: 45002, modelId: 45002, name: 'BF 150 / BF 135 In-Line 4 Outboard', modelname: 'BF 150 / BF 135 In-Line 4 Outboard', count: 24 },
+            { id: 45003, modelId: 45003, name: 'BF 90 / BF 75 Mid-Range Outboard', modelname: 'BF 90 / BF 75 Mid-Range Outboard', count: 20 },
+          ];
+        } else if (mfrId == 109) {
+          list = [
+            { id: 10901, modelId: 10901, name: 'DF350A / DF300B Dual-Prop Outboard', modelname: 'DF350A / DF300B Dual-Prop Outboard', count: 30 },
+            { id: 10902, modelId: 10902, name: 'DF200A / DF175A 4-Cylinder Outboard', modelname: 'DF200A / DF175A 4-Cylinder Outboard', count: 26 },
+            { id: 10903, modelId: 10903, name: 'DF140A / DF115A Lean Burn Series', modelname: 'DF140A / DF115A Lean Burn Series', count: 22 },
+          ];
+        } else {
+          list = FALLBACK_SERIES[mfrId] || FALLBACK_SERIES[602];
+        }
+      } else if (!list) {
+        if (type === 'B') list = FALLBACK_SERIES[1164];
+        else if (type === 'O') list = FALLBACK_SERIES[120];
+        else if (type === 'T') list = FALLBACK_SERIES[301];
+        else list = FALLBACK_SERIES[111];
+      }
+
       return {
         data: { array: list },
         vehicleModelSeriesFacets: { counts: list },
@@ -315,22 +743,63 @@ class TecDocService {
       };
     }
 
+    if (payload.getLinkageTargets && !payload.getLinkageTargets.includeMfrFacets && !payload.getLinkageTargets.includeVehicleModelSeriesFacets) {
+      const type = (payload.getLinkageTargets.linkageTargetType || 'P').toUpperCase();
+      let variants = [];
+      if (type === 'B' || type === 'M') {
+        variants = [
+          { id: 4001, carId: 4001, linkageTargetId: 4001, linkageTargetType: 'B', typeName: '1000cc 4-Cylinder DOHC (158kW / 215HP)', modelName: 'Supersport / Adventure', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2020', powerHpFrom: '215', powerKwFrom: '158' },
+          { id: 4002, carId: 4002, linkageTargetId: 4002, linkageTargetType: 'B', typeName: '600cc 4-Cylinder 16V (88kW / 120HP)', modelName: 'Sport / Touring', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2018', powerHpFrom: '120', powerKwFrom: '88' },
+          { id: 4003, carId: 4003, linkageTargetId: 4003, linkageTargetType: 'B', typeName: '450cc 4-Stroke Single (40kW / 54HP)', modelName: 'Enduro / MX', manuName: 'MOTORCYCLE', yearOfConstrFrom: '2019', powerHpFrom: '54', powerKwFrom: '40' },
+        ];
+      } else if (type === 'T') {
+        variants = [
+          { id: 3001, carId: 3001, linkageTargetId: 3001, linkageTargetType: 'T', typeName: '6.8L 6-Cyl PowerTech Turbo Diesel (155kW / 210HP)', modelName: 'Agricultural Tractor', manuName: 'AGRI', yearOfConstrFrom: '2018', powerHpFrom: '210', powerKwFrom: '155' },
+          { id: 3002, carId: 3002, linkageTargetId: 3002, linkageTargetType: 'T', typeName: '4.5L 4-Cyl Turbo Diesel (95kW / 130HP)', modelName: 'Utility Tractor', manuName: 'AGRI', yearOfConstrFrom: '2016', powerHpFrom: '130', powerKwFrom: '95' },
+        ];
+      } else if (type === 'O') {
+        variants = [
+          { id: 2001, carId: 2001, linkageTargetId: 2001, linkageTargetType: 'O', typeName: '12.8L OM471 6-Cyl Turbo Diesel (330kW / 449HP)', modelName: 'Heavy Truck / Hauler', manuName: 'COMMERCIAL', yearOfConstrFrom: '2019', powerHpFrom: '449', powerKwFrom: '330' },
+          { id: 2002, carId: 2002, linkageTargetId: 2002, linkageTargetType: 'O', typeName: '7.7L OM936 6-Cyl Turbo (220kW / 299HP)', modelName: 'Medium Distribution / Tipper', manuName: 'COMMERCIAL', yearOfConstrFrom: '2018', powerHpFrom: '299', powerKwFrom: '220' },
+        ];
+      } else {
+        variants = [
+          { id: 1001, carId: 1001, linkageTargetId: 1001, linkageTargetType: 'P', typeName: '2.8 GD-6 (GUN126) 150kW / 204HP', modelName: 'HILUX VIII', manuName: 'TOYOTA', yearOfConstrFrom: '2020', powerHpFrom: '204', powerKwFrom: '150' },
+          { id: 1002, carId: 1002, linkageTargetId: 1002, linkageTargetType: 'P', typeName: '2.4 GD-6 (GUN125) 110kW / 150HP', modelName: 'HILUX VIII', manuName: 'TOYOTA', yearOfConstrFrom: '2016', powerHpFrom: '150', powerKwFrom: '110' },
+        ];
+      }
+      return {
+        data: { array: variants },
+        linkageTargets: variants,
+        status: 200,
+      };
+    }
+
     if (payload.getArticles || payload.getArticles2) {
-      const query = (payload.getArticles?.searchQuery || '').toUpperCase();
-      const suppliers = payload.getArticles?.dataSupplierIds || [];
+      const rawQuery = (payload.getArticles?.searchQuery || payload.getArticles2?.searchQuery || '').trim();
+      const normQ = rawQuery.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const suppliers = payload.getArticles?.dataSupplierIds || payload.getArticles2?.dataSupplierIds || [];
       let pool = FALLBACK_ARTICLES;
 
       if (suppliers.includes(7729)) {
-        pool = FALLBACK_ARTICLES.filter((a) => (a.brand || '').toUpperCase().includes('KYB'));
+        pool = FALLBACK_ARTICLES.filter((a) => (a.brand || '').toUpperCase().includes('KYB') || Number(a.dataSupplierId) === 7729);
       } else if (suppliers.includes(15) || suppliers.includes(5414)) {
         pool = FALLBACK_ARTICLES.filter((a) => !(a.brand || '').toUpperCase().includes('KYB'));
       }
 
-      let matches = pool;
-      if (query) {
-        matches = pool.filter(
-          (a) => a.articleNo.includes(query) || a.articleName.toUpperCase().includes(query)
-        );
+      let matches = [];
+      if (normQ) {
+        matches = pool.filter((a) => {
+          const no = (a.articleNo || a.partNumber || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+          const name = (a.articleName || '').toUpperCase();
+          const tradeNos = (a.tradeNumbers || []).map((t) => String(t).toUpperCase().replace(/[^A-Z0-9]/g, ''));
+          return (
+            no.includes(normQ) ||
+            normQ.includes(no) ||
+            tradeNos.some((t) => t.includes(normQ) || normQ.includes(t)) ||
+            name.includes(rawQuery.toUpperCase())
+          );
+        });
       } else {
         matches = pool;
       }
@@ -361,7 +830,16 @@ class TecDocService {
    * 1. Get Vehicle Manufacturers (Pegasus 3.0 getLinkageTargets with fallback)
    */
   async getManufacturers(type = 'P', country = this.defaultCountry, lang = this.defaultLang) {
-    const cacheKey = `mfrs_${type}_${country}_${lang}`;
+    const rawType = (type || 'P').toUpperCase().trim();
+    let targetType = rawType;
+    if (rawType === 'MOTORCYCLE' || rawType === 'BIKE') targetType = 'B';
+    else if (rawType === 'COMMERCIAL') targetType = 'O';
+    else if (rawType === 'LIGHTCOMMERCIAL' || rawType === 'LCV') targetType = 'L';
+    else if (rawType === 'TRACTOR' || rawType === 'AGRICULTURAL') targetType = 'T';
+    else if (rawType === 'MARINE') targetType = 'M';
+    else if (rawType === 'PASSENGER') targetType = 'P';
+
+    const cacheKey = `mfrs_${targetType}_${country}_${lang}`;
     const cached = memoryCache.get(cacheKey);
     if (cached) return cached;
 
@@ -370,15 +848,74 @@ class TecDocService {
         provider: this.providerId,
         linkageTargetCountry: country,
         lang: lang,
-        linkageTargetType: type,
+        linkageTargetType: targetType,
         includeMfrFacets: true,
         perPage: 0,
         page: 1,
       },
     };
 
-    const data = await this.execute(payloadPegasus);
-    const mfrCounts = data?.mfrFacets?.counts || data?.data?.array || FALLBACK_MANUFACTURERS;
+    let data = await this.execute(payloadPegasus);
+    let mfrCounts = data?.mfrFacets?.counts || data?.data?.array;
+
+    // Fallbacks if Pegasus returns 0 records for specific categories
+    if (!mfrCounts || mfrCounts.length === 0) {
+      if (targetType === 'B') {
+        const bikeBrands = this.getPopularBrands('M');
+        mfrCounts = bikeBrands.map((b) => ({
+          id: b.manuId || b.id,
+          manuId: b.manuId || b.id,
+          name: b.name || b.manuName,
+          manuName: b.name || b.manuName,
+          count: 120,
+        }));
+      } else if (targetType === 'M') {
+        mfrCounts = [
+          { id: 1164, manuId: 1164, name: 'YAMAHA MARINE', manuName: 'YAMAHA MARINE', count: 95 },
+          { id: 602, manuId: 602, name: 'MERCURY MARINE', manuName: 'MERCURY MARINE', count: 85 },
+          { id: 45, manuId: 45, name: 'HONDA MARINE', manuName: 'HONDA MARINE', count: 70 },
+          { id: 109, manuId: 109, name: 'SUZUKI MARINE', manuName: 'SUZUKI MARINE', count: 65 },
+          { id: 120, manuId: 120, name: 'VOLVO PENTA', manuName: 'VOLVO PENTA', count: 60 },
+          { id: 603, manuId: 603, name: 'YANMAR', manuName: 'YANMAR', count: 50 },
+          { id: 574, manuId: 574, name: 'KAWASAKI WATERCRAFT', manuName: 'KAWASAKI WATERCRAFT', count: 45 },
+          { id: 604, manuId: 604, name: 'TOHATSU', manuName: 'TOHATSU', count: 40 },
+          { id: 605, manuId: 605, name: 'EVINRUDE / JOHNSON', manuName: 'EVINRUDE / JOHNSON', count: 35 },
+          { id: 607, manuId: 607, name: 'CUMMINS MARINE', manuName: 'CUMMINS MARINE', count: 30 },
+        ];
+      } else if (targetType === 'O') {
+        const commBrands = this.getPopularBrands('O');
+        mfrCounts = commBrands.map((b) => ({
+          id: b.manuId || b.id,
+          manuId: b.manuId || b.id,
+          name: b.name || b.manuName,
+          manuName: b.name || b.manuName,
+          count: 150,
+        }));
+      } else if (targetType === 'L') {
+        mfrCounts = [
+          { id: 111, manuId: 111, name: 'TOYOTA', manuName: 'TOYOTA', count: 480 },
+          { id: 36, manuId: 36, name: 'FORD', manuName: 'FORD', count: 320 },
+          { id: 54, manuId: 54, name: 'ISUZU', manuName: 'ISUZU', count: 290 },
+          { id: 121, manuId: 121, name: 'VOLKSWAGEN', manuName: 'VOLKSWAGEN', count: 260 },
+          { id: 80, manuId: 80, name: 'NISSAN', manuName: 'NISSAN', count: 210 },
+          { id: 74, manuId: 74, name: 'MERCEDES-BENZ', manuName: 'MERCEDES-BENZ', count: 190 },
+          { id: 183, manuId: 183, name: 'HYUNDAI', manuName: 'HYUNDAI', count: 160 },
+          { id: 93, manuId: 93, name: 'RENAULT', manuName: 'RENAULT', count: 110 },
+        ];
+      } else if (targetType === 'T') {
+        mfrCounts = [
+          { id: 301, manuId: 301, name: 'JOHN DEERE', manuName: 'JOHN DEERE', count: 220 },
+          { id: 302, manuId: 302, name: 'MASSEY FERGUSON', manuName: 'MASSEY FERGUSON', count: 180 },
+          { id: 303, manuId: 303, name: 'NEW HOLLAND', manuName: 'NEW HOLLAND', count: 160 },
+          { id: 304, manuId: 304, name: 'CASE IH', manuName: 'CASE IH', count: 140 },
+          { id: 305, manuId: 305, name: 'KUBOTA', manuName: 'KUBOTA', count: 130 },
+          { id: 306, manuId: 306, name: 'DEUTZ-FAHR', manuName: 'DEUTZ-FAHR', count: 95 },
+          { id: 307, manuId: 307, name: 'CLAAS', manuName: 'CLAAS', count: 85 },
+        ];
+      } else {
+        mfrCounts = FALLBACK_MANUFACTURERS;
+      }
+    }
 
     const formatted = mfrCounts.map((m) => ({
       id: m.id || m.manuId,
@@ -452,6 +989,10 @@ class TecDocService {
           seriesCounts.push(s);
         }
       }
+
+      if (seriesCounts.length === 0) {
+        seriesCounts = FALLBACK_SERIES[mfrId] || FALLBACK_SERIES[120] || FALLBACK_SERIES[54] || FALLBACK_SERIES[111];
+      }
     } else {
       const payloadPegasus = {
         getLinkageTargets: {
@@ -466,11 +1007,45 @@ class TecDocService {
         },
       };
       const data = await this.execute(payloadPegasus);
-      seriesCounts =
-        data?.vehicleModelSeriesFacets?.counts ||
-        data?.data?.array ||
-        FALLBACK_SERIES[mfrId] ||
-        FALLBACK_SERIES[111];
+      const rawFacets = data?.vehicleModelSeriesFacets?.counts || data?.data?.array;
+      if (Array.isArray(rawFacets) && rawFacets.length > 0) {
+        seriesCounts = rawFacets;
+      } else {
+        const rawType = (type || 'P').toUpperCase().trim();
+        let defFallback = FALLBACK_SERIES[111];
+        if (rawType === 'B') defFallback = FALLBACK_SERIES[1164];
+        else if (rawType === 'M') defFallback = FALLBACK_SERIES[602];
+        else if (rawType === 'O') defFallback = FALLBACK_SERIES[120];
+        else if (rawType === 'T') defFallback = FALLBACK_SERIES[301];
+        else if (rawType === 'L') defFallback = FALLBACK_SERIES[111];
+
+        if (rawType === 'M') {
+          if (mfrId == 1164) {
+            seriesCounts = [
+              { id: 116401, modelId: 116401, name: 'F350 / F300 V8 Offshore Outboards', modelname: 'F350 / F300 V8 Offshore Outboards', count: 35 },
+              { id: 116402, modelId: 116402, name: 'F200 / F150 In-Line 4 4-Stroke', modelname: 'F200 / F150 In-Line 4 4-Stroke', count: 30 },
+              { id: 116403, modelId: 116403, name: 'WaveRunner FX SVHO / GP1800R PWC', modelname: 'WaveRunner FX SVHO / GP1800R PWC', count: 28 },
+              { id: 116404, modelId: 116404, name: 'VMAX SHO 250 / 200 High Output', modelname: 'VMAX SHO 250 / 200 High Output', count: 25 },
+            ];
+          } else if (mfrId == 45) {
+            seriesCounts = [
+              { id: 45001, modelId: 45001, name: 'BF 250 / BF 225 V6 4-Stroke Outboard', modelname: 'BF 250 / BF 225 V6 4-Stroke Outboard', count: 28 },
+              { id: 45002, modelId: 45002, name: 'BF 150 / BF 135 In-Line 4 Outboard', modelname: 'BF 150 / BF 135 In-Line 4 Outboard', count: 24 },
+              { id: 45003, modelId: 45003, name: 'BF 90 / BF 75 Mid-Range Outboard', modelname: 'BF 90 / BF 75 Mid-Range Outboard', count: 20 },
+            ];
+          } else if (mfrId == 109) {
+            seriesCounts = [
+              { id: 10901, modelId: 10901, name: 'DF350A / DF300B Dual-Prop Outboard', modelname: 'DF350A / DF300B Dual-Prop Outboard', count: 30 },
+              { id: 10902, modelId: 10902, name: 'DF200A / DF175A 4-Cylinder Outboard', modelname: 'DF200A / DF175A 4-Cylinder Outboard', count: 26 },
+              { id: 10903, modelId: 10903, name: 'DF140A / DF115A Lean Burn Series', modelname: 'DF140A / DF115A Lean Burn Series', count: 22 },
+            ];
+          } else {
+            seriesCounts = FALLBACK_SERIES[mfrId] || defFallback;
+          }
+        } else {
+          seriesCounts = FALLBACK_SERIES[mfrId] || defFallback;
+        }
+      }
     }
 
     const popPrefix =
@@ -542,6 +1117,105 @@ class TecDocService {
       }));
       memoryCache.set(cacheKey, formatted, 86400);
       return formatted;
+    }
+
+    if (type === 'B' || type === 'M' || type === 'MOTORCYCLE') {
+      return [
+        {
+          id: 4001,
+          carId: 4001,
+          linkageTargetId: 4001,
+          linkageTargetType: 'B',
+          typeName: '1000cc 4-Cylinder DOHC (158kW / 215HP)',
+          modelName: 'Supersport / Adventure',
+          manuName: 'MOTORCYCLE',
+          yearOfConstrFrom: '2020',
+          powerHpFrom: '215',
+          powerKwFrom: '158',
+        },
+        {
+          id: 4002,
+          carId: 4002,
+          linkageTargetId: 4002,
+          linkageTargetType: 'B',
+          typeName: '600cc 4-Cylinder 16V (88kW / 120HP)',
+          modelName: 'Sport / Touring',
+          manuName: 'MOTORCYCLE',
+          yearOfConstrFrom: '2018',
+          powerHpFrom: '120',
+          powerKwFrom: '88',
+        },
+        {
+          id: 4003,
+          carId: 4003,
+          linkageTargetId: 4003,
+          linkageTargetType: 'B',
+          typeName: '450cc 4-Stroke Single (40kW / 54HP)',
+          modelName: 'Enduro / MX',
+          manuName: 'MOTORCYCLE',
+          yearOfConstrFrom: '2019',
+          powerHpFrom: '54',
+          powerKwFrom: '40',
+        },
+      ];
+    }
+
+    if (type === 'T' || type === 'TRACTOR') {
+      return [
+        {
+          id: 3001,
+          carId: 3001,
+          linkageTargetId: 3001,
+          linkageTargetType: 'T',
+          typeName: '6.8L 6-Cyl PowerTech Turbo Diesel (155kW / 210HP)',
+          modelName: 'Agricultural Tractor',
+          manuName: 'AGRI',
+          yearOfConstrFrom: '2018',
+          powerHpFrom: '210',
+          powerKwFrom: '155',
+        },
+        {
+          id: 3002,
+          carId: 3002,
+          linkageTargetId: 3002,
+          linkageTargetType: 'T',
+          typeName: '4.5L 4-Cyl Turbo Diesel (95kW / 130HP)',
+          modelName: 'Utility Tractor',
+          manuName: 'AGRI',
+          yearOfConstrFrom: '2016',
+          powerHpFrom: '130',
+          powerKwFrom: '95',
+        },
+      ];
+    }
+
+    if (type === 'O' || type === 'COMMERCIAL') {
+      return [
+        {
+          id: 2001,
+          carId: 2001,
+          linkageTargetId: 2001,
+          linkageTargetType: 'O',
+          typeName: '12.8L OM471 6-Cyl Turbo Diesel (330kW / 449HP)',
+          modelName: 'Heavy Truck / Hauler',
+          manuName: 'COMMERCIAL',
+          yearOfConstrFrom: '2019',
+          powerHpFrom: '449',
+          powerKwFrom: '330',
+        },
+        {
+          id: 2002,
+          carId: 2002,
+          linkageTargetId: 2002,
+          linkageTargetType: 'O',
+          typeName: '7.7L OM936 6-Cyl Turbo (220kW / 299HP)',
+          modelName: 'Medium Distribution / Tipper',
+          manuName: 'COMMERCIAL',
+          yearOfConstrFrom: '2018',
+          powerHpFrom: '299',
+          powerKwFrom: '220',
+        },
+      ];
     }
 
     return [
@@ -618,21 +1292,39 @@ class TecDocService {
 
     // Special handling for KYB: since KYB supplier in ZA has OE cross references without direct vehicle linkage targets,
     // if brand is KYB and 0 articles returned, fetch verified KYB suspension items
-    if (normBrand === 'kyb' && (!articles || articles.length === 0)) {
-      const kybPayload = {
-        getArticles: {
-          provider: this.providerId,
-          articleCountry: country,
-          lang: lang,
-          dataSupplierIds: [7729],
-          perPage: 12,
-          page: 1,
-          includeAll: true,
-        },
-      };
-      const kybData = await this.execute(kybPayload);
-      if (kybData?.articles?.length > 0) {
-        articles = kybData.articles;
+    if (normBrand === 'kyb') {
+      if (!articles || articles.length === 0) {
+        const kybPayload = {
+          getArticles: {
+            provider: this.providerId,
+            articleCountry: country,
+            lang: lang,
+            dataSupplierIds: [7729],
+            perPage: 24,
+            page: 1,
+            includeAll: true,
+          },
+        };
+        const kybData = await this.execute(kybPayload);
+        if (kybData?.articles?.length > 0) {
+          articles = kybData.articles;
+        }
+      }
+
+      // Ensure catalog has coverage across all suspension categories (Shocks, Struts, Springs, Mounts)
+      const existing = articles || [];
+      const hasSprings = existing.some((a) => (a.title || a.articleName || '').toLowerCase().includes('spring'));
+      const hasMounts = existing.some((a) => {
+        const t = (a.title || a.articleName || '').toLowerCase();
+        return t.includes('mount') || t.includes('kit') || t.includes('bearing') || t.includes('bellow');
+      });
+      const kybExtra = FALLBACK_ARTICLES.filter(
+        (a) =>
+          (a.brand || '').includes('KYB') &&
+          ((!hasSprings && a.articleNo === 'RA1829') || (!hasMounts && (a.articleNo === 'SM5101' || a.articleNo === '910002')))
+      );
+      if (kybExtra.length > 0) {
+        articles = [...existing, ...kybExtra];
       }
     }
 
@@ -671,12 +1363,13 @@ class TecDocService {
     }
 
     const normBrand = (resolvedBrand || '').toLowerCase().trim();
+    const cleanSearch = (searchQuery || '').trim();
     const payload = {
       getArticles: {
         provider: this.providerId,
         articleCountry: resolvedCountry,
         lang: resolvedLang,
-        searchQuery: searchQuery,
+        searchQuery: cleanSearch,
         searchType: 10,
         includeAll: true,
         includeImages: true,
@@ -691,20 +1384,31 @@ class TecDocService {
     }
 
     const data = await this.execute(payload);
-    let articles = data?.articles || data?.data?.array;
+    let articles = data?.articles || data?.data?.array || data?.getArticles?.array || [];
 
     if (!articles || articles.length === 0) {
-      const q = (searchQuery || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-      articles = FALLBACK_ARTICLES.filter((a) => {
-        const no = (a.articleNo || a.partNumber || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-        return no.includes(q) || (q.length > 2 && no.startsWith(q));
-      });
-      if (articles.length === 0) {
-        if (normBrand === 'kyb') {
-          articles = FALLBACK_ARTICLES.filter((a) => (a.brand || a.brandName || '').toUpperCase().includes('KYB') || Number(a.dataSupplierId) === 7729);
-        } else if (normBrand === 'ngk' || normBrand === 'ntk') {
-          articles = FALLBACK_ARTICLES.filter((a) => !(a.brand || a.brandName || '').toUpperCase().includes('KYB'));
-        }
+      const normQ = cleanSearch.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      let pool = FALLBACK_ARTICLES;
+      if (normBrand === 'kyb') {
+        pool = FALLBACK_ARTICLES.filter((a) => (a.brand || a.brandName || '').toUpperCase().includes('KYB') || Number(a.dataSupplierId) === 7729);
+      } else if (normBrand === 'ngk' || normBrand === 'ntk') {
+        pool = FALLBACK_ARTICLES.filter((a) => !(a.brand || a.brandName || '').toUpperCase().includes('KYB'));
+      }
+
+      if (normQ) {
+        articles = pool.filter((a) => {
+          const no = (a.articleNo || a.partNumber || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+          const name = (a.articleName || '').toUpperCase();
+          const tradeNos = (a.tradeNumbers || []).map((t) => String(t).toUpperCase().replace(/[^A-Z0-9]/g, ''));
+          return (
+            no.includes(normQ) ||
+            normQ.includes(no) ||
+            tradeNos.some((t) => t.includes(normQ) || normQ.includes(t)) ||
+            name.includes(cleanSearch.toUpperCase())
+          );
+        });
+      } else {
+        articles = pool;
       }
     }
 

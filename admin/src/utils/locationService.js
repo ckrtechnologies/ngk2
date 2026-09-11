@@ -40,6 +40,194 @@ export const extractCityFromAddress = (addr, displayName = '') => {
 };
 
 /**
+ * Format address strictly to standard: [Street no] [Street Name] [Suburb] [City] [State] [Code]
+ */
+export const formatStructuredAddress = ({
+  streetNo = '',
+  streetName = '',
+  suburb = '',
+  city = '',
+  state = '',
+  code = '',
+} = {}) => {
+  const parts = [
+    String(streetNo || '').trim(),
+    String(streetName || '').trim(),
+    String(suburb || '').trim(),
+    String(city || '').trim(),
+    String(state || '').trim(),
+    String(code || '').trim(),
+  ].filter(Boolean);
+
+  return parts.join(' ');
+};
+
+/**
+ * Parse an address string or Nominatim address object into structured components:
+ * { streetNo, streetName, suburb, city, state, code }
+ */
+export const parseAddressComponents = (rawText = '', addrObj = null) => {
+  const comp = {
+    streetNo: '',
+    streetName: '',
+    suburb: '',
+    city: '',
+    state: '',
+    code: '',
+  };
+
+  if (addrObj && typeof addrObj === 'object') {
+    comp.streetNo = addrObj.house_number || addrObj.street_number || '';
+    comp.streetName = addrObj.road || addrObj.street || addrObj.pedestrian || addrObj.footway || '';
+    comp.suburb =
+      addrObj.suburb ||
+      addrObj.neighbourhood ||
+      addrObj.quarter ||
+      addrObj.residential ||
+      addrObj.district ||
+      '';
+    comp.city =
+      addrObj.city ||
+      addrObj.town ||
+      addrObj.municipality ||
+      addrObj.village ||
+      addrObj.hamlet ||
+      '';
+    comp.state = addrObj.state || addrObj.province || addrObj.region || '';
+    comp.code = addrObj.postcode || addrObj.postal_code || '';
+
+    // If city is empty, fallback to extractor
+    if (!comp.city) {
+      comp.city = extractCityFromAddress(addrObj, rawText);
+    }
+  }
+
+  // Fallback: If raw text provided and components are empty, parse from raw text
+  if (rawText && typeof rawText === 'string' && (!comp.streetName && !comp.city)) {
+    let text = rawText.replace(/,\s*South Africa$/i, '').trim();
+
+    if (text.includes(',')) {
+      const segments = text.split(',').map((s) => s.trim()).filter(Boolean);
+      if (segments.length >= 5) {
+        const first = segments[0];
+        const sm = first.match(/^(\d+[\w-]*)\s+(.+)$/);
+        if (sm) {
+          comp.streetNo = sm[1];
+          comp.streetName = sm[2];
+        } else {
+          comp.streetName = first;
+        }
+        comp.suburb = segments[1];
+        comp.city = segments[2];
+        comp.state = segments[3];
+        const cm = segments[4].match(/\b(\d{4,6})\b/);
+        if (cm) comp.code = cm[1];
+        else comp.code = segments[4];
+      } else if (segments.length === 4) {
+        const first = segments[0];
+        const sm = first.match(/^(\d+[\w-]*)\s+(.+)$/);
+        if (sm) {
+          comp.streetNo = sm[1];
+          comp.streetName = sm[2];
+        } else {
+          comp.streetName = first;
+        }
+        comp.suburb = segments[1];
+        comp.city = segments[2];
+        const last = segments[3];
+        const cm = last.match(/\b(\d{4,6})\b$/);
+        if (cm) {
+          comp.code = cm[1];
+          comp.state = last.replace(cm[1], '').trim();
+        } else {
+          comp.state = last;
+        }
+      } else {
+        const first = segments[0];
+        const sm = first.match(/^(\d+[\w-]*)\s+(.+)$/);
+        if (sm) {
+          comp.streetNo = sm[1];
+          comp.streetName = sm[2];
+        } else {
+          comp.streetName = first;
+        }
+        if (segments[1]) comp.suburb = segments[1];
+        if (segments[2]) comp.city = segments[2];
+      }
+    } else {
+      // Space separated string, e.g. "4 Sydney Street Westville" or "42 Oxford Road Rosebank Johannesburg Gauteng 2196"
+      const codeMatch = text.match(/\b(\d{4,6})$/);
+      if (codeMatch) {
+        comp.code = codeMatch[1];
+        text = text.substring(0, text.length - codeMatch[0].length).trim();
+      }
+
+      const provinces = [
+        'Western Cape',
+        'Eastern Cape',
+        'Northern Cape',
+        'KwaZulu-Natal',
+        'Free State',
+        'North West',
+        'Gauteng',
+        'Limpopo',
+        'Mpumalanga',
+        'KZN',
+      ];
+      for (const prov of provinces) {
+        const regex = new RegExp(`\\b${prov}$`, 'i');
+        if (regex.test(text)) {
+          comp.state = prov;
+          text = text.replace(regex, '').trim();
+          break;
+        }
+      }
+
+      const streetNoMatch = text.match(/^(\d+[\w-]*)\s+/);
+      if (streetNoMatch) {
+        comp.streetNo = streetNoMatch[1];
+        text = text.substring(streetNoMatch[0].length).trim();
+      }
+
+      const streetSuffixRegex =
+        /\b(Street|St|Road|Rd|Avenue|Ave|Drive|Dr|Lane|Ln|Way|Crescent|Cres|Place|Pl|Boulevard|Blvd|Close|Cl|Highway|Hwy|Terrace|Ter)\b/i;
+      const suffixMatch = text.match(streetSuffixRegex);
+      if (suffixMatch) {
+        const idx = text.indexOf(suffixMatch[0]) + suffixMatch[0].length;
+        comp.streetName = text.substring(0, idx).trim();
+        const remainder = text.substring(idx).trim();
+        if (remainder) {
+          const remParts = remainder.split(/\s+/);
+          if (remParts.length === 1) {
+            comp.suburb = remParts[0];
+          } else if (remParts.length === 2) {
+            comp.suburb = remParts[0];
+            comp.city = remParts[1];
+          } else {
+            comp.suburb = remParts.slice(0, -1).join(' ');
+            comp.city = remParts[remParts.length - 1];
+          }
+        }
+      } else {
+        if (comp.streetNo) {
+          const parts = text.split(/\s+/);
+          if (parts.length > 1) {
+            comp.streetName = parts.slice(0, -1).join(' ');
+            comp.suburb = parts[parts.length - 1];
+          } else {
+            comp.streetName = text;
+          }
+        } else {
+          comp.city = text;
+        }
+      }
+    }
+  }
+
+  return comp;
+};
+
+/**
  * Search Address Suggestions (Live Autocomplete for Address Picker)
  */
 export const searchAddressSuggestions = async (queryText) => {
@@ -60,18 +248,25 @@ export const searchAddressSuggestions = async (queryText) => {
 
     return data.map((item) => {
       const addr = item.address || {};
-      const city = extractCityFromAddress(addr, item.display_name);
-      const road = addr.road || addr.pedestrian || addr.suburb || '';
-      const area = [road, city].filter(Boolean).join(', ') || item.display_name.split(',')[0];
+      const components = parseAddressComponents(item.display_name, addr);
+      const structuredAddress = formatStructuredAddress(components);
+      const city = components.city || extractCityFromAddress(addr, item.display_name);
+
+      const area =
+        [components.streetNo, components.streetName, components.suburb].filter(Boolean).join(' ') ||
+        city ||
+        item.display_name.split(',')[0];
 
       return {
-        address: item.display_name,
+        address: structuredAddress || item.display_name,
+        display_name: item.display_name,
         city: city || (item.display_name.split(',')[0] || '').trim(),
         latitude: parseFloat(item.lat),
         longitude: parseFloat(item.lon),
         primaryText: area,
-        secondaryText: item.display_name,
+        secondaryText: structuredAddress || item.display_name,
         country: addr.country || '',
+        components,
       };
     });
   } catch (err) {
@@ -91,11 +286,22 @@ export const reverseGeocode = async (lat, lon) => {
     const res = await fetch(`${BASE_URL}/dealers/reverse-geocode?lat=${lat}&lon=${lon}`);
     const data = await res.json();
     if (data && data.success && data.formattedAddress) {
+      const components = {
+        streetNo: data.streetNo || data.house_number || '',
+        streetName: data.streetName || data.road || '',
+        suburb: data.suburb || '',
+        city: data.city || '',
+        state: data.state || '',
+        code: data.code || data.postcode || '',
+      };
+      const formatted = formatStructuredAddress(components) || data.formattedAddress;
+
       return {
-        address: data.formattedAddress,
+        address: formatted,
         city: data.city || extractCityFromAddress(null, data.formattedAddress),
         latitude: parseFloat(lat),
         longitude: parseFloat(lon),
+        components,
       };
     }
   } catch {
@@ -116,13 +322,16 @@ export const reverseGeocode = async (lat, lon) => {
   }
 
   const addr = directData.address || {};
-  const city = extractCityFromAddress(addr, directData.display_name);
+  const components = parseAddressComponents(directData.display_name, addr);
+  const formatted = formatStructuredAddress(components) || directData.display_name;
+  const city = components.city || extractCityFromAddress(addr, directData.display_name);
 
   return {
-    address: directData.display_name,
+    address: formatted,
     city,
     latitude: parseFloat(directData.lat || lat),
     longitude: parseFloat(directData.lon || lon),
+    components,
   };
 };
 
@@ -138,11 +347,21 @@ export const geocodeAddress = async (addressText) => {
     const res = await fetch(`${BASE_URL}/dealers/geocode?address=${encodeURIComponent(clean)}`);
     const data = await res.json();
     if (data && data.success && data.latitude && data.longitude) {
+      const components = {
+        streetNo: data.streetNo || data.house_number || '',
+        streetName: data.streetName || data.road || '',
+        suburb: data.suburb || '',
+        city: data.city || '',
+        state: data.state || '',
+        code: data.code || data.postcode || '',
+      };
+      const formatted = formatStructuredAddress(components) || data.formattedAddress || clean;
       return {
         latitude: parseFloat(data.latitude),
         longitude: parseFloat(data.longitude),
-        formattedAddress: data.formattedAddress || clean,
-        city: data.city || extractCityFromAddress(null, data.formattedAddress || clean),
+        formattedAddress: formatted,
+        city: data.city || extractCityFromAddress(null, formatted),
+        components,
       };
     }
   } catch {
@@ -160,12 +379,15 @@ export const geocodeAddress = async (addressText) => {
   const fbData = await fbRes.json();
   if (fbData && fbData.length > 0) {
     const item = fbData[0];
-    const city = extractCityFromAddress(item.address, item.display_name);
+    const components = parseAddressComponents(item.display_name, item.address);
+    const formatted = formatStructuredAddress(components) || item.display_name;
+    const city = components.city || extractCityFromAddress(item.address, item.display_name);
     return {
       latitude: parseFloat(item.lat),
       longitude: parseFloat(item.lon),
-      formattedAddress: item.display_name,
+      formattedAddress: formatted,
       city,
+      components,
     };
   }
 

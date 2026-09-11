@@ -69,13 +69,13 @@ export const getArticlesByVehicle = async (req, res) => {
 
 export const getArticlesByPartNumber = async (req, res) => {
   try {
-    const { searchQuery, partNumber, query, country, lang, brand: queryBrand } = req.query;
+    const { searchQuery, partNumber, partNo, part, query, q, country, lang, brand: queryBrand } = req.query;
     const brand = queryBrand || req.headers['x-catalog-brand'] || req.headers['x-brand'];
-    const search = searchQuery || partNumber || query;
-    if (!search) {
-      return sendError(res, 'searchQuery query parameter is required', 400);
+    const search = searchQuery || partNumber || partNo || part || query || q;
+    if (!search || !search.trim()) {
+      return sendError(res, 'searchQuery or partNo query parameter is required', 400);
     }
-    const articles = await tecdocService.getArticlesByPartNumber(search, country, lang, brand);
+    const articles = await tecdocService.getArticlesByPartNumber(search.trim(), country, lang, brand);
     return sendSuccess(res, { status: 200, articles, count: articles.length }, 'Articles fetched successfully');
   } catch (error) {
     return sendError(res, error.message, 500, error);

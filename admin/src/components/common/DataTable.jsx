@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Inbox, Loader2 } from 'lucide-react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+  InboxIcon,
+  ArrowPathIcon,
+} from '@heroicons/react/20/solid';
 
 /**
  * High-Density Compact Data Table with Built-in Pagination
@@ -57,7 +64,7 @@ export const DataTable = ({
               <tr>
                 <td colSpan={columns.length} className="py-16 text-center text-slate-400">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Loader2 className="w-6 h-6 animate-spin text-brand-red" />
+                    <ArrowPathIcon className="w-6 h-6 animate-spin text-brand-red" />
                     <span className="text-xs font-semibold text-slate-500">Loading records...</span>
                   </div>
                 </td>
@@ -66,7 +73,7 @@ export const DataTable = ({
               <tr>
                 <td colSpan={columns.length} className="py-16 text-center text-slate-400">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Inbox className="w-8 h-8 text-slate-300 stroke-[1.5]" />
+                    <InboxIcon className="w-8 h-8 text-slate-300" />
                     <span className="text-xs font-bold text-slate-500">{emptyMessage}</span>
                   </div>
                 </td>
@@ -121,7 +128,7 @@ export const DataTable = ({
               className="p-1 rounded-md text-slate-500 hover:bg-white hover:text-slate-900 border border-transparent hover:border-slate-200 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
               title="First Page"
             >
-              <ChevronsLeft className="w-4 h-4" />
+              <ChevronDoubleLeftIcon className="w-4 h-4" />
             </button>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -129,7 +136,7 @@ export const DataTable = ({
               className="p-1 rounded-md text-slate-500 hover:bg-white hover:text-slate-900 border border-transparent hover:border-slate-200 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
               title="Previous Page"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeftIcon className="w-4 h-4" />
             </button>
 
             <span className="px-2.5 py-0.5 text-xs font-extrabold text-slate-800 bg-white border border-slate-200 rounded-md shadow-2xs">
@@ -142,7 +149,7 @@ export const DataTable = ({
               className="p-1 rounded-md text-slate-500 hover:bg-white hover:text-slate-900 border border-transparent hover:border-slate-200 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
               title="Next Page"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRightIcon className="w-4 h-4" />
             </button>
             <button
               onClick={() => handlePageChange(totalPages)}
@@ -150,7 +157,7 @@ export const DataTable = ({
               className="p-1 rounded-md text-slate-500 hover:bg-white hover:text-slate-900 border border-transparent hover:border-slate-200 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
               title="Last Page"
             >
-              <ChevronsRight className="w-4 h-4" />
+              <ChevronDoubleRightIcon className="w-4 h-4" />
             </button>
           </div>
         </div>

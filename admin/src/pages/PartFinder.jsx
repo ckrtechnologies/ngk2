@@ -1,77 +1,687 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
-  Search,
-  Car,
-  Truck,
-  Bus,
-  Bike,
-  Tractor,
-  Cpu,
-  Wrench,
-  CheckCircle2,
-  ChevronDown,
-  Layers,
-  FileText,
-  Image as ImageIcon,
-  ExternalLink,
-  Loader2,
-  X,
-  Package,
-  SlidersHorizontal,
-  Copy,
-  Check,
-  PanelLeft,
-  PanelRight,
-  ShieldCheck,
-  Tag,
-  Info,
-  Sparkles,
-  Maximize2,
-  Minimize2,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-  RotateCcw,
-  Download,
-  Eye,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+  MagnifyingGlassIcon as Search,
+  WrenchScrewdriverIcon as Wrench,
+  CheckCircleIcon as CheckCircle2,
+  ChevronDownIcon as ChevronDown,
+  Squares2X2Icon as Layers,
+  DocumentTextIcon as FileText,
+  PhotoIcon as ImageIcon,
+  ArrowTopRightOnSquareIcon as ExternalLink,
+  ArrowPathIcon as Loader2,
+  XMarkIcon as X,
+  CubeIcon as Package,
+  AdjustmentsHorizontalIcon as SlidersHorizontal,
+  ClipboardDocumentIcon as Copy,
+  TruckIcon as Truck,
+  CheckIcon as Check,
+  ChevronDoubleLeftIcon as PanelLeft,
+  ChevronDoubleRightIcon as PanelRight,
+  ShieldCheckIcon as ShieldCheck,
+  TagIcon as Tag,
+  InformationCircleIcon as Info,
+  SparklesIcon as Sparkles,
+  ArrowsPointingOutIcon as Maximize2,
+  ArrowsPointingInIcon as Minimize2,
+  MagnifyingGlassPlusIcon as ZoomIn,
+  MagnifyingGlassMinusIcon as ZoomOut,
+  ArrowPathIcon as RotateCw,
+  ArrowPathIcon as RotateCcw,
+  ArrowDownTrayIcon as Download,
+  EyeIcon as Eye,
+  ChevronLeftIcon as ChevronLeft,
+  ChevronRightIcon as ChevronRight,
+} from '@heroicons/react/20/solid';
 import { searchArticlesCatalog } from '../redux/adminSlice';
-import { serviceJsonApi } from '../config/api';
 import { DataTable } from '../components/common/DataTable';
+import {
+  manufacturersApi,
+  modelSeriesApi,
+  vehiclesApi,
+  serviceJsonApi,
+} from '../config/api';
+
+const Car = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
+    <circle cx="7.5" cy="14.5" r="1.5" />
+    <circle cx="16.5" cy="14.5" r="1.5" />
+  </svg>
+);
+
+const VanIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm11.5-7.5H15V6h2v5zm.5 7.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+  </svg>
+);
+
+const BikeIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M5 20.5A3.5 3.5 0 0 1 1.5 17 3.5 3.5 0 0 1 5 13.5c1.61 0 2.98 1.09 3.39 2.57l3.22-3.22-1.39-2.32A3.5 3.5 0 0 1 7 11a3.5 3.5 0 1 1 3.5-3.5c0 .35-.06.68-.16 1l1.7 2.84 2.81-1.69a1.5 1.5 0 0 1 2.05.55l1.54 2.57A3.5 3.5 0 1 1 19 20.5a3.5 3.5 0 0 1-3.39-2.58l-3.35.42-2.76 2.76A3.48 3.48 0 0 1 5 20.5zM19 15.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-14 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
+  </svg>
+);
+
+const TractorIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M19 14a5 5 0 1 0 4.9 6h-2.1a3 3 0 1 1-2.8-4V9h-3V5H7a3 3 0 0 0-3 3v6.1A3 3 0 1 0 6 20h6v-2H6.9A3 3 0 0 0 4 17.8V8a1 1 0 0 1 1-1h8v7h4v2h2.2a4.98 4.98 0 0 0-2.2-2zM4 19a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm15-2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
+  </svg>
+);
+
+const MarineIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v-2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v2h-2zM3.95 15.5l1.6-4.8c.18-.54.69-.9 1.26-.9h10.38c.57 0 1.08.36 1.26.9l1.6 4.8C18.66 14.54 16.9 14 15 14c-2.14 0-4.14.7-6 1.5-1.86-.8-3.86-1.5-6-1.5-.35 0-.7.03-1.05.08zM12 2a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v1H7V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1z" />
+  </svg>
+);
 
 const applications = [
-  { id: 'Passenger', label: 'Passenger Car', icon: Car, type: 'P' },
-  { id: 'Commercial', label: 'Commercial Vehicle', icon: Truck, type: 'O' },
-  { id: 'LightCommercial', label: 'Light Commercial (LCV)', icon: Bus, type: 'L' },
-  { id: 'Motorcycle', label: 'Motorcycle & 2-Wheeler', icon: Bike, type: 'B' },
-  { id: 'Tractor', label: 'Agricultural & Tractor', icon: Tractor, type: 'T' },
-  { id: 'Engine', label: 'Engine & Industrial', icon: Cpu, type: 'E' },
+  { id: 'Passenger', label: 'Passenger Vehicles', icon: Car, type: 'P' },
+  { id: 'Commercial', label: 'Commercial Vehicles', icon: Truck, type: 'O' },
+  { id: 'LightCommercial', label: 'LCV / Vans', icon: VanIcon, type: 'L' },
+  { id: 'Motorcycle', label: 'Motorcycles & Quads', icon: BikeIcon, type: 'B' },
+  { id: 'Tractor', label: 'Tractors & Agri', icon: TractorIcon, type: 'T' },
+  { id: 'Marine', label: 'Marine & Engines', icon: MarineIcon, type: 'M' },
 ];
+
+const FALLBACK_SERIES_CATALOG = {
+  // Marine
+  1164: [
+    { id: 116401, name: 'F350 / F300 V8 Offshore Outboards' },
+    { id: 116402, name: 'F200 / F150 In-Line 4 4-Stroke' },
+    { id: 116403, name: 'WaveRunner FX SVHO / GP1800R PWC' },
+    { id: 116404, name: 'VMAX SHO 250 / 200 High Output' },
+  ],
+  602: [
+    { id: 6021, name: 'Verado V12 600hp / V8 300hp Outboards' },
+    { id: 6022, name: 'FourStroke 175 - 300hp Commercial' },
+    { id: 6023, name: 'MerCruiser Inboard 4.5L / 6.2L V8' },
+    { id: 6024, name: 'Pro XS 115 - 250hp High-Output' },
+  ],
+  45: [
+    { id: 45001, name: 'BF 250 / BF 225 V6 4-Stroke Outboard' },
+    { id: 45002, name: 'BF 150 / BF 135 In-Line 4 Outboard' },
+    { id: 45003, name: 'BF 90 / BF 75 Mid-Range Outboard' },
+    { id: 45004, name: 'BF 50 / BF 40 Compact 4-Stroke' },
+  ],
+  109: [
+    { id: 10901, name: 'DF350A / DF300B Dual-Prop Outboard' },
+    { id: 10902, name: 'DF200A / DF175A 4-Cylinder Outboard' },
+    { id: 10903, name: 'DF140A / DF115A Lean Burn Series' },
+  ],
+  120: [
+    { id: 12001, name: 'D4 / D6 Aquamatic Sterndrive Diesel' },
+    { id: 12002, name: 'D13 / D16 Inboard Commercial Diesel' },
+    { id: 12003, name: 'IPS 600 / 800 Forward Drive' },
+  ],
+  603: [
+    { id: 6031, name: '6LY / 4LV High Speed Diesel Inboard' },
+    { id: 6032, name: '3YM / 2YM Auxiliary Sailboat Engines' },
+  ],
+  574: [
+    { id: 57401, name: 'Ultra 310LX / 310R Supercharged JetSki' },
+    { id: 57402, name: 'STX 160 / SX-R 4-Stroke Stand-Up' },
+  ],
+  604: [
+    { id: 6041, name: 'MFS 115A / 140A 4-Stroke Outboards' },
+    { id: 6042, name: 'BFT 250 / 200 V6 Outboard Series' },
+  ],
+  605: [
+    { id: 6051, name: 'E-TEC G2 150 - 300hp V6 2-Stroke DFI' },
+    { id: 6052, name: 'OceanPro / Special V4 - V6' },
+  ],
+  607: [
+    { id: 6071, name: 'QSB 6.7 Quantum Marine Diesel' },
+    { id: 6072, name: 'QSC 8.3 Heavy Commercial Inboard' },
+  ],
+  // LCV / Vans & MCV
+  80: [
+    { id: 8001, name: 'NP300 Hardbody (D22)' },
+    { id: 8002, name: 'Navara Pick-up (D40 / D23)' },
+    { id: 8003, name: 'NV350 Impendulo Taxi / Van' },
+    { id: 8004, name: '1400 Bakkie (B140)' },
+    { id: 8005, name: 'NP200 Half-ton Bakkie' },
+  ],
+  93: [
+    { id: 9301, name: 'Trafic II / III Van' },
+    { id: 9302, name: 'Master III Commercial Van' },
+    { id: 9303, name: 'Kangoo Express / Maxi' },
+  ],
+  111: [
+    { id: 501, name: 'HILUX VIII Single/Double Cab' },
+    { id: 502, name: 'QUANTUM Sesfikile Taxi / Van' },
+    { id: 503, name: 'LAND CRUISER 79 Pick-up' },
+    { id: 504, name: 'DYNA Light Truck' },
+    { id: 505, name: 'FORTUNER SUV' },
+  ],
+  36: [
+    { id: 10450, name: 'RANGER (TKE) Single/Super/Double Cab' },
+    { id: 11620, name: 'TRANSIT Custom / Panel Van' },
+    { id: 14500, name: 'BANTAM 1.3 / 1.6 Bakkie' },
+  ],
+  54: [
+    { id: 10252, name: 'D-MAX Single / Double Cab' },
+    { id: 40683, name: 'KB 250 / KB 300 D-TEQ' },
+    { id: 10254, name: 'N-Series NPR / NQR Forward Truck' },
+  ],
+  121: [
+    { id: 701, name: 'CADDY Maxi / Panel Van' },
+    { id: 702, name: 'TRANSPORTER T6.1 Kombi / Van' },
+    { id: 703, name: 'CRAFTER 35 / 50 Panel Van' },
+    { id: 704, name: 'AMAROK V6 TDI' },
+  ],
+  74: [
+    { id: 2039, name: 'SPRINTER 316 / 519 CDI Panel Van / Bus' },
+    { id: 2041, name: 'VITO 114 / 116 CDI Crew Cab' },
+    { id: 1587, name: 'ACTROS Heavy Haulage' },
+    { id: 3431, name: 'ATEGO Distribution Truck' },
+  ],
+  183: [
+    { id: 9145, name: 'H-100 Bakkie' },
+    { id: 11984, name: 'H-1 9-Seater Bus / Panel Van' },
+    { id: 11050, name: 'STARIA Multicab' },
+  ],
+  // Motorcycles
+  2760: [
+    { id: 27601, name: '1290 Super Duke R' },
+    { id: 27602, name: '890 Adventure / R' },
+    { id: 27603, name: '390 Duke' },
+  ],
+  112: [
+    { id: 1121, name: 'Tiger 900 / 1200' },
+    { id: 1122, name: 'Bonneville T120 / T100' },
+  ],
+  181: [
+    { id: 1811, name: 'Vespa GTS 300 Super' },
+    { id: 1812, name: 'Beverly 300 / 400' },
+  ],
+  4552: [
+    { id: 45521, name: 'Pulsar 200 NS / RS' },
+    { id: 45522, name: 'Dominar 400' },
+  ],
+  // Commercial Trucks
+  103: [
+    { id: 1031, name: 'R-Series (R450, R500, R560)' },
+    { id: 1032, name: 'G-Series (G410, G460)' },
+  ],
+  69: [
+    { id: 6901, name: 'TGX Long Haul Tractor' },
+    { id: 6902, name: 'TGS Heavy Duty / Offroad' },
+  ],
+  151: [
+    { id: 1511, name: 'HINO 300 Series Light Duty' },
+    { id: 1512, name: 'HINO 500 Series Freightliner' },
+  ],
+  55: [
+    { id: 5501, name: 'Daily Van / Chassis Cab' },
+    { id: 5502, name: 'Eurocargo Medium Truck' },
+  ],
+  // Tractors
+  301: [
+    { id: 3011, name: '6M / 6R Utility Tractors' },
+    { id: 3012, name: '8R / 8RT Row-Crop Tractors' },
+  ],
+  302: [
+    { id: 3021, name: 'MF 5700 / 6700 Series' },
+    { id: 3022, name: 'MF 7700 / 8700 High HP' },
+  ],
+  303: [
+    { id: 3031, name: 'T6 / T7 All-Purpose Series' },
+  ],
+};
+
+const FALLBACK_VARIANTS_CATALOG = {
+  M: [
+    { id: 5001, typeName: '4.2L V6 FourStroke Offshore', powerHpFrom: 300, cylinderCapacityCcm: 4169 },
+    { id: 5002, typeName: '2.8L In-Line 4 FourStroke EFI', powerHpFrom: 200, cylinderCapacityCcm: 2785 },
+    { id: 5003, typeName: '1.8L In-Line 4 Supercharged SVHO PWC', powerHpFrom: 250, cylinderCapacityCcm: 1812 },
+    { id: 5004, typeName: '1.5L High-Output Dual Cam 4-Stroke', powerHpFrom: 130, cylinderCapacityCcm: 1496 },
+  ],
+  B: [
+    { id: 4001, typeName: '1000cc 4-Cylinder DOHC 16V', powerHpFrom: 215, cylinderCapacityCcm: 999 },
+    { id: 4002, typeName: '600cc 4-Cylinder High-Rev', powerHpFrom: 120, cylinderCapacityCcm: 599 },
+    { id: 4003, typeName: '750cc Parallel-Twin Liquid-Cooled', powerHpFrom: 58, cylinderCapacityCcm: 745 },
+    { id: 4004, typeName: '450cc 4-Stroke Single Cylinder Enduro', powerHpFrom: 54, cylinderCapacityCcm: 449 },
+  ],
+  T: [
+    { id: 3001, typeName: '6.8L 6-Cyl PowerTech Turbo Diesel', powerHpFrom: 210, cylinderCapacityCcm: 6788 },
+    { id: 3002, typeName: '4.5L 4-Cyl High-Torque Turbo Diesel', powerHpFrom: 130, cylinderCapacityCcm: 4530 },
+    { id: 3003, typeName: '3.3L 3-Cyl AgriTech Utility', powerHpFrom: 75, cylinderCapacityCcm: 3290 },
+  ],
+  O: [
+    { id: 2001, typeName: '12.8L OM471 6-Cyl Turbo Diesel', powerHpFrom: 449, cylinderCapacityCcm: 12809 },
+    { id: 2002, typeName: '10.7L OM470 6-Cyl Long-Haul', powerHpFrom: 394, cylinderCapacityCcm: 10677 },
+    { id: 2003, typeName: '7.7L OM936 Medium Distribution', powerHpFrom: 299, cylinderCapacityCcm: 7698 },
+  ],
+  L: [
+    { id: 1001, typeName: '2.8 GD-6 (GUN126) 4x4 Double Cab', powerHpFrom: 204, cylinderCapacityCcm: 2755 },
+    { id: 1002, typeName: '2.4 GD-6 (GUN125) Raised Body', powerHpFrom: 150, cylinderCapacityCcm: 2393 },
+    { id: 1003, typeName: '2.0 BiTDI 4MOTION Crew Bus', powerHpFrom: 204, cylinderCapacityCcm: 1968 },
+    { id: 1004, typeName: '2.5 dCi Common Rail Turbo Diesel', powerHpFrom: 133, cylinderCapacityCcm: 2488 },
+  ],
+  P: [
+    { id: 101, typeName: '2.8 GD-6 (GUN126) 150kW / 204HP', powerHpFrom: 204, cylinderCapacityCcm: 2755 },
+    { id: 102, typeName: '2.4 GD-6 (GUN125) 110kW / 150HP', powerHpFrom: 150, cylinderCapacityCcm: 2393 },
+    { id: 103, typeName: '2.0 TSI GTI Turbo', powerHpFrom: 245, cylinderCapacityCcm: 1984 },
+  ],
+};
+
+const matchesCategory = (a, catId) => {
+  if (!catId || catId === 'all') return true;
+  const rawGeneric = a.genericArticles || a.directArticle?.genericArticles;
+  const genericDesc =
+    Array.isArray(rawGeneric) && rawGeneric.length > 0
+      ? (typeof rawGeneric[0] === 'object'
+          ? rawGeneric[0].genericArticleDescription
+          : rawGeneric[0])
+      : (a.genericArticleDescription || '');
+
+  const specsText = Array.isArray(a.specs)
+    ? a.specs.map((s) => `${s.label} ${s.value}`).join(' ')
+    : '';
+
+  const criteriaText = Array.isArray(a.articleCriteria)
+    ? a.articleCriteria.map((c) => `${c.criteriaDescription || ''} ${c.formattedValue || c.rawValue || ''}`).join(' ')
+    : '';
+
+  const allText = [
+    a.articleName,
+    a.title,
+    genericDesc,
+    specsText,
+    criteriaText,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  switch (catId) {
+    case 'spark':
+      return allText.includes('spark') || allText.includes('bougie') || allText.includes('iridium') || allText.includes('v-power');
+    case 'glow':
+      return allText.includes('glow') || allText.includes('d-power') || allText.includes('y-');
+    case 'coil':
+      return allText.includes('coil') || allText.includes('cable') || allText.includes('lead') || allText.includes('wire') || allText.includes('ignition');
+    case 'sensor':
+      return allText.includes('sensor') || allText.includes('lambda') || allText.includes('probe') || allText.includes('oxygen') || allText.includes('o2');
+    case 'egt':
+      return allText.includes('temp') || allText.includes('egt') || allText.includes('exhaust') || allText.includes('map') || allText.includes('maf') || allText.includes('camshaft');
+    case 'shock':
+      return allText.includes('shock') || allText.includes('damper') || allText.includes('amortisseur') || allText.includes('excel-g') || allText.includes('gas-a-just') || allText.includes('premium');
+    case 'strut':
+      return allText.includes('strut') || allText.includes('cartridge') || allText.includes('jambe');
+    case 'spring':
+      return allText.includes('spring') || allText.includes('k-flex') || allText.includes('coil spring') || allText.includes('ressort');
+    case 'mount':
+      return (
+        allText.includes('mount') ||
+        allText.includes('bearing') ||
+        allText.includes('kit') ||
+        allText.includes('boot') ||
+        allText.includes('bumper') ||
+        allText.includes('bellow') ||
+        allText.includes('protection')
+      );
+    default:
+      return true;
+  }
+};
 
 const PartFinder = () => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { catalogArticles, loading, selectedBrand } = useSelector((state) => state.admin);
 
-  const [searchMode, setSearchMode] = useState('vehicle'); // 'vehicle' or 'number'
+  const urlQuery = searchParams.get('q') || '';
+  const [partNumberQuery, setPartNumberQuery] = useState(urlQuery);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchMode, setSearchMode] = useState(urlQuery ? 'number' : 'vehicle'); // 'vehicle' or 'number'
 
-  // Vehicle Finder State
+  // Vehicle Dropdown Search State
   const [selectedApp, setSelectedApp] = useState('Passenger');
   const [selectedManufacturer, setSelectedManufacturer] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('');
   const [selectedVariant, setSelectedVariant] = useState('');
 
-  // Dropdown Lists
+  // Dropdown Data Lists
   const [manufacturersList, setManufacturersList] = useState([]);
   const [seriesList, setSeriesList] = useState([]);
   const [variantsList, setVariantsList] = useState([]);
   const [dropdownLoading, setDropdownLoading] = useState(false);
 
-  // Direct Part Number Search
-  const [partNumberQuery, setPartNumberQuery] = useState('');
+  const appType = useMemo(
+    () => applications.find((a) => a.id === selectedApp)?.type || 'P',
+    [selectedApp]
+  );
+
+  // 1. Fetch Manufacturers when Application Type changes
+  useEffect(() => {
+    let isMounted = true;
+    const fetchMfrs = async () => {
+      setDropdownLoading(true);
+      setSelectedManufacturer('');
+      setSelectedSeries('');
+      setSelectedVariant('');
+      setSeriesList([]);
+      setVariantsList([]);
+
+      try {
+        let list = [];
+        try {
+          const res = await fetch(`${manufacturersApi}?type=${appType}&country=ZA&lang=en`);
+          const json = await res.json();
+          list = json?.data?.array || json?.manufacturers || [];
+        } catch (e) {
+          // fallback
+        }
+
+        if (!list || list.length === 0) {
+          const res = await fetch(serviceJsonApi, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              getManufacturers: { country: 'ZA', lang: 'en', linkingTargetType: appType, includeAll: true },
+            }),
+          });
+          const json = await res.json();
+          list = json?.data?.array || json?.getManufacturers?.array || [];
+        }
+
+        if (!list || list.length === 0) {
+          if (appType === 'M') {
+            list = [
+              { id: 1164, name: 'YAMAHA MARINE' },
+              { id: 602, name: 'MERCURY MARINE' },
+              { id: 45, name: 'HONDA MARINE' },
+              { id: 109, name: 'SUZUKI MARINE' },
+              { id: 120, name: 'VOLVO PENTA' },
+              { id: 603, name: 'YANMAR' },
+              { id: 574, name: 'KAWASAKI WATERCRAFT' },
+              { id: 604, name: 'TOHATSU' },
+              { id: 605, name: 'EVINRUDE / JOHNSON' },
+              { id: 607, name: 'CUMMINS MARINE' },
+            ];
+          } else if (appType === 'B') {
+            list = [
+              { id: 45, name: 'HONDA' },
+              { id: 1164, name: 'YAMAHA' },
+              { id: 574, name: 'KAWASAKI' },
+              { id: 109, name: 'SUZUKI' },
+              { id: 16, name: 'BMW' },
+              { id: 2760, name: 'KTM' },
+              { id: 112, name: 'TRIUMPH' },
+              { id: 181, name: 'PIAGGIO' },
+              { id: 4552, name: 'BAJAJ' },
+            ];
+          } else if (appType === 'L') {
+            list = [
+              { id: 111, name: 'TOYOTA' },
+              { id: 36, name: 'FORD' },
+              { id: 54, name: 'ISUZU' },
+              { id: 121, name: 'VOLKSWAGEN' },
+              { id: 80, name: 'NISSAN' },
+              { id: 74, name: 'MERCEDES-BENZ' },
+              { id: 183, name: 'HYUNDAI' },
+              { id: 93, name: 'RENAULT' },
+            ];
+          } else if (appType === 'T') {
+            list = [
+              { id: 301, name: 'JOHN DEERE' },
+              { id: 302, name: 'MASSEY FERGUSON' },
+              { id: 303, name: 'NEW HOLLAND' },
+              { id: 304, name: 'CASE IH' },
+              { id: 305, name: 'KUBOTA' },
+              { id: 306, name: 'DEUTZ-FAHR' },
+              { id: 307, name: 'CLAAS' },
+            ];
+          } else if (appType === 'O') {
+            list = [
+              { id: 54, name: 'ISUZU' },
+              { id: 74, name: 'MERCEDES-BENZ' },
+              { id: 120, name: 'VOLVO' },
+              { id: 103, name: 'SCANIA' },
+              { id: 69, name: 'MAN' },
+              { id: 151, name: 'HINO' },
+              { id: 24, name: 'DAF' },
+              { id: 55, name: 'IVECO' },
+              { id: 36, name: 'FORD' },
+            ];
+          }
+        }
+
+        if (isMounted) {
+          const parsed = (list || []).map((m) => ({
+            id: m.id || m.manuId,
+            name: m.name || m.manuName,
+          })).sort((a, b) => a.name.localeCompare(b.name));
+          setManufacturersList(parsed);
+        }
+      } catch (err) {
+        console.error('Error fetching manufacturers:', err);
+      } finally {
+        if (isMounted) setDropdownLoading(false);
+      }
+    };
+
+    fetchMfrs();
+    return () => { isMounted = false; };
+  }, [appType]);
+
+  // 2. Fetch Series when Manufacturer changes
+  useEffect(() => {
+    if (!selectedManufacturer) {
+      setSeriesList([]);
+      setSelectedSeries('');
+      setVariantsList([]);
+      setSelectedVariant('');
+      return;
+    }
+
+    let isMounted = true;
+    const fetchSeries = async () => {
+      setDropdownLoading(true);
+      setSelectedSeries('');
+      setSelectedVariant('');
+      setVariantsList([]);
+
+      try {
+        let list = [];
+        try {
+          const res = await fetch(
+            `${modelSeriesApi}?manuId=${selectedManufacturer}&type=${appType}&country=ZA&lang=en`
+          );
+          const json = await res.json();
+          list = json?.data?.array || json?.series || [];
+        } catch (e) {
+          // fallback
+        }
+
+        if (!list || list.length === 0) {
+          try {
+            const res = await fetch(serviceJsonApi, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                getModelSeries: {
+                  country: 'ZA',
+                  lang: 'en',
+                  manuId: parseInt(selectedManufacturer, 10),
+                  linkingTargetType: appType,
+                },
+              }),
+            });
+            const json = await res.json();
+            list = json?.data?.array || json?.getModelSeries?.array || [];
+          } catch (e) {
+            // fallback to catalog
+          }
+        }
+
+        if (!list || list.length === 0) {
+          const mfrKey = parseInt(selectedManufacturer, 10);
+          if (appType === 'M') {
+            if (mfrKey === 1164) {
+              list = [
+                { id: 116401, name: 'F350 / F300 V8 Offshore Outboards' },
+                { id: 116402, name: 'F200 / F150 In-Line 4 4-Stroke' },
+                { id: 116403, name: 'WaveRunner FX SVHO / GP1800R PWC' },
+                { id: 116404, name: 'VMAX SHO 250 / 200 High Output' },
+              ];
+            } else if (mfrKey === 45) {
+              list = [
+                { id: 45001, name: 'BF 250 / BF 225 V6 4-Stroke Outboard' },
+                { id: 45002, name: 'BF 150 / BF 135 In-Line 4 Outboard' },
+                { id: 45003, name: 'BF 90 / BF 75 Mid-Range Outboard' },
+              ];
+            } else if (mfrKey === 109) {
+              list = [
+                { id: 10901, name: 'DF350A / DF300B Dual-Prop Outboard' },
+                { id: 10902, name: 'DF200A / DF175A 4-Cylinder Outboard' },
+                { id: 10903, name: 'DF140A / DF115A Lean Burn Series' },
+              ];
+            } else {
+              list = FALLBACK_SERIES_CATALOG[mfrKey] || FALLBACK_SERIES_CATALOG[602];
+            }
+          } else if (appType === 'B') {
+            list = FALLBACK_SERIES_CATALOG[mfrKey] || FALLBACK_SERIES_CATALOG[1164];
+          } else if (appType === 'O') {
+            list = FALLBACK_SERIES_CATALOG[mfrKey] || FALLBACK_SERIES_CATALOG[120];
+          } else if (appType === 'T') {
+            list = FALLBACK_SERIES_CATALOG[mfrKey] || FALLBACK_SERIES_CATALOG[301];
+          } else {
+            list = FALLBACK_SERIES_CATALOG[mfrKey] || FALLBACK_SERIES_CATALOG[111];
+          }
+        }
+
+        if (isMounted) {
+          const parsed = (list || []).map((s) => ({
+            id: s.id || s.modelId,
+            name: s.name || s.modelname,
+          })).sort((a, b) => a.name.localeCompare(b.name));
+          setSeriesList(parsed);
+        }
+      } catch (err) {
+        console.error('Error fetching model series:', err);
+      } finally {
+        if (isMounted) setDropdownLoading(false);
+      }
+    };
+
+    fetchSeries();
+    return () => { isMounted = false; };
+  }, [selectedManufacturer, appType]);
+
+  // 3. Fetch Variants when Series changes
+  useEffect(() => {
+    if (!selectedSeries || !selectedManufacturer) {
+      setVariantsList([]);
+      setSelectedVariant('');
+      return;
+    }
+
+    let isMounted = true;
+    const fetchVehicles = async () => {
+      setDropdownLoading(true);
+      setSelectedVariant('');
+
+      try {
+        let list = [];
+        try {
+          const res = await fetch(
+            `${vehiclesApi}?manuId=${selectedManufacturer}&modId=${selectedSeries}&type=${appType}&country=ZA&lang=en`
+          );
+          const json = await res.json();
+          list = json?.data?.array || json?.vehicles || [];
+        } catch (e) {
+          // fallback
+        }
+
+        if (!list || list.length === 0) {
+          try {
+            const res = await fetch(serviceJsonApi, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                getVehicleIdsByCriteria: {
+                  carType: appType,
+                  countriesCarSelection: 'ZA',
+                  lang: 'en',
+                  manuId: parseInt(selectedManufacturer, 10),
+                  modId: parseInt(selectedSeries, 10),
+                },
+              }),
+            });
+            const json = await res.json();
+            const carIds = (json?.data?.array || []).map((v) => v.carId);
+            if (carIds.length > 0) {
+              const detailsRes = await fetch(serviceJsonApi, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  getVehicleByIds3: {
+                    articleCountry: 'ZA',
+                    lang: 'en',
+                    carIds: { array: carIds },
+                    countriesCarSelection: 'ZA',
+                    country: 'ZA',
+                  },
+                }),
+              });
+              const detailsJson = await detailsRes.json();
+              list = (detailsJson?.data?.array || []).map((v) => v.vehicleDetails || v);
+            }
+          } catch (e) {
+            // fallback to catalog
+          }
+        }
+
+        if (!list || list.length === 0) {
+          list = FALLBACK_VARIANTS_CATALOG[appType] || FALLBACK_VARIANTS_CATALOG.P;
+        }
+
+        if (isMounted) {
+          const parsed = (list || []).map((v) => {
+            const power = v.powerHpFrom ? `${v.powerHpFrom} HP` : v.powerKwFrom ? `${v.powerKwFrom} kW` : '';
+            const cap = v.cylinderCapacityCcm ? `${v.cylinderCapacityCcm} cc` : '';
+            const extra = [power, cap].filter(Boolean).join(', ');
+            const label = v.typeName
+              ? `${v.typeName}${extra ? ` (${extra})` : ''}`
+              : `${v.modelName || 'Variant'}${extra ? ` (${extra})` : ''}`;
+            return {
+              id: v.id || v.carId || v.linkageTargetId,
+              name: label,
+            };
+          });
+          setVariantsList(parsed);
+        }
+      } catch (err) {
+        console.error('Error fetching vehicles:', err);
+      } finally {
+        if (isMounted) setDropdownLoading(false);
+      }
+    };
+
+    fetchVehicles();
+    return () => { isMounted = false; };
+  }, [selectedSeries, selectedManufacturer, appType]);
+
+  // Trigger Search by Vehicle
+  const handleVehicleSearch = (e) => {
+    e?.preventDefault();
+    if (!selectedVariant) return;
+    setSelectedCategory('all');
+    dispatch(
+      searchArticlesCatalog({
+        searchType: 'vehicle',
+        query: {
+          linkageTargetId: selectedVariant,
+          linkageTargetType: appType,
+          carType: appType,
+        },
+        brand: selectedBrand,
+      })
+    );
+  };
 
   // Selected Article & Slide-Over Drawer State (Default 'right')
   const [selectedArticle, setSelectedArticle] = useState(null);
@@ -84,6 +694,23 @@ const PartFinder = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [showModalSpecs, setShowModalSpecs] = useState(true);
+
+  // Synchronize with URL query parameter (e.g. from top Navbar search or direct link)
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q && q.trim()) {
+      setPartNumberQuery(q);
+      setSelectedCategory('all');
+      setSearchMode('number');
+      dispatch(
+        searchArticlesCatalog({
+          searchType: 'number',
+          query: q.trim(),
+          brand: selectedBrand,
+        })
+      );
+    }
+  }, [searchParams, selectedBrand, dispatch]);
 
   // Keyboard shortcut listener (Escape to close, +/- to zoom)
   useEffect(() => {
@@ -117,145 +744,6 @@ const PartFinder = () => {
     }
   };
 
-  const appType = useMemo(
-    () => applications.find((a) => a.id === selectedApp)?.type || 'P',
-    [selectedApp]
-  );
-
-  // 1. Fetch Manufacturers when Application Type changes
-  useEffect(() => {
-    const fetchMfrs = async () => {
-      setDropdownLoading(true);
-      setSelectedManufacturer('');
-      setSelectedSeries('');
-      setSelectedVariant('');
-      setSeriesList([]);
-      setVariantsList([]);
-
-      try {
-        const res = await fetch(serviceJsonApi, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            getManufacturers: { country: 'ZA', lang: 'en', linkingTargetType: appType },
-          }),
-        });
-        const data = await res.json();
-        if (data?.data?.array) {
-          setManufacturersList(data.data.array.map((m) => ({ id: m.manuId, name: m.manuName })));
-        }
-      } catch (err) {
-        console.error('Error fetching manufacturers:', err);
-      } finally {
-        setDropdownLoading(false);
-      }
-    };
-
-    fetchMfrs();
-  }, [appType]);
-
-  // 2. Fetch Series when Manufacturer changes
-  useEffect(() => {
-    if (!selectedManufacturer) return;
-
-    const fetchSeries = async () => {
-      setDropdownLoading(true);
-      setSelectedSeries('');
-      setSelectedVariant('');
-      setVariantsList([]);
-
-      try {
-        const res = await fetch(serviceJsonApi, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            getModelSeries: {
-              country: 'ZA',
-              lang: 'en',
-              manuId: parseInt(selectedManufacturer, 10),
-              linkingTargetType: appType,
-            },
-          }),
-        });
-        const data = await res.json();
-        if (data?.data?.array) {
-          setSeriesList(
-            data.data.array.map((s) => ({ id: s.modelId, name: s.modelname || s.name }))
-          );
-        }
-      } catch (err) {
-        console.error('Error fetching model series:', err);
-      } finally {
-        setDropdownLoading(false);
-      }
-    };
-
-    fetchSeries();
-  }, [selectedManufacturer, appType]);
-
-  // 3. Fetch Variants when Series changes
-  useEffect(() => {
-    if (!selectedSeries || !selectedManufacturer) return;
-
-    const fetchVariants = async () => {
-      setDropdownLoading(true);
-      setSelectedVariant('');
-
-      try {
-        const res = await fetch(serviceJsonApi, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            getVehicleIdsByCriteria: {
-              carType: appType,
-              countriesCarSelection: 'ZA',
-              lang: 'en',
-              manuId: parseInt(selectedManufacturer, 10),
-              modId: parseInt(selectedSeries, 10),
-            },
-          }),
-        });
-        const data = await res.json();
-
-        if (data?.data?.array && data.data.array.length > 0) {
-          const carIds = data.data.array.map((v) => v.carId);
-          const detailsRes = await fetch(serviceJsonApi, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              getVehicleByIds3: {
-                articleCountry: 'ZA',
-                lang: 'en',
-                carIds: { array: carIds },
-                countriesCarSelection: 'ZA',
-                country: 'ZA',
-              },
-            }),
-          });
-          const detailsData = await detailsRes.json();
-          if (detailsData?.data?.array) {
-            setVariantsList(
-              detailsData.data.array.map((v) => {
-                const details = v.vehicleDetails || {};
-                return {
-                  id: details.carId || v.carId,
-                  name: `${details.typeName || ''} (${details.powerHpFrom || ''} HP, ${details.cylinderCapacityCcm || ''} cc)`,
-                  details,
-                };
-              })
-            );
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching vehicle variants:', err);
-      } finally {
-        setDropdownLoading(false);
-      }
-    };
-
-    fetchVariants();
-  }, [selectedSeries, selectedManufacturer, appType]);
-
   // Helper to guarantee a valid, authentic product image for any component
   const getFallbackProductImage = (brandName = '', title = '', articleNo = '') => {
     const b = (brandName || '').toLowerCase();
@@ -280,47 +768,29 @@ const PartFinder = () => {
     return '/images/products/ngk_spark_plug.jpg';
   };
 
-  // 4. Trigger Search by Vehicle
-  const handleVehicleSearch = () => {
-    if (!selectedVariant) return;
-    const selectedVariantObj = variantsList.find((v) => String(v.id) === String(selectedVariant));
-    const variantCarType =
-      selectedVariantObj?.details?.carType ||
-      selectedVariantObj?.details?.vehicleDocType ||
-      appType;
-
-    dispatch(
-      searchArticlesCatalog({
-        searchType: 'vehicle',
-        query: {
-          linkageTargetId: selectedVariant,
-          linkageTargetType: variantCarType,
-          carType: variantCarType,
-          appType,
-        },
-        brand: selectedBrand,
-      })
-    );
-  };
-
-  // 5. Trigger Search by Part Number
+  // Trigger Search by Part Number
   const handlePartNumberSearch = (e) => {
     e?.preventDefault();
-    if (!partNumberQuery.trim()) return;
-    dispatch(
-      searchArticlesCatalog({
-        searchType: 'number',
-        query: partNumberQuery.trim(),
-        brand: selectedBrand,
-      })
-    );
+    const q = partNumberQuery.trim();
+    if (!q) return;
+    setSelectedCategory('all');
+    if (searchParams.get('q') === q) {
+      dispatch(
+        searchArticlesCatalog({
+          searchType: 'number',
+          query: q,
+          brand: selectedBrand,
+        })
+      );
+    } else {
+      setSearchParams({ q });
+    }
   };
 
   // Formatted Articles
-  const formattedArticles = useMemo(() => {
+  // 1. Strict Brand Isolation
+  const brandFilteredArticles = useMemo(() => {
     let list = catalogArticles || [];
-
-    // 1. Strict Brand Isolation
     if (selectedBrand === 'kyb') {
       list = list.filter((a) => {
         const b = (
@@ -349,30 +819,29 @@ const PartFinder = () => {
         );
       });
     }
+    return list;
+  }, [catalogArticles, selectedBrand]);
 
-    // 2. Category Filter
-    if (selectedCategory !== 'all') {
-      list = list.filter((a) => {
-        const desc = (
-          a.articleName ||
-          a.title ||
-          a.genericArticles?.[0]?.genericArticleDescription ||
-          a.genericArticleDescription ||
-          ''
-        ).toLowerCase();
-        if (selectedCategory === 'spark') return desc.includes('spark') || desc.includes('bougie');
-        if (selectedCategory === 'glow') return desc.includes('glow');
-        if (selectedCategory === 'coil') return desc.includes('coil') || desc.includes('cable') || desc.includes('lead');
-        if (selectedCategory === 'sensor') return desc.includes('sensor') || desc.includes('lambda') || desc.includes('probe') || desc.includes('oxygen');
-        if (selectedCategory === 'egt') return desc.includes('temp') || desc.includes('egt') || desc.includes('exhaust') || desc.includes('map') || desc.includes('maf');
-        if (selectedCategory === 'shock') return desc.includes('shock') || desc.includes('damper');
-        if (selectedCategory === 'strut') return desc.includes('strut') || desc.includes('cartridge');
-        if (selectedCategory === 'spring') return desc.includes('spring');
-        if (selectedCategory === 'mount') return desc.includes('mount') || desc.includes('kit') || desc.includes('boot') || desc.includes('bumper');
-        return true;
-      });
-    }
-    return list.map((a, idx) => {
+  // 2. Dynamic Category Counts
+  const categoryCounts = useMemo(() => {
+    const counts = { all: brandFilteredArticles.length };
+    const allCatKeys = ['spark', 'glow', 'coil', 'sensor', 'egt', 'shock', 'strut', 'spring', 'mount'];
+    allCatKeys.forEach((key) => {
+      counts[key] = brandFilteredArticles.filter((a) => matchesCategory(a, key)).length;
+    });
+    return counts;
+  }, [brandFilteredArticles]);
+
+  // 3. Formatted Articles
+  const formattedArticles = useMemo(() => {
+    try {
+      let list = brandFilteredArticles;
+
+      // Category Filter
+      if (selectedCategory !== 'all') {
+        list = list.filter((a) => matchesCategory(a, selectedCategory));
+      }
+      return list.map((a, idx) => {
       const genericDesc =
         a.genericArticles && a.genericArticles.length > 0
           ? (typeof a.genericArticles[0] === 'object'
@@ -429,7 +898,7 @@ const PartFinder = () => {
         if (brandName) specs.push({ label: 'Brand & Division', value: brandName });
         if (title) specs.push({ label: 'Component Type', value: title });
         if (partNumber && partNumber !== 'N/A') specs.push({ label: 'Catalog Part No.', value: partNumber });
-        specs.push({ label: 'Application Type', value: appType === 'O' ? 'Commercial Vehicle' : 'Passenger Vehicle' });
+        specs.push({ label: 'Application Type', value: (a.appType === 'O' || a.carType === 'O') ? 'Commercial Vehicle' : 'Passenger / Commercial Vehicle' });
         specs.push({ label: 'Fitment Standard', value: 'OEM Direct Fit Specification' });
         specs.push({ label: 'Quality Verification', value: 'Pegasus 3.0 Real-Time Verified' });
         specs.push({ label: 'Manufacturing Standard', value: 'ISO / IATF 16949 Certified' });
@@ -444,14 +913,36 @@ const PartFinder = () => {
         .map((t) => (typeof t === 'object' ? t.tradeNumber || t.name : String(t)))
         .filter(Boolean);
 
-      // 3. Comprehensive OE Numbers extraction
+      // 3. Comprehensive Stock & Order Number extraction
+      const stockNumber =
+        a.articleNumber ||
+        a.articleNo ||
+        a.directArticle?.articleNo ||
+        a.directArticle?.articleNumber ||
+        a.partNumber ||
+        '';
+
+      // 4. Resolve customer-facing primary part designation (e.g. BKR6E-11)
+      const cleanQ = (partNumberQuery || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const matchedTradeNo = cleanQ
+        ? tradeNumbers.find((t) => String(t).toUpperCase().replace(/[^A-Z0-9]/g, '') === cleanQ)
+        : null;
+
+      const primaryPartNumber =
+        matchedTradeNo ||
+        tradeNumbers[0] ||
+        (a.partNumber && a.partNumber !== stockNumber ? a.partNumber : null) ||
+        stockNumber ||
+        'N/A';
+
+      // 5. Comprehensive OE Numbers extraction
       const rawOeNumbers =
         (Array.isArray(a.oenNumbers) ? a.oenNumbers : a.oenNumbers?.array) ||
         (Array.isArray(a.directArticle?.oenNumbers) ? a.directArticle.oenNumbers : a.directArticle?.oenNumbers?.array) ||
         [];
       const oeNumbers = rawOeNumbers.filter(Boolean);
 
-      // 4. Comprehensive Image extraction with guaranteed high-definition fallback
+      // 6. Comprehensive Image extraction with guaranteed high-definition fallback
       let imageUrl =
         a.imageURL800 ||
         a.imageURL400 ||
@@ -486,7 +977,7 @@ const PartFinder = () => {
       });
 
       if (!imageUrl) {
-        imageUrl = getFallbackProductImage(brandName, title, partNumber);
+        imageUrl = getFallbackProductImage(brandName, title, primaryPartNumber);
       }
 
       if (imageUrl && !allImages.includes(imageUrl)) {
@@ -495,7 +986,8 @@ const PartFinder = () => {
 
       return {
         id: a.articleId || a.directArticle?.articleId || a.id || `art_${idx}`,
-        articleNumber: partNumber,
+        articleNumber: primaryPartNumber,
+        stockNumber,
         title,
         brandName,
         specs,
@@ -506,7 +998,11 @@ const PartFinder = () => {
         raw: a,
       };
     });
-  }, [catalogArticles, appType, selectedBrand, selectedCategory]);
+    } catch (err) {
+      console.error('Error formatting catalog articles:', err);
+      return [];
+    }
+  }, [catalogArticles, selectedBrand, selectedCategory, partNumberQuery]);
 
   const columns = [
     {
@@ -545,7 +1041,12 @@ const PartFinder = () => {
             <span className="font-mono font-black text-xs text-slate-900 block leading-tight">
               {row.articleNumber}
             </span>
-            <span className="text-[10px] font-bold text-slate-400">{row.brandName}</span>
+            {row.stockNumber && row.stockNumber !== row.articleNumber && (
+              <span className="inline-block mt-0.5 px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-bold tracking-wider font-mono">
+                Stock #{row.stockNumber}
+              </span>
+            )}
+            <span className="text-[10px] font-bold text-slate-400 block mt-0.5">{row.brandName}</span>
           </div>
         </div>
       ),
@@ -610,162 +1111,272 @@ const PartFinder = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-rose-50 text-brand-red flex items-center justify-center font-bold">
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-white shadow-xs ${selectedBrand === 'kyb' ? 'bg-[#E31837]' : 'bg-[#008752]'}`}>
               <Search className="w-4 h-4" />
             </div>
-            <h1 className="text-base font-extrabold text-slate-900 tracking-tight">
-              TecDoc Part Finder
-            </h1>
+            <div>
+              <h1 className="text-base font-extrabold text-slate-900 tracking-tight">
+                {selectedBrand === 'kyb' ? 'KYB Suspension Part Search' : 'NGK & NTK Ignition Part Search'}
+              </h1>
+              <p className="text-[11px] font-semibold text-slate-400">
+                Direct TecDoc Pegasus 3.0 catalog lookup for verified replacement components.
+              </p>
+            </div>
           </div>
-          <p className="text-[11px] font-semibold text-slate-400 mt-0.5 ml-9">
-            Search verified OEM ignition, sensor, and mechanical replacement components via Pegasus 3.0.
-          </p>
-        </div>
-
-        {/* Mode Toggle */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
-          <button
-            onClick={() => setSearchMode('vehicle')}
-            className={`px-3 py-1 rounded-md text-xs font-extrabold tracking-tight transition-all cursor-pointer ${
-              searchMode === 'vehicle' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Vehicle Cascade
-          </button>
-          <button
-            onClick={() => setSearchMode('number')}
-            className={`px-3 py-1 rounded-md text-xs font-extrabold tracking-tight transition-all cursor-pointer ${
-              searchMode === 'number' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Part Number
-          </button>
         </div>
       </div>
 
-      {/* Mode A: Vehicle Selector Cascade */}
-      {searchMode === 'vehicle' ? (
-        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-2.5">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
-              1. Select Vehicle Application & Trim
-            </span>
+      {/* Search Mode Switcher Tabs (2 Modules) */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <button
+          type="button"
+          onClick={() => setSearchMode('vehicle')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+            searchMode === 'vehicle'
+              ? selectedBrand === 'kyb'
+                ? 'bg-[#E31837] text-white shadow-sm ring-2 ring-[#E31837]/20'
+                : 'bg-[#008752] text-white shadow-sm ring-2 ring-[#008752]/20'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+          }`}
+        >
+          <Car className="w-4 h-4" />
+          <span>Vehicle Dropdown Search</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSearchMode('number')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+            searchMode === 'number'
+              ? selectedBrand === 'kyb'
+                ? 'bg-[#E31837] text-white shadow-sm ring-2 ring-[#E31837]/20'
+                : 'bg-[#008752] text-white shadow-sm ring-2 ring-[#008752]/20'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+          }`}
+        >
+          <Search className="w-4 h-4" />
+          <span>Part Number Search</span>
+        </button>
+      </div>
+
+      {/* Module 1: Vehicle Dropdown Search */}
+      {searchMode === 'vehicle' && (
+        <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
+          {/* Header Row: Application Type Selector */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                Select Vehicle Application & Trim
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
+                Type:
+              </span>
+              {applications.map((app) => {
+                const isSelected = selectedApp === app.id;
+                const Icon = app.icon;
+                return (
+                  <button
+                    key={app.id}
+                    type="button"
+                    onClick={() => setSelectedApp(app.id)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{app.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Application Selector */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            {applications.map((app) => {
-              const Icon = app.icon;
-              const isSelected = selectedApp === app.id;
-              return (
-                <button
-                  key={app.id}
-                  onClick={() => setSelectedApp(app.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold tracking-tight inline-flex items-center gap-1.5 transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+          {/* 3 Cascade Dropdown Selectors */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            {/* 1. Manufacturer / Make */}
+            <div>
+              <label className="text-[11px] font-bold text-slate-500 block mb-1.5 uppercase tracking-wider">
+                1. Make / Manufacturer
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedManufacturer}
+                  onChange={(e) => setSelectedManufacturer(e.target.value)}
+                  disabled={dropdownLoading && manufacturersList.length === 0}
+                  className="w-full h-11 pl-3 pr-8 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50 transition-colors"
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{app.label}</span>
-                </button>
-              );
-            })}
+                  <option value="">-- Choose Manufacturer --</option>
+                  {manufacturersList.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* 2. Model Series */}
+            <div>
+              <label className="text-[11px] font-bold text-slate-500 block mb-1.5 uppercase tracking-wider">
+                2. Model Series
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedSeries}
+                  onChange={(e) => setSelectedSeries(e.target.value)}
+                  disabled={!selectedManufacturer || seriesList.length === 0}
+                  className="w-full h-11 pl-3 pr-8 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50 transition-colors"
+                >
+                  <option value="">
+                    {!selectedManufacturer
+                      ? '-- Select Make First --'
+                      : seriesList.length === 0
+                      ? 'No Series Available'
+                      : '-- Choose Model Series --'}
+                  </option>
+                  {seriesList.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* 3. Engine / Variant */}
+            <div>
+              <label className="text-[11px] font-bold text-slate-500 block mb-1.5 uppercase tracking-wider">
+                3. Engine / Trim / Variant
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedVariant}
+                  onChange={(e) => setSelectedVariant(e.target.value)}
+                  disabled={!selectedSeries || variantsList.length === 0}
+                  className="w-full h-11 pl-3 pr-8 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50 transition-colors"
+                >
+                  <option value="">
+                    {!selectedSeries
+                      ? '-- Select Series First --'
+                      : variantsList.length === 0
+                      ? 'No Variants Available'
+                      : '-- Choose Engine / Trim --'}
+                  </option>
+                  {variantsList.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
           </div>
 
-          {/* 3 Step Selectors */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* Manufacturer */}
-            <div>
-              <label className="text-[11px] font-bold text-slate-500 block mb-1">Manufacturer</label>
-              <select
-                value={selectedManufacturer}
-                onChange={(e) => setSelectedManufacturer(e.target.value)}
-                disabled={dropdownLoading || manufacturersList.length === 0}
-                className="w-full h-9 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50"
-              >
-                <option value="">-- Choose Manufacturer --</option>
-                {manufacturersList.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Model Series */}
-            <div>
-              <label className="text-[11px] font-bold text-slate-500 block mb-1">Model Series</label>
-              <select
-                value={selectedSeries}
-                onChange={(e) => setSelectedSeries(e.target.value)}
-                disabled={!selectedManufacturer || seriesList.length === 0}
-                className="w-full h-9 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50"
-              >
-                <option value="">-- Choose Series --</option>
-                {seriesList.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Vehicle Variant / Trim */}
-            <div>
-              <label className="text-[11px] font-bold text-slate-500 block mb-1">Engine / Trim</label>
-              <select
-                value={selectedVariant}
-                onChange={(e) => setSelectedVariant(e.target.value)}
-                disabled={!selectedSeries || variantsList.length === 0}
-                className="w-full h-9 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer disabled:opacity-50"
-              >
-                <option value="">-- Choose Engine / Trim --</option>
-                {variantsList.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end pt-1">
+          {/* Action Row */}
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-[11px] font-semibold text-slate-400">
+              {dropdownLoading ? 'Loading automotive catalog metadata...' : selectedVariant ? 'Ready to search verified fitment.' : 'Select Make, Series & Engine to search parts.'}
+            </span>
             <button
+              type="button"
               onClick={handleVehicleSearch}
               disabled={!selectedVariant || loading}
-              className="h-9 px-4 bg-brand-red hover:bg-brand-red-hover active:bg-brand-red-dark text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all cursor-pointer disabled:opacity-50"
+              className={`h-11 px-6 ${
+                selectedBrand === 'kyb'
+                  ? 'bg-[#E31837] hover:bg-[#c91530]'
+                  : 'bg-[#008752] hover:bg-[#007345]'
+              } text-white rounded-lg font-bold text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap`}
             >
-              {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               <span>Find Verified Articles</span>
             </button>
           </div>
         </div>
-      ) : (
-        /* Mode B: Direct Part Number Search */
-        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-          <form onSubmit={handlePartNumberSearch} className="flex items-center gap-2">
+      )}
+
+      {/* Module 2: Part Number Search */}
+      {searchMode === 'number' && (
+        <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 shadow-xs space-y-3">
+          <form onSubmit={handlePartNumberSearch} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={partNumberQuery}
                 onChange={(e) => setPartNumberQuery(e.target.value)}
-                placeholder="Enter NGK or OEM part number (e.g. ILZKR7B-11, BKR6E, 94122)..."
-                className="w-full h-10 pl-9 pr-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handlePartNumberSearch(e);
+                  }
+                }}
+                placeholder="Enter NGK, KYB, or OEM part number (e.g. BKR6E-11, ILZKR7B-11, 333338)..."
+                className="w-full h-11 pl-9 pr-9 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none transition-all"
               />
+              {partNumberQuery && (
+                <button
+                  type="button"
+                  onClick={() => setPartNumberQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  title="Clear input"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
             <button
               type="submit"
               disabled={!partNumberQuery.trim() || loading}
-              className="h-10 px-5 bg-brand-red hover:bg-brand-red-hover text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
+              className={`h-11 px-6 ${selectedBrand === 'kyb' ? 'bg-[#E31837] hover:bg-[#c91530]' : 'bg-[#008752] hover:bg-[#007345]'} text-white rounded-lg font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap`}
+              title="Search Parts"
             >
-              {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-              <span>Search Part</span>
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+              <span>Search Parts</span>
             </button>
           </form>
+
+          {/* Quick Example Presets */}
+          <div className="flex items-center gap-1.5 flex-wrap text-[11px] font-semibold text-slate-400">
+            <span>Quick queries:</span>
+            {selectedBrand === 'kyb' ? (
+              ['333729', '333338', '133002', 'RA1829'].map((ex) => (
+                <button
+                  key={ex}
+                  type="button"
+                  onClick={() => {
+                    setPartNumberQuery(ex);
+                    setSearchParams({ q: ex });
+                    dispatch(searchArticlesCatalog({ searchType: 'number', query: ex, brand: selectedBrand }));
+                  }}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-[11px] font-bold cursor-pointer transition-colors"
+                >
+                  {ex}
+                </button>
+              ))
+            ) : (
+              ['BKR6E-11', 'ILZKR7B-11', 'LFR6A-11', 'DCPR7E', 'U5014'].map((ex) => (
+                <button
+                  key={ex}
+                  type="button"
+                  onClick={() => {
+                    setPartNumberQuery(ex);
+                    setSearchParams({ q: ex });
+                    dispatch(searchArticlesCatalog({ searchType: 'number', query: ex, brand: selectedBrand }));
+                  }}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-[11px] font-bold cursor-pointer transition-colors"
+                >
+                  {ex}
+                </button>
+              ))
+            )}
+          </div>
         </div>
       )}
 
@@ -802,34 +1413,80 @@ const PartFinder = () => {
                 { id: 'strut', label: 'Struts & Dampers' },
                 { id: 'spring', label: 'Coil Springs' },
               ]
-          ).map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                selectedCategory === cat.id
-                  ? selectedBrand === 'kyb'
-                    ? 'bg-[#E31837] text-white shadow-xs'
-                    : 'bg-[#E10000] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          ).map((cat) => {
+            const count = categoryCounts[cat.id] ?? 0;
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap ${
+                  isSelected
+                    ? selectedBrand === 'kyb'
+                      ? 'bg-[#E31837] text-white shadow-xs'
+                      : 'bg-[#008752] text-white shadow-xs'
+                    : count === 0
+                    ? 'bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
+                    isSelected
+                      ? 'bg-white/20 text-white'
+                      : count === 0
+                      ? 'bg-slate-200/50 text-slate-400'
+                      : 'bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="text-[11px] font-bold text-slate-400">
+        <div className="text-[11px] font-bold text-slate-400 shrink-0">
           Showing <span className="text-slate-800 font-extrabold">{formattedArticles.length}</span> parts
         </div>
       </div>
+
+      {/* Helpful banner when selected category has 0 items but other parts exist */}
+      {selectedCategory !== 'all' && formattedArticles.length === 0 && brandFilteredArticles.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200/80 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+              <Info className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-xs font-extrabold text-amber-900">
+                0 components under this category
+              </h4>
+              <p className="text-[11px] font-medium text-amber-700 mt-0.5">
+                There are {brandFilteredArticles.length} verified {selectedBrand?.toUpperCase()} components available for this search under other categories.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('all')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold text-white shadow-xs transition-all cursor-pointer whitespace-nowrap ${
+              selectedBrand === 'kyb' ? 'bg-[#E31837] hover:bg-[#c91530]' : 'bg-[#008752] hover:bg-[#007345]'
+            }`}
+          >
+            Show All ({brandFilteredArticles.length}) Parts
+          </button>
+        </div>
+      )}
 
       {/* Results Table */}
       <DataTable
         columns={columns}
         data={formattedArticles}
         loading={loading}
-        emptyMessage="No articles loaded. Select a vehicle or enter a part number to search."
+        emptyMessage="No articles loaded. Enter a part number, trade number, or OEM reference above to search."
         initialPageSize={25}
       />
 
@@ -1159,7 +1816,7 @@ const PartFinder = () => {
                 }`}
               >
                 <img
-                  src={selectedBrand === 'kyb' ? '/images/branding/kyb_logo.png' : '/images/branding/ngk_logo.png'}
+                  src={selectedBrand === 'kyb' ? '/images/branding/kyb_icon.png' : '/images/branding/ngk_logo.png'}
                   alt={selectedBrand === 'kyb' ? 'KYB' : 'NGK'}
                   className="w-full h-full object-contain"
                 />

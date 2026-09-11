@@ -318,25 +318,47 @@ export const searchArticlesCatalog = createAsyncThunk(
 
       // Search by Part Number
       const cleanQuery = typeof query === 'string' ? query.trim().toUpperCase() : String(query);
-      const payload = {
-        getArticles: {
-          articleCountry: 'ZA',
-          lang: 'en',
-          searchQuery: cleanQuery,
-          searchType: 10,
-          perPage: 50,
-          page: 1,
-          includeAll: true,
-        },
-      };
+      const brandParam = activeBrand ? `&brand=${activeBrand}` : '';
 
-      if (activeBrand === 'kyb') {
-        payload.getArticles.dataSupplierIds = [7729];
-      } else if (activeBrand === 'ngk') {
-        payload.getArticles.dataSupplierIds = [15, 5414];
+      // 1. Primary: Backend /articles/by-part endpoint with Pegasus and verified catalog
+      try {
+        const partRes = await fetch(
+          `${articlesByPartApi}?searchQuery=${encodeURIComponent(cleanQuery)}&partNo=${encodeURIComponent(cleanQuery)}${brandParam}`,
+          { headers: authHeaders }
+        );
+        const partData = await partRes.json();
+        const articles =
+          partData?.data?.articles ||
+          partData?.articles ||
+          partData?.data?.array ||
+          (Array.isArray(partData?.data) ? partData?.data : null);
+        if (Array.isArray(articles) && articles.length > 0) {
+          return { articles, data: { array: articles } };
+        }
+      } catch (e) {
+        console.warn('Backend articlesByPartApi call failed, trying serviceJsonApi proxy:', e);
       }
 
+      // 2. Secondary fallback: Direct Pegasus JSON proxy endpoint
       try {
+        const payload = {
+          getArticles: {
+            articleCountry: 'ZA',
+            lang: 'en',
+            searchQuery: cleanQuery,
+            searchType: 10,
+            perPage: 50,
+            page: 1,
+            includeAll: true,
+          },
+        };
+
+        if (activeBrand === 'kyb') {
+          payload.getArticles.dataSupplierIds = [7729];
+        } else if (activeBrand === 'ngk') {
+          payload.getArticles.dataSupplierIds = [15, 5414];
+        }
+
         const response = await fetch(serviceJsonApi, {
           method: 'POST',
           headers: authHeaders,
@@ -348,23 +370,7 @@ export const searchArticlesCatalog = createAsyncThunk(
           return { articles, data: { array: articles } };
         }
       } catch (e) {
-        console.warn('Direct Pegasus part search failed, trying backend fallback:', e);
-      }
-
-      // Fallback to backend /articles/by-part endpoint with brand and fuzzy matching
-      try {
-        const brandParam = activeBrand ? `&brand=${activeBrand}` : '';
-        const partRes = await fetch(
-          `${articlesByPartApi}?partNo=${encodeURIComponent(cleanQuery)}${brandParam}`,
-          { headers: authHeaders }
-        );
-        const partData = await partRes.json();
-        const articles = partData?.articles || partData?.data?.array || partData?.data;
-        if (Array.isArray(articles) && articles.length > 0) {
-          return { articles, data: { array: articles } };
-        }
-      } catch (e) {
-        console.warn('Backend articlesByPartApi fallback failed:', e);
+        console.warn('Direct Pegasus proxy part search failed:', e);
       }
 
       return { articles: [], data: { array: [] } };
@@ -428,7 +434,7 @@ const getInitialUser = () => {
 const initialState = {
   adminUser: getInitialUser(),
   isAuthenticated: !!localStorage.getItem('token') || !!localStorage.getItem('adminUser'),
-  selectedBrand: localStorage.getItem('adminSelectedBrand') || null,
+  selectedBrand: localStorage.getItem('adminSelectedBrand') || 'ngk',
   users: [],
   enquiries: [],
   catalogDealers: [],

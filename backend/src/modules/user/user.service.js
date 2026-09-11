@@ -210,6 +210,22 @@ class UserService {
       }
     }
 
+    // 5b. Structured Address Components validation (JSONB object)
+    if (updateFields.address_components !== undefined) {
+      if (updateFields.address_components && typeof updateFields.address_components === 'object') {
+        payload.address_components = {
+          streetNo: String(updateFields.address_components.streetNo || '').trim(),
+          streetName: String(updateFields.address_components.streetName || '').trim(),
+          suburb: String(updateFields.address_components.suburb || '').trim(),
+          city: String(updateFields.address_components.city || '').trim(),
+          state: String(updateFields.address_components.state || '').trim(),
+          code: String(updateFields.address_components.code || '').trim(),
+        };
+      } else {
+        payload.address_components = null;
+      }
+    }
+
     // Optional password reset / update
     if (updateFields.password && typeof updateFields.password === 'string' && updateFields.password.trim().length >= 6) {
       payload.password_hash = await bcrypt.hash(updateFields.password.trim(), 10);
@@ -251,18 +267,23 @@ class UserService {
     if (error) {
       // If error is due to missing columns before migration, retry with core fields only
       console.warn('Update user failed with full payload, trying core fields:', error.message);
-      const corePayload = {
-        name: payload.name,
-        email: payload.email,
-        role: payload.role,
-        phone: payload.phone,
-        address: payload.address,
-        updated_at: payload.updated_at,
-      };
-      // Remove undefined keys
-      Object.keys(corePayload).forEach(k => corePayload[k] === undefined && delete corePayload[k]);
-      const { error: coreError } = await supabase.from('users').update(corePayload).eq('id', id);
-      if (coreError) throw new Error(coreError.message || 'Failed to update user');
+      const retryPayload = { ...payload };
+      delete retryPayload.address_components;
+      const { error: retryError } = await supabase.from('users').update(retryPayload).eq('id', id);
+      if (retryError) {
+        const corePayload = {
+          name: payload.name,
+          email: payload.email,
+          role: payload.role,
+          phone: payload.phone,
+          address: payload.address,
+          updated_at: payload.updated_at,
+        };
+        // Remove undefined keys
+        Object.keys(corePayload).forEach(k => corePayload[k] === undefined && delete corePayload[k]);
+        const { error: coreError } = await supabase.from('users').update(corePayload).eq('id', id);
+        if (coreError) throw new Error(coreError.message || 'Failed to update user');
+      }
     }
 
     // Synchronize dealers table is_live with user is_approved
@@ -319,11 +340,21 @@ class UserService {
     }
 
     // Also synchronize dealer commercial details if provided
-    if (updateFields.company_name || updateFields.latitude !== undefined || updateFields.longitude !== undefined || updateFields.city) {
+    if (
+      updateFields.company_name ||
+      updateFields.latitude !== undefined ||
+      updateFields.longitude !== undefined ||
+      updateFields.city ||
+      updateFields.postal_code ||
+      updateFields.code
+    ) {
       try {
         const dealerUpdate = {};
         if (updateFields.company_name) dealerUpdate.company_name = String(updateFields.company_name).trim();
         if (updateFields.city) dealerUpdate.city = String(updateFields.city).trim();
+        if (updateFields.postal_code || updateFields.code) {
+          dealerUpdate.postal_code = String(updateFields.postal_code || updateFields.code).trim();
+        }
         if (updateFields.phone) dealerUpdate.phone = String(updateFields.phone).trim();
         if (updateFields.address) dealerUpdate.street_address = String(updateFields.address).trim();
         if (updateFields.latitude !== undefined && updateFields.latitude !== '') {

@@ -1,39 +1,42 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Users,
-  Plus,
-  Edit2,
-  Trash2,
-  UserCheck,
-  Mail,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  Lock,
-  Building2,
-  Store,
-  User,
-  Calendar,
-  AlertTriangle,
-  Loader2,
-  CheckCircle2,
-  Eye,
-  Car,
-  Bookmark,
-  ExternalLink,
-  Copy,
-  Check,
-  RefreshCw,
-  Clock,
-  FileText,
-  Compass,
-  XCircle,
-  Hash,
-  Search,
-  X,
-  Crosshair,
-} from 'lucide-react';
+  UsersIcon as Users,
+  PlusIcon as Plus,
+  TrashIcon as Trash2,
+  EnvelopeIcon as Mail,
+  MapPinIcon as MapPin,
+  PhoneIcon as Phone,
+  ShieldCheckIcon as ShieldCheck,
+  LockClosedIcon as Lock,
+  BuildingOffice2Icon as Building2,
+  BuildingStorefrontIcon as Store,
+  UserIcon as User,
+  CalendarIcon as Calendar,
+  ExclamationTriangleIcon as AlertTriangle,
+  ArrowPathIcon as Loader2,
+  CheckCircleIcon as CheckCircle2,
+  EyeIcon as Eye,
+  BookmarkIcon as Bookmark,
+  ArrowTopRightOnSquareIcon as ExternalLink,
+  ClipboardDocumentIcon as Copy,
+  CheckIcon as Check,
+  ArrowPathIcon as RefreshCw,
+  ClockIcon as Clock,
+  DocumentTextIcon as FileText,
+  GlobeAmericasIcon as Compass,
+  XCircleIcon as XCircle,
+  HashtagIcon as Hash,
+  MagnifyingGlassIcon as Search,
+  XMarkIcon as X,
+  MapPinIcon as Crosshair,
+} from '@heroicons/react/20/solid';
+
+const Car = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+  </svg>
+);
 import {
   fetchUsers,
   fetchUserById,
@@ -49,11 +52,8 @@ import { DataTable } from '../components/common/DataTable';
 import { Modal } from '../components/common/Modal';
 import { exportToCSV, exportToPDF } from '../utils/exportUtils';
 import {
-  detectCurrentLocation,
-  geocodeAddress,
-  reverseGeocode,
-  searchAddressSuggestions,
-  SOUTH_AFRICA_CITY_PRESETS,
+  formatStructuredAddress,
+  parseAddressComponents,
 } from '../utils/locationService';
 
 const UserManagement = () => {
@@ -75,16 +75,10 @@ const UserManagement = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailTab, setDetailTab] = useState('overview'); // 'overview' | 'role_data' | 'enquiries'
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [createError, setCreateError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
   const [copiedId, setCopiedId] = useState(false);
-  const [geoLoading, setGeoLoading] = useState(false);
-  const [geoNotice, setGeoNotice] = useState(null);
-  const [addressSuggestions, setAddressSuggestions] = useState([]);
-  const [isSearchingAddress, setIsSearchingAddress] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const addressSearchTimerRef = useRef(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -92,10 +86,15 @@ const UserManagement = () => {
     email: '',
     password: '',
     role: 'owner',
+    streetNo: '',
+    streetName: '',
+    suburb: '',
+    city: '',
+    state: '',
+    code: '',
     address: '',
     phone: '',
     company_name: '',
-    city: '',
     latitude: '',
     longitude: '',
     approval_status: 'approved',
@@ -225,123 +224,29 @@ const UserManagement = () => {
     }
   };
 
-  // --- Geolocation & Address Prefetch Handlers ---
-  const handleAutoDetectLocation = async () => {
-    setGeoLoading(true);
-    setGeoNotice(null);
-    try {
-      const loc = await detectCurrentLocation();
-      const detectedCity = loc.city || (loc.address ? loc.address.split(',')[0].trim() : '');
-      setFormData((prev) => ({
-        ...prev,
-        address: loc.address,
-        city: detectedCity || prev.city || '',
-        latitude: String(loc.latitude),
-        longitude: String(loc.longitude),
-      }));
-      setGeoNotice(`📍 Location acquired: ${detectedCity || 'Coordinates'} (${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)})`);
-    } catch (err) {
-      setGeoNotice(`⚠️ ${err.message}`);
-    } finally {
-      setGeoLoading(false);
-    }
+  // Helper to format any display address strictly as: [Street no] [Street Name] [Suburb] [City] [State] [Code]
+  const formatDisplayAddress = (addrText) => {
+    if (!addrText) return 'Not set';
+    const comp = parseAddressComponents(addrText, null);
+    const formatted = formatStructuredAddress(comp);
+    return formatted || addrText;
   };
 
-  const handleAddressInputChange = (text) => {
-    setFormData((prev) => ({ ...prev, address: text }));
-    if (!text || text.trim().length < 2) {
-      setAddressSuggestions([]);
-      setShowSuggestions(false);
-      return;
-    }
-
-    if (addressSearchTimerRef.current) clearTimeout(addressSearchTimerRef.current);
-
-    addressSearchTimerRef.current = setTimeout(async () => {
-      setIsSearchingAddress(true);
-      try {
-        const list = await searchAddressSuggestions(text);
-        setAddressSuggestions(list);
-        setShowSuggestions(list.length > 0);
-      } catch (e) {
-        setAddressSuggestions([]);
-      } finally {
-        setIsSearchingAddress(false);
-      }
-    }, 300);
-  };
-
-  const handlePickAddressSuggestion = (item) => {
-    setFormData((prev) => ({
-      ...prev,
-      address: item.address,
-      city: item.city || prev.city || '',
-      latitude: String(item.latitude),
-      longitude: String(item.longitude),
-    }));
-    setAddressSuggestions([]);
-    setShowSuggestions(false);
-    setGeoNotice(`📍 Address picked: ${item.city || item.primaryText} (${item.latitude.toFixed(4)}, ${item.longitude.toFixed(4)})`);
-  };
-
-  const handleLookupCoordsFromAddress = async () => {
-    if (!formData.address || !formData.address.trim()) {
-      setGeoNotice('⚠️ Please enter an address first to lookup coordinates.');
-      return;
-    }
-    setGeoLoading(true);
-    setGeoNotice(null);
-    try {
-      const res = await geocodeAddress(formData.address);
-      setFormData((prev) => ({
-        ...prev,
-        latitude: String(res.latitude),
-        longitude: String(res.longitude),
-        address: res.formattedAddress || prev.address,
-        city: res.city || prev.city || '',
-      }));
-      setGeoNotice(`📍 GPS found: ${res.city ? `${res.city} ` : ''}(${res.latitude.toFixed(4)}, ${res.longitude.toFixed(4)})`);
-    } catch (err) {
-      setGeoNotice(`⚠️ ${err.message}`);
-    } finally {
-      setGeoLoading(false);
-    }
-  };
-
-  const handleReverseGeocodeFromCoords = async () => {
-    if (!formData.latitude || !formData.longitude) {
-      setGeoNotice('⚠️ Please enter both latitude and longitude to fetch address.');
-      return;
-    }
-    setGeoLoading(true);
-    setGeoNotice(null);
-    try {
-      const res = await reverseGeocode(formData.latitude, formData.longitude);
-      setFormData((prev) => ({
-        ...prev,
-        address: res.address,
-        city: res.city || prev.city || '',
-      }));
-      setGeoNotice(`📍 Address acquired: ${res.city || 'Location found'}`);
-    } catch (err) {
-      setGeoNotice(`⚠️ ${err.message}`);
-    } finally {
-      setGeoLoading(false);
-    }
-  };
-
-  const handleSelectCityPreset = (presetName) => {
-    const p = SOUTH_AFRICA_CITY_PRESETS.find((x) => x.name === presetName);
-    if (p) {
-      setFormData((prev) => ({
-        ...prev,
-        address: prev.address && prev.address.length > 5 ? prev.address : p.address,
-        city: p.city,
-        latitude: String(p.lat),
-        longitude: String(p.lon),
-      }));
-      setGeoNotice(`📍 Applied preset for ${p.name}`);
-    }
+  // Structured address change handler (keeps [Street no] [Street Name] [Suburb] [City] [State] [Code] in sync)
+  const handleStructuredAddressChange = (field, val) => {
+    setFormData((prev) => {
+      const next = { ...prev, [field]: val };
+      const formatted = formatStructuredAddress({
+        streetNo: next.streetNo,
+        streetName: next.streetName,
+        suburb: next.suburb,
+        city: next.city,
+        state: next.state,
+        code: next.code,
+      });
+      next.address = formatted;
+      return next;
+    });
   };
 
   // --- Actions ---
@@ -356,18 +261,21 @@ const UserManagement = () => {
 
   // 2. Open Create User Modal
   const handleOpenCreate = () => {
-    setGeoNotice(null);
-    setAddressSuggestions([]);
-    setShowSuggestions(false);
+    setCreateError(null);
     setFormData({
       name: '',
       email: '',
       password: '',
       role: 'owner',
+      streetNo: '',
+      streetName: '',
+      suburb: '',
+      city: '',
+      state: '',
+      code: '',
       address: '',
       phone: '',
       company_name: '',
-      city: '',
       latitude: '',
       longitude: '',
       approval_status: 'approved',
@@ -376,31 +284,7 @@ const UserManagement = () => {
     setShowCreateModal(true);
   };
 
-  // 3. Open Update User Modal
-  const handleOpenUpdate = (user) => {
-    setActiveUser(user);
-    setGeoNotice(null);
-    setAddressSuggestions([]);
-    setShowSuggestions(false);
-    const isCommercial = (user.role || '').toLowerCase() === 'reseller' || (user.role || '').toLowerCase() === 'distributor';
-    setFormData({
-      name: user.name || '',
-      email: user.email || '',
-      password: '',
-      role: user.role || 'owner',
-      address: user.address || user.dealer?.street_address || '',
-      phone: user.phone || user.dealer?.phone || '',
-      company_name: user.dealer?.company_name || user.name || '',
-      city: user.dealer?.city || user.city || '',
-      latitude: user.dealer?.latitude !== undefined && user.dealer?.latitude !== null ? String(user.dealer.latitude) : (user.latitude ? String(user.latitude) : ''),
-      longitude: user.dealer?.longitude !== undefined && user.dealer?.longitude !== null ? String(user.dealer.longitude) : (user.longitude ? String(user.longitude) : ''),
-      approval_status: user.approval_status || (user.is_approved ? 'approved' : isCommercial ? 'pending_approval' : 'approved'),
-      rejection_reason: user.rejection_reason || '',
-    });
-    setShowUpdateModal(true);
-  };
-
-  // 4. Open Delete Confirmation Modal
+  // 3. Open Delete Confirmation Modal
   const handleOpenDelete = (user) => {
     setActiveUser(user);
     setShowDeleteModal(true);
@@ -409,6 +293,7 @@ const UserManagement = () => {
   // Create Submit
   const handleCreateSubmit = (e) => {
     e.preventDefault();
+    setCreateError(null);
     const isCommercial = formData.role === 'reseller' || formData.role === 'distributor';
     const payload = {
       name: formData.name,
@@ -416,6 +301,14 @@ const UserManagement = () => {
       password: formData.password,
       role: formData.role,
       address: formData.address,
+      address_components: {
+        streetNo: formData.streetNo,
+        streetName: formData.streetName,
+        suburb: formData.suburb,
+        city: formData.city,
+        state: formData.state,
+        code: formData.code,
+      },
       phone: formData.phone,
     };
     if (isCommercial) {
@@ -429,48 +322,8 @@ const UserManagement = () => {
       if (!res.error) {
         setShowCreateModal(false);
         dispatch(fetchUsers());
-      }
-    });
-  };
-
-  // Update Submit
-  const handleUpdateSubmit = (e) => {
-    e.preventDefault();
-    const isCommercial = formData.role === 'reseller' || formData.role === 'distributor';
-    const updatePayload = {
-      name: formData.name,
-      email: formData.email,
-      role: formData.role,
-      address: formData.address,
-      phone: formData.phone,
-      approval_status: formData.approval_status,
-      is_approved: formData.approval_status === 'approved',
-      rejection_reason: formData.approval_status === 'rejected' ? formData.rejection_reason : null,
-    };
-
-    if (formData.password && formData.password.trim().length >= 6) {
-      updatePayload.password = formData.password.trim();
-    }
-
-    if (isCommercial) {
-      updatePayload.company_name = formData.company_name || formData.name;
-      updatePayload.city = formData.city || (formData.address ? formData.address.split(',')[0].trim() : '') || 'City';
-      if (formData.latitude) updatePayload.latitude = formData.latitude;
-      if (formData.longitude) updatePayload.longitude = formData.longitude;
-    }
-
-    dispatch(
-      updateUser({
-        id: activeUser.id,
-        userData: updatePayload,
-      })
-    ).then((res) => {
-      if (!res.error) {
-        setShowUpdateModal(false);
-        dispatch(fetchUsers());
-        if (showDetailModal && activeUser) {
-          dispatch(fetchUserById(activeUser.id));
-        }
+      } else {
+        setCreateError(res.payload || res.error?.message || 'Failed to create user account');
       }
     });
   };
@@ -514,6 +367,33 @@ const UserManagement = () => {
     }
     return activeUser || {};
   }, [selectedUserDetails, activeUser]);
+
+  // Helper to get structured address components breakdown for detailed user
+  const detailedAddressBreakdown = useMemo(() => {
+    if (
+      detailedUser.address_components &&
+      typeof detailedUser.address_components === 'object' &&
+      Object.values(detailedUser.address_components).some(Boolean)
+    ) {
+      const comp = { ...detailedUser.address_components };
+      if (!comp.city && (detailedUser.dealer?.city || detailedUser.city)) {
+        comp.city = detailedUser.dealer?.city || detailedUser.city;
+      }
+      if (!comp.code && (detailedUser.dealer?.postal_code || detailedUser.postal_code)) {
+        comp.code = detailedUser.dealer?.postal_code || detailedUser.postal_code;
+      }
+      return comp;
+    }
+    const rawAddr = detailedUser.address || detailedUser.dealer?.street_address || '';
+    const comp = parseAddressComponents(rawAddr, null);
+    if (!comp.city && (detailedUser.dealer?.city || detailedUser.city)) {
+      comp.city = detailedUser.dealer?.city || detailedUser.city;
+    }
+    if (!comp.code && (detailedUser.dealer?.postal_code || detailedUser.postal_code)) {
+      comp.code = detailedUser.dealer?.postal_code || detailedUser.postal_code;
+    }
+    return comp;
+  }, [detailedUser]);
 
   // Table Column Definitions
   const columns = [
@@ -612,14 +492,17 @@ const UserManagement = () => {
     },
     {
       key: 'address',
-      label: 'Location / City',
-      width: '16%',
-      render: (row) => (
-        <div className="text-xs font-medium text-slate-600 truncate flex items-center gap-1.5" title={row.address}>
-          <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
-          <span className="truncate">{row.address || <span className="text-slate-400 italic">Not set</span>}</span>
-        </div>
-      ),
+      label: 'Location / Address',
+      width: '18%',
+      render: (row) => {
+        const displayAddr = formatDisplayAddress(row.address);
+        return (
+          <div className="text-xs font-medium text-slate-600 truncate flex items-center gap-1.5" title={displayAddr}>
+            <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
+            <span className="truncate">{displayAddr !== 'Not set' ? displayAddr : <span className="text-slate-400 italic">Not set</span>}</span>
+          </div>
+        );
+      },
     },
     {
       key: 'created_at',
@@ -673,13 +556,6 @@ const UserManagement = () => {
                 </button>
               ))}
 
-            <button
-              onClick={() => handleOpenUpdate(row)}
-              className="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-              title="Edit User Master"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-            </button>
             <button
               onClick={() => handleOpenDelete(row)}
               className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
@@ -804,7 +680,7 @@ const UserManagement = () => {
             onClick={handleOpenCreate}
             className="h-9 px-3 bg-brand-red hover:bg-brand-red-hover active:bg-brand-red-dark text-white rounded-lg font-bold text-xs tracking-wide flex items-center gap-1.5 shadow-xs transition-all cursor-pointer whitespace-nowrap"
           >
-            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Add User</span>
           </button>
         }
@@ -829,7 +705,7 @@ const UserManagement = () => {
           dispatch(clearSelectedUserDetails());
         }}
         title="User Master Profile"
-        subtitle={`ID: ${detailedUser.id || ''}`}
+        subtitle="Account profile, permissions, and registered location"
         icon={Eye}
         maxWidth="max-w-3xl"
       >
@@ -874,28 +750,6 @@ const UserManagement = () => {
                   )}
                 </div>
               </div>
-            </div>
-
-            {/* Quick Actions in Hero */}
-            <div className="flex items-center gap-2 self-end sm:self-center">
-              <button
-                onClick={() => handleCopyId(detailedUser.id)}
-                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-700"
-                title="Copy User ID"
-              >
-                {copiedId ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
-                <span>{copiedId ? 'Copied' : 'Copy ID'}</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowDetailModal(false);
-                  handleOpenUpdate(detailedUser);
-                }}
-                className="px-3 py-1.5 bg-brand-red hover:bg-brand-red-hover text-white rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>Edit Profile</span>
-              </button>
             </div>
           </div>
 
@@ -997,11 +851,56 @@ const UserManagement = () => {
                       <span className="font-semibold text-slate-500">Official Email:</span>
                       <span className="font-bold text-slate-900">{detailedUser.email}</span>
                     </div>
-                    <div className="py-1">
-                      <span className="font-semibold text-slate-500 block mb-1">Physical Trading / Residential Address:</span>
-                      <p className="font-semibold text-slate-800 bg-white p-2 rounded border border-slate-200 text-[11px]">
-                        {detailedUser.address || detailedUser.dealer?.street_address || 'No physical address on file'}
+                    <div className="py-1 space-y-2">
+                      <span className="font-semibold text-slate-500 block">Physical Location & Address:</span>
+                      <p className="font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 text-xs shadow-2xs">
+                        {formatDisplayAddress(detailedUser.address || detailedUser.dealer?.street_address)}
                       </p>
+
+                      {/* Structured Component Breakdown */}
+                      <div className="space-y-1.5 pt-1">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                          Address Breakdown
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Street No.</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.streetNo || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Street Name</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.streetName || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Suburb</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.suburb || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">City</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.city || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Province / State</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.state || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Postal Code</span>
+                            <span className="font-bold text-slate-900 truncate block mt-0.5">
+                              {detailedAddressBreakdown.code || <span className="text-slate-400 font-normal italic">Not set</span>}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1161,11 +1060,56 @@ const UserManagement = () => {
                         </p>
                       </div>
 
-                      <div className="sm:col-span-2">
-                        <span className="text-slate-400 font-semibold block mb-0.5">Storefront Street Address</span>
-                        <p className="font-semibold text-slate-800 text-xs bg-white p-2 rounded border border-slate-200">
-                          {detailedUser.dealer?.street_address || detailedUser.address || 'Address pending setup'}
+                      <div className="sm:col-span-2 space-y-2">
+                        <span className="text-slate-400 font-semibold block text-xs mb-1">Storefront Street Address & Location</span>
+                        <p className="font-bold text-slate-900 text-xs bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
+                          {formatDisplayAddress(detailedUser.dealer?.street_address || detailedUser.address)}
                         </p>
+
+                        {/* Structured Component Breakdown */}
+                        <div className="space-y-1.5 pt-1">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                            Address Breakdown
+                          </span>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Street No.</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.streetNo || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Street Name</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.streetName || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Suburb</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.suburb || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">City</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.city || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Province / State</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.state || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                            <div className="bg-white p-2 rounded-lg border border-slate-200/80 shadow-2xs">
+                              <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Postal Code</span>
+                              <span className="font-bold text-slate-900 truncate block mt-0.5">
+                                {detailedAddressBreakdown.code || <span className="text-slate-400 font-normal italic">Not set</span>}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       <div className="sm:col-span-2 p-3 bg-white border border-slate-200 rounded-lg flex items-center justify-between gap-3">
@@ -1308,6 +1252,12 @@ const UserManagement = () => {
         maxWidth="max-w-lg"
       >
         <form onSubmit={handleCreateSubmit} className="space-y-3.5" autoComplete="off">
+          {createError && (
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>{createError}</span>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-2.5">
             <div className="col-span-2 sm:col-span-1">
               <label className="text-[11px] font-bold text-slate-600 block mb-1">Full Name</label>
@@ -1378,141 +1328,109 @@ const UserManagement = () => {
             </div>
           </div>
 
-          {/* Smart Location & Address Assistant Strip */}
-          <div className="p-3 bg-gradient-to-br from-slate-50 to-rose-50/25 border border-slate-200/80 rounded-xl space-y-2">
+          {/* Structured Address Specification */}
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Compass className="w-3.5 h-3.5 text-brand-red" />
-                Smart Location & GPS Assistant
-              </span>
-              {geoLoading && (
-                <span className="text-[10px] font-bold text-brand-red flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" /> Fetching location...
-                </span>
-              )}
+              <label className="text-[11px] font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-brand-red" />
+                Physical Location & Address
+              </label>
             </div>
 
-            <div className="flex flex-wrap items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleAutoDetectLocation}
-                disabled={geoLoading}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
-                title="Auto-detect GPS and prefetch street address"
-              >
-                <MapPin className="w-3 h-3 text-emerald-600" />
-                <span>📍 Auto-Detect Current GPS</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleLookupCoordsFromAddress}
-                disabled={geoLoading || !formData.address}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors disabled:opacity-40"
-                title="Lookup coordinates from the entered address"
-              >
-                <Compass className="w-3 h-3 text-sky-600" />
-                <span>🔍 GPS from Address</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReverseGeocodeFromCoords}
-                disabled={geoLoading || !formData.latitude || !formData.longitude}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors disabled:opacity-40"
-                title="Reverse geocode address text from coordinates"
-              >
-                <RefreshCw className="w-3 h-3 text-amber-600" />
-                <span>🔄 Address from GPS</span>
-              </button>
-            </div>
-
-            {geoNotice && (
-              <div className="text-[10px] font-bold text-slate-700 bg-white px-2.5 py-1 rounded-md border border-slate-200 flex items-center gap-1.5 animate-fade-in">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span className="truncate">{geoNotice}</span>
-                <span className="text-[9px] text-slate-400 ml-auto font-medium italic whitespace-nowrap">Auto-synced</span>
+            {/* 6 Structured Input Fields */}
+            <div className="grid grid-cols-6 gap-2">
+              <div className="col-span-2">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  Street No.
+                </label>
+                <input
+                  type="text"
+                  value={formData.streetNo}
+                  onChange={(e) => handleStructuredAddressChange('streetNo', e.target.value)}
+                  placeholder="e.g. 42"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
               </div>
-            )}
-          </div>
 
-          {/* Physical Street Address with Live Autocomplete Search Dropdown */}
-          <div className="relative">
-            <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] font-bold text-slate-600">Physical Street Address / Location</label>
-              {formData.address && (
-                <button
-                  type="button"
-                  onClick={handleLookupCoordsFromAddress}
-                  className="text-[10px] font-extrabold text-brand-red hover:underline cursor-pointer flex items-center gap-1"
-                >
-                  <Compass className="w-3 h-3" /> Fetch GPS
-                </button>
-              )}
+              <div className="col-span-4">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  Street Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.streetName}
+                  onChange={(e) => handleStructuredAddressChange('streetName', e.target.value)}
+                  placeholder="e.g. Oxford Road"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  Suburb
+                </label>
+                <input
+                  type="text"
+                  value={formData.suburb}
+                  onChange={(e) => handleStructuredAddressChange('suburb', e.target.value)}
+                  placeholder="e.g. Rosebank"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  City
+                </label>
+                <input
+                  type="text"
+                  value={formData.city}
+                  onChange={(e) => handleStructuredAddressChange('city', e.target.value)}
+                  placeholder="e.g. Johannesburg"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  Province / State
+                </label>
+                <input
+                  type="text"
+                  value={formData.state}
+                  onChange={(e) => handleStructuredAddressChange('state', e.target.value)}
+                  placeholder="e.g. Gauteng"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) => handleStructuredAddressChange('code', e.target.value)}
+                  placeholder="e.g. 2196"
+                  className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
+                />
+              </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute left-2.5 top-2.5 pointer-events-none">
-                {isSearchingAddress ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-red" />
-                ) : (
-                  <Search className="w-3.5 h-3.5 text-slate-400" />
-                )}
+            {/* Live Formatted Output Display */}
+            <div className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span>Address Preview</span>
               </div>
-              <textarea
-                rows={2}
-                value={formData.address}
-                onChange={(e) => handleAddressInputChange(e.target.value)}
-                placeholder="Start typing address, street, or city to search & pick..."
-                className="w-full pl-8 pr-7 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
-              />
-              {formData.address ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFormData((prev) => ({ ...prev, address: '', city: '', latitude: '', longitude: '' }));
-                    setAddressSuggestions([]);
-                    setShowSuggestions(false);
-                  }}
-                  className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              ) : null}
+              <p className="text-xs font-bold text-emerald-300 font-mono break-words select-all">
+                {formData.address || <span className="text-slate-500 font-normal italic">Address fields are empty</span>}
+              </p>
             </div>
-
-            {/* Floating Suggestions Dropdown */}
-            {showSuggestions && addressSuggestions.length > 0 && (
-              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 max-h-56 overflow-y-auto">
-                <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                  <span>Matching Address Results</span>
-                  <span>Click to Pick</span>
-                </div>
-                {addressSuggestions.map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handlePickAddressSuggestion(item)}
-                    className="w-full text-left p-2.5 hover:bg-rose-50/50 flex items-start gap-2.5 transition-colors cursor-pointer group"
-                  >
-                    <MapPin className="w-3.5 h-3.5 text-brand-red mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold text-slate-800 truncate">{item.primaryText}</div>
-                      <div className="text-[10px] text-slate-400 truncate">{item.secondaryText}</div>
-                    </div>
-                    {item.city ? (
-                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex-shrink-0">
-                        {item.city}
-                      </span>
-                    ) : null}
-                  </button>
-                ))}
-              </div>
-            )}
 
             {/* Picked Coordinates Tag */}
             {formData.latitude && formData.longitude ? (
-              <div className="flex items-center gap-2 mt-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-800 animate-fade-in">
+              <div className="flex items-center gap-2 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-800 animate-fade-in">
                 <MapPin className="w-3 h-3 text-emerald-600 flex-shrink-0" />
                 <span className="truncate">
                   {formData.city ? `${formData.city} • ` : ''}({parseFloat(formData.latitude).toFixed(4)}, {parseFloat(formData.longitude).toFixed(4)})
@@ -1606,356 +1524,7 @@ const UserManagement = () => {
       </Modal>
 
       {/* ========================================================================= */}
-      {/* 3. EDIT USER MODAL (UPDATE MASTER)                                        */}
-      {/* ========================================================================= */}
-      <Modal
-        isOpen={showUpdateModal}
-        onClose={() => setShowUpdateModal(false)}
-        title="Edit User Master Record"
-        subtitle={`Updating: ${activeUser?.email}`}
-        icon={Edit2}
-        maxWidth="max-w-lg"
-      >
-        <form onSubmit={handleUpdateSubmit} autoComplete="off" className="space-y-3.5">
-          <div className="grid grid-cols-2 gap-2.5">
-            <div className="col-span-2 sm:col-span-1">
-              <label className="text-[11px] font-bold text-slate-600 block mb-1">Full Name</label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
-              />
-            </div>
-
-            <div className="col-span-2 sm:col-span-1">
-              <label className="text-[11px] font-bold text-slate-600 block mb-1">Role Type</label>
-              <select
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full h-9 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer"
-              >
-                <option value="owner">Vehicle Owner</option>
-                <option value="reseller">Reseller (Stockist)</option>
-                <option value="distributor">Distributor</option>
-                <option value="admin">System Admin</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2.5">
-            <div>
-              <label className="text-[11px] font-bold text-slate-600 block mb-1">Email Address</label>
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-bold text-slate-600 block mb-1">Contact Phone</label>
-              <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+27..."
-                className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Password Reset Option */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <Lock className="w-3.5 h-3.5 text-slate-500" />
-              Reset Password (Optional)
-            </label>
-            <input
-              type="password"
-              autoComplete="new-password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="Leave blank to keep existing password"
-              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-            />
-            <p className="text-[10px] text-slate-400">If filled, minimum 6 characters are required.</p>
-          </div>
-
-          {/* Approval Lifecycle Control */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <div className={formData.approval_status === 'rejected' ? 'col-span-1' : 'col-span-2'}>
-              <label className="text-[11px] font-bold text-slate-600 block mb-1">Approval Status</label>
-              <select
-                value={formData.approval_status}
-                onChange={(e) => setFormData({ ...formData, approval_status: e.target.value })}
-                className="w-full h-9 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:bg-white focus:border-brand-red focus:outline-none cursor-pointer"
-              >
-                <option value="approved">Live & Approved</option>
-                <option value="pending_approval">Review Pending</option>
-                <option value="suspended">Suspended</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-
-            {formData.approval_status === 'rejected' && (
-              <div className="col-span-1">
-                <label className="text-[11px] font-bold text-slate-600 block mb-1">Rejection Note</label>
-                <input
-                  type="text"
-                  value={formData.rejection_reason}
-                  onChange={(e) => setFormData({ ...formData, rejection_reason: e.target.value })}
-                  placeholder="Reason for rejection"
-                  className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Smart Location & Address Assistant Strip */}
-          <div className="p-3 bg-gradient-to-br from-slate-50 to-rose-50/25 border border-slate-200/80 rounded-xl space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Compass className="w-3.5 h-3.5 text-brand-red" />
-                Smart Location & GPS Assistant
-              </span>
-              {geoLoading && (
-                <span className="text-[10px] font-bold text-brand-red flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" /> Fetching location...
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleAutoDetectLocation}
-                disabled={geoLoading}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
-                title="Auto-detect GPS and prefetch street address"
-              >
-                <MapPin className="w-3 h-3 text-emerald-600" />
-                <span>📍 Auto-Detect GPS & Address</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleLookupCoordsFromAddress}
-                disabled={geoLoading || !formData.address}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors disabled:opacity-40"
-                title="Lookup coordinates from the entered address"
-              >
-                <Compass className="w-3 h-3 text-sky-600" />
-                <span>🔍 GPS from Address</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReverseGeocodeFromCoords}
-                disabled={geoLoading || !formData.latitude || !formData.longitude}
-                className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-[11px] font-extrabold flex items-center gap-1 shadow-2xs cursor-pointer transition-colors disabled:opacity-40"
-                title="Reverse geocode address text from coordinates"
-              >
-                <RefreshCw className="w-3 h-3 text-amber-600" />
-                <span>🔄 Address from GPS</span>
-              </button>
-
-              <select
-                onChange={(e) => {
-                  if (e.target.value) handleSelectCityPreset(e.target.value);
-                }}
-                defaultValue=""
-                className="h-6.5 px-2 bg-white border border-slate-200 rounded-md text-[11px] font-bold text-slate-600 focus:outline-none focus:border-brand-red cursor-pointer"
-              >
-                <option value="" disabled>🇿🇦 Quick Presets...</option>
-                {SOUTH_AFRICA_CITY_PRESETS.map((p) => (
-                  <option key={p.name} value={p.name}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {geoNotice && (
-              <div className="text-[10px] font-bold text-slate-700 bg-white px-2.5 py-1 rounded-md border border-slate-200 flex items-center gap-1.5 animate-fade-in">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span className="truncate">{geoNotice}</span>
-                <span className="text-[9px] text-slate-400 ml-auto font-medium italic whitespace-nowrap">Editable below</span>
-              </div>
-            )}
-          </div>
-
-          {/* Physical Address Search & Selection */}
-          <div className="relative">
-            <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] font-bold text-slate-600">Physical Street Address / Location</label>
-              {formData.address && (
-                <button
-                  type="button"
-                  onClick={handleLookupCoordsFromAddress}
-                  className="text-[10px] font-extrabold text-brand-red hover:underline cursor-pointer flex items-center gap-1"
-                >
-                  <Compass className="w-3 h-3" /> Fetch GPS
-                </button>
-              )}
-            </div>
-
-            <div className="relative">
-              <div className="absolute left-2.5 top-2.5 pointer-events-none">
-                {isSearchingAddress ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-red" />
-                ) : (
-                  <Search className="w-3.5 h-3.5 text-slate-400" />
-                )}
-              </div>
-              <textarea
-                rows={2}
-                value={formData.address}
-                onChange={(e) => handleAddressInputChange(e.target.value)}
-                placeholder="Start typing address, street, or city to search & pick..."
-                className="w-full pl-8 pr-7 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:bg-white focus:border-brand-red focus:outline-none resize-none"
-              />
-              {formData.address ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFormData((prev) => ({ ...prev, address: '', city: '', latitude: '', longitude: '' }));
-                    setAddressSuggestions([]);
-                    setShowSuggestions(false);
-                  }}
-                  className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              ) : null}
-            </div>
-
-            {/* Floating Suggestions Dropdown */}
-            {showSuggestions && addressSuggestions.length > 0 && (
-              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 max-h-56 overflow-y-auto">
-                <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                  <span>Matching Address Results</span>
-                  <span>Click to Pick</span>
-                </div>
-                {addressSuggestions.map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handlePickAddressSuggestion(item)}
-                    className="w-full text-left p-2.5 hover:bg-rose-50/50 flex items-start gap-2.5 transition-colors cursor-pointer group"
-                  >
-                    <MapPin className="w-3.5 h-3.5 text-brand-red mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold text-slate-800 truncate">{item.primaryText}</div>
-                      <div className="text-[10px] text-slate-400 truncate">{item.secondaryText}</div>
-                    </div>
-                    {item.city ? (
-                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex-shrink-0">
-                        {item.city}
-                      </span>
-                    ) : null}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Picked Coordinates Tag */}
-            {formData.latitude && formData.longitude ? (
-              <div className="flex items-center gap-2 mt-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-800 animate-fade-in">
-                <MapPin className="w-3 h-3 text-emerald-600 flex-shrink-0" />
-                <span className="truncate">
-                  {formData.city ? `${formData.city} • ` : ''}({parseFloat(formData.latitude).toFixed(4)}, {parseFloat(formData.longitude).toFixed(4)})
-                </span>
-                <a
-                  href={`https://www.google.com/maps?q=${formData.latitude},${formData.longitude}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-700 hover:underline flex items-center gap-0.5 ml-auto text-[10px]"
-                >
-                  Verify <ExternalLink className="w-2.5 h-2.5" />
-                </a>
-              </div>
-            ) : null}
-          </div>
-
-          {/* Commercial Specific Fields */}
-          {(formData.role === 'reseller' || formData.role === 'distributor') && (
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5">
-              <div className="text-[11px] font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Store className="w-3.5 h-3.5 text-slate-600" />
-                Commercial Directory Sync
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">Company / Trade Name</label>
-                  <input
-                    type="text"
-                    value={formData.company_name}
-                    onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                    className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">City</label>
-                  <input
-                    type="text"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">GPS Latitude</label>
-                  <input
-                    type="text"
-                    value={formData.latitude}
-                    onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                    placeholder="Latitude coordinate"
-                    className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">GPS Longitude</label>
-                  <input
-                    type="text"
-                    value={formData.longitude}
-                    onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                    placeholder="Longitude coordinate"
-                    className="w-full h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:border-brand-red focus:outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => setShowUpdateModal(false)}
-              className="h-8.5 px-3 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-100 cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={actionLoading}
-              className="h-8.5 px-4 bg-brand-red hover:bg-brand-red-hover text-white rounded-lg text-xs font-extrabold tracking-wide flex items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
-            >
-              {actionLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* ========================================================================= */}
-      {/* 4. DELETE CONFIRMATION MODAL (DELETE MASTER)                              */}
+      {/* 3. DELETE CONFIRMATION MODAL (DELETE MASTER)                              */}
       {/* ========================================================================= */}
       <Modal
         isOpen={showDeleteModal}

@@ -7,7 +7,7 @@ class AuthService {
   /**
    * Register a new user and generate JWT
    */
-  async register({ name, email, password, role = 'owner', address = '', phone = '', latitude = null, longitude = null }) {
+  async register({ name, email, password, role = 'owner', address = '', address_components = null, phone = '', latitude = null, longitude = null }) {
     if (!email || !password || !name) {
       throw new Error('Name, email, and password are required');
     }
@@ -29,21 +29,39 @@ class AuthService {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
+    // Insert payload
+    const insertPayload = {
+      name: name.trim(),
+      email: cleanEmail,
+      password_hash: passwordHash,
+      role: cleanRole,
+      address: address.trim(),
+      phone: phone.trim() || null,
+      is_approved: !isCommercial,
+      approval_status: isCommercial ? 'pending_approval' : 'approved',
+    };
+    if (address_components && typeof address_components === 'object') {
+      insertPayload.address_components = address_components;
+    }
+
     // Insert into normalized users table
-    const { data: newUser, error: insertError } = await supabase
+    let { data: newUser, error: insertError } = await supabase
       .from('users')
-      .insert({
-        name: name.trim(),
-        email: cleanEmail,
-        password_hash: passwordHash,
-        role: cleanRole,
-        address: address.trim(),
-        phone: phone.trim() || null,
-        is_approved: !isCommercial,
-        approval_status: isCommercial ? 'pending_approval' : 'approved',
-      })
+      .insert(insertPayload)
       .select('id, name, email, role, address, phone, is_approved, approval_status, created_at')
       .single();
+
+    if (insertError && insertPayload.address_components) {
+      console.warn('Register user failed with address_components, retrying without it:', insertError.message);
+      delete insertPayload.address_components;
+      const retryResult = await supabase
+        .from('users')
+        .insert(insertPayload)
+        .select('id, name, email, role, address, phone, is_approved, approval_status, created_at')
+        .single();
+      newUser = retryResult.data;
+      insertError = retryResult.error;
+    }
 
     if (insertError) {
       console.error('Supabase user registration error:', insertError);

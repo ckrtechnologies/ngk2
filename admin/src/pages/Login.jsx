@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ShieldCheck, Mail, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
+import {
+  EnvelopeIcon,
+  LockClosedIcon,
+  ExclamationCircleIcon,
+  ArrowRightIcon,
+  ArrowPathIcon,
+} from '@heroicons/react/20/solid';
 import { loginAdmin } from '../redux/adminSlice';
 
 const Login = () => {
@@ -23,11 +29,15 @@ const Login = () => {
       <div className="w-full max-w-sm bg-[#111624] border border-slate-800/90 rounded-2xl p-7 shadow-2xl relative z-10 animate-scale-up">
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="w-11 h-11 bg-brand-red rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md shadow-brand-red/30 ring-1 ring-white/20">
-            <span className="text-white font-black text-sm tracking-wider">NGK</span>
+          <div className="w-16 h-16 bg-white rounded-2xl p-2.5 flex items-center justify-center mx-auto mb-3.5 shadow-xl shadow-emerald-950/30 ring-1 ring-white/30">
+            <img
+              src="/images/branding/ngk_logo.png"
+              alt="NGK SPARK PLUG"
+              className="w-full h-full object-contain"
+            />
           </div>
-          <h1 className="text-lg font-black text-white tracking-wide uppercase">Command Center</h1>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+          <h1 className="text-xl font-black text-white tracking-wider uppercase">ADMIN CONSOLE</h1>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
             Enterprise Fleet & Catalog Portal
           </p>
         </div>
@@ -35,7 +45,7 @@ const Login = () => {
         {/* Error Alert */}
         {error && (
           <div className="mb-4 bg-rose-500/10 border border-rose-500/30 rounded-lg p-3 flex items-center gap-2 text-rose-300 animate-fade-in">
-            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+            <ExclamationCircleIcon className="w-4 h-4 flex-shrink-0 text-rose-400" />
             <span className="text-xs font-bold">{error}</span>
           </div>
         )}
@@ -47,7 +57,7 @@ const Login = () => {
               Admin Email
             </label>
             <div className="relative flex items-center">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3" />
+              <EnvelopeIcon className="w-4 h-4 text-slate-500 absolute left-3" />
               <input
                 type="email"
                 required
@@ -64,7 +74,7 @@ const Login = () => {
               Password
             </label>
             <div className="relative flex items-center">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3" />
+              <LockClosedIcon className="w-4 h-4 text-slate-500 absolute left-3" />
               <input
                 type="password"
                 required
@@ -83,13 +93,13 @@ const Login = () => {
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <ArrowPathIcon className="w-4 h-4 animate-spin" />
                 <span>Authenticating...</span>
               </>
             ) : (
               <>
-                <span>Access Command Portal</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Access Admin Console</span>
+                <ArrowRightIcon className="w-3.5 h-3.5" />
               </>
             )}
           </button>

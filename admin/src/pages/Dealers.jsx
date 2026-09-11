@@ -1,17 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Store,
-  Building2,
-  Search,
-  MapPin,
-  Phone,
-  Mail,
-  ExternalLink,
-  Navigation,
-  Globe,
-  Loader2,
-} from 'lucide-react';
+  BuildingStorefrontIcon,
+  MapPinIcon,
+  PhoneIcon,
+} from '@heroicons/react/20/solid';
 import { fetchDealersCatalog } from '../redux/adminSlice';
 import { StatusBadge, RoleBadge } from '../components/common/Badge';
 import { FilterBar } from '../components/common/FilterBar';
@@ -135,7 +128,7 @@ const Dealers = () => {
       render: (row) => (
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0">
-            <Store className="w-4 h-4" />
+            <BuildingStorefrontIcon className="w-4 h-4" />
           </div>
           <div className="min-w-0">
             <div className="font-extrabold text-xs text-slate-900 truncate">{row.name}</div>
@@ -158,7 +151,7 @@ const Dealers = () => {
       width: '18%',
       render: (row) => (
         <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-          <MapPin className="w-3 h-3 text-slate-400" />
+          <MapPinIcon className="w-3 h-3 text-slate-400" />
           {row.city}
         </span>
       ),
@@ -179,7 +172,7 @@ const Dealers = () => {
       width: '14%',
       render: (row) => (
         <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-          <Phone className="w-3 h-3 text-slate-400" />
+          <PhoneIcon className="w-3 h-3 text-slate-400" />
           {row.phone || <span className="text-slate-400 italic font-normal">N/A</span>}
         </span>
       ),
@@ -236,7 +229,7 @@ const Dealers = () => {
         <div>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-              <Store className="w-4 h-4" />
+              <BuildingStorefrontIcon className="w-4 h-4" />
             </div>
             <h1 className="text-base font-extrabold text-slate-900 tracking-tight">
               Dealers & Resellers Directory

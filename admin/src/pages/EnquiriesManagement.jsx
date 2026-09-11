@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  FileText,
-  Search,
-  MessageSquare,
-  X,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
-  ShieldCheck,
-  User,
-  Store,
-  Eye,
-  Car,
-  Tag,
-} from 'lucide-react';
+  TagIcon,
+  BuildingStorefrontIcon,
+  EyeIcon,
+  XMarkIcon,
+  ArrowTopRightOnSquareIcon,
+  ShieldCheckIcon,
+} from '@heroicons/react/20/solid';
+import { DocumentTextIcon } from '@heroicons/react/24/solid';
+
+const SolidCarIcon = ({ className = "w-2.5 h-2.5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+  </svg>
+);
 import { fetchEnquiries } from '../redux/adminSlice';
 import { StatusBadge } from '../components/common/Badge';
 import { FilterBar } from '../components/common/FilterBar';
@@ -160,13 +159,13 @@ const EnquiriesManagement = () => {
           <div className="flex items-center gap-2 mt-1">
             {item.partNumber && (
               <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
-                <Tag className="w-2.5 h-2.5" />
+                <TagIcon className="w-2.5 h-2.5" />
                 {item.partNumber}
               </span>
             )}
             {item.carName && (
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500">
-                <Car className="w-2.5 h-2.5" />
+                <SolidCarIcon className="w-2.5 h-2.5" />
                 {item.carName}
               </span>
             )}
@@ -199,7 +198,7 @@ const EnquiriesManagement = () => {
       render: (item) => (
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs">
-            <Store className="w-3.5 h-3.5" />
+            <BuildingStorefrontIcon className="w-3.5 h-3.5" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-xs text-slate-900">
@@ -244,7 +243,7 @@ const EnquiriesManagement = () => {
           onClick={() => setActiveEnquiry(item)}
           className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
         >
-          <Eye className="w-3.5 h-3.5" />
+          <EyeIcon className="w-3.5 h-3.5" />
           <span>Inspect Log</span>
         </button>
       ),
@@ -339,7 +338,7 @@ const EnquiriesManagement = () => {
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-rose-50 text-brand-red rounded-xl">
-                  <FileText className="w-5 h-5" />
+                  <DocumentTextIcon className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="text-sm font-black text-slate-900">
@@ -357,7 +356,7 @@ const EnquiriesManagement = () => {
                   onClick={() => setActiveEnquiry(null)}
                   className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg cursor-pointer"
                 >
-                  <X className="w-4 h-4" />
+                  <XMarkIcon className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -419,7 +418,7 @@ const EnquiriesManagement = () => {
                       />
                       <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <span className="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded-md flex items-center gap-1">
-                          <ExternalLink className="w-3 h-3" /> Zoom
+                          <ArrowTopRightOnSquareIcon className="w-3 h-3" /> Zoom
                         </span>
                       </div>
                     </div>
@@ -490,7 +489,7 @@ const EnquiriesManagement = () => {
 
               {/* Policy Notice: Admin does not participate in ticket management */}
               <div className="p-3.5 rounded-xl bg-slate-100 border border-slate-200 flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
+                <ShieldCheckIcon className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
                 <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
                   <strong>Administrative Policy:</strong> Commercial negotiations, pricing, and fulfillment occur directly between verified resellers and customers. Administrative intervention is limited to auditing and regulatory compliance.
                 </p>
@@ -516,7 +515,7 @@ const EnquiriesManagement = () => {
               onClick={() => setShowImageLightbox(false)}
               className="absolute -top-3 -right-3 p-1.5 bg-white text-slate-800 rounded-full shadow-lg cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <XMarkIcon className="w-4 h-4" />
             </button>
           </div>
         </div>

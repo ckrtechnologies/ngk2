@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {
-  Search,
-  X,
-  SlidersHorizontal,
-  ArrowUpDown,
-  RefreshCw,
-  Download,
-  FileSpreadsheet,
-  FileText,
-  ChevronDown,
-} from 'lucide-react';
+  MagnifyingGlassIcon,
+  XMarkIcon,
+  AdjustmentsHorizontalIcon,
+  ArrowsUpDownIcon,
+  ArrowPathIcon,
+  ArrowDownTrayIcon,
+  TableCellsIcon,
+  DocumentTextIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/20/solid';
 
 /**
  * Sophisticated Multi-Facet Filter Toolbar with CSV & PDF Exports
@@ -45,7 +45,7 @@ export const FilterBar = ({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5">
         {/* Search Field */}
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <MagnifyingGlassIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
@@ -58,7 +58,7 @@ export const FilterBar = ({
               onClick={() => onSearchChange('')}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
             >
-              <X className="w-3.5 h-3.5" />
+              <XMarkIcon className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -67,7 +67,7 @@ export const FilterBar = ({
         <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
           {onSortChange && (
             <div className="relative flex items-center">
-              <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 pointer-events-none" />
+              <ArrowsUpDownIcon className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 pointer-events-none" />
               <select
                 value={sortBy}
                 onChange={(e) => onSortChange(e.target.value)}
@@ -90,9 +90,9 @@ export const FilterBar = ({
                 onClick={() => setShowExportMenu(!showExportMenu)}
                 className="h-9 px-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <Download className="w-3.5 h-3.5 text-slate-500" />
+                <ArrowDownTrayIcon className="w-3.5 h-3.5 text-slate-500" />
                 <span>Export</span>
-                <ChevronDown className="w-3 h-3 text-slate-400" />
+                <ChevronDownIcon className="w-3 h-3 text-slate-400" />
               </button>
 
               {showExportMenu && (
@@ -110,7 +110,7 @@ export const FilterBar = ({
                         }}
                         className="w-full px-2.5 py-1.5 rounded-lg text-left text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center gap-2 cursor-pointer transition-colors"
                       >
-                        <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                        <TableCellsIcon className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Export CSV</span>
                       </button>
                     )}
@@ -122,7 +122,7 @@ export const FilterBar = ({
                         }}
                         className="w-full px-2.5 py-1.5 rounded-lg text-left text-xs font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-800 flex items-center gap-2 cursor-pointer transition-colors"
                       >
-                        <FileText className="w-3.5 h-3.5 text-brand-red" />
+                        <DocumentTextIcon className="w-3.5 h-3.5 text-brand-red" />
                         <span>Export PDF</span>
                       </button>
                     )}
@@ -138,7 +138,7 @@ export const FilterBar = ({
               className="h-9 px-2.5 text-[11px] font-bold text-slate-500 hover:text-brand-red bg-slate-100 hover:bg-rose-50 border border-slate-200 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
               title="Reset all filters"
             >
-              <RefreshCw className="w-3 h-3" />
+              <ArrowPathIcon className="w-3 h-3" />
               Reset
             </button>
           )}
@@ -152,7 +152,7 @@ export const FilterBar = ({
         <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 gap-2 overflow-x-auto">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1 flex items-center gap-1">
-              <SlidersHorizontal className="w-3 h-3" /> Filter:
+              <AdjustmentsHorizontalIcon className="w-3 h-3" /> Filter:
             </span>
             {facets.map((f) => {
               const isSelected = activeFacet === f.id;

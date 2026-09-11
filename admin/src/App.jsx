@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import store from './redux/store';
 
@@ -38,8 +39,22 @@ const ProtectedLayout = ({ children }) => {
 };
 
 const AppRoutes = () => {
+  const location = useLocation();
   const { isAuthenticated, selectedBrand } = useSelector((state) => state.admin);
   const defaultAuthPath = selectedBrand ? '/parts' : '/portal';
+
+  useEffect(() => {
+    const brandPrefix = selectedBrand === 'kyb' ? 'KYB SUSPENSION' : 'NGK SPARK PLUGS';
+    const titles = {
+      '/login': 'NGK SPARK PLUGS | Admin Console — Login',
+      '/portal': `${brandPrefix} | Brand & Operations Portal`,
+      '/users': `${brandPrefix} | User & Partner Management`,
+      '/enquiries': `${brandPrefix} | Commercial Inquiries Audit`,
+      '/parts': selectedBrand === 'kyb' ? 'KYB SUSPENSION | Shock Absorbers & Part Search' : 'NGK SPARK PLUGS | Ignition & Part Search',
+      '/dealers': `${brandPrefix} | Authorized Dealers Directory`,
+    };
+    document.title = titles[location.pathname] || `${brandPrefix} | ADMIN CONSOLE`;
+  }, [location.pathname, selectedBrand]);
 
   return (
     <Routes>
@@ -84,6 +99,11 @@ const AppRoutes = () => {
             <PartFinder />
           </ProtectedLayout>
         }
+      />
+
+      <Route
+        path="/api-tester"
+        element={<Navigate to="/parts" replace />}
       />
 
       <Route
