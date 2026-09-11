@@ -469,7 +469,7 @@ const OwnerHomeScreen = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scrollContent, { paddingBottom: 84 + insets.bottom }]}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -799,7 +799,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 96,
+    paddingBottom: 24,
   },
   sectionHeader: {
     flexDirection: 'row',

@@ -200,14 +200,12 @@ const DealerLocatorScreen = () => {
       if (filters.role === 'reseller' && d.role !== 'reseller') return false;
 
       // 2. Distance radius filter
-      if (
-        filters.radius !== undefined &&
-        filters.radius !== null &&
-        d.distanceKm !== undefined &&
-        d.distanceKm !== null &&
-        d.distanceKm !== 999999
-      ) {
-        if (d.distanceKm > filters.radius) {
+      if (filters.radius !== undefined && filters.radius !== null) {
+        if (
+          d.distanceKm === undefined ||
+          d.distanceKm === null ||
+          d.distanceKm > filters.radius
+        ) {
           return false;
         }
       }
@@ -326,14 +324,12 @@ const DealerLocatorScreen = () => {
   const counts = useMemo(() => {
     const baseList = dealers.filter((d) => {
       // 1. Distance radius filter
-      if (
-        filters.radius !== undefined &&
-        filters.radius !== null &&
-        d.distanceKm !== undefined &&
-        d.distanceKm !== null &&
-        d.distanceKm !== 999999
-      ) {
-        if (d.distanceKm > filters.radius) {
+      if (filters.radius !== undefined && filters.radius !== null) {
+        if (
+          d.distanceKm === undefined ||
+          d.distanceKm === null ||
+          d.distanceKm > filters.radius
+        ) {
           return false;
         }
       }

@@ -134,16 +134,39 @@ export const proxyServiceJson = async (req, res) => {
     const payload = req.body;
     const brand = (req.query.brand || req.headers['x-catalog-brand'] || req.headers['x-brand'] || '').toLowerCase();
 
-    // If payload contains getArticles and brand is specified, auto-scope dataSupplierIds
-    if (payload && payload.getArticles && brand) {
-      if (brand === 'kyb' && !payload.getArticles.dataSupplierIds) {
-        payload.getArticles.dataSupplierIds = [7729];
-      } else if (brand === 'ngk' && !payload.getArticles.dataSupplierIds) {
-        payload.getArticles.dataSupplierIds = [15, 5414];
-      }
+    // Strictly enforce vendor supplier scoping if brand header/query is present
+    if (brand === 'kyb') {
+      if (payload?.getArticles) payload.getArticles.dataSupplierIds = [7729];
+      if (payload?.getArticles2) payload.getArticles2.dataSupplierIds = [7729];
+    } else if (brand === 'ngk' || brand === 'ntk') {
+      if (payload?.getArticles) payload.getArticles.dataSupplierIds = [15, 5414];
+      if (payload?.getArticles2) payload.getArticles2.dataSupplierIds = [15, 5414];
     }
 
-    const data = await tecdocService.execute(payload);
+    let data = await tecdocService.execute(payload);
+
+    // Strict post-filtering to guarantee complete vendor isolation
+    if (brand === 'kyb') {
+      const filterKyb = (arr) =>
+        (arr || []).filter((a) => {
+          const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+          return b.includes('KYB') || Number(a.dataSupplierId) === 7729;
+        });
+      if (Array.isArray(data?.articles)) data.articles = filterKyb(data.articles);
+      if (Array.isArray(data?.data?.array)) data.data.array = filterKyb(data.data.array);
+    } else if (brand === 'ngk' || brand === 'ntk') {
+      const filterNgk = (arr) =>
+        (arr || []).filter((a) => {
+          const b = (a.mfrName || a.brand || a.brandName || a.dataSupplierName || '').toUpperCase();
+          return (
+            (b.includes('NGK') || b.includes('NTK') || Number(a.dataSupplierId) === 15 || Number(a.dataSupplierId) === 5414) &&
+            !b.includes('KYB')
+          );
+        });
+      if (Array.isArray(data?.articles)) data.articles = filterNgk(data.articles);
+      if (Array.isArray(data?.data?.array)) data.data.array = filterNgk(data.data.array);
+    }
+
     return res.status(200).json(data);
   } catch (error) {
     return sendError(res, error.message, 500, error);

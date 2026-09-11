@@ -2,7 +2,6 @@ import React from 'react';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -37,10 +36,14 @@ const renderTabBarIcon = (routeName, focused, size) => {
   return null;
 };
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export default function OwnerTabNavigator() {
   const insets = useSafeAreaInsets();
-  const bottomInset = Math.max(insets.bottom, 12);
-  const tabBarHeight = 58 + bottomInset;
+
+  // Dynamically compute comfortable tab bar height adapting to device navigation bar
+  const bottomPadding = insets.bottom > 0 ? insets.bottom : 8;
+  const barHeight = Platform.OS === 'ios' ? 56 + insets.bottom : 62 + (insets.bottom > 0 ? insets.bottom : 0);
 
   return (
     <Tab.Navigator
@@ -50,8 +53,8 @@ export default function OwnerTabNavigator() {
         tabBarStyle: [
           styles.tabBar,
           {
-            height: tabBarHeight,
-            paddingBottom: bottomInset,
+            height: barHeight,
+            paddingBottom: bottomPadding,
           },
         ],
         tabBarActiveTintColor: COLORS.white,
@@ -100,9 +103,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     borderTopLeftRadius: wp('8%'),
     borderTopRightRadius: wp('8%'),
-    position: 'absolute',
     borderTopWidth: 0,
+    // No hardcoded height — the tab bar auto-sizes to its icon + label content.
+    // paddingTop adds breathing room above the icons.
+    // paddingBottom adds breathing room below labels, above the system nav bar.
     paddingTop: 8,
+    paddingBottom: 8,
     elevation: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -5 },
@@ -112,6 +118,6 @@ const styles = StyleSheet.create({
   tabBarLabel: {
     fontSize: wp('3%'),
     fontWeight: FONTS.weight.semiBold,
-    marginBottom: 4,
+    marginBottom: 2,
   },
 });

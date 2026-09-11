@@ -21,6 +21,7 @@ import {
   Check,
   Sparkles,
 } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DistanceSlider from './DistanceSlider';
 
 export const DEFAULT_FILTERS = {
@@ -38,6 +39,7 @@ export default function DealerFilterModal({
   dealers = [],
 }) {
   const [draft, setDraft] = useState({ ...DEFAULT_FILTERS, ...filters });
+  const insets = useSafeAreaInsets();
 
   // Sync draft whenever modal becomes visible or external filters update
   useEffect(() => {
@@ -61,14 +63,12 @@ export default function DealerFilterModal({
         return false;
 
       // Distance / radius filter
-      if (
-        draft.radius !== undefined &&
-        draft.radius !== null &&
-        d.distanceKm !== undefined &&
-        d.distanceKm !== null &&
-        d.distanceKm !== 999999
-      ) {
-        if (d.distanceKm > draft.radius) {
+      if (draft.radius !== undefined && draft.radius !== null) {
+        if (
+          d.distanceKm === undefined ||
+          d.distanceKm === null ||
+          d.distanceKm > draft.radius
+        ) {
           return false;
         }
       }
@@ -110,7 +110,7 @@ export default function DealerFilterModal({
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.backdrop}>
             <TouchableWithoutFeedback>
-              <View style={styles.sheetContainer}>
+              <View style={[styles.sheetContainer, { paddingBottom: Math.max(insets.bottom, 20) }]}>
               {/* Top Drag Pill */}
               <View style={styles.dragPill} />
 
@@ -356,7 +356,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
-    paddingBottom: 20,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.15,

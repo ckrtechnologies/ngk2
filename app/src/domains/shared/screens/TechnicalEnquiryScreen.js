@@ -51,6 +51,20 @@ import ScreenContainer from '../../../components/common/ScreenContainer';
 import AppHeader from '../../../components/common/AppHeader';
 import AppInput from '../../../components/common/AppInput';
 
+// Helper: calculate spherical distance in km using Haversine formula
+const haversineDistanceKm = (lat1, lon1, lat2, lon2) => {
+  if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) return null;
+  const toRad = (v) => (v * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
 const TechnicalEnquiryScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -283,8 +297,20 @@ const TechnicalEnquiryScreen = () => {
           const role = (d.role || '').toLowerCase();
           const isDistributor = role === 'distributor' || role === 'wholesaler';
           const rawDist = d.distance !== undefined && d.distance !== null ? d.distance : d.distanceKm;
-          const parsedKm =
+          let parsedKm =
             rawDist !== undefined && rawDist !== null ? parseFloat(rawDist) : 999999;
+
+          if (parsedKm === 999999 && userCoords?.userLat != null && d.latitude != null) {
+            const calc = haversineDistanceKm(
+              userCoords.userLat,
+              userCoords.userLon,
+              d.latitude,
+              d.longitude
+            );
+            if (calc != null) {
+              parsedKm = parseFloat(calc.toFixed(1));
+            }
+          }
 
           list.push({
             id,
@@ -308,8 +334,8 @@ const TechnicalEnquiryScreen = () => {
       });
     }
 
-    // 2. Process Redux users for matching roles
-    if (Array.isArray(users)) {
+    // 2. Process Redux users ONLY if stockists list is empty (fallback)
+    if ((!stockists || stockists.length === 0) && Array.isArray(users)) {
       users.forEach((u) => {
         const id = u.id || u._id;
         const role = (u.role || '').toLowerCase();
@@ -329,6 +355,19 @@ const TechnicalEnquiryScreen = () => {
           if (!isApproved) return;
 
           seen.add(id);
+          let parsedKm = 999999;
+          if (userCoords?.userLat != null && u.latitude != null) {
+            const calc = haversineDistanceKm(
+              userCoords.userLat,
+              userCoords.userLon,
+              u.latitude,
+              u.longitude
+            );
+            if (calc != null) {
+              parsedKm = parseFloat(calc.toFixed(1));
+            }
+          }
+
           list.push({
             id,
             name:
@@ -337,8 +376,11 @@ const TechnicalEnquiryScreen = () => {
               (isDistributor ? 'Regional Distributor' : 'Authorized Reseller'),
             companyName: u.companyName || u.name,
             role: isDistributor ? 'distributor' : 'reseller',
-            distance: null,
-            distanceKm: 999999,
+            distance:
+              !isNaN(parsedKm) && parsedKm < 999999
+                ? `${parsedKm.toFixed(1)} km`
+                : null,
+            distanceKm: parsedKm,
             address: u.address || '',
             city: u.city || '',
             rating: '4.8',
@@ -359,20 +401,18 @@ const TechnicalEnquiryScreen = () => {
     }
 
     return list;
-  }, [stockists, users, myself, storedUserId, storedUserEmail]);
+  }, [stockists, users, myself, storedUserId, storedUserEmail, userCoords]);
 
   // Compute dynamic counts based on active search query & radius filter
   const counts = useMemo(() => {
     const baseList = scopedCandidateDealers.filter((d) => {
       // 1. Distance radius filter
-      if (
-        filters.radius !== undefined &&
-        filters.radius !== null &&
-        d.distanceKm !== undefined &&
-        d.distanceKm !== null &&
-        d.distanceKm !== 999999
-      ) {
-        if (d.distanceKm > filters.radius) {
+      if (filters.radius !== undefined && filters.radius !== null) {
+        if (
+          d.distanceKm === undefined ||
+          d.distanceKm === null ||
+          d.distanceKm > filters.radius
+        ) {
           return false;
         }
       }
@@ -410,14 +450,12 @@ const TechnicalEnquiryScreen = () => {
         return false;
 
       // 2. Distance radius filter
-      if (
-        filters.radius !== undefined &&
-        filters.radius !== null &&
-        d.distanceKm !== undefined &&
-        d.distanceKm !== null &&
-        d.distanceKm !== 999999
-      ) {
-        if (d.distanceKm > filters.radius) {
+      if (filters.radius !== undefined && filters.radius !== null) {
+        if (
+          d.distanceKm === undefined ||
+          d.distanceKm === null ||
+          d.distanceKm > filters.radius
+        ) {
           return false;
         }
       }
@@ -860,7 +898,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Step 1 Banner */}
       <View style={styles.stepBannerCard}>
         <View style={styles.stepBannerIconBox}>
-          <CheckCircle2 size={18} color="#059669" />
+          <CheckCircle2 size={16} color="#059669" />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.stepBannerTitle}>STEP 1: PART & VEHICLE IDENTIFICATION</Text>
@@ -875,7 +913,7 @@ const TechnicalEnquiryScreen = () => {
         <View style={styles.garageSelectorContainer}>
           <View style={styles.sectionHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <SolidGarageBayIcon size={16} color={COLORS.primary} />
+              <SolidGarageBayIcon size={15} color={COLORS.primary} />
               <Text style={styles.sectionTitle}>SELECT FROM MY GARAGE</Text>
             </View>
             <Text style={styles.garageCountBadge}>
@@ -901,7 +939,7 @@ const TechnicalEnquiryScreen = () => {
                   activeOpacity={0.7}
                 >
                   <SolidCarSilhouetteIcon
-                    size={15}
+                    size={14}
                     color={isSelected ? COLORS.white : COLORS.textTertiary}
                   />
                   <Text
@@ -913,7 +951,7 @@ const TechnicalEnquiryScreen = () => {
                   >
                     {car.make} {car.model} {car.year ? `(${car.year})` : ''}
                   </Text>
-                  {isSelected && <Check size={13} color={COLORS.white} strokeWidth={2.6} />}
+                  {isSelected && <Check size={12} color={COLORS.white} strokeWidth={2.6} />}
                 </TouchableOpacity>
               );
             })}
@@ -924,7 +962,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Part Identification Fields */}
       <View style={styles.formCard}>
         <View style={styles.cardHeaderRow}>
-          <SolidPartTagIcon size={17} color={COLORS.primary} />
+          <SolidPartTagIcon size={16} color={COLORS.primary} />
           <Text style={styles.cardTitle}>PART IDENTIFICATION</Text>
         </View>
         <Text style={styles.cardSubtitle}>
@@ -937,6 +975,7 @@ const TechnicalEnquiryScreen = () => {
             placeholder="e.g. BKR6E-11, ILFR6A, 90919-01192"
             value={partNumber}
             onChangeText={setPartNumber}
+            containerStyle={styles.appInputCompact}
           />
         </View>
 
@@ -946,6 +985,7 @@ const TechnicalEnquiryScreen = () => {
             placeholder="e.g. Laser Iridium Spark Plug, Oxygen Sensor"
             value={partName}
             onChangeText={setPartName}
+            containerStyle={styles.appInputCompact}
           />
         </View>
       </View>
@@ -953,7 +993,7 @@ const TechnicalEnquiryScreen = () => {
       {/* Vehicle Specifications */}
       <View style={styles.formCard}>
         <View style={styles.cardHeaderRow}>
-          <SolidCarSilhouetteIcon size={17} color="#2563EB" />
+          <SolidCarSilhouetteIcon size={16} color="#2563EB" />
           <Text style={styles.cardTitle}>VEHICLE SPECIFICATIONS</Text>
         </View>
         <Text style={styles.cardSubtitle}>
@@ -967,6 +1007,7 @@ const TechnicalEnquiryScreen = () => {
               placeholder="e.g. Toyota, Mahindra"
               value={vehicleMake}
               onChangeText={setVehicleMake}
+              containerStyle={styles.appInputCompact}
             />
           </View>
           <View style={styles.twoColumnItem}>
@@ -975,6 +1016,7 @@ const TechnicalEnquiryScreen = () => {
               placeholder="e.g. Scorpio N, Beetle"
               value={vehicleModel}
               onChangeText={setVehicleModel}
+              containerStyle={styles.appInputCompact}
             />
           </View>
         </View>
@@ -986,6 +1028,7 @@ const TechnicalEnquiryScreen = () => {
             value={vehicleYear}
             onChangeText={setVehicleYear}
             keyboardType="numeric"
+            containerStyle={styles.appInputCompact}
           />
         </View>
       </View>
@@ -1465,81 +1508,79 @@ const TechnicalEnquiryScreen = () => {
   );
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <AppHeader
+        title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
+        subtitle={
+          isReseller
+            ? 'Distributor Lead & Fitment Support'
+            : 'Authorized Verification & Dealer Dispatch'
+        }
+        onBack={() => {
+          if (currentStep > 1) {
+            setCurrentStep((s) => s - 1);
+          } else {
+            navigation.goBack();
+          }
+        }}
+      />
+
+      {/* 3-Step Guided Journey Indicator */}
+      <EnquiryStepIndicator
+        currentStep={currentStep}
+        onStepPress={handleStepPress}
+      />
+
+      <ScreenContainer
+        scrollable={true}
+        includeTopInset={false}
+        showStatusBar={false}
+        contentContainerStyle={styles.enquiryScrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={COLORS.primary}
+            colors={[COLORS.primary]}
+          />
+        }
       >
-        <AppHeader
-          title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
-          subtitle={
-            isReseller
-              ? 'Distributor Lead & Fitment Support'
-              : 'Authorized Verification & Dealer Dispatch'
-          }
-          onBack={() => {
-            if (currentStep > 1) {
-              setCurrentStep((s) => s - 1);
-            } else {
-              navigation.goBack();
-            }
-          }}
-        />
+        {currentStep === 1 && renderStep1()}
+        {currentStep === 2 && renderStep2()}
+        {currentStep === 3 && renderStep3()}
+      </ScreenContainer>
 
-        {/* 3-Step Guided Journey Indicator */}
-        <EnquiryStepIndicator
-          currentStep={currentStep}
-          onStepPress={handleStepPress}
-        />
-
-        <ScreenContainer
-          scrollable={true}
-          includeTopInset={false}
-          showStatusBar={false}
-          contentContainerStyle={styles.enquiryScrollContent}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              tintColor={COLORS.primary}
-              colors={[COLORS.primary]}
-            />
-          }
-        >
-          {currentStep === 1 && renderStep1()}
-          {currentStep === 2 && renderStep2()}
-          {currentStep === 3 && renderStep3()}
-        </ScreenContainer>
-
-        {/* Full Sophisticated Dealer Filter Panel */}
-        <DealerFilterModal
-          visible={filterModalVisible}
-          onClose={() => setFilterModalVisible(false)}
-          filters={filters}
-          onApply={(newFilters) => setFilters(newFilters)}
-          onReset={() => setFilters(DEFAULT_FILTERS)}
-          dealers={scopedCandidateDealers}
-        />
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      {/* Full Sophisticated Dealer Filter Panel */}
+      <DealerFilterModal
+        visible={filterModalVisible}
+        onClose={() => setFilterModalVisible(false)}
+        filters={filters}
+        onApply={(newFilters) => setFilters(newFilters)}
+        onReset={() => setFilters(DEFAULT_FILTERS)}
+        dealers={scopedCandidateDealers}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   enquiryScrollContent: {
-    paddingBottom: 60,
+    paddingBottom: 24,
+  },
+  appInputCompact: {
+    marginBottom: 6,
   },
   // Role Notice Card
   resellerNoticeCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: 8,
     backgroundColor: COLORS.errorLight,
     borderWidth: 1,
     borderColor: COLORS.errorBorder,
     borderRadius: RADIUS.sm,
-    padding: 12,
-    marginBottom: 14,
+    padding: 10,
+    marginBottom: 8,
   },
   resellerNoticeIconBox: {
     marginTop: 2,
@@ -1561,18 +1602,18 @@ const styles = StyleSheet.create({
   stepBannerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
     backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 14,
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   stepBannerIconBox: {
-    width: 34,
-    height: 34,
-    borderRadius: RADIUS.sm,
+    width: 28,
+    height: 28,
+    borderRadius: RADIUS.xs,
     backgroundColor: '#F0FDF4',
     justifyContent: 'center',
     alignItems: 'center',
@@ -1586,7 +1627,7 @@ const styles = StyleSheet.create({
   stepBannerSubtitle: {
     fontSize: FONTS.size.caption,
     color: COLORS.textTertiary,
-    marginTop: 2,
+    marginTop: 1,
   },
 
   // Section Headers
@@ -1594,8 +1635,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
-    marginTop: 6,
+    marginBottom: 4,
+    marginTop: 2,
   },
   sectionTitle: {
     fontSize: FONTS.size.caption,
@@ -1606,7 +1647,7 @@ const styles = StyleSheet.create({
 
   // Garage Quick Selector
   garageSelectorContainer: {
-    marginBottom: 14,
+    marginBottom: 8,
   },
   garageCountBadge: {
     fontSize: FONTS.size.caption,
@@ -1621,8 +1662,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingVertical: 7,
-    paddingHorizontal: 12,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderRadius: RADIUS.xl,
     backgroundColor: COLORS.white,
     borderWidth: 1,
@@ -1645,17 +1686,17 @@ const styles = StyleSheet.create({
   // Form Cards
   formCard: {
     backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   cardHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
+    gap: 6,
+    marginBottom: 2,
   },
   cardTitle: {
     fontSize: FONTS.size.xs,
@@ -1666,10 +1707,10 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: FONTS.size.caption,
     color: COLORS.textTertiary,
-    marginBottom: 12,
+    marginBottom: 6,
   },
   inputSpacing: {
-    marginBottom: 10,
+    marginBottom: 0,
   },
   twoColumnRow: {
     flexDirection: 'row',
@@ -1677,7 +1718,7 @@ const styles = StyleSheet.create({
   },
   twoColumnItem: {
     flex: 1,
-    marginBottom: 10,
+    marginBottom: 0,
   },
 
   // Quantity Stepper
@@ -1686,9 +1727,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
@@ -1730,12 +1771,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginTop: 14,
-    marginBottom: 28,
+    marginTop: 8,
+    marginBottom: 14,
   },
   fullNextStepBtn: {
     width: '100%',
-    height: 48,
+    height: 44,
     borderRadius: RADIUS.sm,
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
