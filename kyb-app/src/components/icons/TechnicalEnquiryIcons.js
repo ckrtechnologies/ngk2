@@ -11,7 +11,7 @@ import Svg, {
 } from 'react-native-svg';
 
 /**
- * Solid, premium automotive icons designed specifically for NGK Technical Enquiry.
+ * Solid, premium automotive icons designed specifically for KYB Technical Enquiry.
  * These replace generic hollow outline icons with brand-aligned solid glyphs.
  */
 
@@ -44,7 +44,7 @@ export function SolidStoreIcon({ size = 22, color = COLORS.primary, ...props }) 
   );
 }
 
-// 2. SOLID PART / SPARK PLUG COMPONENT ICON
+// 2. SOLID PART / SUSPENSION COMPONENT ICON
 export function SolidPartTagIcon({ size = 18, color = COLORS.primary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
@@ -63,7 +63,7 @@ export function SolidPartTagIcon({ size = 18, color = COLORS.primary, ...props }
       {/* Precision Aperture Center */}
       <Circle cx="7.5" cy="7.5" r="2.2" fill={COLORS.white} />
       <Circle cx="7.5" cy="7.5" r="1.1" fill={color === COLORS.primary ? '#B91C1C' : COLORS.white} />
-      {/* Spark Plug Electrode Accents */}
+      {/* Component Damper Accents */}
       <Rect x="13.5" y="12.5" width="4" height="1.5" rx="0.5" transform="rotate(45 13.5 12.5)" fill={COLORS.white} opacity={0.8} />
       <Rect x="15.5" y="14.5" width="3" height="1.5" rx="0.5" transform="rotate(45 15.5 14.5)" fill={COLORS.white} opacity={0.6} />
     </Svg>

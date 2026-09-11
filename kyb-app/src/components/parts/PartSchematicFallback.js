@@ -37,29 +37,27 @@ export default function PartSchematicFallback({
           <Line x1="40" y1="10" x2="40" y2="70" stroke="#1E293B" strokeWidth="0.8" strokeDasharray="2 2" />
           <Line x1="10" y1="40" x2="70" y2="40" stroke="#1E293B" strokeWidth="0.8" strokeDasharray="2 2" />
 
-          {/* Spark Plug Technical Schematic Profile */}
-          <G transform="translate(15, 12)">
-            {/* Terminal Stud */}
-            <Rect x="22" y="4" width="6" height="5" rx="1" fill="#E2E8F0" />
+          {/* Shock Absorber / Strut Technical Schematic Profile */}
+          <G transform="translate(18, 10)">
+            {/* Top Mount Eyelet */}
+            <Circle cx="22" cy="6" r="4.5" fill="none" stroke="#94A3B8" strokeWidth="1.8" />
+            <Circle cx="22" cy="6" r="2" fill="#0F172A" />
 
-            {/* Ceramic Insulator Ribs */}
-            <Rect x="20" y="9" width="10" height="15" rx="2" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="0.8" />
-            <Line x1="19" y1="13" x2="31" y2="13" stroke={COLORS.slate400} strokeWidth="1" />
-            <Line x1="19" y1="17" x2="31" y2="17" stroke={COLORS.slate400} strokeWidth="1" />
-            <Line x1="19" y1="21" x2="31" y2="21" stroke={COLORS.slate400} strokeWidth="1" />
+            {/* Piston Rod (Chrome) */}
+            <Rect x="20.5" y="10.5" width="3" height="15" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.5" />
 
-            {/* Hex Nut / Metal Shell */}
-            <Path d="M17 24h16l2 8H15l2-8z" fill="#334155" stroke="#0F172A" strokeWidth="0.8" />
+            {/* Dust Boot / Seal Collar */}
+            <Rect x="17" y="24" width="10" height="4" rx="1" fill="#475569" />
 
-            {/* Threaded Section */}
-            <Rect x="18" y="32" width="14" height="15" fill="#1E293B" />
-            <Line x1="18" y1="35" x2="32" y2="35" stroke="#64748B" strokeWidth="1" />
-            <Line x1="18" y1="39" x2="32" y2="39" stroke="#64748B" strokeWidth="1" />
-            <Line x1="18" y1="43" x2="32" y2="43" stroke="#64748B" strokeWidth="1" />
+            {/* Main Damper Cylinder Body */}
+            <Rect x="16" y="28" width="12" height="22" rx="2" fill="#1E293B" stroke={COLORS.primary} strokeWidth="1.2" />
+            <Line x1="16" y1="35" x2="28" y2="35" stroke="#334155" strokeWidth="1" />
+            <Line x1="16" y1="42" x2="28" y2="42" stroke="#334155" strokeWidth="1" />
 
-            {/* Ground Electrode & Center Spark Point */}
-            <Path d="M22 47v6h6" stroke={COLORS.primary} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            <Circle cx="25" cy="50" r="1" fill="#FEF08A" />
+            {/* Bottom Mount Eyelet */}
+            <Rect x="20.5" y="50" width="3" height="3" fill="#64748B" />
+            <Circle cx="22" cy="56" r="4.5" fill="none" stroke="#94A3B8" strokeWidth="1.8" />
+            <Circle cx="22" cy="56" r="2" fill="#0F172A" />
           </G>
         </Svg>
         <View style={styles.thumbBrandTag}>
@@ -100,40 +98,37 @@ export default function PartSchematicFallback({
         <Line x1="140" y1="15" x2="140" y2="165" stroke={COLORS.primary} strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
         <Line x1="20" y1="90" x2="260" y2="90" stroke={COLORS.primary} strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
 
-        {/* Horizontal Technical Spark Plug Blueprint */}
-        <G transform="translate(45, 62)">
-          {/* Terminal Stud */}
-          <Rect x="10" y="23" width="10" height="10" rx="1.5" fill="#E2E8F0" stroke={COLORS.slate400} strokeWidth="1" />
+        {/* Horizontal Technical KYB Gas-A-Just / Excel-G Strut Blueprint */}
+        <G transform="translate(30, 65)">
+          {/* Left / Top Mount Eyelet */}
+          <Circle cx="15" cy="25" r="9" fill="none" stroke="#94A3B8" strokeWidth="3" />
+          <Circle cx="15" cy="25" r="4.5" fill="#0F172A" />
+          <Rect x="24" y="22" width="8" height="6" fill="#64748B" />
 
-          {/* Ceramic Insulator Ribs */}
-          <Rect x="20" y="19" width="45" height="18" rx="3" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1.2" />
-          <Line x1="28" y1="16" x2="28" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
-          <Line x1="36" y1="16" x2="36" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
-          <Line x1="44" y1="16" x2="44" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
-          <Line x1="52" y1="16" x2="52" y2="40" stroke={COLORS.slate400} strokeWidth="1.5" />
+          {/* Hard-Chromed Piston Shaft */}
+          <Rect x="32" y="20" width="55" height="10" rx="2" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1.2" />
+          <Line x1="38" y1="21" x2="82" y2="21" stroke="#FFFFFF" strokeWidth="1.5" />
 
-          {/* Hex Nut Collar */}
-          <Path d="M65 14l6 4v20l-6 4H65V14z" fill="#475569" stroke="#0F172A" strokeWidth="1.2" />
-          <Rect x="71" y="16" width="22" height="24" fill="#334155" stroke="#0F172A" strokeWidth="1.2" />
-          <Line x1="82" y1="16" x2="82" y2="40" stroke="#64748B" strokeWidth="1.2" />
+          {/* Wiper Seal & Guide Collar */}
+          <Rect x="87" y="14" width="10" height="22" rx="2" fill="#475569" stroke="#334155" strokeWidth="1" />
+          <Rect x="97" y="16" width="6" height="18" fill="#F59E0B" />
 
-          {/* Gasket Ring */}
-          <Rect x="93" y="17" width="5" height="22" rx="1" fill="#F59E0B" />
+          {/* Outer Damper Cylinder Body (KYB Red Accent / High-Grade Steel) */}
+          <Rect x="103" y="12" width="95" height="26" rx="4" fill="#1E293B" stroke={COLORS.primary} strokeWidth="1.8" />
+          
+          {/* Internal Gas/Hydraulic chamber markers */}
+          <Line x1="125" y1="14" x2="125" y2="36" stroke="#334155" strokeWidth="1.5" strokeDasharray="2 2" />
+          <Line x1="155" y1="14" x2="155" y2="36" stroke="#334155" strokeWidth="1.5" strokeDasharray="2 2" />
+          <Line x1="175" y1="14" x2="175" y2="36" stroke="#334155" strokeWidth="1.5" strokeDasharray="2 2" />
 
-          {/* Threaded Barrel */}
-          <Rect x="98" y="19" width="45" height="18" fill="#1E293B" stroke="#0F172A" strokeWidth="1.2" />
-          <Line x1="104" y1="17" x2="104" y2="39" stroke="#64748B" strokeWidth="1.4" />
-          <Line x1="112" y1="17" x2="112" y2="39" stroke="#64748B" strokeWidth="1.4" />
-          <Line x1="120" y1="17" x2="120" y2="39" stroke="#64748B" strokeWidth="1.4" />
-          <Line x1="128" y1="17" x2="128" y2="39" stroke="#64748B" strokeWidth="1.4" />
-          <Line x1="136" y1="17" x2="136" y2="39" stroke="#64748B" strokeWidth="1.4" />
+          {/* KYB Gas Pressure Symbol */}
+          <Circle cx="140" cy="25" r="6" fill="none" stroke={COLORS.primary} strokeWidth="1" />
+          <Path d="M138 23l4 4m0-4l-4 4" stroke={COLORS.primary} strokeWidth="1" strokeLinecap="round" />
 
-          {/* Center Electrode & Ground Electrode Tip */}
-          <Rect x="143" y="26" width="10" height="4" fill="#E2E8F0" />
-          <Path d="M145 35h12v-12" stroke={COLORS.primary} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-
-          {/* Spark Glow Point */}
-          <Circle cx="155" cy="28" r="2.5" fill="#FEF08A" />
+          {/* Lower Mount Base & Bushing Eye */}
+          <Rect x="198" y="21" width="10" height="8" fill="#475569" />
+          <Circle cx="216" cy="25" r="9" fill="none" stroke="#94A3B8" strokeWidth="3" />
+          <Circle cx="216" cy="25" r="4.5" fill="#0F172A" />
         </G>
 
         {/* Technical Calibration Text in SVG */}
@@ -152,7 +147,7 @@ export default function PartSchematicFallback({
           {partNo ? `#${partNo}` : `${displayBrand} OE SPECIFICATION`}
         </Text>
         <Text style={styles.largePartNameText} numberOfLines={1}>
-          {partName || 'Precision Ignition & Sensor Component'}
+          {partName || 'Precision Shock & Strut Component'}
         </Text>
       </View>
     </View>

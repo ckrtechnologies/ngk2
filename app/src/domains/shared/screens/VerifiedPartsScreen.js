@@ -114,7 +114,7 @@ const categorizePart = (item) => {
     };
   }
 
-  // 3. Suspension & Damping (KYB)
+  // 3. Suspension & Damping
   if (
     [854, 855, 856].includes(genericId) ||
     desc.includes('shock') ||
@@ -433,7 +433,7 @@ const VerifiedPartsScreen = () => {
     const fetchPartsForVehicle = async () => {
       setLoading(true);
       const incomingType = vehicle.linkageTargetType || appType || 'P';
-      // In TecDoc Pegasus ZA catalog (NGK/NTK/KYB), articles are indexed under 'P' (and 'V').
+      // In TecDoc Pegasus ZA catalog (NGK/NTK), articles are indexed under 'P' (and 'V').
       // Queries with 'O' or 'C' return 0 articles.
       const primaryType = (incomingType === 'O' || incomingType === 'C') ? 'P' : incomingType;
 
@@ -571,7 +571,7 @@ const VerifiedPartsScreen = () => {
     const title = (item.articleName || item.title || item.partName || '').toLowerCase();
     const partNo = (item.articleNumber || item.articleNo || item.partNumber || '').toLowerCase();
 
-    if (brand.includes('kyb') || title.includes('shock') || title.includes('strut') || title.includes('damper')) {
+    if (title.includes('shock') || title.includes('strut') || title.includes('damper')) {
       if (title.includes('strut')) {
         return 'https://digital-assets.tecalliance.services/images/400/a59c5579be1ff74702c8856275255ab592e38e7e.jpg';
       }
@@ -704,7 +704,7 @@ const VerifiedPartsScreen = () => {
     peekPart?.dataSupplierName ||
     peekPart?.directArticle?.brandName ||
     'NGK';
-  const isPeekKyb = String(peekBrand).toUpperCase().includes('KYB');
+  const isPeekNtk = String(peekBrand).toUpperCase().includes('NTK');
   const peekPartNo =
     peekPart?.tradeNumbers?.[0] ||
     peekPart?.articleNumber ||
@@ -813,8 +813,8 @@ const VerifiedPartsScreen = () => {
             <Text style={styles.emptyTitle}>No Direct Catalog Matches</Text>
             <Text style={styles.emptySub}>
               {vehicle?.description || vehicle?.typeName || vehicle?.modelName
-                ? `No standard retail NGK/NTK/KYB parts are directly cataloged for ${vehicle.manuName || ''} ${vehicle.description || vehicle.typeName || vehicle.modelName} in South Africa.`
-                : 'No verified components found for this vehicle in the catalog. You can request a manual part lookup or quote from an authorized distributor.'}
+                ? `No standard retail NGK/NTK parts are directly cataloged for ${vehicle.manuName || ''} ${vehicle.description || vehicle.typeName || vehicle.modelName} in South Africa.`
+                : 'No verified NGK/NTK components found for this vehicle in the catalog. You can request a manual part lookup or quote from an authorized distributor.'}
             </Text>
             <Text style={[styles.emptySub, { marginTop: 6, fontSize: FONTS.size.xs, color: COLORS.textTertiary }]}>
               {appType === 'O' && (vehicle?.manuName || '').toUpperCase().includes('VOLVO')
@@ -1083,7 +1083,7 @@ const VerifiedPartsScreen = () => {
                   item.dataSupplierName ||
                   item.directArticle?.brandName ||
                   'NGK';
-                const isKyb = String(brand).toUpperCase().includes('KYB');
+                const isNtk = String(brand).toUpperCase().includes('NTK');
                 const fitPos = (item.articleCriteria || item.specs || []).find((c) =>
                   (c.criteriaDescription || c.label || c.attrName || '').toLowerCase().includes('fitting position')
                 );
@@ -1097,8 +1097,8 @@ const VerifiedPartsScreen = () => {
                       {/* Card Top: Brand Badge, Fitment, Peek Trigger */}
                       <View style={styles.cardHeader}>
                         <View style={styles.cardHeaderBadges}>
-                          <View style={[styles.brandBadge, isKyb && styles.kybBadge]}>
-                            <Text style={[styles.brandBadgeText, isKyb && styles.kybBadgeText]}>{brand}</Text>
+                          <View style={[styles.brandBadge, isNtk && styles.ntkBadge]}>
+                            <Text style={[styles.brandBadgeText, isNtk && styles.ntkBadgeText]}>{brand}</Text>
                           </View>
                           {fitPosVal && (
                             <View style={styles.fitPosPill}>
@@ -1202,8 +1202,8 @@ const VerifiedPartsScreen = () => {
                 <View key={item.articleId || idx} style={styles.partCard}>
                   <View style={styles.partCardTop}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', flex: 1 }}>
-                      <View style={[styles.partBadge, isKyb && styles.kybBadge]}>
-                        <Text style={[styles.partBadgeText, isKyb && styles.kybBadgeText]}>{brand}</Text>
+                      <View style={[styles.partBadge, isNtk && styles.ntkBadge]}>
+                        <Text style={[styles.partBadgeText, isNtk && styles.ntkBadgeText]}>{brand}</Text>
                       </View>
                       {fitPosVal && (
                         <View style={styles.fitPosPill}>
@@ -1275,8 +1275,8 @@ const VerifiedPartsScreen = () => {
             {/* Header */}
             <View style={styles.peekModalHeader}>
               <View style={styles.peekModalTitleWrap}>
-                <View style={[styles.brandBadge, isPeekKyb && styles.kybBadge]}>
-                  <Text style={[styles.brandBadgeText, isPeekKyb && styles.kybBadgeText]}>
+                <View style={[styles.brandBadge, isPeekNtk && styles.ntkBadge]}>
+                  <Text style={[styles.brandBadgeText, isPeekNtk && styles.ntkBadgeText]}>
                     {peekBrand}
                   </Text>
                 </View>
@@ -2312,11 +2312,11 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     letterSpacing: 0.4,
   },
-  kybBadge: {
-    backgroundColor: COLORS.infoLight,
+  ntkBadge: {
+    backgroundColor: '#FEF3C7',
   },
-  kybBadgeText: {
-    color: '#1D4ED8',
+  ntkBadgeText: {
+    color: '#D97706',
   },
   fitPosPill: {
     backgroundColor: COLORS.surfaceSecondary,

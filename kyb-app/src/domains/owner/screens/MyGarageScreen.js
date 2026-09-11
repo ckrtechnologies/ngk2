@@ -677,7 +677,7 @@ const MyGarageScreen = () => {
             <GarageEmptyStateIllustration size={110} />
             <Text style={[styles.emptyTitle, { marginTop: 16 }]}>Your Garage is Empty</Text>
             <Text style={styles.emptySubtitle}>
-              Save your vehicles here to instantly find 100% verified spark plugs, glow plugs, and oxygen sensors.
+              Save your vehicles here to instantly find 100% verified KYB shock absorbers, struts, and suspension components.
             </Text>
             <AppButton
               title="Add Your First Vehicle"

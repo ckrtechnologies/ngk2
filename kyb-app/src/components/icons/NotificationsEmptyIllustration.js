@@ -12,7 +12,7 @@ import Svg, {
 /**
  * NotificationsEmptyIllustration
  * OEM-grade automotive telemetry illustration for notification empty states.
- * Depicts an ECU signal transmitter / OBD antenna with NGK brand colours.
+ * Depicts an ECU signal transmitter / OBD antenna with KYB brand colours.
  * Zero gradients. Pure precision SVG geometry.
  */
 export default function NotificationsEmptyIllustration({ size = 120 }) {
@@ -43,7 +43,7 @@ export default function NotificationsEmptyIllustration({ size = 120 }) {
       <Rect x="33" y="57" width="8" height="8" rx="1.5" fill="#E2E8F0" stroke={COLORS.slate400} strokeWidth="1" />
       <Rect x="44" y="57" width="8" height="8" rx="1.5" fill="#E2E8F0" stroke={COLORS.slate400} strokeWidth="1" />
       <Rect x="55" y="57" width="8" height="8" rx="1.5" fill={COLORS.primary} />
-      {/* NGK chip label lines */}
+      {/* KYB chip label lines */}
       <Line x1="34.5" y1="69" x2="44.5" y2="69" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
       <Line x1="34.5" y1="72" x2="51" y2="72" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
 

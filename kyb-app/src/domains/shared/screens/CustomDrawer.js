@@ -118,7 +118,7 @@ export default function CustomDrawer({ navigation }) {
     >
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} translucent={false} />
 
-      {/* Drawer Header (Solid NGK Crimson Theme matching rest of the app) */}
+      {/* Drawer Header (Solid KYB Crimson Theme matching rest of the app) */}
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <TouchableOpacity
           style={styles.profileRow}

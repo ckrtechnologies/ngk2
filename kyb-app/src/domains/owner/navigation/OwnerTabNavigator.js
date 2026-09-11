@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   tabBarLabel: {
-    fontSize: wp('3%'),
-    fontWeight: FONTS.weight.semiBold,
+    fontSize: 13.5,
+    fontWeight: FONTS.weight.bold,
     marginBottom: 2,
   },
 });

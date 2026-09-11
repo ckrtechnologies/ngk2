@@ -9,7 +9,7 @@ import Svg, {
 } from 'react-native-svg';
 
 /**
- * High-End Industrial OEM Automotive Icons for NGK App
+ * High-End Industrial OEM Automotive Icons for KYB App
  * Precision vector geometry with authentic automotive semantics.
  * Completely free of pseudo-3D gradients, specular glares, or AI template artifacts.
  */
@@ -125,7 +125,7 @@ export function DrawerAvatar3DIcon({ size = 36, ...props }) {
         fill="#0F172A"
       />
 
-      {/* NGK Red Service Badge Overlap */}
+      {/* KYB Red Service Badge Overlap */}
       <Circle cx="34" cy="34" r="7" fill={COLORS.primary} stroke={COLORS.white} strokeWidth="2" />
       {/* Wrench Silhouette on Badge */}
       <Path
@@ -168,7 +168,7 @@ export function DrawerSignOut3DIcon({ size = 20, ...props }) {
   );
 }
 
-// 5. FIND PARTS ICON - Precision Search Lens with Spark Plug Cross-Section
+// 5. FIND PARTS ICON - Precision Search Lens with Suspension Strut Cross-Section
 export function FindParts3DIcon({ size = 32, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" fill="none" {...props}>
@@ -206,7 +206,7 @@ export function FindParts3DIcon({ size = 32, ...props }) {
       <Line x1="20" y1="12" x2="20" y2="16" stroke={COLORS.slate400} strokeWidth="1.2" strokeLinecap="round" />
       <Line x1="20" y1="24" x2="20" y2="28" stroke={COLORS.slate400} strokeWidth="1.2" strokeLinecap="round" />
 
-      {/* Spark Plug Electrode Target Center */}
+      {/* Strut Damper Target Center */}
       <Rect x="18.5" y="16" width="3" height="6" rx="0.5" fill="#0F172A" />
       <Line x1="20" y1="22" x2="20" y2="25" stroke={COLORS.primary} strokeWidth="1.6" strokeLinecap="round" />
       <Circle cx="20" cy="20" r="1" fill={COLORS.white} />
@@ -475,7 +475,7 @@ export function ResellerRole3DIcon({ size = 36, ...props }) {
       {/* Certified Torque Wrench Crest */}
       <G transform="translate(26, 12)">
         <Circle cx="8" cy="8" r="8" fill="#0F172A" stroke={COLORS.white} strokeWidth="1.8" />
-        {/* Crossed Wrench & Spark Plug */}
+        {/* Crossed Wrench & Strut Tool */}
         <Path
           d="M5 11l6-6M11 5l1.5 1.5M6.5 9.5L5 11"
           stroke="#F59E0B"

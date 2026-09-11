@@ -662,8 +662,7 @@ const VerifiedPartsScreen = () => {
 
   const criteriaList = selectedPart?.articleCriteria || selectedPart?.specs || [];
 
-  // Dynamically extract up to 4 meaningful highlight specifications for the selected part.
-  // Never show hardcoded spark plug values on Ignition Coils, Sensors, or Shock Absorbers!
+  // Dynamically extract up to 4 meaningful highlight specifications for the selected KYB part.
   const highlightKpis = useMemo(() => {
     if (!selectedPart) return [];
     const raw = selectedPart?.articleCriteria || selectedPart?.specs || [];

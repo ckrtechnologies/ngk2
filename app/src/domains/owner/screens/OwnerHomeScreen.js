@@ -625,7 +625,7 @@ const OwnerHomeScreen = () => {
                 <Text style={styles.tipBadgeText}>100% OEM</Text>
               </View>
             </View>
-            <Text style={styles.tipText} numberOfLines={1}>
+            <Text style={styles.tipText} numberOfLines={2}>
               Always verify part numbers and electrode gap before installation.
             </Text>
           </View>
@@ -752,7 +752,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   headerGreetingHello: {
-    fontSize: 9.5,
+    fontSize: 13.5,
     fontWeight: FONTS.weight.heavy,
     color: 'rgba(255, 255, 255, 0.82)',
     letterSpacing: 0.8,
@@ -896,18 +896,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.errorLight,
   },
   switchActivePillText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: FONTS.weight.heavy,
     color: COLORS.primary,
   },
   vehicleCardTitle: {
-    fontSize: 14.5,
+    fontSize: 16,
     fontWeight: FONTS.weight.heavy,
     color: COLORS.slate900,
     marginBottom: 2,
   },
   vehicleCardDetails: {
-    fontSize: 11.5,
+    fontSize: 13.5,
     fontWeight: FONTS.weight.semiBold,
     color: COLORS.textSecondary,
     marginBottom: 8,
@@ -918,7 +918,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     backgroundColor: COLORS.slate900,
-    height: 35,
+    minHeight: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 10,
   },
   activePartsCtaText: {
@@ -927,7 +929,9 @@ const styles = StyleSheet.create({
     fontWeight: FONTS.weight.heavy,
   },
   inactiveSetBtn: {
-    height: 35,
+    minHeight: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 10,
     backgroundColor: COLORS.background,
     borderWidth: 1,
@@ -1047,14 +1051,14 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   iphoneCardTitle: {
-    fontSize: 12.5,
+    fontSize: 15,
     fontWeight: FONTS.weight.heavy,
     color: COLORS.slate900,
     textAlign: 'center',
     letterSpacing: -0.2,
   },
   iphoneCardSub: {
-    fontSize: 10,
+    fontSize: 13.5,
     fontWeight: FONTS.weight.semiBold,
     color: COLORS.textTertiary,
     textAlign: 'center',
@@ -1108,26 +1112,26 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   tipTitle: {
-    fontSize: 12.5,
+    fontSize: 16,
     fontWeight: FONTS.weight.heavy,
     color: COLORS.slate900,
   },
   tipBadge: {
     backgroundColor: COLORS.errorLight,
-    paddingHorizontal: 6,
-    paddingVertical: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
     borderRadius: 5,
   },
   tipBadgeText: {
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: FONTS.weight.black,
     color: COLORS.primary,
   },
   tipText: {
-    fontSize: 10.5,
+    fontSize: 14,
     fontWeight: FONTS.weight.medium,
     color: '#334155',
-    lineHeight: 14,
+    lineHeight: 19,
   },
 
   /* Vehicle Picker Modal Styles (Item 2) */

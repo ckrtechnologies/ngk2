@@ -63,7 +63,8 @@ const AppButton = ({
       style={[
         styles.button,
         {
-          height,
+          minHeight: height,
+          paddingVertical: 10,
           backgroundColor: disabled ? COLORS.border : getBackgroundColor(),
           borderColor: isOutline ? (disabled ? COLORS.borderDark : COLORS.primary) : 'transparent',
           borderWidth: isOutline ? 1.5 : 0,

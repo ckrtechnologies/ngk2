@@ -29,7 +29,7 @@ export default function RootNavigator() {
   const isCommercial = normalizedRole === 'distributor' || normalizedRole === 'reseller';
 
   // Strict Commercial Approval Gate:
-  // Resellers & Distributors MUST be verified & approved by NGK Admin before accessing the app.
+  // Resellers & Distributors MUST be verified & approved by KYB Admin before accessing the app.
   if (isCommercial) {
     const isApproved =
       effectiveUser?.is_approved === true &&

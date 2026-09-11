@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   tickerContent: {
     flex: 1,
-    height: 28,
+    minHeight: 28,
     justifyContent: 'center',
     marginRight: 6,
   },
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   tickerText: {
     fontFamily: FONTS.family.semiBold,
-    fontSize: FONTS.size.sm,
+    fontSize: 14,
     fontWeight: FONTS.weight.semiBold,
     color: COLORS.slate800,
   },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   tickerHighlightText: {
     fontFamily: FONTS.family.bold,
-    fontSize: FONTS.size.micro,
+    fontSize: 11.5,
     fontWeight: FONTS.weight.heavy,
     letterSpacing: FONTS.letterSpacing.wider,
     textTransform: 'uppercase',

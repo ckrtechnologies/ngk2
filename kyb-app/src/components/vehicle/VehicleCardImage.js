@@ -70,7 +70,7 @@ function VehicleCardImage({
           source={{
             uri: imageUrl,
             headers: {
-              'User-Agent': 'NGKApp/1.0 (https://ngkntk.co.za; tech@ngkntk.co.za)',
+              'User-Agent': 'KYBApp/1.0 (https://kyb.co.za; tech@kyb.co.za)',
             },
           }}
           style={[styles.image, loading && { opacity: 0 }]}

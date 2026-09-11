@@ -208,7 +208,7 @@ export async function getVehicleImageUrl(car) {
       const endpoint = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`;
       const res = await fetch(endpoint, {
         headers: {
-          'User-Agent': 'NGKAutomotiveApp/1.0 (https://ngkntk.co.za; tech@ngkntk.co.za)',
+          'User-Agent': 'KYBAutomotiveApp/1.0 (https://kyb.co.za; tech@kyb.co.za)',
           Accept: 'application/json',
         },
       });

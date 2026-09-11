@@ -94,7 +94,7 @@ const RegisterScreen = ({ route, navigation }) => {
         try {
           const geoRes = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
-            { headers: { 'User-Agent': 'NGKApp/1.0' } }
+            { headers: { 'User-Agent': 'KYBApp/1.0' } }
           );
           const geoData = await geoRes.json();
           if (geoData && geoData.display_name) {

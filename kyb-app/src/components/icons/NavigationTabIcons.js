@@ -8,7 +8,7 @@ import Svg, {
 } from 'react-native-svg';
 
 /**
- * NGK App Bottom Navigation Tab Icons
+ * KYB App Bottom Navigation Tab Icons
  * Solid-fill ACTIVE state, translucent-stroke INACTIVE state.
  * Zero gradients. Crisp automotive-grade geometry.
  */
@@ -76,7 +76,7 @@ export function SearchTabIcon({ focused = false, size = 24 }) {
       <Svg width={size} height={size} viewBox="0 0 32 32" fill="none">
         {/* Outer Lens Ring */}
         <Circle cx="13" cy="13" r="9.5" fill={COLORS.white} />
-        {/* Inner NGK Crimson Core */}
+        {/* Inner KYB Crimson Core */}
         <Circle cx="13" cy="13" r="6" fill={COLORS.primary} />
         {/* Reticle Crosshairs */}
         <Line x1="13" y1="8.5" x2="13" y2="10.5" stroke={COLORS.white} strokeWidth="1.4" strokeLinecap="round" />
