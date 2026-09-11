@@ -722,13 +722,13 @@ const MyGarageScreen = () => {
                         </Text>
                         {isCarActive ? (
                           <View style={styles.activePill}>
-                            <CheckCircle2 size={11} color="#059669" strokeWidth={2.5} />
+                            <CheckCircle2 size={11} color={COLORS.primary} strokeWidth={2.5} />
                             <Text style={styles.activePillText}>Active Vehicle</Text>
                           </View>
                         ) : null}
                         {hasCatalogLink && (
                           <View style={styles.verifiedBadge}>
-                            <ShieldCheck size={11} color="#059669" strokeWidth={2.5} />
+                            <ShieldCheck size={11} color={COLORS.primary} strokeWidth={2.5} />
                             <Text style={styles.verifiedBadgeText}>TecDoc Verified</Text>
                           </View>
                         )}
@@ -915,7 +915,7 @@ const MyGarageScreen = () => {
                             <Text style={styles.selectedPillValue}>
                               {selectedManu.manuName || selectedManu.name}
                             </Text>
-                            <CheckCircle2 size={16} color="#059669" />
+                            <CheckCircle2 size={16} color={COLORS.primary} />
                           </View>
                         ) : (
                           <View>
@@ -984,7 +984,7 @@ const MyGarageScreen = () => {
                               <Text style={styles.selectedPillValue}>
                                 {selectedSeries.modelname || selectedSeries.name}
                               </Text>
-                              <CheckCircle2 size={16} color="#059669" />
+                              <CheckCircle2 size={16} color={COLORS.primary} />
                             </View>
                           ) : (
                             <TouchableOpacity
@@ -1097,7 +1097,7 @@ const MyGarageScreen = () => {
                       <View style={styles.matchBanner}>
                         <View style={styles.matchBannerTop}>
                           <View style={styles.verifiedIconWrap}>
-                            <ShieldCheck size={18} color="#059669" strokeWidth={2.5} />
+                            <ShieldCheck size={18} color={COLORS.primary} strokeWidth={2.5} />
                           </View>
                           <View style={{ flex: 1 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -1610,33 +1610,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   activePillText: {
     fontSize: 10,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   verifiedBadgeText: {
     fontSize: 10,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   carSpecs: {
     fontSize: FONTS.size.xs,
@@ -1823,9 +1823,9 @@ const styles = StyleSheet.create({
   selectedPillCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: RADIUS.sm,
@@ -1833,13 +1833,13 @@ const styles = StyleSheet.create({
   },
   selectedPillLabel: {
     fontSize: FONTS.size.xs,
-    color: '#065F46',
+    color: COLORS.primaryDark,
   },
   selectedPillValue: {
     flex: 1,
     fontSize: FONTS.size.sm,
     fontWeight: FONTS.weight.heavy,
-    color: '#065F46',
+    color: COLORS.primaryDark,
   },
   popularBrandsGrid: {
     flexDirection: 'row',
@@ -1944,11 +1944,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   matchBanner: {
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   matchBannerTop: {
     flexDirection: 'row',
@@ -1959,25 +1959,25 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   matchBannerBadge: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.heavy,
-    color: COLORS.success,
+    color: COLORS.primary,
     textTransform: 'uppercase',
   },
   matchCarTitle: {
     fontSize: FONTS.size.lg,
     fontWeight: FONTS.weight.heavy,
-    color: '#065F46',
+    color: COLORS.primaryDark,
     marginTop: 2,
   },
   matchCarSubtitle: {
     fontSize: FONTS.size.xs,
-    color: '#047857',
+    color: COLORS.primary,
     marginTop: 1,
   },
   reselectBtn: {
@@ -1986,7 +1986,7 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -1994,14 +1994,14 @@ const styles = StyleSheet.create({
   reselectBtnText: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primaryDark,
   },
   matchSpecsPillRow: {
     flexDirection: 'row',
     gap: 8,
     marginTop: 10,
     borderTopWidth: 1,
-    borderTopColor: COLORS.successBorder,
+    borderTopColor: COLORS.primaryBorder,
     paddingTop: 8,
   },
   matchPill: {
@@ -2011,12 +2011,12 @@ const styles = StyleSheet.create({
   },
   matchPillLabel: {
     fontSize: FONTS.size.caption,
-    color: '#047857',
+    color: COLORS.primary,
   },
   matchPillVal: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primaryDark,
   },
   reviewSectionTitle: {
     fontSize: FONTS.size.sm,

@@ -108,7 +108,7 @@ const DistributorHomeScreen = () => {
       title: 'Reseller Network',
       subtitle: 'Authorized dealer management',
       icon: <Layers size={22} color={COLORS.primary} />,
-      bg: COLORS.successLight,
+      bg: COLORS.primaryLight,
       route: 'DealerLocator',
     },
   ];
@@ -117,7 +117,7 @@ const DistributorHomeScreen = () => {
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
-      {/* Solid Crimson NGK Header */}
+      {/* Solid Crimson KYB Header */}
       <View style={[styles.solidHeader, { paddingTop: insets.top + 6 }]}>
         <TouchableOpacity
           style={styles.headerBtn}
@@ -222,8 +222,8 @@ const DistributorHomeScreen = () => {
             onPress={() => navigation.navigate('MyEnquiries', { initialFilter: 'all' })}
             activeOpacity={0.75}
           >
-            <View style={[styles.kpiIconWrapper, { backgroundColor: COLORS.successLight }]}>
-              <CheckCircle2 size={16} color="#059669" />
+            <View style={[styles.kpiIconWrapper, { backgroundColor: COLORS.primaryLight }]}>
+              <CheckCircle2 size={16} color={COLORS.primary} />
             </View>
             <Text style={styles.kpiValue}>
               {enquiry?.length || 0}

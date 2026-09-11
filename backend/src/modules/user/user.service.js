@@ -316,6 +316,7 @@ class UserService {
               country: 'ZA',
               latitude: lat,
               longitude: lon,
+              location: `POINT(${lon} ${lat})`,
               phone: userRecord.phone,
               contact_email: userRecord.email,
               is_live: true,
@@ -362,6 +363,9 @@ class UserService {
         }
         if (updateFields.longitude !== undefined && updateFields.longitude !== '') {
           dealerUpdate.longitude = parseFloat(updateFields.longitude);
+        }
+        if (dealerUpdate.latitude && dealerUpdate.longitude) {
+          dealerUpdate.location = `POINT(${dealerUpdate.longitude} ${dealerUpdate.latitude})`;
         }
         await supabase.from('dealers').update(dealerUpdate).eq('user_id', id);
       } catch (dErr) {

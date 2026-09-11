@@ -36,7 +36,7 @@ export default function NotificationsEmptyIllustration({ size = 120 }) {
       {/* Connector Port Strip */}
       <Rect x="32" y="74" width="32" height="6" rx="2" fill="#0F172A" />
       {/* LED Status Row */}
-      <Circle cx="37" cy="77" r="1.5" fill="#10B981" />
+      <Circle cx="37" cy="77" r="1.5" fill={COLORS.primary} />
       <Circle cx="43" cy="77" r="1.5" fill={COLORS.primary} />
       <Circle cx="49" cy="77" r="1.5" fill="#FBBF24" />
       {/* Chip Grid */}

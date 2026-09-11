@@ -2,6 +2,7 @@ import React from 'react';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -37,13 +38,24 @@ const renderTabBarIcon = (routeName, focused, size) => {
 };
 
 export default function OwnerTabNavigator() {
+  const insets = useSafeAreaInsets();
+  const bottomInset = Math.max(insets.bottom, 12);
+  const tabBarHeight = 58 + bottomInset;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        unmountOnBlur: true,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            height: tabBarHeight,
+            paddingBottom: bottomInset,
+          },
+        ],
         tabBarActiveTintColor: COLORS.white,
-        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.6)',
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.65)',
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarIcon: ({ size, focused }) => renderTabBarIcon(route.name, focused, size),
       })}
@@ -86,22 +98,20 @@ export default function OwnerTabNavigator() {
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.primary,
-    height: hp('10%'),
     borderTopLeftRadius: wp('8%'),
     borderTopRightRadius: wp('8%'),
     position: 'absolute',
     borderTopWidth: 0,
-    paddingBottom: hp('2%'),
-    paddingTop: hp('1%'),
-    elevation: 10,
+    paddingTop: 8,
+    elevation: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.12,
     shadowRadius: 10,
   },
   tabBarLabel: {
     fontSize: wp('3%'),
     fontWeight: FONTS.weight.semiBold,
-    marginBottom: hp('0.5%'),
+    marginBottom: 4,
   },
 });

@@ -6,13 +6,13 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    SafeAreaView,
     StatusBar,
     TextInput,
     Image,
     KeyboardAvoidingView,
     Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ChevronLeft, Search, Car, ChevronRight, X } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -159,7 +159,7 @@ const ModalsScreen = () => {
     };
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
         <AppHeader
           title={`Models for ${mfrName || 'Vehicle'}`}
           subtitle="Select vehicle series"
@@ -180,21 +180,20 @@ const ModalsScreen = () => {
                 placeholderTextColor="#8E8E8E"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                returnKeyType="done"
               />
               {searchQuery.length > 0 && (
-                <TouchableOpacity onPress={clearSearch} style={{ padding: wp('2%') }}>
+                <TouchableOpacity onPress={() => setSearchQuery('')}>
                   <X color="#8E8E8E" size={wp('5%')} />
                 </TouchableOpacity>
               )}
             </View>
           </View>
 
-          {/* List */}
+          {/* List of Models */}
           <FlatList
             data={filteredModels}
-            keyExtractor={(item, index) => item.modelId?.toString() || item.id?.toString() || index.toString()}
             renderItem={renderModelItem}
+            keyExtractor={(item) => (item.id || item.modelId || item.name).toString()}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
@@ -206,7 +205,7 @@ const ModalsScreen = () => {
             }
           />
         </KeyboardAvoidingView>
-      </View>
+      </SafeAreaView>
     );
 };
 

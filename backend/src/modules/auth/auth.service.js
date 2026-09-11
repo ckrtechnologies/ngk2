@@ -81,14 +81,18 @@ class AuthService {
           }
         }
 
+        const dLat = lat || -26.2041;
+        const dLon = lon || 28.0473;
+
         await supabase.from('dealers').insert({
           user_id: newUser.id,
           company_name: name.trim(),
           street_address: address.trim() || 'Address on file',
           city: 'Johannesburg',
           country: 'ZA',
-          latitude: lat || -26.2041,
-          longitude: lon || 28.0473,
+          latitude: dLat,
+          longitude: dLon,
+          location: `POINT(${dLon} ${dLat})`,
           phone: phone.trim() || null,
           contact_email: cleanEmail,
           is_live: false,

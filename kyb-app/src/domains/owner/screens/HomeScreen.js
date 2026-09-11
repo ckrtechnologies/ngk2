@@ -1,11 +1,12 @@
 import React from 'react';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const HomeScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top', 'bottom', 'left', 'right']} style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.welcomeText}>Welcome to KYB</Text>
         <Text style={styles.descriptionText}>

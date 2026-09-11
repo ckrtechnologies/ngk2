@@ -168,12 +168,12 @@ export const AppModal = () => {
     switch (type) {
       case 'success':
         return {
-          icon: <CheckCircle2 size={32} color={COLORS.success} strokeWidth={2.4} />,
-          badgeBg: COLORS.successLight,
-          badgeBorder: COLORS.successBorder,
-          btnBg: COLORS.success,
+          icon: <CheckCircle2 size={32} color={COLORS.primary} strokeWidth={2.4} />,
+          badgeBg: COLORS.primaryLight,
+          badgeBorder: COLORS.primaryBorder,
+          btnBg: COLORS.primary,
           btnText: COLORS.white,
-          accent: COLORS.success,
+          accent: COLORS.primary,
         };
       case 'error':
         return {

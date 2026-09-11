@@ -378,8 +378,8 @@ const styles = StyleSheet.create({
   fuelBadge: {
     fontSize: 10,
     fontWeight: FONTS.weight.bold,
-    color: '#047857',
-    backgroundColor: COLORS.successLight,
+    color: COLORS.primary,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,

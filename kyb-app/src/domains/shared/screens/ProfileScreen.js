@@ -282,7 +282,7 @@ export default function ProfileScreen({ navigation }) {
                   </Text>
                 </View>
                 <View style={styles.verifiedRow}>
-                  <CheckCircle2 size={13} color="#10B981" />
+                  <CheckCircle2 size={13} color={COLORS.primary} />
                   <Text style={styles.verifiedLabel}>Verified Account</Text>
                 </View>
               </View>
@@ -319,7 +319,7 @@ export default function ProfileScreen({ navigation }) {
             onPress={() => navigation.navigate('MyEnquiries')}
             activeOpacity={0.75}
           >
-            <View style={styles.statIconBadgeGreen}>
+            <View style={styles.statIconBadgeCrimson}>
               <MessageSquare size={20} color={COLORS.primary} />
             </View>
             <Text style={styles.statNumber}>{enquiriesCount}</Text>
@@ -428,7 +428,7 @@ export default function ProfileScreen({ navigation }) {
             onPress={() => navigation.navigate('MyEnquiries')}
             activeOpacity={0.7}
           >
-            <View style={styles.navIconBadgeGreen}>
+            <View style={styles.navIconBadgeCrimson}>
               <MessageSquare size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
   verifiedLabel: {
     fontSize: FONTS.size.xs,
     fontWeight: FONTS.weight.semiBold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   editPillBtn: {
     flexDirection: 'row',
@@ -811,13 +811,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  statIconBadgeGreen: {
+  statIconBadgeCrimson: {
     width: 42,
     height: 42,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -910,11 +910,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 14,
   },
-  navIconBadgeGreen: {
+  navIconBadgeCrimson: {
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,

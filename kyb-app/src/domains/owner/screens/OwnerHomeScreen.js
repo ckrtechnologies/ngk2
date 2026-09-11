@@ -87,8 +87,8 @@ const TICKER_ITEMS = [
   {
     id: 'tech_quote',
     IconComponent: TickerQuoteIcon,
-    themeColor: COLORS.success,
-    badgeBg: COLORS.successLight,
+    themeColor: COLORS.primary,
+    badgeBg: COLORS.primaryLight,
     countHighlight: 'Direct Support',
     text: 'Instant technical quotes',
     highlight: 'Quotes',
@@ -405,8 +405,8 @@ const OwnerHomeScreen = () => {
       title: 'Tech Enquiry',
       subtitle: 'Track tickets & expert advice',
       IconComponent: TechEnquiry3DIcon,
-      bg: COLORS.successLight,
-      accentColor: COLORS.success,
+      bg: COLORS.primaryLight,
+      accentColor: COLORS.primary,
       tag: 'Tickets',
       route: 'MyEnquiries',
     },
@@ -469,7 +469,7 @@ const OwnerHomeScreen = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: 84 + insets.bottom }]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

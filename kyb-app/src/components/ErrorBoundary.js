@@ -174,9 +174,9 @@ const styles = StyleSheet.create({
   },
   safetyBox: {
     width: '100%',
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    backgroundColor: COLORS.primaryLight,
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.25)',
+    borderColor: COLORS.primaryBorder,
     borderRadius: RADIUS.md,
     padding: wp('3.5%'),
     marginBottom: hp('2.8%'),
@@ -184,12 +184,12 @@ const styles = StyleSheet.create({
   safetyTitle: {
     fontSize: wp('3.4%'),
     fontWeight: FONTS.weight.heavy,
-    color: '#10B981',
+    color: COLORS.primary,
     marginBottom: 3,
   },
   safetySub: {
     fontSize: wp('3.1%'),
-    color: COLORS.successBorder,
+    color: COLORS.textTertiary,
     lineHeight: wp('4.4%'),
   },
   buttonRow: {

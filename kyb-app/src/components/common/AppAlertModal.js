@@ -52,9 +52,9 @@ export default function AppAlertModal({
         };
       case 'success':
         return {
-          icon: <CheckCircle2 size={24} color={COLORS.success} strokeWidth={2.4} />,
-          badgeBg: COLORS.successLight,
-          primaryBg: COLORS.success,
+          icon: <CheckCircle2 size={24} color={COLORS.primary} strokeWidth={2.4} />,
+          badgeBg: COLORS.primaryLight,
+          primaryBg: COLORS.primary,
         };
       case 'info':
       default:

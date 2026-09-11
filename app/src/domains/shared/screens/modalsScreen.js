@@ -6,13 +6,13 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    SafeAreaView,
     StatusBar,
     TextInput,
     Image,
     KeyboardAvoidingView,
     Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ChevronLeft, Search, Car, ChevronRight, X } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -159,7 +159,7 @@ const ModalsScreen = () => {
     };
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.container}>
         <AppHeader
           title={`Models for ${mfrName || 'Vehicle'}`}
           subtitle="Select vehicle series"
@@ -206,7 +206,7 @@ const ModalsScreen = () => {
             }
           />
         </KeyboardAvoidingView>
-      </View>
+      </SafeAreaView>
     );
 };
 

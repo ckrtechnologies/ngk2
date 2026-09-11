@@ -17,12 +17,11 @@ const PRESET_DISTANCES = [
   { label: '50 km', value: 50 },
   { label: '100 km', value: 100 },
   { label: '250 km', value: 250 },
-  { label: 'All SA', value: 1500 },
+  { label: '500 km', value: 500 },
 ];
 
 const MIN_KM = 5;
 const MAX_KM = 500;
-const ALL_SA_VAL = 1500;
 
 export default function DistanceSlider({
   value = 50,
@@ -30,41 +29,36 @@ export default function DistanceSlider({
 }) {
   const [trackWidth, setTrackWidth] = useState(280);
   const [internalKm, setInternalKm] = useState(value);
-  const [textVal, setTextVal] = useState(
-    value >= ALL_SA_VAL ? '1500' : String(value)
-  );
+  const [textVal, setTextVal] = useState(String(value));
   const animatedProgress = useRef(new Animated.Value(0)).current;
 
   // Convert km value to 0..1 ratio
   const kmToRatio = useCallback((km) => {
-    if (km >= ALL_SA_VAL) return 1.0;
     const clamped = Math.max(MIN_KM, Math.min(MAX_KM, km));
-    // Piecewise mapping: generous precision for 5-100km
     if (clamped <= 100) {
-      return (clamped / 100) * 0.6;
+      return (clamped / 100) * 0.5;
     } else {
-      return 0.6 + ((clamped - 100) / 400) * 0.3;
+      return 0.5 + ((clamped - 100) / 400) * 0.5;
     }
   }, []);
 
   // Convert ratio (0..1) to rounded km value
   const ratioToKm = useCallback((r) => {
     const clampedRatio = Math.max(0, Math.min(1, r));
-    if (clampedRatio >= 0.92) return ALL_SA_VAL;
-    if (clampedRatio <= 0.6) {
-      const km = Math.round((clampedRatio / 0.6) * 100);
+    if (clampedRatio <= 0.5) {
+      const km = Math.round((clampedRatio / 0.5) * 100);
       if (km <= 20) return Math.max(MIN_KM, Math.round(km / 5) * 5);
       return Math.round(km / 5) * 5;
     } else {
-      const km = 100 + Math.round(((clampedRatio - 0.6) / 0.3) * 400);
-      return Math.min(500, Math.round(km / 25) * 25);
+      const km = 100 + Math.round(((clampedRatio - 0.5) / 0.5) * 400);
+      return Math.min(MAX_KM, Math.round(km / 25) * 25);
     }
   }, []);
 
   // Synchronize internal state when prop changes
   useEffect(() => {
     setInternalKm(value);
-    setTextVal(value >= ALL_SA_VAL ? '1500' : String(value));
+    setTextVal(String(value));
     const targetRatio = kmToRatio(value);
     Animated.spring(animatedProgress, {
       toValue: targetRatio,
@@ -82,7 +76,7 @@ export default function DistanceSlider({
     const ratio = relativeX / width;
     const km = ratioToKm(ratio);
     setInternalKm(km);
-    setTextVal(km >= ALL_SA_VAL ? '1500' : String(km));
+    setTextVal(String(km));
     animatedProgress.setValue(ratio);
     if (onValueChange) onValueChange(km);
   };
@@ -110,23 +104,20 @@ export default function DistanceSlider({
       onPanResponderMove: (evt) => {
         updateFromPosition(evt.nativeEvent.pageX, false);
       },
-      onPanResponderRelease: (evt) => {
-        updateFromPosition(evt.nativeEvent.pageX, false);
-      },
     })
   ).current;
 
-  const handleSelectPreset = (presetKm) => {
-    setInternalKm(presetKm);
-    setTextVal(presetKm >= ALL_SA_VAL ? '1500' : String(presetKm));
-    const targetRatio = kmToRatio(presetKm);
+  const handlePresetPress = (km) => {
+    setInternalKm(km);
+    setTextVal(String(km));
+    const targetRatio = kmToRatio(km);
     Animated.spring(animatedProgress, {
       toValue: targetRatio,
       useNativeDriver: false,
-      friction: 8,
-      tension: 70,
+      friction: 7,
+      tension: 65,
     }).start();
-    if (onValueChange) onValueChange(presetKm);
+    if (onValueChange) onValueChange(km);
   };
 
   // Handler for direct text entry
@@ -137,30 +128,27 @@ export default function DistanceSlider({
     if (clean.length > 0) {
       const parsed = parseInt(clean, 10);
       if (!isNaN(parsed) && parsed > 0) {
-        setInternalKm(parsed);
-        const targetRatio = kmToRatio(parsed);
+        const clamped = Math.min(MAX_KM, parsed);
+        setInternalKm(clamped);
+        const targetRatio = kmToRatio(clamped);
         Animated.spring(animatedProgress, {
           toValue: targetRatio,
           useNativeDriver: false,
           friction: 8,
           tension: 70,
         }).start();
-        if (onValueChange) onValueChange(parsed);
+        if (onValueChange) onValueChange(clamped);
       }
     }
   };
 
   const handleBlur = () => {
     if (!textVal || parseInt(textVal, 10) <= 0) {
-      const fallback = internalKm >= ALL_SA_VAL ? '1500' : String(internalKm);
-      setTextVal(fallback);
+      setTextVal(String(internalKm));
     }
   };
 
-  const formattedLabel =
-    internalKm >= ALL_SA_VAL
-      ? 'All South Africa'
-      : `Within ${internalKm} km`;
+  const formattedLabel = `Within ${internalKm} km`;
 
   return (
     <View style={styles.container}>
@@ -220,9 +208,9 @@ export default function DistanceSlider({
       {/* Min / Max Labels */}
       <View style={styles.minMaxRow}>
         <Text style={styles.minMaxText}>5 km</Text>
-        <Text style={styles.minMaxText}>50 km</Text>
-        <Text style={styles.minMaxText}>150 km</Text>
-        <Text style={styles.minMaxText}>All SA</Text>
+        <Text style={styles.minMaxText}>100 km</Text>
+        <Text style={styles.minMaxText}>250 km</Text>
+        <Text style={styles.minMaxText}>500 km</Text>
       </View>
 
       {/* Manual KM Input Box */}
@@ -253,15 +241,13 @@ export default function DistanceSlider({
       {/* Quick Preset Chips */}
       <View style={styles.presetsRow}>
         {PRESET_DISTANCES.map((preset) => {
-          const isSelected =
-            (preset.value >= ALL_SA_VAL && internalKm >= ALL_SA_VAL) ||
-            Math.abs(preset.value - internalKm) <= 2;
+          const isSelected = Math.abs(preset.value - internalKm) <= 2;
 
           return (
             <TouchableOpacity
               key={preset.label}
               activeOpacity={0.75}
-              onPress={() => handleSelectPreset(preset.value)}
+              onPress={() => handlePresetPress(preset.value)}
               style={[
                 styles.presetChip,
                 isSelected && styles.presetChipActive,

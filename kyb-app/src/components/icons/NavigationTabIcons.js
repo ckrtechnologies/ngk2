@@ -131,7 +131,7 @@ export function EnquiriesTabIcon({ focused = false, size = 24 }) {
           strokeLinejoin="round"
         />
         {/* Status LED */}
-        <Circle cx="25" cy="7" r="2" fill="#10B981" />
+        <Circle cx="25" cy="7" r="2" fill={COLORS.primary} />
       </Svg>
     );
   }

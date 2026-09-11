@@ -68,9 +68,7 @@ export default function DealerFilterModal({
         d.distanceKm !== null &&
         d.distanceKm !== 999999
       ) {
-        if (draft.radius === 1500) {
-          // All SA preset - show all dealers
-        } else if (d.distanceKm > draft.radius) {
+        if (d.distanceKm > draft.radius) {
           return false;
         }
       }

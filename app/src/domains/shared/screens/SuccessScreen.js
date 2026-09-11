@@ -5,9 +5,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Check } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +16,7 @@ const SuccessScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top', 'bottom', 'left', 'right']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
 
       <View style={styles.content}>
@@ -31,7 +31,7 @@ const SuccessScreen = () => {
 
         <TouchableOpacity
           style={styles.homeBtn}
-          onPress={() => navigation.navigate('OwnerHome')}
+          onPress={() => navigation.replace('OwnerHome')}
         >
           <Text style={styles.homeBtnText}>Back to Home</Text>
         </TouchableOpacity>

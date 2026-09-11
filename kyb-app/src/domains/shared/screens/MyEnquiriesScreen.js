@@ -164,8 +164,8 @@ const MyEnquiriesScreen = () => {
       case 'resolved':
       case 'approved':
         return {
-          bg: COLORS.successLight,
-          color: COLORS.success,
+          bg: COLORS.primaryLight,
+          color: COLORS.primary,
           label: 'Resolved',
         };
       case 'inprogress':
@@ -446,7 +446,7 @@ const MyEnquiriesScreen = () => {
     { id: 'InProgress', label: 'In Progress', desc: 'Reviewing inquiry & checking catalog', bg: COLORS.infoLight, color: '#1D4ED8', border: COLORS.infoBorder },
     { id: 'QuoteSent', label: 'Quote Sent', desc: 'Price & availability sent to customer', bg: '#EDE9FE', color: '#6D28D9', border: '#DDD6FE' },
     { id: 'AwaitingStock', label: 'Awaiting Stock', desc: 'Parts backordered from regional hub', bg: '#FFEDD5', color: '#C2410C', border: '#FED7AA' },
-    { id: 'Resolved', label: 'Mark Resolved', desc: 'Query answered / order ready for pickup', bg: COLORS.successLight, color: '#047857', border: COLORS.successBorder },
+    { id: 'Resolved', label: 'Mark Resolved', desc: 'Query answered / order ready for pickup', bg: COLORS.primaryLight, color: COLORS.primary, border: COLORS.primaryBorder },
     { id: 'Closed', label: 'Close Ticket', desc: 'Transaction completed & archived', bg: COLORS.slate100, color: '#334155', border: COLORS.borderDark },
     { id: 'Declined', label: 'Decline / Cancel', desc: 'Out of stock / unable to supply', bg: '#FFE4E6', color: '#BE123C', border: '#FECDD3' },
   ];
@@ -912,13 +912,13 @@ const MyEnquiriesScreen = () => {
                     {/* 4. Quick Resolve */}
                     {normalizedStatus !== 'resolved' && (
                       <TouchableOpacity
-                        style={[styles.statusActionBtn, { backgroundColor: COLORS.successLight, borderColor: COLORS.successBorder }]}
+                        style={[styles.statusActionBtn, { backgroundColor: COLORS.primaryLight, borderColor: COLORS.primaryBorder }]}
                         onPress={() => handleUpdateStatus('Resolved', 'Inquiry answered and parts ready for pickup.')}
                         disabled={updatingStatus}
                         activeOpacity={0.8}
                       >
-                        <CheckCircle2 size={11} color="#047857" />
-                        <Text style={[styles.statusActionBtnText, { color: '#047857' }]}>Resolved</Text>
+                        <CheckCircle2 size={11} color={COLORS.primary} />
+                        <Text style={[styles.statusActionBtnText, { color: COLORS.primary }]}>Resolved</Text>
                       </TouchableOpacity>
                     )}
 
@@ -1105,7 +1105,7 @@ const MyEnquiriesScreen = () => {
                               <View style={styles.verifiedTag}>
                                 <ShieldCheck
                                   size={10}
-                                  color="#059669"
+                                  color={COLORS.primary}
                                   strokeWidth={2.5}
                                 />
                                 <Text style={styles.verifiedTagText}>Verified</Text>
@@ -1257,7 +1257,7 @@ const MyEnquiriesScreen = () => {
                       </Text>
                     </View>
                     <View style={styles.specsFitmentGuaranteePill}>
-                      <ShieldCheck size={11} color="#059669" strokeWidth={2.2} />
+                      <ShieldCheck size={11} color={COLORS.primary} strokeWidth={2.2} />
                       <Text style={styles.specsFitmentGuaranteeText}>OEM Authentic</Text>
                     </View>
                     <View style={[styles.specsStatusTag, { backgroundColor: statusBadge.bg }]}>
@@ -2204,17 +2204,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3.5,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.successLight,
+    borderColor: COLORS.primaryBorder,
   },
   specsFitmentGuaranteeText: {
     fontSize: 10.5,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   specsStatusTag: {
     paddingHorizontal: 7,
@@ -2416,8 +2416,8 @@ const styles = StyleSheet.create({
   liveIndicatorPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    backgroundColor: COLORS.successLight,
+    gap: 4,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 8,
     paddingVertical: 2.5,
     borderRadius: 10,
@@ -2426,12 +2426,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#10B981',
+    backgroundColor: COLORS.primary,
   },
   liveIndicatorText: {
     fontSize: 9.5,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   waitingForReplyBox: {
     paddingVertical: 20,
@@ -2468,7 +2468,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: COLORS.success,
+    backgroundColor: COLORS.secondary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2535,7 +2535,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 4,
     paddingVertical: 1,
     borderRadius: RADIUS.xs,
@@ -2543,7 +2543,7 @@ const styles = StyleSheet.create({
   verifiedTagText: {
     fontSize: 9,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
   messageBodyText: {
     fontSize: FONTS.size.sm,

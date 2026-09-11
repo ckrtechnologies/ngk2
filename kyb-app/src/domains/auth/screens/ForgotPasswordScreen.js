@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Mail, KeyRound, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react-native';
 import { apiFunction } from '../../../apis/apiFunction';
 import { sendOtpApi, verifyOtpApi, updatePasswordApi } from '../../../apis/api';
@@ -18,6 +21,7 @@ import AppInput from '../../../components/common/AppInput';
 import AppButton from '../../../components/common/AppButton';
 
 const ForgotPasswordScreen = ({ route, navigation }) => {
+  const insets = useSafeAreaInsets();
   const role = route?.params?.role || 'owner';
   const buttonColor = role === 'distributor' ? COLORS.textPrimary : COLORS.primary;
 
@@ -128,7 +132,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
           text1: 'Password Updated',
           text2: 'You can now sign in with your new password',
         });
-        navigation.navigate('Login', { role });
+        navigation.replace('Login', { role });
       } else {
         setError(response?.message || 'Failed to update password');
       }
@@ -146,7 +150,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
       : 'Vehicle Owner';
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} translucent={false} />
       <AppHeader
         title={step === 1 ? 'Reset Password' : step === 2 ? 'Verify Code' : 'Set New Password'}
@@ -156,23 +160,27 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
         onBack={() => (step > 1 ? setStep(step - 1) : navigation.goBack())}
       />
 
-      <ScreenContainer
-        scrollable={true}
-        includeTopInset={false}
-        showStatusBar={false}
-        footer={
-          <View style={styles.footerContainer}>
-            <TouchableOpacity
-              style={styles.backToLoginBtn}
-              onPress={() => navigation.navigate('Login', { role })}
-            >
-              <Text style={styles.backToLoginText}>
-                Remember your password? <Text style={{ color: buttonColor, fontWeight: FONTS.weight.bold }}>Sign In</Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        }
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <ScreenContainer
+          scrollable={true}
+          includeTopInset={false}
+          showStatusBar={false}
+          footer={
+            <View style={[styles.footerContainer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+              <TouchableOpacity
+                style={styles.backToLoginBtn}
+                onPress={() => navigation.replace('Login', { role })}
+              >
+                <Text style={styles.backToLoginText}>
+                  Remember your password? <Text style={{ color: buttonColor, fontWeight: FONTS.weight.bold }}>Sign In</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
+          }
+        >
 
       <View style={styles.content}>
         {/* Step Indicator / Icon */}
@@ -300,7 +308,8 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
         </View>
       </View>
       </ScreenContainer>
-    </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

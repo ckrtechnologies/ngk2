@@ -10,6 +10,7 @@ import {
   StatusBar,
   Keyboard,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Mail, Lock, Eye, EyeOff, ChevronLeft } from 'lucide-react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -175,18 +176,22 @@ const LoginScreen = ({ route, navigation }) => {
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#0F121C" translucent={false} />
 
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.mainScrollView}
-        contentContainerStyle={[
-          styles.scrollMainContent,
-          isKeyboardVisible && { paddingBottom: 180 },
-        ]}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        bounces={false}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <ScrollView
+          ref={scrollViewRef}
+          style={styles.mainScrollView}
+          contentContainerStyle={[
+            styles.scrollMainContent,
+            { paddingBottom: Math.max(insets.bottom, 24) },
+          ]}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          bounces={false}
+        >
         {/* TOP DARK HEADER SECTION */}
         <View
           style={[
@@ -317,6 +322,7 @@ const LoginScreen = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };

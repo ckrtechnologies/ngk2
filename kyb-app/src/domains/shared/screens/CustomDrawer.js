@@ -42,6 +42,10 @@ export default function CustomDrawer({ navigation }) {
     fetchUser();
   }, [dispatch, myself]);
 
+  const navigateAndDismiss = (targetRoute, params) => {
+    navigation.replace(targetRoute, params);
+  };
+
   const handleLogout = async () => {
     await signOut();
   };
@@ -54,15 +58,7 @@ export default function CustomDrawer({ navigation }) {
       Icon: HomeDashboard3DIcon,
       bgColor: '#FFF1F2',
       borderColor: '#FFE4E6',
-      action: () => {
-        const homeRoute =
-          role === 'reseller'
-            ? 'ResellerHome'
-            : role === 'distributor'
-            ? 'DistributorHomeScreen'
-            : 'OwnerHome';
-        navigation.navigate(homeRoute);
-      },
+      action: () => navigation.goBack(),
     },
     {
       id: 'profile',
@@ -71,7 +67,7 @@ export default function CustomDrawer({ navigation }) {
       Icon: Profile3DIcon,
       bgColor: '#EEF2FF',
       borderColor: '#C7D2FE',
-      action: () => navigation.navigate('Profile'),
+      action: () => navigateAndDismiss('Profile'),
     },
     {
       id: 'parts',
@@ -80,7 +76,7 @@ export default function CustomDrawer({ navigation }) {
       Icon: FindParts3DIcon,
       bgColor: COLORS.errorLight,
       borderColor: COLORS.errorBorder,
-      action: () => navigation.navigate('PartsFinder'),
+      action: () => navigateAndDismiss('PartsFinder'),
     },
     {
       id: 'garage',
@@ -89,16 +85,16 @@ export default function CustomDrawer({ navigation }) {
       Icon: MyGarage3DIcon,
       bgColor: COLORS.infoLight,
       borderColor: COLORS.infoLight,
-      action: () => navigation.navigate('MyGarage'),
+      action: () => navigateAndDismiss('MyGarage'),
     },
     {
       id: 'enquiries',
       label: 'Technical Enquiries',
       subtitle: 'Direct engineering support',
       Icon: TechEnquiry3DIcon,
-      bgColor: COLORS.successLight,
-      borderColor: COLORS.successBorder,
-      action: () => navigation.navigate('MyEnquiries'),
+      bgColor: COLORS.primaryLight,
+      borderColor: COLORS.primaryBorder,
+      action: () => navigateAndDismiss('MyEnquiries'),
     },
     {
       id: 'dealers',
@@ -107,7 +103,7 @@ export default function CustomDrawer({ navigation }) {
       Icon: DealerLocator3DIcon,
       bgColor: '#FFFBEB',
       borderColor: COLORS.warningBorder,
-      action: () => navigation.navigate('DealerLocator'),
+      action: () => navigateAndDismiss('DealerLocator'),
     },
   ];
 
@@ -116,7 +112,7 @@ export default function CustomDrawer({ navigation }) {
       style={[
         styles.container,
         {
-          paddingBottom: insets.bottom,
+          paddingBottom: Math.max(insets.bottom, 16),
         },
       ]}
     >
@@ -126,7 +122,7 @@ export default function CustomDrawer({ navigation }) {
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <TouchableOpacity
           style={styles.profileRow}
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() => navigateAndDismiss('Profile')}
           activeOpacity={0.8}
         >
           <View style={styles.profileTextCol}>

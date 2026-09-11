@@ -25,6 +25,7 @@ import {
 } from 'lucide-react-native';
 import NotificationsEmptyIllustration from '../../../components/icons/NotificationsEmptyIllustration';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getMyselfRedux } from '../../../redux/getData';
 import { apiFunction } from '../../../apis/apiFunction';
 import { readNotificationsApi } from '../../../apis/api';
@@ -34,6 +35,7 @@ import AppHeader from '../../../components/common/AppHeader';
 const Notification = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
 
   const { myself } = useSelector((state) => state.getData);
   const [loading, setLoading] = useState(false);
@@ -247,10 +249,10 @@ const Notification = () => {
     if (type === 'account_approved') {
       return {
         badgeText: 'VERIFIED DEALER',
-        badgeBg: COLORS.successLight,
-        badgeColor: COLORS.success,
-        icon: <ShieldCheck size={16} color="#059669" strokeWidth={2.2} />,
-        iconBg: COLORS.successLight,
+        badgeBg: COLORS.primaryLight,
+        badgeColor: COLORS.primary,
+        icon: <ShieldCheck size={16} color={COLORS.primary} strokeWidth={2.2} />, 
+        iconBg: COLORS.primaryLight,
       };
     }
 
@@ -348,7 +350,7 @@ const Notification = () => {
             <View style={styles.metaRow}>
               {item.metadata?.dealerName && (
                 <View style={styles.metaChip}>
-                  <Store size={10} color="#059669" />
+                  <Store size={10} color={COLORS.primary} />
                   <Text style={styles.metaChipText} numberOfLines={1}>
                     {item.metadata.dealerName}
                   </Text>
@@ -471,7 +473,10 @@ const Notification = () => {
       {/* Main Feed */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: Math.max(insets.bottom + 24, 40) },
+        ]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -796,7 +801,7 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,

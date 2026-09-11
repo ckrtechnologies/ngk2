@@ -25,6 +25,7 @@ import {
 } from 'lucide-react-native';
 import NotificationsEmptyIllustration from '../../../components/icons/NotificationsEmptyIllustration';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getMyselfRedux } from '../../../redux/getData';
 import { apiFunction } from '../../../apis/apiFunction';
 import { readNotificationsApi } from '../../../apis/api';
@@ -34,6 +35,7 @@ import AppHeader from '../../../components/common/AppHeader';
 const Notification = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
 
   const { myself } = useSelector((state) => state.getData);
   const [loading, setLoading] = useState(false);
@@ -471,7 +473,10 @@ const Notification = () => {
       {/* Main Feed */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: Math.max(insets.bottom + 24, 40) },
+        ]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

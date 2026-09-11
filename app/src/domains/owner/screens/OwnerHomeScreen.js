@@ -469,7 +469,7 @@ const OwnerHomeScreen = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: 84 + insets.bottom }]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

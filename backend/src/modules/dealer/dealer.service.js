@@ -23,17 +23,17 @@ class DealerService {
     // 1. If user coordinates provided, attempt PostGIS RPC in Supabase first
     if (hasCoords) {
       try {
+        const parsedRadius =
+          radius !== null && radius !== undefined && !isNaN(parseFloat(radius))
+            ? parseFloat(radius)
+            : null;
+
         const { data: rpcDealers, error: rpcError } = await supabase.rpc(
           'get_nearby_approved_dealers',
           {
             user_lat: parseFloat(userLat),
             user_lon: parseFloat(userLon),
-            radius_km:
-              radius !== null &&
-              radius !== undefined &&
-              parseFloat(radius) !== 1500
-                ? parseFloat(radius)
-                : 20000,
+            radius_km: parsedRadius,
             target_role: role || null,
           }
         );
@@ -231,9 +231,7 @@ class DealerService {
     // Distance radius filter if user coordinates and explicit radius were provided
     if (hasCoords && radius !== null && radius !== undefined && !isNaN(parseFloat(radius))) {
       const maxRadius = parseFloat(radius);
-      if (maxRadius !== 1500) {
-        list = list.filter((d) => d.distanceKm <= maxRadius);
-      }
+      list = list.filter((d) => d.distanceKm <= maxRadius);
     }
 
     // Sort by distance if user coordinates were provided

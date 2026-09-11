@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxs,
   },
   circleCompleted: {
-    backgroundColor: COLORS.success,
+    backgroundColor: COLORS.primary,
   },
   circleActive: {
     backgroundColor: COLORS.primary,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontWeight: FONTS.weight.bold,
   },
   labelCompleted: {
-    color: COLORS.success,
+    color: COLORS.primaryDark,
   },
   labelPending: {
     color: COLORS.textMuted,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   connectorActive: {
-    backgroundColor: COLORS.success,
+    backgroundColor: COLORS.primary,
   },
   connectorPending: {
     backgroundColor: COLORS.border,

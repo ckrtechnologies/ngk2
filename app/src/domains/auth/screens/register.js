@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  KeyboardAvoidingView,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 import { User, Mail, Lock, MapPin, Eye, EyeOff, Navigation as NavigationIcon } from 'lucide-react-native';
 import { apiFunction } from '../../../apis/apiFunction';
@@ -19,6 +21,7 @@ import AppInput from '../../../components/common/AppInput';
 import AppButton from '../../../components/common/AppButton';
 
 const RegisterScreen = ({ route, navigation }) => {
+  const insets = useSafeAreaInsets();
   const role = route?.params?.role || 'owner';
 
   const [name, setName] = useState('');
@@ -144,7 +147,7 @@ const RegisterScreen = ({ route, navigation }) => {
           text1: 'Account Created',
           text2: 'Please sign in with your credentials.',
         });
-        navigation.navigate('Login', { role });
+        navigation.replace('Login', { role });
       } else {
         setLoading(false);
         Toast.show({
@@ -164,30 +167,34 @@ const RegisterScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <AppHeader
         title="Create Account"
         subtitle={`Register as ${role === 'owner' ? 'Vehicle Owner' : role}`}
         onBack={() => navigation.goBack()}
       />
 
-      <ScreenContainer
-        scrollable={true}
-        includeTopInset={false}
-        showStatusBar={false}
-        footer={
-          <View style={styles.footerContainer}>
-            <TouchableOpacity
-              style={styles.loginRow}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('Login', { role })}
-            >
-              <Text style={styles.loginPrompt}>Already have an account? </Text>
-              <Text style={[styles.loginLink, { color: buttonColor }]}>Sign In</Text>
-            </TouchableOpacity>
-          </View>
-        }
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <ScreenContainer
+          scrollable={true}
+          includeTopInset={false}
+          showStatusBar={false}
+          footer={
+            <View style={[styles.footerContainer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+              <TouchableOpacity
+                style={styles.loginRow}
+                activeOpacity={0.7}
+                onPress={() => navigation.replace('Login', { role })}
+              >
+                <Text style={styles.loginPrompt}>Already have an account? </Text>
+                <Text style={[styles.loginLink, { color: buttonColor }]}>Sign In</Text>
+              </TouchableOpacity>
+            </View>
+          }
+        >
 
       <View style={styles.formCard}>
         <AppInput
@@ -276,7 +283,8 @@ const RegisterScreen = ({ route, navigation }) => {
         />
       </View>
     </ScreenContainer>
-    </View>
+    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

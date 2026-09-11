@@ -128,7 +128,7 @@ export function SolidGarageBayIcon({ size = 16, color = COLORS.textSecondary, ..
 }
 
 // 5. SOLID VERIFIED SHIELD BADGE
-export function SolidShieldVerifiedIcon({ size = 14, color = COLORS.success, ...props }) {
+export function SolidShieldVerifiedIcon({ size = 14, color = COLORS.primary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       {/* Solid Shield Body */}
@@ -149,7 +149,7 @@ export function SolidShieldVerifiedIcon({ size = 14, color = COLORS.success, ...
 }
 
 // 6. SOLID LOCATION PIN ICON
-export function SolidLocationPinIcon({ size = 14, color = COLORS.success, ...props }) {
+export function SolidLocationPinIcon({ size = 14, color = COLORS.primary, ...props }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       {/* Solid Teardrop Pin */}

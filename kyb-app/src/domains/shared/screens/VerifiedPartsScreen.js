@@ -2196,7 +2196,7 @@ const VerifiedPartsScreen = () => {
                         <Text style={styles.viewFullSpecsBannerSub}>360° rotation, full zoom & HD photography</Text>
                       </View>
                     </View>
-                    <Text style={[styles.viewFullSpecsBannerAction, { color: COLORS.success }]}>Open Studio ↗</Text>
+                    <Text style={[styles.viewFullSpecsBannerAction, { color: COLORS.primary }]}>Open Studio ↗</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -2245,7 +2245,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -2254,7 +2254,7 @@ const styles = StyleSheet.create({
   verifiedBannerText: {
     fontSize: FONTS.size.xs,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primaryDark,
     flex: 1,
   },
   loadingContainer: {
@@ -2455,17 +2455,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   verifiedMicroText: {
     fontSize: 9,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primary,
   },
   peekHeaderBtn: {
     flexDirection: 'row',
@@ -2728,17 +2728,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   peekFitmentText: {
     fontSize: 10,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primary,
   },
   peekCategoryTitle: {
     fontSize: FONTS.size.md,
@@ -2990,17 +2990,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   active3DBadgeTextLight: {
     fontSize: 10,
     fontWeight: FONTS.weight.heavy,
-    color: COLORS.success,
+    color: COLORS.primary,
     letterSpacing: 0.4,
   },
   viewportCenterLight: {
@@ -3535,17 +3535,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: RADIUS.xs,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   guaranteeTagText: {
     fontSize: 10,
     fontWeight: FONTS.weight.bold,
-    color: '#065F46',
+    color: COLORS.primary,
   },
   switchVehicleBtn: {
     backgroundColor: COLORS.surfaceSecondary,

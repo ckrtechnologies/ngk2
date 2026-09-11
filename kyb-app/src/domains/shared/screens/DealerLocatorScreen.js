@@ -87,12 +87,13 @@ const DealerLocatorScreen = () => {
   const fetchDealers = useCallback(
     async (coords = null) => {
       try {
+        const rad = coords?.radius || filters.radius || 50;
         const queryParams =
           coords?.userLat && coords?.userLon
             ? {
                 userLat: coords.userLat,
                 userLon: coords.userLon,
-                radius: 20000,
+                radius: rad,
               }
             : {};
 
@@ -113,7 +114,7 @@ const DealerLocatorScreen = () => {
         setLocating(false);
       }
     },
-    [dispatch]
+    [dispatch, filters.radius]
   );
 
   const acquireGPS = useCallback(async () => {
@@ -185,7 +186,7 @@ const DealerLocatorScreen = () => {
   // Compute how many non-default filter settings are active
   const activeFilterCount = useMemo(() => {
     let c = 0;
-    if (filters.radius !== 50 && filters.radius !== 1500) c++;
+    if (filters.radius !== 50) c++;
     if (filters.role !== 'all') c++;
     if (filters.sortBy !== 'nearest') c++;
     return c;
@@ -206,9 +207,7 @@ const DealerLocatorScreen = () => {
         d.distanceKm !== null &&
         d.distanceKm !== 999999
       ) {
-        if (filters.radius === 1500) {
-          // All SA preset - no distance restriction
-        } else if (d.distanceKm > filters.radius) {
+        if (d.distanceKm > filters.radius) {
           return false;
         }
       }
@@ -334,7 +333,7 @@ const DealerLocatorScreen = () => {
         d.distanceKm !== null &&
         d.distanceKm !== 999999
       ) {
-        if (filters.radius !== 1500 && d.distanceKm > filters.radius) {
+        if (d.distanceKm > filters.radius) {
           return false;
         }
       }
@@ -449,7 +448,7 @@ const DealerLocatorScreen = () => {
                 locating
                   ? COLORS.textMuted
                   : userCoords
-                  ? COLORS.success
+                  ? COLORS.primary
                   : COLORS.textMuted
               }
             />
@@ -457,11 +456,7 @@ const DealerLocatorScreen = () => {
               {locating
                 ? 'Acquiring mobile GPS...'
                 : userCoords
-                ? `Mobile GPS • ${
-                    filters.radius === 1500
-                      ? 'National directory'
-                      : `Within ${filters.radius}km`
-                  }`
+                ? `Mobile GPS • Within ${filters.radius}km`
                 : 'GPS inactive • Showing national directory'}
             </Text>
           </View>
@@ -488,7 +483,7 @@ const DealerLocatorScreen = () => {
             >
               <Text style={styles.activeChipsLabel}>Filters:</Text>
 
-              {filters.radius !== 50 && filters.radius !== 1500 && (
+              {filters.radius !== 50 && (
                 <View style={styles.activeChipPill}>
                   <Text style={styles.activeChipText}>
                     {`≤ ${filters.radius}km`}
@@ -758,7 +753,7 @@ const DealerLocatorScreen = () => {
 
                     {isSelf(item) ? (
                       <View style={styles.selfBadge}>
-                        <ShieldCheck size={12} color="#059669" />
+                        <ShieldCheck size={12} color={COLORS.primary} />
                         <Text style={styles.selfBadgeText}>Your Business</Text>
                       </View>
                     ) : (
@@ -791,14 +786,14 @@ const DealerLocatorScreen = () => {
                 </Text>
 
                 <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 12 }}>
-                  {dealers.length > 0 && filters.radius < 1500 && (
+                  {dealers.length > 0 && filters.radius < 500 && (
                     <TouchableOpacity
-                      onPress={() => setFilters((prev) => ({ ...prev, radius: 1500 }))}
+                      onPress={() => setFilters((prev) => ({ ...prev, radius: 500 }))}
                       style={[styles.emptyResetBtn, { backgroundColor: COLORS.primary }]}
                       activeOpacity={0.8}
                     >
                       <Text style={[styles.emptyResetBtnText, { color: COLORS.white }]}>
-                        Show All South Africa
+                        Expand to 500 km
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -1128,9 +1123,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.infoBorder,
   },
   resellerBadge: {
-    backgroundColor: COLORS.successLight,
+    backgroundColor: '#FFFBEB',
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.warningBorder,
   },
   roleBadgeText: {
     fontSize: 9,
@@ -1141,7 +1136,7 @@ const styles = StyleSheet.create({
     color: '#1D4ED8',
   },
   resellerBadgeText: {
-    color: COLORS.primary,
+    color: COLORS.warning,
   },
   dealerCity: {
     fontSize: FONTS.size.xs,
@@ -1173,12 +1168,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingVertical: 6,
     paddingHorizontal: 8,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   actionTextCall: {
     fontSize: FONTS.size.caption,
@@ -1189,17 +1184,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: COLORS.surfaceSecondary,
     paddingVertical: 6,
     paddingHorizontal: 8,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: COLORS.border,
   },
   actionTextWhatsApp: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.primary,
+    color: COLORS.textPrimary,
   },
   actionBtnMap: {
     flexDirection: 'row',
@@ -1234,17 +1229,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: COLORS.successBorder,
+    borderColor: COLORS.primaryBorder,
   },
   selfBadgeText: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.bold,
-    color: COLORS.success,
+    color: COLORS.primary,
   },
 });
 

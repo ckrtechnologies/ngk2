@@ -228,7 +228,7 @@ export default function DistributorProfileScreen({ navigation }) {
                 </View>
                 {myself?.is_approved !== false && myself?.approval_status !== 'pending_approval' ? (
                   <View style={styles.verifiedRow}>
-                    <CheckCircle2 size={13} color="#10B981" />
+                    <CheckCircle2 size={13} color={COLORS.primary} />
                     <Text style={styles.verifiedLabel}>Certified Partner</Text>
                   </View>
                 ) : (
@@ -336,7 +336,7 @@ export default function DistributorProfileScreen({ navigation }) {
             onPress={() => navigation.navigate('MyEnquiries')}
             activeOpacity={0.7}
           >
-            <View style={styles.navIconBadgeGreen}>
+            <View style={styles.navIconBadgeCrimson}>
               <MessageSquare size={16} color={COLORS.primary} />
             </View>
             <View style={styles.navTextCol}>
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
   verifiedLabel: {
     fontSize: FONTS.size.caption,
     fontWeight: FONTS.weight.semiBold,
-    color: '#10B981',
+    color: COLORS.primary,
   },
   editPillBtn: {
     flexDirection: 'row',
@@ -747,11 +747,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
   },
-  navIconBadgeGreen: {
+  navIconBadgeCrimson: {
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: COLORS.successLight,
+    backgroundColor: COLORS.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,

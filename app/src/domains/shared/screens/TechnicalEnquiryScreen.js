@@ -39,6 +39,7 @@ import {
 import EnquiryStepIndicator from '../../../components/common/EnquiryStepIndicator';
 import DealerFilterModal, { DEFAULT_FILTERS } from '../../../components/common/DealerFilterModal';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { apiFunction } from '../../../apis/apiFunction';
@@ -180,6 +181,7 @@ const TechnicalEnquiryScreen = () => {
           const coords = {
             userLat: pos.coords.latitude,
             userLon: pos.coords.longitude,
+            radius: filters.radius || 50,
           };
           setUserCoords(coords);
           try {
@@ -370,9 +372,7 @@ const TechnicalEnquiryScreen = () => {
         d.distanceKm !== null &&
         d.distanceKm !== 999999
       ) {
-        if (filters.radius === 1500) {
-          // All SA preset
-        } else if (d.distanceKm > filters.radius) {
+        if (d.distanceKm > filters.radius) {
           return false;
         }
       }
@@ -417,9 +417,7 @@ const TechnicalEnquiryScreen = () => {
         d.distanceKm !== null &&
         d.distanceKm !== 999999
       ) {
-        if (filters.radius === 1500) {
-          // All SA preset - no distance restriction
-        } else if (d.distanceKm > filters.radius) {
+        if (d.distanceKm > filters.radius) {
           return false;
         }
       }
@@ -820,7 +818,7 @@ const TechnicalEnquiryScreen = () => {
           text1: 'Enquiry Submitted',
           text2: 'Your technical ticket has been assigned and dispatched.',
         });
-        navigation.navigate('MyEnquiries');
+        navigation.replace('MyEnquiries');
       } else {
         setLoading(false);
         Toast.show({
@@ -1091,7 +1089,7 @@ const TechnicalEnquiryScreen = () => {
             {filters.radius !== 50 && (
               <View style={styles.activeChipPill}>
                 <Text style={styles.activeChipText}>
-                  {filters.radius === 1500 ? 'All SA' : `≤ ${filters.radius}km`}
+                  {`≤ ${filters.radius}km`}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setFilters((prev) => ({ ...prev, radius: 50 }))}
@@ -1467,58 +1465,63 @@ const TechnicalEnquiryScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <AppHeader
-        title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
-        subtitle={
-          isReseller
-            ? 'Distributor Lead & Fitment Support'
-            : 'Authorized Verification & Dealer Dispatch'
-        }
-        onBack={() => {
-          if (currentStep > 1) {
-            setCurrentStep((s) => s - 1);
-          } else {
-            navigation.goBack();
-          }
-        }}
-      />
-
-      {/* 3-Step Guided Journey Indicator */}
-      <EnquiryStepIndicator
-        currentStep={currentStep}
-        onStepPress={handleStepPress}
-      />
-
-      <ScreenContainer
-        scrollable={true}
-        includeTopInset={false}
-        showStatusBar={false}
-        contentContainerStyle={styles.enquiryScrollContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
-          />
-        }
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        {currentStep === 1 && renderStep1()}
-        {currentStep === 2 && renderStep2()}
-        {currentStep === 3 && renderStep3()}
-      </ScreenContainer>
+        <AppHeader
+          title={isReseller ? 'Wholesale Query' : 'Technical Enquiry'}
+          subtitle={
+            isReseller
+              ? 'Distributor Lead & Fitment Support'
+              : 'Authorized Verification & Dealer Dispatch'
+          }
+          onBack={() => {
+            if (currentStep > 1) {
+              setCurrentStep((s) => s - 1);
+            } else {
+              navigation.goBack();
+            }
+          }}
+        />
 
-      {/* Full Sophisticated Dealer Filter Panel */}
-      <DealerFilterModal
-        visible={filterModalVisible}
-        onClose={() => setFilterModalVisible(false)}
-        filters={filters}
-        onApply={(newFilters) => setFilters(newFilters)}
-        onReset={() => setFilters(DEFAULT_FILTERS)}
-        dealers={scopedCandidateDealers}
-      />
-    </View>
+        {/* 3-Step Guided Journey Indicator */}
+        <EnquiryStepIndicator
+          currentStep={currentStep}
+          onStepPress={handleStepPress}
+        />
+
+        <ScreenContainer
+          scrollable={true}
+          includeTopInset={false}
+          showStatusBar={false}
+          contentContainerStyle={styles.enquiryScrollContent}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={COLORS.primary}
+              colors={[COLORS.primary]}
+            />
+          }
+        >
+          {currentStep === 1 && renderStep1()}
+          {currentStep === 2 && renderStep2()}
+          {currentStep === 3 && renderStep3()}
+        </ScreenContainer>
+
+        {/* Full Sophisticated Dealer Filter Panel */}
+        <DealerFilterModal
+          visible={filterModalVisible}
+          onClose={() => setFilterModalVisible(false)}
+          filters={filters}
+          onApply={(newFilters) => setFilters(newFilters)}
+          onReset={() => setFilters(DEFAULT_FILTERS)}
+          dealers={scopedCandidateDealers}
+        />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

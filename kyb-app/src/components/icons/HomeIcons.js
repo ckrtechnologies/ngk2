@@ -105,7 +105,7 @@ export function Profile3DIcon({ size = 32, ...props }) {
       <Line x1="10" y1="31" x2="16" y2="31" stroke={COLORS.slate400} strokeWidth="1.5" strokeLinecap="round" />
 
       {/* Verified Account Seal Dot */}
-      <Circle cx="37" cy="13" r="3.5" fill="#059669" />
+      <Circle cx="37" cy="13" r="3.5" fill={COLORS.primary} />
       <Path d="M35.5 13l1 1 2-2" stroke={COLORS.white} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
@@ -271,14 +271,14 @@ export function TechEnquiry3DIcon({ size = 32, ...props }) {
       {/* Sinusoidal Diagnostic Pulse Waveform */}
       <Path
         d="M14 18.5h3l2.5-4.5 3 8.5 3-5 2.5 3 2.5-2h3.5"
-        stroke="#10B981"
+        stroke={COLORS.primary}
         strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
 
       {/* Online Telemetry Status Indicator */}
-      <Circle cx="32" cy="14" r="1.5" fill="#10B981" />
+      <Circle cx="32" cy="14" r="1.5" fill={COLORS.primary} />
     </Svg>
   );
 }
@@ -402,7 +402,7 @@ export function TickerQuoteIcon({ size = 18, ...props }) {
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <Path
         d="M5 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-4l-4 3v-3H7a2 2 0 0 1-2-2V6z"
-        fill="#059669"
+        fill={COLORS.primary}
       />
       <Path d="M8 8.5h8M8 11.5h5" stroke={COLORS.white} strokeWidth="1.6" strokeLinecap="round" />
     </Svg>
