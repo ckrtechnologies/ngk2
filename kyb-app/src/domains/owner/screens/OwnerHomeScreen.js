@@ -8,8 +8,11 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
-Modal,
+  Modal,
+  ImageBackground,
 } from 'react-native';
+
+const headerRedBg = require('../../../App_Logos_and_Icons_and_Backgrounds/background-Landing-red.jpg');
 import { RefreshControl } from 'react-native-gesture-handler';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -426,8 +429,12 @@ const OwnerHomeScreen = () => {
     <SafeAreaView edges={['left', 'right']} style={styles.rootContainer}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
-      {/* Solid Branded KYB Crimson Header: Spacious, Elegant, Non-Sticky */}
-      <View style={[styles.solidHeader, { paddingTop: insets.top + 8 }]}>
+      {/* Branded KYB Crimson Header with dynamic speed background */}
+      <ImageBackground
+        source={headerRedBg}
+        style={[styles.solidHeader, { paddingTop: insets.top + 8 }]}
+        resizeMode="cover"
+      >
         {/* Left: Navigation Menu Trigger + Dedicated Welcome Greeting */}
         <View style={styles.headerLeftCluster}>
           <TouchableOpacity
@@ -465,7 +472,7 @@ const OwnerHomeScreen = () => {
             {hasUnreadNotifications && <View style={styles.badgeDot} />}
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
 
       <ScrollView
         showsVerticalScrollIndicator={false}

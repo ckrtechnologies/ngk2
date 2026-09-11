@@ -242,10 +242,10 @@ const LoginScreen = ({ route, navigation }) => {
           {/* Center Brand Identity */}
           <View style={[styles.headerHeroBox, isKeyboardVisible && styles.headerHeroBoxCompact]}>
             {!isKeyboardVisible && (
-              <View style={styles.logoCapsule}>
+              <View style={styles.emblemWrapper}>
                 <Image
-                  source={require('../../../assets/images/logo_cropped.png')}
-                  style={styles.brandLogo}
+                  source={require('../../../assets/images/ngk_emblem_red.png')}
+                  style={styles.emblemImage}
                   resizeMode="contain"
                 />
               </View>
@@ -401,25 +401,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  logoCapsule: {
-    backgroundColor: COLORS.white,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 22,
-    marginBottom: 12,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 5,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
+  emblemWrapper: {
+    width: 78,
+    height: 78,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 8,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 6,
   },
-  brandLogo: {
-    width: 88,
-    height: 88,
+  emblemImage: {
+    width: 78,
+    height: 78,
   },
   heroTitle: {
     fontSize: FONTS.size.h3,

@@ -388,7 +388,7 @@ export default function ResellerProfileScreen({ navigation }) {
         visible={editModalVisible}
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setEditModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   modalScrollContent: {
-    paddingBottom: 16,
+    paddingBottom: 120,
   },
   inputGroup: {
     marginBottom: 16,

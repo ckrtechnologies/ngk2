@@ -57,8 +57,8 @@ export default function OwnerTabNavigator() {
             paddingBottom: bottomPadding,
           },
         ],
-        tabBarActiveTintColor: COLORS.white,
-        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.65)',
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.55)',
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarIcon: ({ size, focused }) => renderTabBarIcon(route.name, focused, size),
       })}
@@ -100,16 +100,17 @@ export default function OwnerTabNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#121214',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    borderTopWidth: 0,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
     paddingTop: 6,
     paddingBottom: 6,
     elevation: 12,
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
   },
   tabBarLabel: {

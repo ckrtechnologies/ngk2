@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../../../utils/theme';
 import {
   View,
@@ -22,8 +22,15 @@ import AppButton from '../../../components/common/AppButton';
 
 const ForgotPasswordScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
+  const scrollViewRef = useRef(null);
   const role = route?.params?.role || 'owner';
   const buttonColor = role === 'distributor' ? COLORS.textPrimary : COLORS.primary;
+
+  const scrollToInput = (yOffset) => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ y: yOffset, animated: true });
+    }, 100);
+  };
 
   const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
   const [email, setEmail] = useState('');
@@ -165,12 +172,13 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView
+          ref={scrollViewRef}
           style={{ flex: 1 }}
           contentContainerStyle={{
             flexGrow: 1,
             paddingHorizontal: 20,
             paddingTop: 16,
-            paddingBottom: Math.max(insets.bottom, 24) + 80,
+            paddingBottom: Math.max(insets.bottom, 24) + 200,
           }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -212,6 +220,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
                   setEmail(text);
                   setError('');
                 }}
+                onFocus={() => scrollToInput(60)}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 leftIcon={<Mail size={18} color="#9CA3AF" />}
@@ -237,6 +246,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
                   setOtp(text);
                   setError('');
                 }}
+                onFocus={() => scrollToInput(60)}
                 keyboardType="number-pad"
                 maxLength={6}
                 leftIcon={<KeyRound size={18} color="#9CA3AF" />}
@@ -265,6 +275,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
                   setNewPassword(text);
                   setError('');
                 }}
+                onFocus={() => scrollToInput(80)}
                 secureTextEntry={!showPassword}
                 leftIcon={<Lock size={18} color="#9CA3AF" />}
                 rightIcon={
@@ -285,6 +296,7 @@ const ForgotPasswordScreen = ({ route, navigation }) => {
                   setConfirmPassword(text);
                   setError('');
                 }}
+                onFocus={() => scrollToInput(150)}
                 secureTextEntry={!showPassword}
                 leftIcon={<Lock size={18} color="#9CA3AF" />}
                 error={error}

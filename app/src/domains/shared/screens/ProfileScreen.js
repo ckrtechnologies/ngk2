@@ -13,7 +13,11 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
+  ImageBackground,
 } from 'react-native';
+
+const headerRedBg = require('../../../App_Logos_and_Icons_and_Backgrounds/background-Landing-red.jpg');
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ArrowLeft,
@@ -57,6 +61,25 @@ export default function ProfileScreen({ navigation }) {
   const [editEmail, setEditEmail] = useState('');
   const [editPhone, setEditPhone] = useState('');
   const [editAddress, setEditAddress] = useState('');
+  const [modalKeyboardHeight, setModalKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const subShow = Keyboard.addListener(showEvt, (e) => {
+      const h = e?.endCoordinates?.height || 0;
+      setModalKeyboardHeight(h);
+    });
+    const subHide = Keyboard.addListener(hideEvt, () => {
+      setModalKeyboardHeight(0);
+    });
+
+    return () => {
+      subShow.remove();
+      subHide.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -233,7 +256,11 @@ export default function ProfileScreen({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       {/* Solid Crimson Header */}
-      <View style={[styles.headerBar, { paddingTop: insets.top + 8 }]}>
+      <ImageBackground
+        source={headerRedBg}
+        style={[styles.headerBar, { paddingTop: insets.top + 8 }]}
+        resizeMode="cover"
+      >
         <TouchableOpacity
           style={styles.backBtn}
           onPress={() => navigation.goBack()}
@@ -254,7 +281,7 @@ export default function ProfileScreen({ navigation }) {
         >
           <Pencil size={18} color={COLORS.white} />
         </TouchableOpacity>
-      </View>
+      </ImageBackground>
 
       <ScrollView
         contentContainerStyle={[
@@ -490,7 +517,7 @@ export default function ProfileScreen({ navigation }) {
         visible={editModalVisible}
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setEditModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -505,7 +532,11 @@ export default function ProfileScreen({ navigation }) {
           <View
             style={[
               styles.modalContainer,
-              { paddingBottom: Math.max(insets.bottom, 16) },
+              {
+                paddingBottom:
+                  Math.max(insets.bottom, 16) +
+                  (Platform.OS === 'android' ? modalKeyboardHeight : 0),
+              },
             ]}
           >
             {/* Modal Header */}
@@ -1030,7 +1061,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   modalScrollContent: {
-    paddingBottom: 16,
+    paddingBottom: 120,
   },
   inputGroup: {
     marginBottom: 16,

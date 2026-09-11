@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from 'lucide-react-native';
+
+const headerRedBg = require('../../App_Logos_and_Icons_and_Backgrounds/background-Landing-red.jpg');
 
 const AppHeader = ({
   title,
@@ -43,6 +46,11 @@ const AppHeader = ({
     ? insets.top + (Platform.OS === 'android' ? 6 : 4)
     : 10;
 
+  const HeaderWrapper = isSolid ? ImageBackground : View;
+  const wrapperProps = isSolid
+    ? { source: headerRedBg, resizeMode: 'cover' }
+    : {};
+
   return (
     <>
       {showStatusBar && (
@@ -53,12 +61,13 @@ const AppHeader = ({
         />
       )}
 
-      <View
+      <HeaderWrapper
+        {...wrapperProps}
         style={[
           styles.headerContainer,
           isSolid && styles.solidHeader,
           {
-            backgroundColor: resolvedBgColor,
+            backgroundColor: isSolid ? COLORS.primary : resolvedBgColor,
             paddingTop: containerPaddingTop,
           },
           style,
@@ -115,7 +124,7 @@ const AppHeader = ({
             {rightElement ? rightElement : <View style={styles.backPlaceholder} />}
           </View>
         </View>
-      </View>
+      </HeaderWrapper>
     </>
   );
 };

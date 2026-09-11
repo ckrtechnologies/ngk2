@@ -30,6 +30,9 @@ const AppInput = ({
   multiline = false,
   numberOfLines = 1,
   maxLength,
+  onFocus,
+  onBlur,
+  ...restProps
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -78,6 +81,9 @@ const AppInput = ({
           multiline={multiline}
           numberOfLines={numberOfLines}
           maxLength={maxLength}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          {...restProps}
         />
 
         {rightIcon && (

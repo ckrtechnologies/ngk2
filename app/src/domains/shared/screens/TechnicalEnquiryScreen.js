@@ -155,6 +155,12 @@ const TechnicalEnquiryScreen = () => {
 
   const scrollViewRef = useRef(null);
 
+  const scrollToInput = (yOffset) => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ y: yOffset, animated: true });
+    }, 80);
+  };
+
   // Smooth keyboard shift up for active inputs
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -1076,6 +1082,7 @@ const TechnicalEnquiryScreen = () => {
             placeholder="e.g. BKR6E-11, ILFR6A, 90919-01192"
             value={partNumber}
             onChangeText={setPartNumber}
+            onFocus={() => scrollToInput(0)}
             containerStyle={styles.appInputCompact}
           />
         </View>
@@ -1086,6 +1093,7 @@ const TechnicalEnquiryScreen = () => {
             placeholder="e.g. Laser Iridium Spark Plug, Oxygen Sensor"
             value={partName}
             onChangeText={setPartName}
+            onFocus={() => scrollToInput(60)}
             containerStyle={styles.appInputCompact}
           />
         </View>
@@ -1108,6 +1116,7 @@ const TechnicalEnquiryScreen = () => {
               placeholder="e.g. Toyota, Mahindra"
               value={vehicleMake}
               onChangeText={setVehicleMake}
+              onFocus={() => scrollToInput(180)}
               containerStyle={styles.appInputCompact}
             />
           </View>
@@ -1117,6 +1126,7 @@ const TechnicalEnquiryScreen = () => {
               placeholder="e.g. Scorpio N, Beetle"
               value={vehicleModel}
               onChangeText={setVehicleModel}
+              onFocus={() => scrollToInput(180)}
               containerStyle={styles.appInputCompact}
             />
           </View>
@@ -1128,6 +1138,7 @@ const TechnicalEnquiryScreen = () => {
             placeholder="e.g. 2023"
             value={vehicleYear}
             onChangeText={setVehicleYear}
+            onFocus={() => scrollToInput(280)}
             keyboardType="numeric"
             containerStyle={styles.appInputCompact}
           />
@@ -1617,6 +1628,7 @@ const TechnicalEnquiryScreen = () => {
           placeholder="Describe requirement, stock availability check, fitment query, or price quote..."
           value={enquiryDetails}
           onChangeText={setEnquiryDetails}
+          onFocus={() => scrollToInput(280)}
           multiline={true}
           numberOfLines={4}
         />
@@ -1749,7 +1761,7 @@ const TechnicalEnquiryScreen = () => {
 
 const styles = StyleSheet.create({
   enquiryScrollContent: {
-    paddingBottom: 80,
+    paddingBottom: 220,
   },
   appInputCompact: {
     marginBottom: 6,

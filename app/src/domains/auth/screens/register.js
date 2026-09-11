@@ -248,6 +248,12 @@ const RegisterScreen = ({ route, navigation }) => {
     }
   };
 
+  const scrollToInput = (yOffset) => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ y: yOffset, animated: true });
+    }, 100);
+  };
+
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <AppHeader
@@ -266,7 +272,7 @@ const RegisterScreen = ({ route, navigation }) => {
           contentContainerStyle={{
             paddingHorizontal: 16,
             paddingTop: 10,
-            paddingBottom: Math.max(insets.bottom, 24) + 120,
+            paddingBottom: Math.max(insets.bottom, 24) + 260,
           }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -290,6 +296,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setName(text);
                 if (errors.name) setErrors((prev) => ({ ...prev, name: null }));
               }}
+              onFocus={() => scrollToInput(0)}
               leftIcon={<User size={18} color="#9CA3AF" />}
               error={errors.name}
             />
@@ -303,6 +310,7 @@ const RegisterScreen = ({ route, navigation }) => {
                   setCompanyName(text);
                   if (errors.companyName) setErrors((prev) => ({ ...prev, companyName: null }));
                 }}
+                onFocus={() => scrollToInput(40)}
                 leftIcon={<Building2 size={18} color="#9CA3AF" />}
                 error={errors.companyName}
               />
@@ -316,6 +324,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setEmail(text);
                 if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
               }}
+              onFocus={() => scrollToInput(100)}
               keyboardType="email-address"
               autoCapitalize="none"
               leftIcon={<Mail size={18} color="#9CA3AF" />}
@@ -330,6 +339,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setPhone(text);
                 if (errors.phone) setErrors((prev) => ({ ...prev, phone: null }));
               }}
+              onFocus={() => scrollToInput(160)}
               keyboardType="phone-pad"
               leftIcon={<Phone size={18} color="#9CA3AF" />}
               error={errors.phone}
@@ -363,6 +373,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setStreetAddress(text);
                 if (errors.streetAddress) setErrors((prev) => ({ ...prev, streetAddress: null }));
               }}
+              onFocus={() => scrollToInput(280)}
               leftIcon={<MapPin size={18} color="#9CA3AF" />}
               error={errors.streetAddress}
             />
@@ -377,6 +388,7 @@ const RegisterScreen = ({ route, navigation }) => {
                     setCity(text);
                     if (errors.city) setErrors((prev) => ({ ...prev, city: null }));
                   }}
+                  onFocus={() => scrollToInput(360)}
                   error={errors.city}
                 />
               </View>
@@ -386,6 +398,7 @@ const RegisterScreen = ({ route, navigation }) => {
                   placeholder="e.g. Gauteng"
                   value={province}
                   onChangeText={(text) => setProvince(text)}
+                  onFocus={() => scrollToInput(360)}
                 />
               </View>
             </View>
@@ -398,6 +411,7 @@ const RegisterScreen = ({ route, navigation }) => {
                   value={postalCode}
                   keyboardType="numeric"
                   onChangeText={(text) => setPostalCode(text)}
+                  onFocus={() => scrollToInput(430)}
                 />
               </View>
               <View style={{ flex: 1, marginLeft: 6 }}>
@@ -406,6 +420,7 @@ const RegisterScreen = ({ route, navigation }) => {
                   placeholder="South Africa"
                   value={country}
                   onChangeText={(text) => setCountry(text)}
+                  onFocus={() => scrollToInput(430)}
                 />
               </View>
             </View>
@@ -420,6 +435,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setPassword(text);
                 if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
               }}
+              onFocus={() => scrollToInput(520)}
               secureTextEntry={!showPassword}
               leftIcon={<Lock size={18} color="#9CA3AF" />}
               rightIcon={
@@ -441,6 +457,7 @@ const RegisterScreen = ({ route, navigation }) => {
                 setConfirmPassword(text);
                 if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: null }));
               }}
+              onFocus={() => scrollToInput(600)}
               secureTextEntry={!showPassword}
               leftIcon={<Lock size={18} color="#9CA3AF" />}
               error={errors.confirmPassword}

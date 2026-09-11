@@ -803,7 +803,7 @@ const MyGarageScreen = () => {
         visible={modalVisible && !pickerVisible}
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -878,7 +878,8 @@ const MyGarageScreen = () => {
 
             <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 20 }}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingBottom: 140 }}
             >
               {entryMode === 'catalog' ? (
                 /* ================= CATALOG FLOW ================= */
@@ -1259,7 +1260,7 @@ const MyGarageScreen = () => {
         visible={pickerVisible}
         animationType="slide"
         transparent={false}
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setPickerVisible(false)}
       >
         <KeyboardAvoidingView
@@ -1412,7 +1413,7 @@ const MyGarageScreen = () => {
         visible={editModalVisible}
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => setEditModalVisible(false)}
       >
         <KeyboardAvoidingView
@@ -1443,7 +1444,7 @@ const MyGarageScreen = () => {
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
               >
-                <View style={{ gap: 12, paddingTop: 12, paddingBottom: 28 }}>
+                <View style={{ gap: 12, paddingTop: 12, paddingBottom: 140 }}>
                   <AppInput
                     label="License Plate"
                     placeholder="e.g. CA 123-456"

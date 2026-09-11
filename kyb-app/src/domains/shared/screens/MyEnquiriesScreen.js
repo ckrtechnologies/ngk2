@@ -13,9 +13,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   Linking,
+  Keyboard,
+  ImageBackground,
 } from 'react-native';
+
+const headerRedBg = require('../../../App_Logos_and_Icons_and_Backgrounds/background-Landing-red.jpg');
 import { RefreshControl } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   MessageSquare,
   ChevronRight,
@@ -58,6 +62,7 @@ const MyEnquiriesScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
   const { enquiry, myself } = useSelector((state) => state.getData);
   const scrollViewRef = useRef(null);
 
@@ -68,9 +73,31 @@ const MyEnquiriesScreen = () => {
   const [specsModalVisible, setSpecsModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(!enquiry || enquiry.length === 0);
+  const [modalKeyboardHeight, setModalKeyboardHeight] = useState(0);
   const [currentUserRole, setCurrentUserRole] = useState(
     myself?.role?.toLowerCase() || 'owner'
   );
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showEvent, (e) => {
+      const h = e?.endCoordinates?.height || 0;
+      setModalKeyboardHeight(h);
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    });
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setModalKeyboardHeight(0);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -722,7 +749,7 @@ const MyEnquiriesScreen = () => {
         visible={!!selectedTicket}
         transparent={false}
         animationType="slide"
-        statusBarTranslucent={true}
+        statusBarTranslucent={false}
         onRequestClose={() => {
           if (specsModalVisible) {
             setSpecsModalVisible(false);
@@ -731,13 +758,22 @@ const MyEnquiriesScreen = () => {
           }
         }}
       >
-        <SafeAreaView style={styles.fullScreenConvSafeArea} edges={['top', 'bottom', 'left', 'right']}>
+        <SafeAreaView style={styles.fullScreenConvSafeArea} edges={['top', 'left', 'right']}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            style={styles.fullScreenConvContainer}
+            style={[
+              styles.fullScreenConvContainer,
+              Platform.OS === 'android' && modalKeyboardHeight > 0
+                ? { paddingBottom: modalKeyboardHeight }
+                : null,
+            ]}
           >
             {/* Top Native Crimson Header */}
-            <View style={styles.convHeader}>
+            <ImageBackground
+              source={headerRedBg}
+              style={styles.convHeader}
+              resizeMode="cover"
+            >
               <TouchableOpacity
                 onPress={() => setSelectedTicket(null)}
                 style={styles.convBackBtn}
@@ -805,7 +841,7 @@ const MyEnquiriesScreen = () => {
               >
                 <Info size={19} color={COLORS.white} strokeWidth={2.2} />
               </TouchableOpacity>
-            </View>
+            </ImageBackground>
 
             {/* PINNED CONTEXT BAR (Sticky Under Header - Tappable for Specifications) */}
             {(() => {
@@ -1204,7 +1240,7 @@ const MyEnquiriesScreen = () => {
             </ScrollView>
 
             {/* Bottom Reply Bar */}
-            <View style={styles.replyFooterBox}>
+            <View style={[styles.replyFooterBox, { paddingBottom: Math.max(insets.bottom, 12) }]}>
               <View style={styles.replyRow}>
                 <TextInput
                   style={styles.replyInput}
@@ -1216,6 +1252,7 @@ const MyEnquiriesScreen = () => {
                   placeholderTextColor={COLORS.slate400}
                   value={replyMessage}
                   onChangeText={setReplyMessage}
+                  onFocus={() => setTimeout(() => scrollViewRef.current?.scrollToEnd({ animated: true }), 100)}
                   multiline={false}
                   returnKeyType="send"
                   onSubmitEditing={handleSendReply}

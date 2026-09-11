@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
+
+const headerRedBg = require('../../../App_Logos_and_Icons_and_Backgrounds/background-Landing-red.jpg');
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { X, ChevronRight } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -119,7 +122,11 @@ export default function CustomDrawer({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} translucent={false} />
 
       {/* Drawer Header (Solid NGK Crimson Theme matching rest of the app) */}
-      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+      <ImageBackground
+        source={headerRedBg}
+        style={[styles.header, { paddingTop: insets.top + 10 }]}
+        resizeMode="cover"
+      >
         <TouchableOpacity
           style={styles.profileRow}
           onPress={() => navigateAndDismiss('Profile')}
@@ -151,7 +158,7 @@ export default function CustomDrawer({ navigation }) {
         >
           <X size={20} color={COLORS.white} />
         </TouchableOpacity>
-      </View>
+      </ImageBackground>
 
       {/* Menu List */}
       <ScrollView
